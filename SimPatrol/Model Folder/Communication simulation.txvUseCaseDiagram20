@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V-jr6xbaf013f45j-2l20gk">
+		<property name="$metaclass" value="UseCaseDiagram20"/>
+		<property name="$name" value="Communication simulation"/>
+		<property name="$description" value="Expressa a utilização do SimPatrol quanto à função de simulação de comunicação."/>
+		<property name="$doc" value="Expressa a utilização do SimPatrol quanto à função de simulação de comunicação."/>
+		<reference referencedUin="design:node:::gj7tthezu7zcaaredknw">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="335,215,177,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::8bho0jez5xhlq6lsjjlx">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="235,155,55,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezu82ukqdn6bgt:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="295,240"/>
+				<property name="targetAnchor" value="340,240"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezfxw4uf-1djx5l:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="240,240"/>
+				<property name="targetAnchor" value="199,240"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthezfx3vt5-tjx03j">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="17,215,177,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf013lejp2t5bnw">
+			<property name="bounds" value="175,75,177,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf013rwy3t58nlf:gj7tthf013lejp2t5bnw">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="357,100"/>
+				<property name="targetAnchor" value="430,140"/>
+				<property name="bendpoints" value="430,100"/>
+				<property name="smooth_bendpoints" value="430,100"/>
+				<reference referencedUin="label:include:design:link:::ieje0rf013rwy3t58nlf:gj7tthf013lejp2t5bnw">
+					<property name="bounds" value="359,80,69,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf013ru6o-jq13wj:gj7tthf013lejp2t5bnw">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="180,100"/>
+				<property name="targetAnchor" value="110,140"/>
+				<property name="bendpoints" value="110,100"/>
+				<property name="smooth_bendpoints" value="110,100"/>
+				<reference referencedUin="label:include:design:link:::ieje0rf013ru6o-jq13wj:gj7tthf013lejp2t5bnw">
+					<property name="bounds" value="101,80,69,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf013s8z8l7t7il:gj7tthf013lejp2t5bnw">
+				<property name="sourceAnchor" value="267,121"/>
+				<property name="targetAnchor" value="267,160"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf013n9ot4zgleg">
+			<property name="bounds" value="15,135,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf013ndy1-vh2nmv:gj7tthf013n9ot4zgleg">
+				<property name="sourceAnchor" value="110,181"/>
+				<property name="targetAnchor" value="110,220"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf013qxzu-rj5mz3">
+			<property name="bounds" value="335,135,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf013rl566s3d7w:gj7tthf013qxzu-rj5mz3">
+				<property name="sourceAnchor" value="428,180"/>
+				<property name="targetAnchor" value="428,220"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf02spp299ji278">
+			<property name="bounds" value="17,15,177,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf02ud6ufy1a39h:gj7tthf02spp299ji278">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="199,40"/>
+				<property name="targetAnchor" value="240,81"/>
+				<property name="bendpoints" value="240,40"/>
+				<property name="smooth_bendpoints" value="240,40"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf02sqn4e-kmzn6s">
+			<property name="bounds" value="335,15,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf02udb4y-8m891k:gj7tthf02sqn4e-kmzn6s">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="340,40"/>
+				<property name="targetAnchor" value="299,81"/>
+				<property name="bendpoints" value="300,40"/>
+				<property name="smooth_bendpoints" value="300,40"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>
