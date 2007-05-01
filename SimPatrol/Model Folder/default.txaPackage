@@ -961,6 +961,7 @@
 	<node uin="-tdsqjuezfzcv0n-7mfn9y">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="PerceptionRequisition"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="hnimszezg1s9olr8qhdw">
 			<property name="$metaclass" value="Property20"/>
 			<property name="mod_Visibility" value="$private"/>
@@ -976,11 +977,24 @@
 				<participant referencedUin="design:node:::-i8kpg9ezg1dm3y-tnpvnf" role="Supplier"></participant>
 			</link>
 		</node>
+		<link uin="ieje0rf15kx0d1mvy9b1">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezfzcv0n-7mfn9y" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezfzdrefy796g8">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Perception"/>
 		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="XMLable"/>
+		<link uin="ieje0rf15kqrl1kriqsa">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezfzdrefy796g8" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-i8kpg9ezg1dm3y-tnpvnf">
 		<property name="$metaclass" value="Enumeration"/>
@@ -1010,8 +1024,8 @@
 	</node>
 	<node uin="-tdsqjuezg36mfp-550uor">
 		<property name="$metaclass" value="Class20"/>
-		<property name="@stereotype" value="active"/>
-		<property name="$name" value="Connection"/>
+		<property name="$name" value="AgentConnection"/>
+		<property name="mod__extends" value="Connection"/>
 		<link uin="ieje0rezg6um98-infs5y">
 			<property name="$metaclass" value="KernelAssociation20"/>
 			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
@@ -1035,6 +1049,8 @@
 			<property name="$name" value="requirePerception"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezu90xcs-bger4h"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezu90xcs-bger4h"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff004rwfs-bx01rh"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff004rwfs-bx01rh"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff004rwfs-bx01rh"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff004rwfs-bx01rh"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff004rwfs-bx01rh"/>
@@ -1134,6 +1150,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wg7bit-tkagrx"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wg7bit-tkagrx"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wg7bit-tkagrx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wg7bit-tkagrx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wg7bit-tkagrx"/>
 			<node uin="ttifwdezg7itecawuuc3">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -1211,6 +1229,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00508cn-hro3vc"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00508cn-hro3vc"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00508cn-hro3vc"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00508cn-hro3vc"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00508cn-hro3vc"/>
 			<node uin="ttifwdf003ystd-ixr2l6">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="bodyCondition"/>
@@ -1259,6 +1279,12 @@
 				</link>
 			</node>
 		</node>
+		<link uin="ieje0rf1523wbq-71vwxr">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Connection"/>
+			<participant referencedUin="design:node:::-tdsqjuezg36mfp-550uor" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf1523cxd-wnbz40" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-yrgd8eezg56rljuhy3of">
 		<property name="$metaclass" value="SD20_Interaction"/>
@@ -1528,6 +1554,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
 			<node uin="ttifwdezg6j7wo-ez09me">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -1617,6 +1645,8 @@
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
 			<node uin="ttifwdezg6ln9m-emcqwk">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -1669,6 +1699,7 @@
 	<node uin="-tdsqjuezo86kcy-myuo2j">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Edge"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="j2b4cezq56b0gxwnqmw">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="length"/>
@@ -1713,10 +1744,17 @@
 			<participant referencedUin="design:node:::-tdsqjuezo86kcy-myuo2j" role="Client"></participant>
 			<participant referencedUin="design:node:::-tdsqjuf02v05jqdqob9w" role="Supplier"></participant>
 		</link>
+		<link uin="ieje0rf15ktrms-6ccx5m">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezo86kcy-myuo2j" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezo87k6v-pzk0nw">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Vertex"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="gnsz3ezq7ktdn-jzae0b">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="label"/>
@@ -1799,6 +1837,12 @@
 				<participant referencedUin="design:node:::PrimitiveType.Boolean" role="Supplier"></participant>
 			</link>
 		</node>
+		<link uin="ieje0rf15mwmox-oy1v5z">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezo87k6v-pzk0nw" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezobpqfp9y0pc6">
 		<property name="$metaclass" value="Class20"/>
@@ -1857,10 +1901,23 @@
 	<node uin="-tdsqjuezobt5nw-l64kjc">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="TimeProbabilityDistribution"/>
+		<node uin="hnimszf15txxf8-ogdrfe">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="seed"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Double"/>
+			<property name="mod__type" value="Double"/>
+			<property name="mod_Visibility" value="$private"/>
+			<link uin="ieje0rf15tyabn12fxgb">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszf15txxf8-ogdrfe:-tdsqjuezobt5nw-l64kjc" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Double" role="Supplier"></participant>
+			</link>
+		</node>
 	</node>
 	<node uin="-tdsqjuezobw7xjpdgrr8">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Graph"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="hnimszezobwh8l-sjszli">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="label"/>
@@ -1891,11 +1948,18 @@
 			<participant referencedUin="design:node:::-tdsqjuezobw7xjpdgrr8" role="Client"></participant>
 			<participant referencedUin="design:node:::-tdsqjuezo86kcy-myuo2j" role="Supplier"></participant>
 		</link>
+		<link uin="ieje0rf15kw9x8-39m6ky">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezobw7xjpdgrr8" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezqc7d97-1372y3">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Agent"/>
 		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="XMLable"/>
 		<link uin="ieje0rezqceltf-nqek">
 			<property name="$metaclass" value="KernelAssociation20"/>
 			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
@@ -1950,6 +2014,9 @@
 			<property name="$metaclass" value="Operation20"/>
 			<property name="mod_Visibility" value="$public"/>
 			<property name="$name" value="setPerception"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0vds10p-2p0kbv"/>
@@ -2014,6 +2081,10 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
 			<node uin="ttifwdf0wmmzie-rxgybi">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -2065,6 +2136,12 @@
 				</link>
 			</node>
 		</node>
+		<link uin="ieje0rf15kw45bbij63v">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezqc7d97-1372y3" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-s99ai1ezqciueh-8i58vo">
 		<property name="$metaclass" value="AssociationClass"/>
@@ -2221,6 +2298,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
 			<node uin="ttifwdezu8jag078f6q2">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="bodyCondition"/>
@@ -2281,6 +2360,8 @@
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
 			<property name="mod__returnType" value="ActionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
 			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
@@ -2360,6 +2441,7 @@
 	<node uin="-tdsqjuezu8f2fc-p6x7b2">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="ActionRequisition"/>
+		<property name="mod__implements" value="XMLable"/>
 		<link uin="ieje0rezuqmx14kta4vu">
 			<property name="$metaclass" value="KernelAssociation20"/>
 			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
@@ -2379,11 +2461,24 @@
 				<participant referencedUin="design:node:::-i8kpg9ezuqa3z1-pvmp6o" role="Supplier"></participant>
 			</link>
 		</node>
+		<link uin="ieje0rf15kwq7l-leon3d">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezu8f2fc-p6x7b2" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezu99x09-7yjjox">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Action"/>
 		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="XMLable"/>
+		<link uin="ieje0rf15krmxi-j0j83y">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezu99x09-7yjjox" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuezucdo2z-9ewh6l">
 		<property name="$metaclass" value="Class20"/>
@@ -2422,6 +2517,8 @@
 			<property name="$metaclass" value="Operation20"/>
 			<property name="$name" value="parseActionIntention"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff005m6q7ikhmia"/>
+			<property name="__aggregationEnd_formalParameter" value="etejaf005mpg9-b6hnm9"/>
+			<property name="__aggregationEnd_formalParameter" value="etejaf005mpg9-b6hnm9"/>
 			<property name="__aggregationEnd_formalParameter" value="etejaf005mpg9-b6hnm9"/>
 			<property name="__aggregationEnd_formalParameter" value="etejaf005mpg9-b6hnm9"/>
 			<property name="__aggregationEnd_formalParameter" value="etejaf005mpg9-b6hnm9"/>
@@ -2507,6 +2604,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00amrmc-qgejk6"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00amrmc-qgejk6"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00amrmc-qgejk6"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00amrmc-qgejk6"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00amrmc-qgejk6"/>
 			<node uin="b94cff00al1wjk2sleh">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="bodyCondition"/>
@@ -2563,6 +2662,8 @@
 			<property name="$name" value="requireAction"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
 			<property name="mod_Visibility" value="$private"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00520kqvcac4o"/>
@@ -2719,6 +2820,7 @@
 	<node uin="-tdsqjuezuqc9va-7eu3vt">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="ActionIntention"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="hnimszf0048ook-h5fbl1">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="action_type"/>
@@ -2731,6 +2833,12 @@
 				<participant referencedUin="design:node:::-i8kpg9ezuqckaa7xl40z" role="Supplier"></participant>
 			</link>
 		</node>
+		<link uin="ieje0rf15kwk28xcxean">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuezuqc9va-7eu3vt" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-i8kpg9ezuqckaa7xl40z">
 		<property name="$metaclass" value="Enumeration"/>
@@ -3198,6 +3306,13 @@
 	<node uin="-tdsqjuf02v05jqdqob9w">
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Stigma"/>
+		<property name="mod__implements" value="XMLable"/>
+		<link uin="ieje0rf15mu8e5ufen22">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuf02v05jqdqob9w" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="gj7tthf08z1sjq-g19xz8">
 		<property name="$metaclass" value="UseCase20"/>
@@ -3229,6 +3344,7 @@
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="Society"/>
 		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="XMLable"/>
 		<node uin="hnimszf08zamhxnby2d6">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="label"/>
@@ -3241,6 +3357,12 @@
 				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
 			</link>
 		</node>
+		<link uin="ieje0rf15ks2es6pdi9q">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuf08zaefj-b32oin" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="-tdsqjuf08zfh3x-ol4eow">
 		<property name="$metaclass" value="Class20"/>
@@ -3400,10 +3522,6 @@
 				<participant referencedUin="design:node:::PrimitiveType.Double" role="Supplier"></participant>
 			</link>
 		</node>
-	</node>
-	<node uin="1g64yf0b91ue8leu0wb">
-		<property name="$metaclass" value="Note"/>
-		<property name="$name" value="Note5"/>
 	</node>
 	<node uin="1g64yf0bap5x5-680f3q">
 		<property name="$metaclass" value="Note"/>
@@ -3812,5 +3930,152 @@
 				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
 			</link>
 		</node>
+	</node>
+	<node uin="-tdsqjuf150yjyz-qb4s7x">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="UDPSocket"/>
+	</node>
+	<node uin="-tdsqjuf15117n0-54ge4q">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AnalysisReportDaemon"/>
+		<link uin="ieje0rf151jsxm-ws66q9">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::-tdsqjuf15117n0-54ge4q" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf151eqsb-u1pbj9" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-tdsqjuf151eqsb-u1pbj9">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AnalysisReportRequisitionQueue"/>
+	</node>
+	<node uin="-tdsqjuf151ie2g7wnm1z">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="SimulationLogDaemon"/>
+		<link uin="ieje0rf1520ox7dhixo1">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::-tdsqjuf151ie2g7wnm1z" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf15205o2yw8y73" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-tdsqjuf15205o2yw8y73">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="SimulationLogConnection"/>
+		<property name="mod__extends" value="Connection"/>
+		<link uin="ieje0rf152403k-xqutrg">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Connection"/>
+			<participant referencedUin="design:node:::-tdsqjuf15205o2yw8y73" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf1523cxd-wnbz40" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-tdsqjuf1521xjj-tjdlya">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AnalysisReportConnection"/>
+		<property name="mod__extends" value="Connection"/>
+		<link uin="ieje0rf1522g6j-4cw2ux">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::-tdsqjuf1521xjj-tjdlya" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf151eqsb-u1pbj9" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1523y8qoa0msl">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Connection"/>
+			<participant referencedUin="design:node:::-tdsqjuf1521xjj-tjdlya" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf1523cxd-wnbz40" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-tdsqjuf1523cxd-wnbz40">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Connection"/>
+		<property name="mod__abstract" value="true"/>
+		<property name="@stereotype" value="active"/>
+		<link uin="ieje0rf1525d0uomgset">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::-tdsqjuf1523cxd-wnbz40" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuf150yjyz-qb4s7x" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-tdsqjuf152j6ar4xqbxg">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Message"/>
+		<property name="mod__implements" value="XMLable"/>
+		<node uin="hnimszf152p09s38s582">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::-i8kpg9f152p86y-ffxefe"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="message_type"/>
+			<property name="mod__type" value="MessageType"/>
+			<link uin="ieje0rf152pl5y-byjw0b">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszf152p09s38s582:-tdsqjuf152j6ar4xqbxg" role="Client"></participant>
+				<participant referencedUin="design:node:::-i8kpg9f152p86y-ffxefe" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="hnimszf152qhvx-j0vdbh">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="content"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.String"/>
+			<property name="mod__type" value="String"/>
+			<link uin="ieje0rf152qvt7maijco">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::hnimszf152qhvx-j0vdbh:-tdsqjuf152j6ar4xqbxg" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="ieje0rf15krvb5s59fax">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="XMLable"/>
+			<participant referencedUin="design:node:::-tdsqjuf152j6ar4xqbxg" role="Client"></participant>
+			<participant referencedUin="design:node:::-amcqg9f15jh9en-blfuev" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-i8kpg9f152p86y-ffxefe">
+		<property name="$metaclass" value="Enumeration"/>
+		<property name="$name" value="MessageType"/>
+		<node uin="hpmgzsf15ebxgz3llfjl">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="PERCEPTION_REQUISITION"/>
+		</node>
+		<node uin="hpmgzsf15jb5a52n5pev">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="ACTION_INTENTION"/>
+		</node>
+		<node uin="hpmgzsf15lo8op-ssadhb">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="PERCEPTION"/>
+		</node>
+	</node>
+	<node uin="1g64yf152qzpewtqdtl">
+		<property name="$metaclass" value="Note"/>
+		<property name="$name" value="Note9"/>
+		<property name="$note_text" value="Actually, XML"/>
+		<link uin="ieje0rf152raxx7wztdw">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::1g64yf152qzpewtqdtl" role="Client"></participant>
+			<participant referencedUin="design:node:::hnimszf152qhvx-j0vdbh:-tdsqjuf152j6ar4xqbxg" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="-amcqg9f15jh9en-blfuev">
+		<property name="$metaclass" value="Interface20"/>
+		<property name="$name" value="XMLable"/>
+	</node>
+	<node uin="-tdsqjuf15rl6r0mhrsdb">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="ExperimentalScenery"/>
+		<link uin="ieje0rf15tasa68tw66n">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="@label" value="stores"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::-tdsqjuf15rl6r0mhrsdb" role="Client"></participant>
+			<participant referencedUin="design:node:::-tdsqjuezobw7xjpdgrr8" role="Supplier"></participant>
+		</link>
 	</node>
 </nodeSet>

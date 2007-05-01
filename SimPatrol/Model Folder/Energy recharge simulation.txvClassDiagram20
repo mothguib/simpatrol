@@ -11,12 +11,12 @@
 			<property name="$shortcutReference" value="true"/>
 			<property name="bounds_setted_by_user" value="true"/>
 			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:node:::hnimszf0banher-dopl76:-tdsqjuf0b8dkc3-8rw2qn">
+				<property name="bounds" value="80,14,0,0"/>
+			</reference>
 			<reference referencedUin="design:link:::ieje0rf0b8e39y-3askgu:-tdsqjuf0b8dkc3-8rw2qn">
 				<property name="sourceAnchor" value="180,60"/>
 				<property name="targetAnchor" value="141,60"/>
-			</reference>
-			<reference referencedUin="design:node:::hnimszf0banher-dopl76:-tdsqjuf0b8dkc3-8rw2qn">
-				<property name="bounds" value="80,14,0,0"/>
 			</reference>
 		</reference>
 		<reference referencedUin="design:node:::-tdsqjuezupxw33vl0cja">
@@ -33,7 +33,7 @@
 		<reference referencedUin="design:node:::-tdsqjuezo87k6v-pzk0nw">
 			<property name="$imported" value="true"/>
 			<property name="$shortcutReference" value="true"/>
-			<property name="bounds" value="15,115,161,120"/>
+			<property name="bounds" value="15,115,161,141"/>
 			<property name="location_set_by_user" value="true"/>
 			<property name="bounds_setted_by_user" value="true"/>
 			<property name="foreground_color" value="0,0,0"/>

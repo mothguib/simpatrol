@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhf150x2s2-xbx6nw">
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<property name="$name" value="Connection model"/>
+		<reference referencedUin="design:node:::-tdsqjuezg36mfp-550uor">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="475,116,180,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::tq87glezg7ex40-5c7neg:-tdsqjuezg36mfp-550uor">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezg6um98-infs5y:-tdsqjuezg36mfp-550uor">
+				<property name="sourceAnchor" value="570,120"/>
+				<property name="targetAnchor" value="440,60"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="570,60"/>
+				<property name="smooth_bendpoints" value="570,60"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf1523wbq-71vwxr:-tdsqjuezg36mfp-550uor">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="660,140"/>
+				<property name="targetAnchor" value="700,240"/>
+				<property name="bendpoints" value="700,140"/>
+				<property name="smooth_bendpoints" value="700,140"/>
+			</reference>
+			<reference referencedUin="design:node:::tq87glezg7isxu-4ohdxh:-tdsqjuezg36mfp-550uor">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezuqtgz1-ntej0x:-tdsqjuezg36mfp-550uor">
+				<property name="sourceAnchor" value="570,200"/>
+				<property name="targetAnchor" value="440,260"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="570,260"/>
+				<property name="smooth_bendpoints" value="570,260"/>
+			</reference>
+			<reference referencedUin="design:node:::tq87glf003ys5i-rvzyrf:-tdsqjuezg36mfp-550uor">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuezu8c5wr-o17mu3">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="16,114,158,84"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezu984oa-e1klh3:-tdsqjuezu8c5wr-o17mu3">
+				<property name="sourceAnchor" value="178,160"/>
+				<property name="targetAnchor" value="220,160"/>
+			</reference>
+			<reference referencedUin="design:node:::tq87glezu98t5szbdnpo:-tdsqjuezu8c5wr-o17mu3">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuezfzbu0lpz2kaa">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="16,15,159,84"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::tq87glezg7516mnn2e9k:-tdsqjuezfzbu0lpz2kaa">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezg6movdmru8an:-tdsqjuezfzbu0lpz2kaa">
+				<property name="sourceAnchor" value="180,60"/>
+				<property name="targetAnchor" value="218,60"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf150yjyz-qb4s7x">
+			<property name="bounds" value="673,17,103,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuezg6e17r-olho45">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="215,16,220,81"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::tq87glezg6lmk1vpybme:-tdsqjuezg6e17r-olho45">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::tq87glezg6j7e0i4ph4e:-tdsqjuezg6e17r-olho45">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuezu8cxvp-9x6vb2">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="215,115,220,81"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::tq87glezu8j9zy-5s50gd:-tdsqjuezu8cxvp-9x6vb2">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::tq87glezu8kp4o-32uq8c:-tdsqjuezu8cxvp-9x6vb2">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf15117n0-54ge4q">
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="15,315,162,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf151jsxm-ws66q9:-tdsqjuf15117n0-54ge4q">
+				<property name="sourceAnchor" value="182,358"/>
+				<property name="targetAnchor" value="218,358"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf151eqsb-u1pbj9">
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="214,314,221,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuezupt8px-qwadzr">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="215,215,220,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::tq87glf0046984-lse0jv:-tdsqjuezupt8px-qwadzr">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezuqkdy1gel8q7:-tdsqjuezupt8px-qwadzr">
+				<property name="sourceAnchor" value="330,220"/>
+				<property name="targetAnchor" value="330,201"/>
+			</reference>
+			<reference referencedUin="design:node:::gxhilf00al1wj-3d221r:-tdsqjuezupt8px-qwadzr">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::cakebf005mpft-ab3tf8:-tdsqjuezupt8px-qwadzr">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf151ie2g7wnm1z">
+			<property name="bounds" value="215,415,220,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf1520ox7dhixo1:-tdsqjuf151ie2g7wnm1z">
+				<property name="sourceAnchor" value="440,460"/>
+				<property name="targetAnchor" value="480,460"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf15205o2yw8y73">
+			<property name="bounds" value="475,415,180,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf152403k-xqutrg:-tdsqjuf15205o2yw8y73">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="660,480"/>
+				<property name="targetAnchor" value="760,320"/>
+				<property name="bendpoints" value="760,480"/>
+				<property name="smooth_bendpoints" value="760,480"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf1521xjj-tjdlya">
+			<property name="bounds" value="475,314,180,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf1523y8qoa0msl:-tdsqjuf1521xjj-tjdlya">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="660,380"/>
+				<property name="targetAnchor" value="700,320"/>
+				<property name="bendpoints" value="700,380"/>
+				<property name="smooth_bendpoints" value="700,380"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf1522g6j-4cw2ux:-tdsqjuf1521xjj-tjdlya">
+				<property name="sourceAnchor" value="480,358"/>
+				<property name="targetAnchor" value="440,358"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::-tdsqjuf1523cxd-wnbz40">
+			<property name="bounds" value="675,235,100,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf1525d0uomgset:-tdsqjuf1523cxd-wnbz40">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="760,240"/>
+				<property name="targetAnchor" value="760,102"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

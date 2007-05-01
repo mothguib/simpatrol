@@ -140,11 +140,11 @@
 				<reference referencedUin="label:$associationEnd20SupplierPropertiesInplace:design:link:::ieje0rf0sc8ifa-fyo5ys:-tdsqjuezfzbu0lpz2kaa">
 					<property name="bounds" value="549,5,46,17"/>
 				</reference>
-				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rf0sc8ifa-fyo5ys:-tdsqjuezfzbu0lpz2kaa">
-					<property name="bounds" value="545,115,10,17"/>
-				</reference>
 				<reference referencedUin="label:$associationRoleSupplierInplace:design:link:::ieje0rf0sc8ifa-fyo5ys:-tdsqjuezfzbu0lpz2kaa">
 					<property name="bounds" value="546,168,99,17"/>
+				</reference>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rf0sc8ifa-fyo5ys:-tdsqjuezfzbu0lpz2kaa">
+					<property name="bounds" value="545,115,10,17"/>
 				</reference>
 			</reference>
 			<reference referencedUin="design:link:::ieje0rf005dubz-cs7kyq:-tdsqjuezfzbu0lpz2kaa">
@@ -300,11 +300,11 @@
 			<reference referencedUin="design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
 				<property name="sourceAnchor" value="477,101"/>
 				<property name="targetAnchor" value="477,190"/>
-				<reference referencedUin="label:clientCardinality:design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
-					<property name="bounds" value="480,104,10,17"/>
-				</reference>
 				<reference referencedUin="label:$associationRoleSupplierInplace:design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
 					<property name="bounds" value="430,182,44,17"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="480,104,10,17"/>
 				</reference>
 			</reference>
 		</reference>
@@ -440,6 +440,10 @@
 		<reference referencedUin="design:node:::-tdsqjuezupt8px-qwadzr">
 			<property name="bounds" value="9,239,200,82"/>
 			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezuqkdy1gel8q7:-tdsqjuezupt8px-qwadzr">
+				<property name="sourceAnchor" value="174,326"/>
+				<property name="targetAnchor" value="688,674"/>
+			</reference>
 			<reference referencedUin="design:link:::ieje0rf0076meulw0u5l:-tdsqjuezupt8px-qwadzr">
 				<property name="sourceAnchor" value="191,326"/>
 				<property name="targetAnchor" value="665,575"/>
@@ -452,10 +456,6 @@
 				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rf0076meulw0u5l:-tdsqjuezupt8px-qwadzr">
 					<property name="bounds" value="522,460,10,17"/>
 				</reference>
-			</reference>
-			<reference referencedUin="design:link:::ieje0rezuqkdy1gel8q7:-tdsqjuezupt8px-qwadzr">
-				<property name="sourceAnchor" value="174,326"/>
-				<property name="targetAnchor" value="688,674"/>
 			</reference>
 		</reference>
 		<reference referencedUin="design:node:::-tdsqjuezu8cxvp-9x6vb2">
@@ -790,6 +790,18 @@
 				<property name="sourceAnchor" value="121,555"/>
 				<property name="targetAnchor" value="455,832"/>
 			</reference>
+		</reference>
+		<reference referencedUin="design:view:::V1hexuhf150x2s2-xbx6nw">
+			<property name="$shortcutReference" value="true"/>
+		</reference>
+		<reference referencedUin="design:view:::V1hexuhf152i11i-nx5s17">
+			<property name="$shortcutReference" value="true"/>
+		</reference>
+		<reference referencedUin="design:view:::V1hexuhf15jejai7539kx">
+			<property name="$shortcutReference" value="true"/>
+		</reference>
+		<reference referencedUin="design:view:::V1hexuhf15oyn2w-5jsurb">
+			<property name="$shortcutReference" value="true"/>
 		</reference>
 	</view>
 </nodeSet>
