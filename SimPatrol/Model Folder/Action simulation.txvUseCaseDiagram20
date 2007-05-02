@@ -44,5 +44,15 @@
 				<property name="targetAnchor" value="260,98"/>
 			</reference>
 		</reference>
+		<reference referencedUin="design:node:::8bho0jf16i5l1gchc7ve">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="335,15,71,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf16ifsj2-7slqb2:8bho0jf16i5l1gchc7ve">
+				<property name="sourceAnchor" value="340,81"/>
+				<property name="targetAnchor" value="301,81"/>
+			</reference>
+		</reference>
 	</view>
 </nodeSet>

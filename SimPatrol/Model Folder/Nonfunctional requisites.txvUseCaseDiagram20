@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V-jr6xbaf16jezcyoyrd3x">
+		<property name="$metaclass" value="UseCaseDiagram20"/>
+		<property name="$name" value="Nonfunctional requisites"/>
+		<property name="$description" value="Expressa a utilização do SimPatrol quanto aos seus requisitos não-funcionais."/>
+		<property name="$doc" value="Expressa a utilização do SimPatrol quanto aos seus requisitos não-funcionais."/>
+		<reference referencedUin="design:node:::gj7tthf16jf333mejuax">
+			<property name="bounds" value="115,55,161,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf16jlzhcba530s:gj7tthf16jf333mejuax">
+				<property name="sourceAnchor" value="281,80"/>
+				<property name="targetAnchor" value="320,80"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf16jgxszdakdk3">
+			<property name="bounds" value="115,155,161,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf16jmetv-620n5j:gj7tthf16jgxszdakdk3">
+				<property name="sourceAnchor" value="120,180"/>
+				<property name="targetAnchor" value="75,180"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf16jm1qylhh4kd:gj7tthf16jgxszdakdk3">
+				<property name="sourceAnchor" value="281,180"/>
+				<property name="targetAnchor" value="326,180"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf16jiy92j21qsl">
+			<property name="bounds" value="115,255,161,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::8bho0jez5xhlq6lsjjlx">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="15,125,55,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf16jmjycrxhl49:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="75,160"/>
+				<property name="targetAnchor" value="169,99"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf16jmhqwfi8wjb:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="75,198"/>
+				<property name="targetAnchor" value="170,261"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::8bho0jf16jkd2x2wiv91">
+			<property name="bounds" value="315,31,93,89"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::8bho0jf16jkupw-a202ba">
+			<property name="bounds" value="321,131,81,89"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+		</reference>
+	</view>
+</nodeSet>

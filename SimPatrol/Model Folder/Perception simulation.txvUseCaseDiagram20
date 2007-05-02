@@ -46,5 +46,15 @@
 				<property name="smooth_bendpoints" value="160,140"/>
 			</reference>
 		</reference>
+		<reference referencedUin="design:node:::8bho0jf16i5l1gchc7ve">
+			<property name="bounds" value="335,18,81,95"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf16i61wo-q9l58c:8bho0jf16i5l1gchc7ve">
+				<property name="sourceAnchor" value="340,80"/>
+				<property name="targetAnchor" value="301,80"/>
+			</reference>
+		</reference>
 	</view>
 </nodeSet>

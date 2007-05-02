@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="60vv6f17wa271rfubcd">
+		<property name="$metaclass" value="AssociationClassLinkAspect"/>
+		<property name="$name" value="AssociationClassLinkAspect3"/>
+	</node>
+	<node uin="9kltrf17wa271hxc6a6">
+		<property name="$metaclass" value="AssociationClass"/>
+		<property name="$name" value="ActionTime"/>
+		<link uin="7kvsvf17wa271kachdj">
+			<property name="$metaclass" value="AssociationClassConnectorAspect"/>
+			<participant referencedUin="design:node:::9kltrf17wa271hxc6a6" role="Client"></participant>
+			<participant referencedUin="design:node:::60vv6f17wa271rfubcd" role="Supplier"></participant>
+		</link>
+		<node uin="d1yqyf17wa271kzpf7o">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="time"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="mod_Visibility" value="$private"/>
+			<link uin="33m0zf17wa271-i1942">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::d1yqyf17wa271kzpf7o:9kltrf17wa271hxc6a6" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+	<node uin="bjwddf17ugxj12olap6">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Action"/>
+		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="model.interface.XMLable"/>
+		<link uin="1xpvuf17ugxj1g1i4jp">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="model.interface.XMLable"/>
+			<participant referencedUin="design:node:::bjwddf17ugxj12olap6" role="Client"></participant>
+			<participant referencedUin="design:node:::b16cdf17uk2xity633y" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="etwghf17ugxj1w3eodz">
+		<property name="$metaclass" value="Enumeration"/>
+		<property name="$name" value="ActionType"/>
+	</node>
+	<node uin="gjlolf17ugxj1-5az2i2">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AtomicAction"/>
+		<property name="mod__abstract" value="true"/>
+		<property name="mod__extends" value="Action"/>
+		<link uin="dsjw7f17ugxj1-973p9h">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Action"/>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Client"></participant>
+			<participant referencedUin="design:node:::bjwddf17ugxj12olap6" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="1ap6if17ugxj1jmswgw">
+		<property name="$metaclass" value="Enumeration"/>
+		<property name="$name" value="AtomicActionType"/>
+		<property name="mod__extends" value="action.ActionType"/>
+		<node uin="a245kf17ugxj1qoh421">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="MOVE_ACTION"/>
+		</node>
+		<node uin="4mteqf17ugxj1-828a0h">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="VISIT_ACTION"/>
+		</node>
+		<link uin="bqv0vf17ugxj1-8qicfw">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="action.ActionType"/>
+			<participant referencedUin="design:node:::1ap6if17ugxj1jmswgw" role="Client"></participant>
+			<participant referencedUin="design:node:::etwghf17ugxj1w3eodz" role="Supplier"></participant>
+		</link>
+		<node uin="ipytcf17ugxj1dfhqhg">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="BROADCAST_ACTION"/>
+		</node>
+		<node uin="bxuo1f17ugxj1l91mpc">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="STIGMATIZE_ACTION"/>
+		</node>
+		<node uin="7smj5f17ugxj1-msu5q4">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="RECHARGE_ACTION"/>
+		</node>
+	</node>
+	<node uin="epvtgf17ugxj1-6gjbdx">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="BroadcastAction"/>
+		<property name="mod__extends" value="AtomicAction"/>
+		<link uin="h5x9f17ugxj1w3zrve">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="AtomicAction"/>
+			<participant referencedUin="design:node:::epvtgf17ugxj1-6gjbdx" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="jhafif17ugxj1-buxn34">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="CompoundAction"/>
+		<property name="mod__abstract" value="true"/>
+		<property name="mod__extends" value="Action"/>
+		<link uin="1s7bdf17ugxj1-mw0w14">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="composition" value=""/>
+			<property name="aggregation" value=""/>
+			<property name="supplierIsOrdered" value="true"/>
+			<property name="@supplierCardinality" value="2..*"/>
+			<property name="visibility" value="private"/>
+			<property name="supplierIsUnique" value="true"/>
+			<participant referencedUin="design:node:::jhafif17ugxj1-buxn34" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+		<link uin="38ivsf17ugxj1le5r7p">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Action"/>
+			<participant referencedUin="design:node:::jhafif17ugxj1-buxn34" role="Client"></participant>
+			<participant referencedUin="design:node:::bjwddf17ugxj12olap6" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="9by56f17ugxj1-hkbm5g">
+		<property name="$metaclass" value="Enumeration"/>
+		<property name="$name" value="CompoundActionType"/>
+		<property name="mod__extends" value="action.ActionType"/>
+		<node uin="fog6nf17ugxj1-d9g0hm">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="GOTO_ACTION"/>
+		</node>
+		<link uin="98qc9f17ugxj13w2qsh">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="action.ActionType"/>
+			<participant referencedUin="design:node:::9by56f17ugxj1-hkbm5g" role="Client"></participant>
+			<participant referencedUin="design:node:::etwghf17ugxj1w3eodz" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="cdd6wf17ugxj1-s6b1ca">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="GoToAction"/>
+		<property name="mod__extends" value="CompoundAction"/>
+		<link uin="gm5ldf17ugxj1f8svrc">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="CompoundAction"/>
+			<participant referencedUin="design:node:::cdd6wf17ugxj1-s6b1ca" role="Client"></participant>
+			<participant referencedUin="design:node:::jhafif17ugxj1-buxn34" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="7iypaf17ugxj1j8vqbu">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="MoveAction"/>
+		<property name="mod__extends" value="AtomicAction"/>
+		<link uin="funjaf17ugxj1yevdqz">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="AtomicAction"/>
+			<participant referencedUin="design:node:::7iypaf17ugxj1j8vqbu" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="9y428f17ugxj1lwacpm">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="RechargeAction"/>
+		<property name="mod__extends" value="AtomicAction"/>
+		<link uin="cfzklf17ugxj1-ssofdm">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="AtomicAction"/>
+			<participant referencedUin="design:node:::9y428f17ugxj1lwacpm" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+		<node uin="9229wf17ugxj1523rx1">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="factor"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Double"/>
+			<property name="mod__type" value="Double"/>
+			<property name="mod_Visibility" value="$private"/>
+			<link uin="1gke0f17ugxj1mqx1b3">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::9229wf17ugxj1523rx1:9y428f17ugxj1lwacpm" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Double" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+	<node uin="e6h10f17ugxj1-73oo09">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="StigmatizeAction"/>
+		<property name="mod__extends" value="AtomicAction"/>
+		<link uin="2nt6qf17ugxj1-klmz6c">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="AtomicAction"/>
+			<participant referencedUin="design:node:::e6h10f17ugxj1-73oo09" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="9xapxf17ugxj1v9aaj6">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="VisitAction"/>
+		<property name="mod__extends" value="AtomicAction"/>
+		<link uin="fy2ahf17ugxj1wdc98z">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="AtomicAction"/>
+			<participant referencedUin="design:node:::9xapxf17ugxj1v9aaj6" role="Client"></participant>
+			<participant referencedUin="design:node:::gjlolf17ugxj1-5az2i2" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="bm111f1829zul-1tka35">
+		<property name="$metaclass" value="Note"/>
+		<property name="$name" value="Note6"/>
+		<property name="$note_text" value="Increments the agent's stamina by the factor attribute, only when the agent is on a fueled vertex."/>
+		<link uin="8pcmcf1829zul-p4lxhd">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::bm111f1829zul-1tka35" role="Client"></participant>
+			<participant referencedUin="design:node:::9y428f17ugxj1lwacpm" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>

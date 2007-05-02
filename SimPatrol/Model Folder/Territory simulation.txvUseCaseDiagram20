@@ -74,10 +74,5 @@
 			<property name="$shortcutReference" value="true"/>
 			<property name="bounds_setted_by_user" value="true"/>
 		</reference>
-		<reference referencedUin="design:view:::V-jr6xbaf08yvwpf-xctbp2">
-			<property name="bounds" value="0,0,0,0"/>
-			<property name="location_set_by_user" value="true"/>
-			<property name="$shortcutReference" value="true"/>
-		</reference>
 	</view>
 </nodeSet>

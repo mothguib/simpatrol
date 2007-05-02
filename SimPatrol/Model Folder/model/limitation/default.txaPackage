@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="9yg1pf17uk5it8rqhp5">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="DepthLimitation"/>
+		<property name="mod__extends" value="Limitation"/>
+		<node uin="7y1fxf17uk5it-5zyv74">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="depth"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<link uin="gllcf17uk5it-o83pcq">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::7y1fxf17uk5it-5zyv74:9yg1pf17uk5it8rqhp5" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="ieje0rf17uk5nlyqzvu">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Limitation"/>
+			<participant referencedUin="design:node:::9yg1pf17uk5it8rqhp5" role="Client"></participant>
+			<participant referencedUin="design:node:::cl825f17uk5it-7qup5t" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="cl825f17uk5it-7qup5t">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Limitation"/>
+		<property name="mod__abstract" value="true"/>
+	</node>
+	<node uin="bmogyf17uk5it-1jmoky">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="StaminaLimitation"/>
+		<property name="mod__extends" value="Limitation"/>
+		<link uin="1jjtwf17uk5it17ow2q">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Limitation"/>
+			<participant referencedUin="design:node:::bmogyf17uk5it-1jmoky" role="Client"></participant>
+			<participant referencedUin="design:node:::cl825f17uk5it-7qup5t" role="Supplier"></participant>
+		</link>
+		<node uin="dm14rf17uk5it-d546w7">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="$name" value="cost"/>
+			<link uin="eb19pf17uk5it-a4lx00">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::dm14rf17uk5it-d546w7:bmogyf17uk5it-1jmoky" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+</nodeSet>
