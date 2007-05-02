@@ -90,6 +90,8 @@
 			<property name="__aggregationEnd_formalParameter" value="glyi4f17v15r6aw90xg"/>
 			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
 			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
 			<node uin="c1uvdf17vcg2cvvcsyn">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="bodyCondition"/>
@@ -172,6 +174,8 @@
 			<property name="__aggregationEnd_returnResult" value="e9r6cf17v15r6-20tl0s"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="mod__returnType" value="requisition.ActionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<node uin="hk96tf17vcg2c-q5n85q">
 				<property name="$metaclass" value="Constraint"/>
@@ -353,6 +357,8 @@
 			<property name="__aggregationEnd_formalParameter" value="8ldptf17v1key-1zqg1u"/>
 			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
 			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
 			<node uin="i494wf17vcg2cr148oo">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -448,6 +454,8 @@
 			<property name="__aggregationEnd_returnResult" value="h11t1f17v1key8nt0lh"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="mod__returnType" value="requisition.PerceptionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<node uin="cwg4if17vcg2c-sl098m">
 				<property name="$metaclass" value="Constraint"/>

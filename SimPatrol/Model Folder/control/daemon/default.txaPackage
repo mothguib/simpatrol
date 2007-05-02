@@ -207,5 +207,11 @@
 			<participant referencedUin="design:node:::axoklf17vaioy-wrqfrm" role="Client"></participant>
 			<participant referencedUin="design:node:::drykaf17vaioywpcl2h" role="Supplier"></participant>
 		</link>
+		<link uin="ieje0rf186ukov-z3n2ua">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::axoklf17vaioy-wrqfrm" role="Client"></participant>
+			<participant referencedUin="design:node:::dzrkrf17vflv5-87xgvl" role="Supplier"></participant>
+		</link>
 	</node>
 </nodeSet>
