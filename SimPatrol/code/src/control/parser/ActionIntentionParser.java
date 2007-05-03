@@ -25,7 +25,7 @@ public class ActionIntentionParser {
 	/**
 	 * @model.uin <code>design:node:::gtuu7f17vcg2c-779mfa</code>
 	 */
-	public List actionRequisition;
+	public List<ActionRequisition> actionRequisition;
 
 	/**
 	 * @model.uin <code>design:node:::4gdw3f17vcg2c3hi59r</code>

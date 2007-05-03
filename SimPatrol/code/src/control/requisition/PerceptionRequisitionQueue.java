@@ -17,7 +17,7 @@ public class PerceptionRequisitionQueue extends Queue {
 	/**
 	 * @model.uin <code>design:node:::dm0n5f17vcg2c-joneso</code>
 	 */
-	private List perceptionRequisition;
+	private List<PerceptionRequisition> perceptionRequisition;
 
 	/**
 	 * @param requisition

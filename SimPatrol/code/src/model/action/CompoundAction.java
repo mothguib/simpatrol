@@ -10,5 +10,5 @@ public abstract class CompoundAction extends Action {
 	/**
 	 * @model.uin <code>design:node:::gjlolf17ugxj1-5az2i2</code>
 	 */
-	public List atomicAction;
+	public List<AtomicAction> atomicAction;
 }

@@ -1,7 +1,7 @@
 package control.intention;
 
-import model.$interface$.XMLable;
 import model.action.ActionType;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::eykymf17var26-q6g3uo</code>

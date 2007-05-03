@@ -1,7 +1,8 @@
 package model.Graph;
 
 import java.util.Collection;
-import model.$interface$.XMLable;
+import model.agent.Agent;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::e2gmtf17uk14u-dyl3jm</code>
@@ -11,12 +12,12 @@ public class Vertex implements XMLable {
 	/**
 	 * @model.uin <code>design:node:::a7glof17uk14ujzrw3k</code>
 	 */
-	public Collection in_edges;
+	public Collection<Edge> edge;
 
 	/**
 	 * @model.uin <code>design:node:::a7glof17uk14ujzrw3k</code>
 	 */
-	public Collection out_edges;
+	public Collection<Edge> edge;
 
 	/**
 	 * @model.uin <code>design:node:::32va9f17uk14u-45ywpq</code>
@@ -26,7 +27,7 @@ public class Vertex implements XMLable {
 	/**
 	 * @model.uin <code>design:node:::i172kf17ujey8agupu8</code>
 	 */
-	public Collection agent;
+	public Collection<Agent> agent;
 
 	/**
 	 * @model.uin <code>design:node:::gjtoxf17uk14ugglvpc</code>

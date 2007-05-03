@@ -1,6 +1,6 @@
 package control.requisition;
 
-import model.$interface$.XMLable;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::977fwf17vcg2cbz4ofu</code>

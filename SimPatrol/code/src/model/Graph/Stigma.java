@@ -1,7 +1,7 @@
 package model.Graph;
 
 import model.agent.Agent;
-import model.$interface$.XMLable;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::32va9f17uk14u-45ywpq</code>

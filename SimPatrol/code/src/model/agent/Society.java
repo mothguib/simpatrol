@@ -1,7 +1,7 @@
 package model.agent;
 
 import control.simulator.Simulator;
-import model.$interface$.XMLable;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::hyht6f17ujey8gc0qlv</code>

@@ -2,10 +2,10 @@ package model.agent;
 
 import control.daemon.PerceptionDaemon;
 import model.Graph.Stigma;
-import model.$interface$.XMLable;
 import model.Graph.Vertex;
 import model.Graph.Edge;
 import control.daemon.ActionDaemon;
+import model.interfaces.XMLable;
 import model.perception.Perception;
 
 /**

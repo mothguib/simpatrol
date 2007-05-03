@@ -12,7 +12,7 @@ public class ActionRequisitionQueue extends Queue {
 	/**
 	 * @model.uin <code>design:node:::gtuu7f17vcg2c-779mfa</code>
 	 */
-	public List actionRequisition;
+	public List<ActionRequisition> actionRequisition;
 
 	/**
 	 * @model.uin <code>design:node:::7fxyuf17vbztqy5hrpa</code>

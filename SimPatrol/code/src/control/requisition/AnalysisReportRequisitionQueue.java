@@ -12,7 +12,7 @@ public class AnalysisReportRequisitionQueue extends Queue {
 	/**
 	 * @model.uin <code>design:node:::6wu5ef17vcg2c-9118fj</code>
 	 */
-	public List analysisReportRequisition;
+	public List<AnalysisReportRequisition> analysisReportRequisition;
 
 	/**
 	 * @model.uin <code>design:node:::939iuf17vflv5-vhv0o</code>

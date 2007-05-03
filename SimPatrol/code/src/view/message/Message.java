@@ -1,6 +1,6 @@
 package view.message;
 
-import model.$interface$.XMLable;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::2glexf17vfk7o7esqvc</code>

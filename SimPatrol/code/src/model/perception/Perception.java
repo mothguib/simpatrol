@@ -1,7 +1,7 @@
 package model.perception;
 
 import control.daemon.PerceptionDaemon;
-import model.$interface$.XMLable;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::9gi2yf17uk7386paoue</code>

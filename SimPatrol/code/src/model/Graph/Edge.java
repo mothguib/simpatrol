@@ -1,7 +1,8 @@
 package model.Graph;
 
 import java.util.Collection;
-import model.$interface$.XMLable;
+import model.agent.Agent;
+import model.interfaces.XMLable;
 
 /**
  * @model.uin <code>design:node:::a7glof17uk14ujzrw3k</code>
@@ -11,7 +12,7 @@ public class Edge implements XMLable {
 	/**
 	 * @model.uin <code>design:node:::i172kf17ujey8agupu8</code>
 	 */
-	public Collection agent;
+	public Collection<Agent> agent;
 
 	/**
 	 * @model.uin <code>design:node:::32va9f17uk14u-45ywpq</code>
