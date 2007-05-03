@@ -1,4 +1,4 @@
-package control.daemon;
+package simpatrol.control.daemon;
 
 /**
  * @model.uin <code>design:node:::eskvbf17vaioy-vzb1mq</code>
