@@ -1,4 +1,4 @@
-package model.Graph1;
+package simpatrol.model.graph;
 
 /**
  * @model.uin <code>design:node:::c1k3tf17uk14um68jcf</code>

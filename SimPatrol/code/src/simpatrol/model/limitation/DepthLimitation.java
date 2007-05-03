@@ -1,4 +1,4 @@
-package model.limitation;
+package simpatrol.model.limitation;
 
 /**
  * @model.uin <code>design:node:::9yg1pf17uk5it8rqhp5</code>

@@ -1,4 +1,4 @@
-package model.agent;
+package simpatrol.model.agent;
 
 /**
  * @model.uin <code>design:node:::h27inf17ujey8x42aqh</code>

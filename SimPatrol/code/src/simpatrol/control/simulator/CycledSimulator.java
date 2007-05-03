@@ -1,4 +1,4 @@
-package control.simulator;
+package simpatrol.control.simulator;
 
 /**
  * @model.uin <code>design:node:::d81vpf17vcpxt-15s1dg</code>

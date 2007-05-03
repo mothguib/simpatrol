@@ -1,4 +1,4 @@
-package model.agent;
+package simpatrol.model.agent;
 
 import java.util.Collection;
 

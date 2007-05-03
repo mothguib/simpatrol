@@ -1,4 +1,4 @@
-package control.requisition;
+package simpatrol.control.requisition;
 
 /**
  * @model.uin <code>design:node:::co187f17vytgp-jh8zma</code>

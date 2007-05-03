@@ -1,4 +1,4 @@
-package view.message;
+package simpatrol.view.message;
 
 /**
  * @model.uin <code>design:node:::3agb2f17vfk84-ja3s07</code>
