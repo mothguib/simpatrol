@@ -1,4 +1,4 @@
-package model.perception;
+package simpatrol.model.perception;
 
 /**
  * @model.uin <code>design:node:::exbz7f17uk738igek9d</code>
