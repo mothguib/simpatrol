@@ -1,12 +1,12 @@
 package model.agent;
 
-import control.daemon.PerceptionDaemon;
-import model.Graph.Stigma;
-import model.Graph.Vertex;
-import model.Graph.Edge;
-import control.daemon.ActionDaemon;
+import model.graph.Edge;
+import model.graph.Stigma;
+import model.graph.Vertex;
 import model.interfaces.XMLable;
 import model.perception.Perception;
+import control.daemon.ActionDaemon;
+import control.daemon.PerceptionDaemon;
 
 /**
  * @model.uin <code>design:node:::i172kf17ujey8agupu8</code>
