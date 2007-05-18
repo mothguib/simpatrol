@@ -197,6 +197,38 @@
 			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
 			<participant referencedUin="design:node:::hyht6f17ujey8gc0qlv" role="Supplier"></participant>
 		</link>
+		<link uin="ieje0rf1v1fcb4-yppci0">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::gjtoxf17uk14ugglvpc" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1frms-1xbcsx">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@supplierCardinality" value="1..*"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::f1mcnf17vaioyh63h3f" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fthmhxxz1t">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@supplierCardinality" value="1..*"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::7664yf17vaioyemex79" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fviyiqv90w">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::eskvbf17vaioy-vzb1mq" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fy6g-ww4n0k">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::axoklf17vaioy-wrqfrm" role="Supplier"></participant>
+		</link>
 	</node>
 	<node uin="j360yf1826tva-4w442n">
 		<property name="$metaclass" value="Note"/>
