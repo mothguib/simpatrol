@@ -76,6 +76,16 @@
 			<property name="location_set_by_user" value="true"/>
 			<property name="$shortcutReference" value="true"/>
 			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf1voo7xq-vnjje6:h27inf17ujey8x42aqh">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="301,320"/>
+				<property name="targetAnchor" value="500,220"/>
+				<property name="bendpoints" value="500,320"/>
+				<property name="smooth_bendpoints" value="500,320"/>
+				<reference referencedUin="label:label:design:link:::ieje0rf1voo7xq-vnjje6:h27inf17ujey8x42aqh">
+					<property name="bounds" value="372,323,56,17"/>
+				</reference>
+			</reference>
 			<reference referencedUin="design:link:::jgl9tf17ujey88ogfkd:h27inf17ujey8x42aqh">
 				<property name="location_set_by_user" value="true"/>
 				<property name="sourceAnchor" value="301,320"/>
@@ -87,6 +97,16 @@
 				</reference>
 				<reference referencedUin="label:label:design:link:::ieje0rf0927dzc2jo6xe:-tdsqjuf091xkzw-c2f9cf">
 					<property name="bounds" value="370,323,60,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf1voo2zs-vvppjm:h27inf17ujey8x42aqh">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="301,280"/>
+				<property name="targetAnchor" value="400,220"/>
+				<property name="bendpoints" value="400,280"/>
+				<property name="smooth_bendpoints" value="400,280"/>
+				<reference referencedUin="label:label:design:link:::ieje0rf1voo2zs-vvppjm:h27inf17ujey8x42aqh">
+					<property name="bounds" value="329,283,43,17"/>
 				</reference>
 			</reference>
 			<reference referencedUin="design:link:::8rm0yf17ujey8-lg03mz:h27inf17ujey8x42aqh">

@@ -112,7 +112,7 @@
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf0b361tf-gkgn72">
 			<property name="$shortcutReference" value="true"/>
-			<property name="bounds" value="1415,512,201,213"/>
+			<property name="bounds" value="1415,512,201,229"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf0b8b3nt7sf0fj">
@@ -142,7 +142,7 @@
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf15oyn2w-5jsurb">
 			<property name="$shortcutReference" value="true"/>
-			<property name="bounds" value="638,1375,210,389"/>
+			<property name="bounds" value="638,1375,210,405"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:view:::V-jr6xbaf16f0nlkrykwrp">
@@ -162,7 +162,7 @@
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf17tpl17-ivzrfa">
 			<property name="$shortcutReference" value="true"/>
-			<property name="bounds" value="731,99,136,117"/>
+			<property name="bounds" value="731,99,120,117"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf17uglcosmyg5q">
@@ -767,10 +767,6 @@
 		<reference referencedUin="design:node:::gtuu7f17vcg2c-779mfa">
 			<property name="bounds" value="638,586,200,80"/>
 			<property name="location_set_by_user" value="true"/>
-			<reference referencedUin="design:link:::fga4qf17vcg2c-6uilc5:gtuu7f17vcg2c-779mfa">
-				<property name="sourceAnchor" value="730,574"/>
-				<property name="targetAnchor" value="730,90"/>
-			</reference>
 		</reference>
 		<reference referencedUin="design:node:::4gdw3f17vcg2c3hi59r">
 			<property name="bounds" value="638,669,200,80"/>
@@ -864,7 +860,7 @@
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf17vd7w3wosp20">
-			<property name="bounds" value="673,315,82,76"/>
+			<property name="bounds" value="673,315,82,92"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:node:::2glexf17vfk7o7esqvc">
@@ -935,7 +931,7 @@
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf17vfw1wd7ygk4">
-			<property name="bounds" value="638,483,152,140"/>
+			<property name="bounds" value="638,483,237,172"/>
 			<property name="location_set_by_user" value="true"/>
 		</reference>
 		<reference referencedUin="design:node:::8j88bf17vghjr-7fjxy4">
@@ -1007,6 +1003,8 @@
 		</reference>
 		<reference referencedUin="design:view:::V1hexuhf1v16l7ti81a3z">
 			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="525,2,147,165"/>
+			<property name="location_set_by_user" value="true"/>
 		</reference>
 	</view>
 </nodeSet>

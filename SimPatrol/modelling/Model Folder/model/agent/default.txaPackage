@@ -80,6 +80,8 @@
 			<property name="__aggregationEnd_formalParameter" value="2x9yef17ujey8usorq9"/>
 			<property name="__aggregationEnd_formalParameter" value="2x9yef17ujey8usorq9"/>
 			<property name="__aggregationEnd_formalParameter" value="2x9yef17ujey8usorq9"/>
+			<property name="__aggregationEnd_formalParameter" value="2x9yef17ujey8usorq9"/>
+			<property name="__aggregationEnd_formalParameter" value="2x9yef17ujey8usorq9"/>
 			<node uin="hj7mf17ujey8-qegd4j">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -148,6 +150,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff0wmontu-6sw2jx"/>
 			<property name="__aggregationEnd_formalParameter" value="j5oemf17u6ago-6tt21g"/>
+			<property name="__aggregationEnd_formalParameter" value="38st1f17ujey8-nl4k4z"/>
+			<property name="__aggregationEnd_formalParameter" value="38st1f17ujey8-nl4k4z"/>
 			<property name="__aggregationEnd_formalParameter" value="38st1f17ujey8-nl4k4z"/>
 			<property name="__aggregationEnd_formalParameter" value="38st1f17ujey8-nl4k4z"/>
 			<property name="__aggregationEnd_formalParameter" value="38st1f17ujey8-nl4k4z"/>
@@ -282,6 +286,20 @@
 			<property name="@label" value="appears"/>
 			<participant referencedUin="design:node:::h27inf17ujey8x42aqh" role="Client"></participant>
 			<participant referencedUin="design:node:::-tdsqjuezobt5nw-l64kjc" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1voo2zs-vvppjm">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@label" value="appears"/>
+			<participant referencedUin="design:node:::h27inf17ujey8x42aqh" role="Client"></participant>
+			<participant referencedUin="design:node:::nrlff17vgl5z6xtpx3" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1voo7xq-vnjje6">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="@label" value="disappears"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::h27inf17ujey8x42aqh" role="Client"></participant>
+			<participant referencedUin="design:node:::nrlff17vgl5z6xtpx3" role="Supplier"></participant>
 		</link>
 	</node>
 	<node uin="hyht6f17ujey8gc0qlv">

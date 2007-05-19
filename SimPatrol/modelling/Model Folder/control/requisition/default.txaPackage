@@ -31,13 +31,6 @@
 		<property name="$metaclass" value="Class20"/>
 		<property name="$name" value="ActionRequisition"/>
 		<property name="mod__extends" value="Requisition"/>
-		<link uin="fga4qf17vcg2c-6uilc5">
-			<property name="$metaclass" value="KernelAssociation20"/>
-			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
-			<property name="visibility" value="public"/>
-			<participant referencedUin="design:node:::gtuu7f17vcg2c-779mfa" role="Client"></participant>
-			<participant referencedUin="design:node:::nrlff17vgl5z6xtpx3" role="Supplier"></participant>
-		</link>
 		<node uin="4tznxf17vcg2c7vqq0a">
 			<property name="$metaclass" value="Property20"/>
 			<property name="$name" value="action_type"/>
@@ -88,6 +81,8 @@
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
 			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
 			<property name="__aggregationEnd_formalParameter" value="glyi4f17v15r6aw90xg"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
 			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
 			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
 			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
@@ -175,6 +170,8 @@
 			<property name="__aggregationEnd_returnResult" value="e9r6cf17v15r6-20tl0s"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="mod__returnType" value="requisition.ActionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
 			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
@@ -362,6 +359,8 @@
 			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
 			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
 			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
 			<node uin="i494wf17vcg2cr148oo">
 				<property name="$metaclass" value="Constraint"/>
 				<property name="$name" value="precondition"/>
@@ -457,6 +456,8 @@
 			<property name="__aggregationEnd_returnResult" value="h11t1f17v1key8nt0lh"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="mod__returnType" value="requisition.PerceptionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
 			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>

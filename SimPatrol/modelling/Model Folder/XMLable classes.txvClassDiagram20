@@ -51,7 +51,7 @@
 					<property name="bounds" value="262,95,67,17"/>
 				</reference>
 				<reference referencedUin="label:realize:design:link:::a85h9f17ujey8-upmb7j:i172kf17ujey8agupu8">
-					<property name="bounds" value="244,131,67,17"/>
+					<property name="bounds" value="262,95,67,17"/>
 				</reference>
 			</reference>
 			<reference referencedUin="design:link:::56598f17ujey8-mn4qb2:i172kf17ujey8agupu8">
@@ -102,7 +102,7 @@
 					<property name="bounds" value="197,130,67,17"/>
 				</reference>
 				<reference referencedUin="label:realize:design:link:::hvrrjf17ujey8e8hjdd:hyht6f17ujey8gc0qlv">
-					<property name="bounds" value="218,108,67,17"/>
+					<property name="bounds" value="197,130,67,17"/>
 				</reference>
 			</reference>
 		</reference>
@@ -333,7 +333,7 @@
 					<property name="bounds" value="193,98,67,17"/>
 				</reference>
 				<reference referencedUin="label:realize:design:link:::77s19f17vfk7oj1b5w7:2glexf17vfk7o7esqvc">
-					<property name="bounds" value="209,90,67,17"/>
+					<property name="bounds" value="193,98,67,17"/>
 				</reference>
 			</reference>
 			<reference referencedUin="design:node:::he2qxf17vfk7o-n2mzpk:2glexf17vfk7o7esqvc">
