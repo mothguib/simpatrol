@@ -1,15 +1,22 @@
+/* Stigma.java */
+
+/* The package of this class. */
 package model.graph;
 
+/* Imported classes and/or interfaces. */
 import model.agent.Agent;
 import model.interfaces.XMLable;
 
-/**
- * @model.uin <code>design:node:::32va9f17uk14u-45ywpq</code>
- */
+/** Implements an eventual stigma deposited by a patroller. */
 public class Stigma implements XMLable {
-
-	/**
-	 * @model.uin <code>design:node:::i172kf17ujey8agupu8</code>
-	 */
-	public Agent agent;
+	/* Attributes. */
+	/** The agent patroller that deposited the stigma. */
+	private Agent agent;
+	
+	/* Methods. */
+	/** Constructor.
+	 *  @param agent The agent patroller that deposited the stigma. */
+	public Stigma(Agent agent) {
+		this.agent = agent;
+	}
 }
