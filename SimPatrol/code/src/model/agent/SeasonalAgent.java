@@ -1,6 +1,6 @@
 package model.agent;
 
-import util.TimeProbabilityDistribution;
+import util.tpd.TimeProbabilityDistribution;
 
 /**
  * @model.uin <code>design:node:::h27inf17ujey8x42aqh</code>

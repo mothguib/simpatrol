@@ -4,7 +4,7 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
-import util.TimeProbabilityDistribution;
+import util.tpd.TimeProbabilityDistribution;
 
 /** Implements dynamic edges of a Graph object,
  *  that can appear and disappear with a specific time

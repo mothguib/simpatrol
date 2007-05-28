@@ -72,7 +72,8 @@ public class Vertex implements XMLable {
 		this.in_edges.add(in_arc);
 	}
 	
-	/** Returns the edges set of the vertex. */
+	/** Returns the edges set of the vertex.
+	 *  @return The set of edges associated with the vertex.*/
 	public Set<Edge> getEdges() {		
 		Set<Edge> answer = new HashSet<Edge>();
 		answer.addAll(this.in_edges);
