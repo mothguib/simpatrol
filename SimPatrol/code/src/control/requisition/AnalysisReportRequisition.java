@@ -5,4 +5,9 @@ package control.requisition;
  */
 public class AnalysisReportRequisition extends Requisition {
 
+	public String toXML(int identation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

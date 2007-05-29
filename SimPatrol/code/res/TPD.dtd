@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Document   : TPD.dtd
+    Version    : 1.0
+    Date       : May 28th, 2007, 12:05
+    Description: SimPatrol's Time Probability Distribution DTD
+-->
+
+<!-- TPD - Time Probability Distribution -->
+<!ELEMENT tpd (tpd_parameter*)>
+<!ATTLIST tpd id ID #REQUIRED>
+<!ATTLIST tpd seed CDATA #REQUIRED>
+<!ATTLIST tpd next_bool_count CDATA #REQUIRED>
+<!ATTLIST tpd type (0 | 1 | 2) #REQUIRED>
+
+<!-- TPD PARAMETER -->
+<!ELEMENT tpd_parameter EMPTY>
+<!ATTLIST tpd_parameter value CDATA #REQUIRED>

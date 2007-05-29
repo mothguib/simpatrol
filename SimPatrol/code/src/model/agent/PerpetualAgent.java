@@ -5,4 +5,9 @@ package model.agent;
  */
 public class PerpetualAgent extends Agent {
 
+	public String toXML(int identation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

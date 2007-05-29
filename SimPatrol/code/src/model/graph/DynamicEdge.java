@@ -42,4 +42,31 @@ public class DynamicEdge extends Edge {
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = appearing_pd;
 	}
+	
+	public String toXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer(super.toXML(identation));
+		
+		// removes the closing of the xml tag
+		int last_valid_index = 0;
+		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
+		else last_valid_index = buffer.indexOf("</edge>");
+		
+		buffer.delete(last_valid_index, buffer.length());
+		
+		// adds the time probability distributions
+		buffer.append("\n");
+		buffer.append(this.appearing_pd.toXML(identation + 1));
+		buffer.append(this.disappearing_pd.toXML(identation + 1));
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// closes the tags
+		buffer.append("</edge>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
 }

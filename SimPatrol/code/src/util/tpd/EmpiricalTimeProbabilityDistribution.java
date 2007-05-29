@@ -9,9 +9,8 @@ import cern.jet.random.EmpiricalWalker;
 
 /** Implements the probability distributions based on time of simulation
  *  that are given by an empirical method. */
-public class EmpiricalTimeProbabilityDistribution extends
-		TimeProbabilityDistribution {	
-	/* Attribute. */
+public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistribution {	
+	/* Attributes. */
 	/** The discrete empirical distribution.  */
 	private double[] distribution;
 	
@@ -34,5 +33,39 @@ public class EmpiricalTimeProbabilityDistribution extends
 		
 		if(rn_distributor.nextInt() == next_bool_counter) return true;
 		else return false;
+	}
+	
+	public String toXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// partially fills the buffer 
+		buffer.append("<tpd id=" + this.getObjectId() +
+				      " seed=" + this.seed +
+				      " next_bool_count=" + this.next_bool_counter +
+				      " type=" + TimeProbabilityDistributionType.EMPIRICAL +
+				      ">\n");
+		
+		// completes the buffer content
+		for(int i = 0; i < this.distribution.length; i++) {
+			// applies the identation
+			for(int j = 0; j < identation + 1; j++)
+				buffer.append("\t");
+			
+			buffer.append("<tpd_parameter value=" + this.distribution[i] + "/>\n");
+		}
+		
+		// finishes the buffer content
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		buffer.append("</tpd>\n");
+		
+		// returns the buffer content (incomplete)
+		return buffer.toString();		
 	}
 }

@@ -9,8 +9,7 @@ import cern.jet.random.EmpiricalWalker;
 
 /** Implements the probability distributions based on time of simulation
  *  that are given uniformly by a single probability value. */
-public class UniformTimeProbabilityDistribution extends
-		TimeProbabilityDistribution {
+public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribution {
 	/* Attributes. */
 	/** The probability value of happening an associated event.
 	 *  Its value must belong to the interval [0,1].  */
@@ -36,5 +35,36 @@ public class UniformTimeProbabilityDistribution extends
 		
 		if(this.rn_distributor.nextInt() == 0) return false;
 		else return true;
+	}
+	
+	public String toXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// partially fills the buffer 
+		buffer.append("<tpd id=" + this.getObjectId() + 
+				      " seed=" + this.seed +
+				      " next_bool_count=" + this.next_bool_counter +
+				      " type=" + TimeProbabilityDistributionType.UNIFORM +
+				      ">\n");
+		
+		// puts the probability value
+		for(int i = 0; i < identation + 1; i++)
+			buffer.append("\t");
+		
+		buffer.append("<tpd_parameter value=" + this.probability + "/>\n");
+		
+		// finishes the buffer content
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		buffer.append("</tpd>\n");
+		
+		// returns the buffer content (incomplete)
+		return buffer.toString();		
 	}
 }

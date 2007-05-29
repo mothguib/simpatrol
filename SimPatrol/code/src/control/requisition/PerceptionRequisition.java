@@ -11,4 +11,9 @@ public class PerceptionRequisition extends Requisition {
 	 * @model.uin <code>design:node:::jmkg1f17vcg2cdluq0x:dm0n5f17vcg2c-joneso</code>
 	 */
 	private PerceptionType perception_type;
+
+	public String toXML(int identation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -27,4 +27,31 @@ public class DynamicVertex extends Vertex {
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = disappearing_pd;
 	}
+	
+	public String toXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer(super.toXML(identation));
+		
+		// removes the closing of the xml tag
+		int last_valid_index = 0;
+		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
+		else last_valid_index = buffer.indexOf("</vertex>");
+		
+		buffer.delete(last_valid_index, buffer.length());
+		
+		// adds the time probability distributions
+		buffer.append("\n");
+		buffer.append(this.appearing_pd.toXML(identation + 1));
+		buffer.append(this.disappearing_pd.toXML(identation + 1));
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// closes the tags
+		buffer.append("</vertex>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
 }

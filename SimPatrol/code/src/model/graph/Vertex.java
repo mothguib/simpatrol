@@ -12,15 +12,19 @@ import model.interfaces.XMLable;
  *  @see Graph */
 public class Vertex implements XMLable {
 	/* Atributes. */
+	/** The object id of the vertex.
+	 *  Not part of the patrol problem modelling. */
+	private String id;
+	
 	/** The set of edges whose emitter is this vertex. */
 	private Set<Edge> in_edges;
 
 	/** The set of edges whose collector is this vertex. */
 	private Set<Edge> out_edges;
 
-	/** The stigma eventually deposited by a patroller.
+	/** The set of stigmas eventually deposited by a patroller.
 	 *  Its default value is NULL. */
-	private Stigma stigma = null;
+	protected Set<Stigma> stigmas = null;
 
 	/** The label of the vertex. */
 	private String label;
@@ -45,6 +49,10 @@ public class Vertex implements XMLable {
 	/** Constructor.
 	 *  @param label The label of the vertex. */
 	public Vertex(String label) {
+		this.id = this.getClass().getName() + "@" +
+		          Integer.toHexString(this.hashCode()) + "#" +
+		          Float.toHexString(System.currentTimeMillis());
+		
 		this.in_edges  = new HashSet<Edge>();
 		this.out_edges = new HashSet<Edge>();
 		this.label = label;
@@ -79,5 +87,45 @@ public class Vertex implements XMLable {
 		answer.addAll(this.in_edges);
 		answer.addAll(this.out_edges);
 		return answer;		
+	}
+
+	public String toXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// fills the buffer 
+		buffer.append("<vertex id=" + this.id + 
+				      " label=" + this.label +
+				      " priority=" + this.priority +
+				      " visibility=" + this.visibility +
+				      " idleness=" + this.idleness +
+				      " fuel=" + this.fuel);
+		
+		// treats the ocurrency of stigmas
+		if(this.stigmas != null) {
+			buffer.append(">\n");
+			
+			Stigma[] stigmas_array = (Stigma[]) this.stigmas.toArray();			
+			for(int i = 0; i < stigmas_array.length; i++)
+				buffer.append(stigmas_array[i].toXML(identation + 1));
+			
+			// applies the identation
+			for(int i = 0; i < identation; i++)
+				buffer.append("\t");
+			
+			buffer.append("</vertex>\n");
+		}
+		else buffer.append("/>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
+	public String getObjectId() {
+		return this.id;
 	}
 }

@@ -42,4 +42,8 @@ public abstract class Agent implements XMLable {
 		/* default generated stub */;
 
 	}
+	
+	public String getObjectId() {
+		return null;
+	}
 }
