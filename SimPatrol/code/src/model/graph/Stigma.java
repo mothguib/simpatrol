@@ -21,13 +21,9 @@ public class Stigma implements XMLable {
 	/** Constructor.
 	 *  @param agent The agent patroller that deposited the stigma. */
 	public Stigma(Agent agent) {
-		this.id = this.getClass().getName() + "@" +
-                  Integer.toHexString(this.hashCode()) + "#" +
-                  Float.toHexString(System.currentTimeMillis());		
-		
 		this.agent = agent;
 	}
-
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
@@ -37,15 +33,20 @@ public class Stigma implements XMLable {
 			buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<stigma id=" + this.id + 
-				      " agent_id=" + this.agent.getObjectId() +
-				      "/>\n");		
+		buffer.append("<stigma id=\"" + this.id + 
+				      "\" agent_id=\"" + "" + //this.agent.getObjectId() +
+				      "\"/>\n");		
 		
 		// returns the buffer content
 		return buffer.toString();
+		// TODO corrigir!!		
 	}
 
 	public String getObjectId() {
 		return this.id;
+	}
+
+	public void setObjectId(String object_id) {
+		this.id = object_id;		
 	}
 }

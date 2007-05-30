@@ -12,10 +12,7 @@ import cern.jet.random.EmpiricalWalker;
 public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistribution {	
 	/* Attributes. */
 	/** The discrete empirical distribution.  */
-	private double[] distribution;
-	
-	/** The discrete empirical distributor.  */
-	private EmpiricalWalker rn_distributor;
+	private double[] distribution;	
 	
 	/* Methods. */
 	/** Constructor.
@@ -24,6 +21,8 @@ public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistrib
 	public EmpiricalTimeProbabilityDistribution(int seed, double[] distribution) {
 		super(seed);
 		this.distribution = distribution;
+		
+		// never forget to instantiate this.rn_distributor!!!
 		this.rn_distributor = new EmpiricalWalker(this.distribution, Empirical.NO_INTERPOLATION, this.rn_generator);
 	}
 	
@@ -44,11 +43,11 @@ public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistrib
 			buffer.append("\t");
 		
 		// partially fills the buffer 
-		buffer.append("<tpd id=" + this.getObjectId() +
-				      " seed=" + this.seed +
-				      " next_bool_count=" + this.next_bool_counter +
-				      " type=" + TimeProbabilityDistributionType.EMPIRICAL +
-				      ">\n");
+		buffer.append("<tpd id=\"" + this.getObjectId() +
+				      "\" seed=\"" + this.seed +
+				      "\" next_bool_count=\"" + this.next_bool_counter +
+				      "\" type=\"" + TimeProbabilityDistributionType.EMPIRICAL +
+				      "\">\n");
 		
 		// completes the buffer content
 		for(int i = 0; i < this.distribution.length; i++) {
@@ -56,7 +55,7 @@ public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistrib
 			for(int j = 0; j < identation + 1; j++)
 				buffer.append("\t");
 			
-			buffer.append("<tpd_parameter value=" + this.distribution[i] + "/>\n");
+			buffer.append("<tpd_parameter value=\"" + this.distribution[i] + "\"/>\n");
 		}
 		
 		// finishes the buffer content
@@ -65,7 +64,7 @@ public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistrib
 		
 		buffer.append("</tpd>\n");
 		
-		// returns the buffer content (incomplete)
+		// returns the buffer content
 		return buffer.toString();		
 	}
 }

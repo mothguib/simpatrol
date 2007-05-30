@@ -35,10 +35,10 @@ public class DynamicVertex extends Vertex {
 		// removes the closing of the xml tag
 		int last_valid_index = 0;
 		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else last_valid_index = buffer.indexOf("</vertex>");
+		else last_valid_index = buffer.indexOf("\n\t</vertex>");
 		
 		buffer.delete(last_valid_index, buffer.length());
-		
+
 		// adds the time probability distributions
 		buffer.append("\n");
 		buffer.append(this.appearing_pd.toXML(identation + 1));

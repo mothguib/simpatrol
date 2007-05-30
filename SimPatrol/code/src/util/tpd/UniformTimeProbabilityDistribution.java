@@ -15,9 +15,6 @@ public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribut
 	 *  Its value must belong to the interval [0,1].  */
 	private double probability;
 	
-	/** A discrete empirical distributor.  */
-	private EmpiricalWalker rn_distributor;
-	
 	/* Methods. */
 	/** Constructor.
 	 *  @param seed The seed for the random number generation.
@@ -26,6 +23,8 @@ public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribut
 		super(seed);
 		this.probability = probability;		
 		double[] distribution = {Math.abs(1 - this.probability), Math.abs(this.probability)};
+		
+		// never forget to instantiate this.rn_distributor!!!
 		this.rn_distributor = new EmpiricalWalker(distribution, Empirical.NO_INTERPOLATION, this.rn_generator);						
 	}
 	
@@ -46,17 +45,17 @@ public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribut
 			buffer.append("\t");
 		
 		// partially fills the buffer 
-		buffer.append("<tpd id=" + this.getObjectId() + 
-				      " seed=" + this.seed +
-				      " next_bool_count=" + this.next_bool_counter +
-				      " type=" + TimeProbabilityDistributionType.UNIFORM +
-				      ">\n");
+		buffer.append("<tpd id=\"" + this.getObjectId() + 
+				      "\" seed=" + this.seed +
+				      "\" next_bool_count=" + this.next_bool_counter +
+				      "\" type=" + TimeProbabilityDistributionType.UNIFORM +
+				      "\">\n");
 		
 		// puts the probability value
 		for(int i = 0; i < identation + 1; i++)
 			buffer.append("\t");
 		
-		buffer.append("<tpd_parameter value=" + this.probability + "/>\n");
+		buffer.append("<tpd_parameter value=\"" + this.probability + "\"/>\n");
 		
 		// finishes the buffer content
 		for(int i = 0; i < identation; i++)
@@ -64,7 +63,7 @@ public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribut
 		
 		buffer.append("</tpd>\n");
 		
-		// returns the buffer content (incomplete)
+		// returns the buffer content
 		return buffer.toString();		
 	}
 }

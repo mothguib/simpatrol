@@ -50,10 +50,6 @@ public class Edge implements XMLable {
 	 *  @param oriented TRUE if the edge is an arc.
 	 *  @param length The length of the edge. */
 	public Edge(Vertex emitter, Vertex collector, boolean oriented, double length) {
-		this.id = this.getClass().getName() + "@" +
-        		  Integer.toHexString(this.hashCode()) + "#" +
-        		  Float.toHexString(System.currentTimeMillis());
-		
 		this.emitter = emitter;
 		this.collector = collector;
 		this.oriented = oriented;
@@ -74,6 +70,18 @@ public class Edge implements XMLable {
 		
 		this.length = length;
 	}
+	
+	/** Configures the set of stigmas of the edge.
+	 *  @param stigmas The set of stigmas. */
+	public void setStigmas(Set<Stigma> stigmas) {
+		this.stigmas = stigmas;
+	}
+	
+	/** Configures the visibility of the edge.
+	 * @param visibility The visibility. */
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
 
 	public String getObjectId() {
 		return this.id;
@@ -88,20 +96,20 @@ public class Edge implements XMLable {
 			buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<edge id=" + this.id + 
-				      " emitter_id=" + this.emitter.getObjectId() +
-				      " collector_id=" + this.collector.getObjectId() +
-				      " oriented=" + this.oriented +
-				      " length=" + this.length +
-				      " visibility=" + this.visibility);
+		buffer.append("<edge id=\"" + this.id + 
+				      "\" emitter_id=\"" + this.emitter.getObjectId() +
+				      "\" collector_id=\"" + this.collector.getObjectId() +
+				      "\" oriented=\"" + this.oriented +
+				      "\" length=\"" + this.length +
+				      "\" visibility=\"" + this.visibility);
 		
 		// treats the ocurrency of stigmas
 		if(this.stigmas != null) {
-			buffer.append(">\n");
+			buffer.append("\">\n");
 			
-			Stigma[] stigmas_array = (Stigma[]) this.stigmas.toArray();			
+			Object[] stigmas_array = this.stigmas.toArray();			
 			for(int i = 0; i < stigmas_array.length; i++)
-				buffer.append(stigmas_array[i].toXML(identation + 1));
+				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
 			
 			// applies the identation
 			for(int i = 0; i < identation; i++)
@@ -109,9 +117,13 @@ public class Edge implements XMLable {
 			
 			buffer.append("</edge>\n");
 		}
-		else buffer.append("/>\n");
+		else buffer.append("\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();
+	}
+
+	public void setObjectId(String object_id) {
+		this.id = object_id;		
 	}
 }

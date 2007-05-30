@@ -16,9 +16,6 @@ public class NormalTimeProbabilityDistribution extends TimeProbabilityDistributi
 	/** The standard deviation of the normal function. */
 	private double standard_deviation;
 	
-	/** The discrete empirical distributor.  */
-	private Normal rn_distributor;
-	
 	/* Methods. */
 	/** Constructor.
 	 *  @param seed The seed for the random number generation.
@@ -28,6 +25,8 @@ public class NormalTimeProbabilityDistribution extends TimeProbabilityDistributi
 		super(seed);
 		this.mean = mean;
 		this.standard_deviation = standard_deviation;
+		
+		// never forget to instantiate this.rn_distributor!!!
 		this.rn_distributor = new Normal(this.mean, this.standard_deviation, this.rn_generator); 
 	}
 
@@ -48,23 +47,23 @@ public class NormalTimeProbabilityDistribution extends TimeProbabilityDistributi
 			buffer.append("\t");
 		
 		// partially fills the buffer 
-		buffer.append("<tpd id=" + this.getObjectId() +
-				      " seed=" + this.seed +
-				      " next_bool_count=" + this.next_bool_counter +
-				      " type=" + TimeProbabilityDistributionType.NORMAL +
-				      ">\n");
+		buffer.append("<tpd id=\"" + this.getObjectId() +
+				      "\" seed=\"" + this.seed +
+				      "\" next_bool_count=\"" + this.next_bool_counter +
+				      "\" type=\"" + TimeProbabilityDistributionType.NORMAL +
+				      "\">\n");
 		
 		// puts the mean value
 		for(int i = 0; i < identation + 1; i++)
 			buffer.append("\t");
 		
-		buffer.append("<tpd_parameter value=" + this.mean + "/>\n");
+		buffer.append("<tpd_parameter value=\"" + this.mean + "\"/>\n");
 		
 		// puts the standard deviation value
 		for(int i = 0; i < identation + 1; i++)
 			buffer.append("\t");
 		
-		buffer.append("<tpd_parameter value=" + this.standard_deviation + "/>\n");
+		buffer.append("<tpd_parameter value=\"" + this.standard_deviation + "\"/>\n");
 		
 		// finishes the buffer content
 		for(int i = 0; i < identation; i++)
@@ -72,7 +71,7 @@ public class NormalTimeProbabilityDistribution extends TimeProbabilityDistributi
 		
 		buffer.append("</tpd>\n");
 		
-		// returns the buffer content (incomplete)
+		// returns the buffer content
 		return buffer.toString();
 	}
 }

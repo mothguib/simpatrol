@@ -13,4 +13,8 @@ public interface XMLable {
 	/** Forces the object to have a unique id.
 	 *  @return The object id. */
 	public String getObjectId();
+	
+	/** Forces the object to have a unique id.
+	 *  @param object_id The object id. */
+	public void setObjectId(String object_id);
 }

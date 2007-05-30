@@ -50,7 +50,7 @@ public class DynamicEdge extends Edge {
 		// removes the closing of the xml tag
 		int last_valid_index = 0;
 		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else last_valid_index = buffer.indexOf("</edge>");
+		else last_valid_index = buffer.indexOf("\n\t</edge>");
 		
 		buffer.delete(last_valid_index, buffer.length());
 		

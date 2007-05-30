@@ -30,18 +30,17 @@ public class Graph implements XMLable {
 	 *  @param label The label of the graph.
 	 *  @param vertexes The set of vertexes of the graph. */
 	public Graph(String label, Set<Vertex> vertexes) {
-		this.id = this.getClass().getName() + "@" +
-		          Integer.toHexString(this.hashCode()) + "#" +
-		          Float.toHexString(System.currentTimeMillis());
-				
 		this.label = label;
 		this.vertexes = vertexes;
 		this.edges = new HashSet<Edge>();
 		
 		// for each vertex, adds its edges to the set of edges
-		Vertex[] vertexes_array = (Vertex[]) this.vertexes.toArray();
+		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++)
-			this.edges.addAll(vertexes_array[i].getEdges());
+			this.edges.addAll(((Vertex) vertexes_array[i]).getEdges());
+		
+		if(this.edges.size() == 0)
+			this.edges = null;
 	}
 
 	public String toXML(int identation) {
@@ -53,25 +52,26 @@ public class Graph implements XMLable {
 			buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<graph id=" + this.id + 
-				      " label=" + this.label +
-				      ">\n");
+		buffer.append("<graph id=\"" + this.id + 
+				      "\" label=\"" + this.label +
+				      "\">\n");
 		
 		// inserts the vertexes
-		Vertex[] vertexes_array = (Vertex[]) this.vertexes.toArray();
+		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++)
-			buffer.append(vertexes_array[i].toXML(identation + 1));
+			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1));
 		
 		// inserts the edges
-		Edge[] edges_array = (Edge[]) this.edges.toArray();
-		for(int i = 0; i < edges_array.length; i++)
-			buffer.append(edges_array[i].toXML(identation + 1));
-		
-		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		if(this.edges != null) {
+			Object[] edges_array = this.edges.toArray();
+			for (int i = 0; i < edges_array.length; i++)
+				buffer.append(((Edge) edges_array[i]).toXML(identation + 1));
+		}
 		
 		// finishes the buffer content
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+
 		buffer.append("</graph>\n");		
 		
 		// returns the buffer content
@@ -80,5 +80,9 @@ public class Graph implements XMLable {
 
 	public String getObjectId() {
 		return this.id;
+	}
+
+	public void setObjectId(String object_id) {
+		this.id = object_id;
 	}
 }

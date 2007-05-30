@@ -49,10 +49,6 @@ public class Vertex implements XMLable {
 	/** Constructor.
 	 *  @param label The label of the vertex. */
 	public Vertex(String label) {
-		this.id = this.getClass().getName() + "@" +
-		          Integer.toHexString(this.hashCode()) + "#" +
-		          Float.toHexString(System.currentTimeMillis());
-		
 		this.in_edges  = new HashSet<Edge>();
 		this.out_edges = new HashSet<Edge>();
 		this.label = label;
@@ -88,7 +84,37 @@ public class Vertex implements XMLable {
 		answer.addAll(this.out_edges);
 		return answer;		
 	}
-
+	
+	/** Configures the set of stigmas of the vertex.
+	 *  @param stigmas The set of stigmas. */
+	public void setStigmas(Set<Stigma> stigmas) {
+		this.stigmas = stigmas;
+	}
+	
+	/** Configures the priority of the vertex.
+	 * @param priority The priority. */
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+	
+	/** Configures the visibility of the vertex.
+	 * @param visibility The visibility. */
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
+	
+	/** Configures the idleness of the vertex.
+	 * @param idleness The idleness. */
+	public void setIdleness(int idleness) {
+		this.idleness = idleness;
+	}
+	
+	/** Configures if the vertex is a fuel recharging point.
+	 * @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
+	public void setFuel(boolean fuel) {
+		this.fuel = fuel;
+	}	
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
@@ -98,20 +124,20 @@ public class Vertex implements XMLable {
 			buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<vertex id=" + this.id + 
-				      " label=" + this.label +
-				      " priority=" + this.priority +
-				      " visibility=" + this.visibility +
-				      " idleness=" + this.idleness +
-				      " fuel=" + this.fuel);
+		buffer.append("<vertex id=\"" + this.id + 
+				      "\" label=\"" + this.label +
+				      "\" priority=\"" + this.priority +
+				      "\" visibility=\"" + this.visibility +
+				      "\" idleness=\"" + this.idleness +
+				      "\" fuel=\"" + this.fuel);
 		
 		// treats the ocurrency of stigmas
 		if(this.stigmas != null) {
-			buffer.append(">\n");
+			buffer.append("\">\n");
 			
-			Stigma[] stigmas_array = (Stigma[]) this.stigmas.toArray();			
+			Object[] stigmas_array = this.stigmas.toArray();			
 			for(int i = 0; i < stigmas_array.length; i++)
-				buffer.append(stigmas_array[i].toXML(identation + 1));
+				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
 			
 			// applies the identation
 			for(int i = 0; i < identation; i++)
@@ -119,7 +145,7 @@ public class Vertex implements XMLable {
 			
 			buffer.append("</vertex>\n");
 		}
-		else buffer.append("/>\n");
+		else buffer.append("\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();
@@ -127,5 +153,9 @@ public class Vertex implements XMLable {
 	
 	public String getObjectId() {
 		return this.id;
+	}
+
+	public void setObjectId(String object_id) {
+		this.id = object_id;		
 	}
 }
