@@ -10,4 +10,9 @@ public class PerpetualAgent extends Agent {
 		return null;
 	}
 
+	public void setObjectId(String object_id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -20,6 +20,7 @@
 <!ATTLIST vertex visibility CDATA "true">
 <!ATTLIST vertex idleness CDATA "0">
 <!ATTLIST vertex fuel CDATA "false">
+<!ATTLIST vertex is_appearing CDATA "false">
 
 <!-- EDGE -->
 <!ELEMENT edge ((stigma*)?, (tpd, tpd)?)>
@@ -29,6 +30,7 @@
 <!ATTLIST edge oriented CDATA "false">
 <!ATTLIST edge length CDATA #REQUIRED>
 <!ATTLIST edge visibility CDATA "true">
+<!ATTLIST edge is_appearing CDATA "false">
 
 <!-- STIGMA -->
 <!ELEMENT stigma EMPTY>

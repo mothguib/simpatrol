@@ -1,6 +1,6 @@
 /* XMLable.java */
 
-/* The package of this class. */
+/* The package of this interface. */
 package model.interfaces;
 
 /** Lets the objects that implement it have a XML version. */

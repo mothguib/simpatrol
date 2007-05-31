@@ -2,11 +2,15 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import model.agent.ClosedSociety;
+import model.agent.Society;
 import model.graph.Graph;
 
 import org.xml.sax.SAXException;
 
 import control.parser.GraphTranslator;
+import control.simulator.CycledSimulator;
+import control.simulator.RealTimeSimulator;
 
 public class Teste {
 
@@ -44,8 +48,20 @@ public class Teste {
 		Graph grafo = new Graph("teste", vertexes);
 		System.out.println(grafo.toXML(0));*/
 		
-		Graph grafo = GraphTranslator.getGraph("c:/teste.txt");
-		System.out.println(grafo.toXML(0));
+		//Graph grafo = GraphTranslator.getGraph("c:/teste.txt");
+		//System.out.println(grafo.toXML(0));
+		
+		//ClosedSociety soc = new ClosedSociety();
+		//CycledSimulator simulator = new CycledSimulator(5, null, null, null);
+		//simulator.addSociety(soc);
+		//soc.start();
+		//simulator.startSimulation();
+		//soc.stop();
+		
+		
+		
+		//RealTimeSimulator simulator = new RealTimeSimulator(60, null, null, null);
+		//simulator.startSimulation();
 	}
 
 }

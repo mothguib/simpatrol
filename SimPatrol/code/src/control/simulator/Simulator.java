@@ -1,50 +1,71 @@
+/* Simulator.java */
+
+/* The package of this class. */
 package control.simulator;
 
-import java.util.Collection;
+/* Imported classes and/or interfaces. */
+import java.util.HashSet;
+import java.util.Set;
+import model.agent.Society;
 import model.graph.Graph;
+import control.daemon.ActionDaemon;
+import control.daemon.PerceptionDaemon;
 import control.daemon.SimulationLogDaemon;
 import control.daemon.AnalysisReportDaemon;
 
-/**
- * @model.uin <code>design:node:::5fdg2f17vcpxt33cmgu</code>
- */
+/** Implements the simulator of the patrolling task. */
 public abstract class Simulator {
+	/* Atributes. */
+	/** The time of simulation.
+	 * 
+	 *  Measured in cycles, if the simulator is a cycled one,
+	 *  or in seconds, if it is a real time one. */
+	protected int simulation_time;
 
-	/**
-	 * @model.uin <code>design:node:::eskvbf17vaioy-vzb1mq</code>
-	 */
-	public AnalysisReportDaemon analysisReportDaemon;
+	/** The graph of the simulation. */
+	protected Graph graph;
+	
+	/** The set of societies of agents involved with the simulation. */
+	protected Set<Society> societies;
+	
+	/** The set of daemons that attend requisitions of perceptions. */
+	private Set<PerceptionDaemon> perception_daemons;
 
-	/**
-	 * @model.uin <code>design:node:::f1mcnf17vaioyh63h3f</code>
-	 */
-	public Collection perceptionDaemon;
-
-	/**
-	 * @model.uin <code>design:node:::hyht6f17ujey8gc0qlv</code>
-	 */
-	public Collection society;
-
-	/**
-	 * @model.uin <code>design:node:::gjtoxf17uk14ugglvpc</code>
-	 */
-	public Graph graph;
-
-	/**
-	 * @model.uin <code>design:node:::7664yf17vaioyemex79</code>
-	 */
-	public Collection actionDaemon;
-
-	/**
-	 * @model.uin <code>design:node:::axoklf17vaioy-wrqfrm</code>
-	 */
-	public SimulationLogDaemon simulationLogDaemon;
-
-	/**
-	 * @model.uin <code>design:node:::co9mf17vcpxt-qsrxax:5fdg2f17vcpxt33cmgu</code>
-	 */
-	public void startSimulation() {
-		/* default generated stub */;
-
+	/** The set of daemons that attend requisitions of actions. */
+	private Set<ActionDaemon> action_daemons;
+	
+	/** The daemon that attends requisitions of analysis reports. */
+	private AnalysisReportDaemon analysis_report_daemon;
+	
+	/** The daemon that produces logs of the simulation. */
+	private SimulationLogDaemon simulation_log_daemon;
+	
+	/* Methods. */
+	/** Constructor.
+	 *  @param simulation_time The time of simulation.
+	 *  @param graph The graph to be pattroled.
+	 *  @param analysis_report_daemon The daemon to attend requisitios for analysis reports.
+	 *  @param simulation_log_daemon The daemon to produce logs of the simulation. */
+	public Simulator(int simulation_time, Graph graph, AnalysisReportDaemon analysis_report_daemon, SimulationLogDaemon simulation_log_daemon) {
+		this.simulation_time = simulation_time;
+		this.graph = graph;
+		this.analysis_report_daemon = analysis_report_daemon;
+		this.simulation_log_daemon = simulation_log_daemon;
+		
+		this.societies = new HashSet<Society>();
+		this.perception_daemons = new HashSet<PerceptionDaemon>();
+		this.action_daemons = new HashSet<ActionDaemon>();
 	}
+	
+	/** Adds a given society to the simulator.
+	 *  @param society The society to be added. */	
+	public void addSociety(Society society) {
+		this.societies.add(society);
+	}
+	
+	/** Starts the simulation. */
+	public abstract void startSimulation();
+	
+	/** Returns the simulated time. */
+	public abstract int getSimulatedTime();
 }

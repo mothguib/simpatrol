@@ -1,7 +1,8 @@
+/* Daemon.java */
+
+/* The package of this class. */
 package control.daemon;
 
-/**
- * @model.uin <code>design:node:::drykaf17vaioywpcl2h</code>
- */
+/** Implements the daemons of SimPatrol. */
 public abstract class Daemon {
 }

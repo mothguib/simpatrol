@@ -48,7 +48,7 @@ public class UniformTimeProbabilityDistribution extends TimeProbabilityDistribut
 		buffer.append("<tpd id=\"" + this.getObjectId() + 
 				      "\" seed=" + this.seed +
 				      "\" next_bool_count=" + this.next_bool_counter +
-				      "\" type=" + TimeProbabilityDistributionType.UNIFORM +
+				      "\" type=" + TimeProbabilityDistributionTypes.UNIFORM +
 				      "\">\n");
 		
 		// puts the probability value

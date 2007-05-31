@@ -35,7 +35,7 @@ public abstract class GraphTranslator extends Translator {
 		String label = graph_element.getAttribute("label");		
 		
 		// obtains the vertexes
-		Set<Vertex> vertexes = getVertexes(graph_element);
+		Vertex[] vertexes = getVertexes(graph_element);
 		
 		// obtains the edges
 		getEdges(graph_element, vertexes);
@@ -49,9 +49,10 @@ public abstract class GraphTranslator extends Translator {
 	}
 	
 	/** Obtains the vertexes from the given XML element.
-	 *  @param xml_element The XML source containing the vertexes. */	
-	private static Set<Vertex> getVertexes(Element xml_element) {
-		// the answer for the method
+	 *  @param xml_element The XML source containing the vertexes.
+	 *  @return The vertexes from the XML source. */	
+	private static Vertex[] getVertexes(Element xml_element) {
+		// the set of obtained vertexes
 		Set<Vertex> vertexes = new HashSet<Vertex>();
 		
 		// obtains the nodes with the "vertex" tag
@@ -69,9 +70,10 @@ public abstract class GraphTranslator extends Translator {
 			boolean visibility = Boolean.parseBoolean(vertex_element.getAttribute("visibility"));
 			int idleness = Integer.parseInt(vertex_element.getAttribute("idleness"));
 			boolean fuel = Boolean.parseBoolean(vertex_element.getAttribute("fuel"));
+			boolean is_appearing = Boolean.parseBoolean(vertex_element.getAttribute("is_appearing"));
 			
 			// obtains the stigmas
-			Set<Stigma> stigmas = getStigmas(vertex_element);
+			Stigma[] stigmas = getStigmas(vertex_element);
 			
 			// obtains the time probability distributions
 			TimeProbabilityDistribution[] tpds = TimeProbabilityDistributionTranslator.getTimeProbabilityDistribution(vertex_element);
@@ -79,7 +81,7 @@ public abstract class GraphTranslator extends Translator {
 			// instatiates the new vertex
 			Vertex current_vertex = null;
 			if(tpds == null) current_vertex = new Vertex(label);
-			else current_vertex = new DynamicVertex(label, tpds[0], tpds[1]);
+			else current_vertex = new DynamicVertex(label, tpds[0], tpds[1], is_appearing);
 			
 			// configures the new vertex
 			current_vertex.setObjectId(id);
@@ -94,14 +96,17 @@ public abstract class GraphTranslator extends Translator {
 		}
 		
 		// returns the answer
-		if(vertexes.size() == 0) return null;
-		else return vertexes;
+		Object[] vertexes_array = vertexes.toArray();
+		Vertex[] answer = new Vertex[vertexes_array.length];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Vertex) vertexes_array[i];
+		return answer;
 	}
 
 	/** Obtains the edges from the given XML element.
 	 *  @param xml_element The XML source containing the edges.
 	 *  @param vertexes The set of vertexes read from the XML source. */	
-	private static Set<Edge> getEdges(Element xml_element, Set<Vertex> vertexes) {
+	private static Edge[] getEdges(Element xml_element, Vertex[] vertexes) {
 		// the answer for the method
 		Set<Edge> edges = new HashSet<Edge>();
 		
@@ -120,20 +125,20 @@ public abstract class GraphTranslator extends Translator {
 			boolean oriented = Boolean.parseBoolean(edge_element.getAttribute("oriented"));
 			double length = Double.parseDouble(edge_element.getAttribute("length"));
 			boolean visibility = Boolean.parseBoolean(edge_element.getAttribute("visibility"));
+			boolean is_appearing = Boolean.parseBoolean(edge_element.getAttribute("is_appearing"));
 			
 			// obtains the stigmas
-			Set<Stigma> stigmas = getStigmas(edge_element);						
+			Stigma[] stigmas = getStigmas(edge_element);						
 			
 			// obtains the time probability distributions
 			TimeProbabilityDistribution[] tpds = TimeProbabilityDistributionTranslator.getTimeProbabilityDistribution(edge_element);
 			
-			// finds the correspondent emitter ans collector vertexes
+			// finds the correspondent emitter and collector vertexes
 			Vertex emitter = null;
-			Vertex collector = null;			
-			Object[] vertexes_array = vertexes.toArray();
+			Vertex collector = null;
 			
-			for(int j = 0; j < vertexes_array.length; j++) {
-				Vertex current_vertex = (Vertex) vertexes_array[j];
+			for(int j = 0; j < vertexes.length; j++) {
+				Vertex current_vertex = vertexes[j];
 								
 				if(current_vertex.getObjectId().equals(emitter_id)) {
 					emitter = current_vertex;
@@ -149,7 +154,7 @@ public abstract class GraphTranslator extends Translator {
 			// instantiates the new edge
 			Edge current_edge = null;
 			if(tpds == null) current_edge = new Edge(emitter, collector, oriented, length);
-			else current_edge = new DynamicEdge(emitter, collector, oriented, length, tpds[0], tpds[1]);
+			else current_edge = new DynamicEdge(emitter, collector, oriented, length, tpds[0], tpds[1], is_appearing);
 						
 			// configures the new edge
 			current_edge.setObjectId(id);
@@ -161,14 +166,18 @@ public abstract class GraphTranslator extends Translator {
 		}
 		
 		// returns the answer
-		if(edges.size() == 0) return null;
-		else return edges;
+		Object[] edges_array = edges.toArray();
+		Edge[] answer = new Edge[edges_array.length];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Edge) edges_array[i];
+		return answer;
 	}
 	
 	/** Obtains the stigmas from the given vertex/edge element.
-	 *  @param vertex_edge_element The XML source containing the stigmas. */
-	private static Set<Stigma> getStigmas(Element vertex_edge_element) {
-		// the answer of the method
+	 *  @param vertex_edge_element The XML source containing the stigmas.
+	 *  @return The stigmas from the XML source. */
+	private static Stigma[] getStigmas(Element vertex_edge_element) {
+		// the set of obtained stigmas
 		Set<Stigma> stigmas = new HashSet<Stigma>();
 		
 		// obtains the nodes with the "stigma" tag
@@ -195,7 +204,10 @@ public abstract class GraphTranslator extends Translator {
 		}
 		
 		// returns the answer
-		if(stigmas.size() == 0) return null;
-		else return stigmas;
+		Object[] stigmas_array = stigmas.toArray();
+		Stigma[] answer = new Stigma[stigmas_array.length];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Stigma) stigmas_array[i];
+		return answer;
 	}
 }

@@ -16,11 +16,13 @@ public class Vertex implements XMLable {
 	 *  Not part of the patrol problem modelling. */
 	private String id;
 	
-	/** The set of edges whose emitter is this vertex. */
-	private Set<Edge> in_edges;
+	/** The set of edges whose emitter is this vertex.
+	 *  Its default value is NULL. */
+	private Set<Edge> in_edges = null;
 
-	/** The set of edges whose collector is this vertex. */
-	private Set<Edge> out_edges;
+	/** The set of edges whose collector is this vertex.
+	 *  Its defaultvalue is NULL. */
+	private Set<Edge> out_edges = null;
 
 	/** The set of stigmas eventually deposited by a patroller.
 	 *  Its default value is NULL. */
@@ -49,8 +51,6 @@ public class Vertex implements XMLable {
 	/** Constructor.
 	 *  @param label The label of the vertex. */
 	public Vertex(String label) {
-		this.in_edges  = new HashSet<Edge>();
-		this.out_edges = new HashSet<Edge>();
 		this.label = label;
 		this.idleness = 0;
 	}
@@ -60,6 +60,9 @@ public class Vertex implements XMLable {
 	public void addEdge(Edge edge) {
 		// as the edge is not an arc, it must be added to both
 		// in and out edge sets
+		if(this.in_edges == null) this.in_edges = new HashSet<Edge>();
+		if(this.out_edges == null) this.out_edges = new HashSet<Edge>();
+		
 		this.in_edges.add(edge);
 		this.out_edges.add(edge);
 	}
@@ -67,28 +70,55 @@ public class Vertex implements XMLable {
 	/** Adds the passed edge as a way out arc to the vertex.
 	 *  @param out_arc The edge whose emitter is this vertex. */
 	public void addOutEdge(Edge out_arc) {
+		if(this.out_edges == null) this.out_edges = new HashSet<Edge>();
 		this.out_edges.add(out_arc);
 	}
 	
 	/** Adds the passed edge as a way in arc to the vertex.
 	 *  @param in_arc The edge whose collector is this vertex. */
 	public void addInEdge(Edge in_arc) {
+		if(this.in_edges == null) this.in_edges = new HashSet<Edge>();			
 		this.in_edges.add(in_arc);
 	}
 	
 	/** Returns the edges set of the vertex.
-	 *  @return The set of edges associated with the vertex.*/
-	public Set<Edge> getEdges() {		
-		Set<Edge> answer = new HashSet<Edge>();
-		answer.addAll(this.in_edges);
-		answer.addAll(this.out_edges);
+	 *  @return The edges associated with the vertex.*/
+	public Edge[] getEdges() {
+		int in_edges_size = 0;
+		int out_edge_size = 0;
+		
+		if(this.in_edges != null) in_edges_size = this.in_edges.size();
+		if(this.out_edges != null) out_edge_size = this.out_edges.size();
+		
+		Edge[] answer = new Edge[in_edges_size + out_edge_size];
+				
+		if(this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
+			
+			for(int i = 0; i < in_edges_array.length; i++)
+				answer[i] = (Edge) in_edges_array[i];			
+		}
+		
+		if(this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			
+			for(int i = 0; i < out_edges_array.length; i++)
+				answer[i + in_edges_size] = (Edge) out_edges_array[i];			
+		}
+		
 		return answer;		
 	}
 	
 	/** Configures the set of stigmas of the vertex.
 	 *  @param stigmas The set of stigmas. */
-	public void setStigmas(Set<Stigma> stigmas) {
-		this.stigmas = stigmas;
+	public void setStigmas(Stigma[] stigmas) {
+		if(stigmas.length > 0) {
+			this.stigmas = new HashSet<Stigma>();
+			
+			for(int i = 0; i < stigmas.length; i++)
+				this.stigmas.add(stigmas[i]);
+		}
+		else this.stigmas = null;
 	}
 	
 	/** Configures the priority of the vertex.

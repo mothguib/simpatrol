@@ -46,7 +46,7 @@ public class EmpiricalTimeProbabilityDistribution extends TimeProbabilityDistrib
 		buffer.append("<tpd id=\"" + this.getObjectId() +
 				      "\" seed=\"" + this.seed +
 				      "\" next_bool_count=\"" + this.next_bool_counter +
-				      "\" type=\"" + TimeProbabilityDistributionType.EMPIRICAL +
+				      "\" type=\"" + TimeProbabilityDistributionTypes.EMPIRICAL +
 				      "\">\n");
 		
 		// completes the buffer content

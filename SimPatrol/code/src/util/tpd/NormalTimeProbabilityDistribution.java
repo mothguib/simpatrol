@@ -50,7 +50,7 @@ public class NormalTimeProbabilityDistribution extends TimeProbabilityDistributi
 		buffer.append("<tpd id=\"" + this.getObjectId() +
 				      "\" seed=\"" + this.seed +
 				      "\" next_bool_count=\"" + this.next_bool_counter +
-				      "\" type=\"" + TimeProbabilityDistributionType.NORMAL +
+				      "\" type=\"" + TimeProbabilityDistributionTypes.NORMAL +
 				      "\">\n");
 		
 		// puts the mean value

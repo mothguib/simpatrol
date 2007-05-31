@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 import util.tpd.EmpiricalTimeProbabilityDistribution;
 import util.tpd.NormalTimeProbabilityDistribution;
 import util.tpd.TimeProbabilityDistribution;
-import util.tpd.TimeProbabilityDistributionType;
+import util.tpd.TimeProbabilityDistributionTypes;
 import util.tpd.UniformTimeProbabilityDistribution;
 
 /** Implements a translator thar obtains time probability distributions
@@ -44,15 +44,15 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 			
 			// instantiates the new tpd and configures it
 			switch(type) {
-				case TimeProbabilityDistributionType.UNIFORM: {
+				case TimeProbabilityDistributionTypes.UNIFORM: {
 					answer[i] = new UniformTimeProbabilityDistribution(seed, getUniformTPDParameter(tpd_element));
 					break;
 				}
-				case TimeProbabilityDistributionType.EMPIRICAL: {
+				case TimeProbabilityDistributionTypes.EMPIRICAL: {
 					answer[i] = new EmpiricalTimeProbabilityDistribution(seed, getEmpiricalTPDParameter(tpd_element));
 					break;
 				}
-				case TimeProbabilityDistributionType.NORMAL: {
+				case TimeProbabilityDistributionTypes.NORMAL: {
 					double[] parameters = getNormalTPDParameter(tpd_element);
 					answer[i] = new NormalTimeProbabilityDistribution(seed, parameters[0], parameters[1]);
 					break;

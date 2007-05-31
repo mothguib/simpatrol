@@ -4,6 +4,7 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
+import java.util.HashSet;
 import java.util.Set;
 import model.interfaces.XMLable;
 
@@ -16,10 +17,10 @@ public class Edge implements XMLable {
 	private String id;
 	
 	/** The emitter of this edge, if it is an arc. */
-	private Vertex emitter;
+	protected Vertex emitter;
 
 	/** The collector of this edge, if it is an arc. */
-	private Vertex collector;
+	protected Vertex collector;
 	
 	/** The set of stigmas eventually deposited by a patroller.
 	 *  Its default value is NULL. */
@@ -69,12 +70,20 @@ public class Edge implements XMLable {
 		}
 		
 		this.length = length;
+		
+		
 	}
 	
 	/** Configures the set of stigmas of the edge.
-	 *  @param stigmas The set of stigmas. */
-	public void setStigmas(Set<Stigma> stigmas) {
-		this.stigmas = stigmas;
+	 *  @param stigmas The stigmas to be added. */
+	public void setStigmas(Stigma[] stigmas) {
+		if(stigmas.length > 0) {
+			this.stigmas = new HashSet<Stigma>();
+			
+			for(int i = 0; i < stigmas.length; i++)
+				this.stigmas.add(stigmas[i]);
+		}
+		else this.stigmas = null;
 	}
 	
 	/** Configures the visibility of the edge.
