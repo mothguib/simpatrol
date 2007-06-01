@@ -9,6 +9,9 @@ import java.util.Calendar;
 /** Implements a real time clock. */
 public class Clock extends Thread {
 	/* Attributes. */
+	/** Registers if the clock shall stop working. */
+	private boolean stop_working;
+	
 	/** The object to be clocked. */
 	private Clockable object;
 	
@@ -28,7 +31,8 @@ public class Clock extends Thread {
 	 *  @param object The object to be clocked. */
 	public Clock(Clockable object) {
 		this.object = object;
-		this.current_time = 0;		
+		this.current_time = 0;
+		this.stop_working = false;
 	}
 	
 	/** Changes the clock's counting step.
@@ -47,12 +51,17 @@ public class Clock extends Thread {
 	 * @return The current clocked time. */
 	public int getCurrentTime() {
 		return this.current_time;
-	}		
+	}
+	
+	/** Indicates that the clock must stop working. */
+	public void stopWorking() {
+		this.stop_working = true;
+	}
 			
 	public void run() {
 		// calls the object's act method, when it is time
 		int prev_ref = Calendar.getInstance().get(this.unity);
-		while(true) {
+		while(!this.stop_working) {
 			int next_ref = Calendar.getInstance().get(this.unity);
 			
 			if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;

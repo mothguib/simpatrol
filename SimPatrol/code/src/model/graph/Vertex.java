@@ -18,11 +18,11 @@ public class Vertex implements XMLable {
 	
 	/** The set of edges whose emitter is this vertex.
 	 *  Its default value is NULL. */
-	private Set<Edge> in_edges = null;
+	protected Set<Edge> in_edges = null;
 
 	/** The set of edges whose collector is this vertex.
 	 *  Its defaultvalue is NULL. */
-	private Set<Edge> out_edges = null;
+	protected Set<Edge> out_edges = null;
 
 	/** The set of stigmas eventually deposited by a patroller.
 	 *  Its default value is NULL. */
@@ -159,7 +159,8 @@ public class Vertex implements XMLable {
 				      "\" priority=\"" + this.priority +
 				      "\" visibility=\"" + this.visibility +
 				      "\" idleness=\"" + this.idleness +
-				      "\" fuel=\"" + this.fuel);
+				      "\" fuel=\"" + this.fuel +
+					  "\" is_appearing=\"true\"");
 		
 		// treats the ocurrency of stigmas
 		if(this.stigmas != null) {

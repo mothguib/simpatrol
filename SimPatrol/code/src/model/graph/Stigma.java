@@ -44,7 +44,6 @@ public class Stigma implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();
-		// TODO corrigir!!		
 	}
 
 	public String getObjectId() {

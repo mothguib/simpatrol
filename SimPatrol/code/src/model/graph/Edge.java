@@ -36,6 +36,13 @@ public class Edge implements XMLable {
 	/** Registers if the edge is oriented (is an arc). */
 	private boolean oriented;
 	
+	/** Verifies if the edge is appearing.
+	 * 
+	 *  An edge can disappear, if one of its vertexes is dynamic.
+	 *  
+	 *  Its default value is TRUE. */
+	protected boolean is_appearing = true;
+	
 	/* Methods. */
 	/** Contructor for non-oriented edges (non-arcs).
 	 *  @param vertex_1 One of the vertexes of the edge.
@@ -70,8 +77,6 @@ public class Edge implements XMLable {
 		}
 		
 		this.length = length;
-		
-		
 	}
 	
 	/** Configures the set of stigmas of the edge.
@@ -91,7 +96,43 @@ public class Edge implements XMLable {
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
 	}
-
+	
+	/** Returns if the edge is appearing.
+	 * 
+	 *  An edge can have dynamic behavior, if one of its vertexes
+	 *  is dynamic.
+	 * 
+	 *  @return TRUE, if the edge is appearing, FALSE if not. */	
+	public boolean isAppearing() {
+		return this.is_appearing;
+	}
+	
+	/** Configures if the edge is appearing.
+	 * 
+	 *  An edge can have dynamic behavior, if one of its vertexes
+	 *  is dynamic.
+	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */
+	public void setIsAppearing(boolean is_appearing) {		
+		// if is_appearing is TRUE
+		// verifies if its nodes are appearing
+		if(is_appearing) {
+			// if the emitter is a dynamic vertex and is not appearing
+			if(this.emitter instanceof DynamicVertex &&
+					!((DynamicVertex)this.emitter).isAppearing())
+				return;
+			
+			// if the collector is a dynamic vertex and is not appearing
+			if(this.collector instanceof DynamicVertex &&
+					!((DynamicVertex)this.collector).isAppearing())
+				return;			
+		}
+		
+		this.is_appearing = is_appearing;
+		
+		// TODO retirar codigo abaixo!!
+		System.out.println(this.getObjectId() + " appearing " + this.is_appearing);
+	}
+	
 	public String getObjectId() {
 		return this.id;
 	}
@@ -104,13 +145,32 @@ public class Edge implements XMLable {
 		for(int i = 0; i < identation; i++)
 			buffer.append("\t");
 		
+		// verifies if the emitter is a dynamic
+		// vertex and if the edge is in its memory
+		// of appearing edges
+		boolean is_in_dynamic_emitter_memory = false;
+		if(this.emitter instanceof DynamicVertex)
+			if(((DynamicVertex)this.emitter).isInAppearingEdges(this))
+				is_in_dynamic_emitter_memory = true;
+		
+		// verifies if the collector is a dynamic
+		// vertex and if the edge is in its memory
+		// of appearing edges
+		boolean is_in_dynamic_collector_memory = false;
+		if(this.collector instanceof DynamicVertex)
+			if(((DynamicVertex)this.collector).isInAppearingEdges(this))
+				is_in_dynamic_collector_memory = true;
+		
 		// fills the buffer 
 		buffer.append("<edge id=\"" + this.id + 
 				      "\" emitter_id=\"" + this.emitter.getObjectId() +
 				      "\" collector_id=\"" + this.collector.getObjectId() +
 				      "\" oriented=\"" + this.oriented +
 				      "\" length=\"" + this.length +
-				      "\" visibility=\"" + this.visibility);
+				      "\" visibility=\"" + this.visibility +
+				      "\" is_appearing=\"" + this.is_appearing +
+				      "\" is_in_dynamic_emitter_memory=\"" + is_in_dynamic_emitter_memory +
+				      "\" is_in_dynamic_collector_memory=\"" + is_in_dynamic_collector_memory);
 		
 		// treats the ocurrency of stigmas
 		if(this.stigmas != null) {
@@ -133,6 +193,6 @@ public class Edge implements XMLable {
 	}
 
 	public void setObjectId(String object_id) {
-		this.id = object_id;		
+		this.id = object_id;
 	}
 }

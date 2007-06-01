@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import model.agent.Society;
 import model.graph.Graph;
+import model.interfaces.Dynamic;
 import control.daemon.ActionDaemon;
 import control.daemon.PerceptionDaemon;
 import control.daemon.SimulationLogDaemon;
@@ -63,9 +64,33 @@ public abstract class Simulator {
 		this.societies.add(society);
 	}
 	
+	/** Obtains the dynamic objects of the simulation. */
+	protected Dynamic[] getDynamicObjects() {
+		// holds the dynamic objects
+		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
+		
+		// obtains the dynamic objects in the graph
+		Dynamic[] dynamic_from_graph = this.graph.getDynamicComponents();
+		for(int i = 0; i < dynamic_from_graph.length; i++)
+			dynamic_objects.add(dynamic_from_graph[i]);
+		
+		// TODO completar com outros objetos dinamicos (ex: agentes!)
+		
+		// returns the answer
+		Object[] dynamic_objects_array = dynamic_objects.toArray();
+		Dynamic[] answer = new Dynamic[dynamic_objects_array.length];
+		for(int i = 0; i <answer.length; i++)
+			answer[i] = (Dynamic) dynamic_objects_array[i];		
+		return answer;
+	}
+	
 	/** Starts the simulation. */
 	public abstract void startSimulation();
 	
-	/** Returns the simulated time. */
+	/** Stops the simulation. */
+	public abstract void stopSimulation();
+		
+	/** Returns the simulated time.
+	 *  @return The simulated time, in cycles or in seconds. */
 	public abstract int getSimulatedTime();
 }

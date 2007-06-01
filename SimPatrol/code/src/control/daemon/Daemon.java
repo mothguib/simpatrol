@@ -4,5 +4,5 @@
 package control.daemon;
 
 /** Implements the daemons of SimPatrol. */
-public abstract class Daemon {
+public abstract class Daemon extends Thread {
 }

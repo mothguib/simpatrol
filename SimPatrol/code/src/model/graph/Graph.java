@@ -6,6 +6,8 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+
+import model.interfaces.Dynamic;
 import model.interfaces.XMLable;
 
 /** Implements graphs that represent the territories to be
@@ -50,50 +52,34 @@ public class Graph implements XMLable {
 			this.edges = null;
 	}
 	
-	/** Returns the dynamic edges of the graph.
-	 *  @return The dynamic edges of the graph. */
-	public DynamicEdge[] getDynamicEdges() {
-		// the dynamic edges
-		Set<DynamicEdge> dynamic_edges = new HashSet<DynamicEdge>();
+	/** Obtains the dynamic objects in the graph.
+	 *  @return The dynamic vertexes and edges. */
+	public Dynamic[] getDynamicComponents() {
+		// the set of dynamic objects
+		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
 		
-		// obtains the edges
-		Object[] edges_array = this.edges.toArray();
-		
-		// for each edge, verifies if it's a dynamic edge		
-		for(int i = 0; i < edges_array.length; i++)
-			if(edges_array[i] instanceof DynamicEdge)
-				dynamic_edges.add((DynamicEdge) edges_array[i]);
-		
-		// returns the answer
-		DynamicEdge[] answer = new DynamicEdge[dynamic_edges.size()];
-		edges_array = dynamic_edges.toArray();
-		for(int i = 0; i < edges_array.length; i++)
-			answer[i] = (DynamicEdge) edges_array[i];
-		return answer;		
-	}	
-
-	/** Returns the dynamic vertexes of the graph.
-	 *  @return The dynamic vertexes of the graph. */
-	public DynamicVertex[] getDynamicVertexes() {
-		// the dynamic vertexes
-		Set<DynamicVertex> dynamic_vertexes = new HashSet<DynamicVertex>();
-		
-		// obtains the vertexes
+		// searches for dynamic vertexes
 		Object[] vertexes_array = this.vertexes.toArray();
-		
-		// for each vertex, verifies if it's a dynamic vertex		
 		for(int i = 0; i < vertexes_array.length; i++)
-			if(vertexes_array[i] instanceof DynamicVertex)
-				dynamic_vertexes.add((DynamicVertex) vertexes_array[i]);
+			if(vertexes_array[i] instanceof Dynamic)
+				dynamic_objects.add((Dynamic) vertexes_array[i]);
+		
+		// searches for dynamic edges
+		if(this.edges != null) {
+			Object[] edges_array = this.edges.toArray();
+			for(int i = 0; i < edges_array.length; i++)
+				if(edges_array[i] instanceof Dynamic)
+					dynamic_objects.add((Dynamic) edges_array[i]);
+		}
 		
 		// returns the answer
-		DynamicVertex[] answer = new DynamicVertex[dynamic_vertexes.size()];
-		vertexes_array = dynamic_vertexes.toArray();
-		for(int i = 0; i < vertexes_array.length; i++)
-			answer[i] = (DynamicVertex) vertexes_array[i];
-		return answer;		
-	}	
-		
+		Object[] dynamic_objects_array = dynamic_objects.toArray();
+		Dynamic[] answer = new Dynamic[dynamic_objects_array.length];
+		for(int i = 0; i <answer.length; i++)
+			answer[i] = (Dynamic) dynamic_objects_array[i];		
+		return answer;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();

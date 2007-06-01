@@ -1,4 +1,4 @@
-/* GraphParser.java */
+/* GraphTrasnlator.java */
 
 /* The package of this class. */
 package control.parser;
@@ -24,8 +24,9 @@ import model.graph.Vertex;
  *  XML files.
  *  @see Graph */
 public abstract class GraphTranslator extends Translator {
-	/** Obtains the vertexes from the given XML source file.
-	 *  @param xml_file_path The XML source file containing the graph. */	
+	/** Obtains the graph from the given XML source file.
+	 *  @param xml_file_path The XML source file containing the graph.
+	 *  @return The graph from the XML source file. */
 	public static Graph getGraph(String xml_file_path) throws ParserConfigurationException, SAXException, IOException {
 		// parses the xml file in a graph element
 		Element graph_element = Translator.parse(xml_file_path);
@@ -105,9 +106,10 @@ public abstract class GraphTranslator extends Translator {
 
 	/** Obtains the edges from the given XML element.
 	 *  @param xml_element The XML source containing the edges.
-	 *  @param vertexes The set of vertexes read from the XML source. */	
+	 *  @param vertexes The set of vertexes read from the XML source.
+	 *  @return The edges from the XML source. */
 	private static Edge[] getEdges(Element xml_element, Vertex[] vertexes) {
-		// the answer for the method
+		// the set of obtained edges
 		Set<Edge> edges = new HashSet<Edge>();
 		
 		// obtains the nodes with the "edge" tag
@@ -126,6 +128,8 @@ public abstract class GraphTranslator extends Translator {
 			double length = Double.parseDouble(edge_element.getAttribute("length"));
 			boolean visibility = Boolean.parseBoolean(edge_element.getAttribute("visibility"));
 			boolean is_appearing = Boolean.parseBoolean(edge_element.getAttribute("is_appearing"));
+			boolean is_in_dynamic_emitter_memory = Boolean.parseBoolean(edge_element.getAttribute("is_in_dynamic_emitter_memory"));
+			boolean is_in_dynamic_collector_memory = Boolean.parseBoolean(edge_element.getAttribute("is_in_dynamic_collector_memory"));
 			
 			// obtains the stigmas
 			Stigma[] stigmas = getStigmas(edge_element);						
@@ -155,11 +159,21 @@ public abstract class GraphTranslator extends Translator {
 			Edge current_edge = null;
 			if(tpds == null) current_edge = new Edge(emitter, collector, oriented, length);
 			else current_edge = new DynamicEdge(emitter, collector, oriented, length, tpds[0], tpds[1], is_appearing);
-						
+			
 			// configures the new edge
 			current_edge.setObjectId(id);
 			current_edge.setVisibility(visibility);
 			current_edge.setStigmas(stigmas);
+			
+			// if the emitter is a dynamic vertex and
+			// the current edge is in its memory of appearing edges
+			if(emitter instanceof DynamicVertex && is_in_dynamic_emitter_memory)
+				((DynamicVertex) emitter).addAppearingEdge(current_edge);
+						
+			// if the collector is a dynamic vertex and
+			// the current edge is in its memory of appearing edges
+			if(collector instanceof DynamicVertex && is_in_dynamic_collector_memory)
+				((DynamicVertex) collector).addAppearingEdge(current_edge);
 			
 			// adds the new edge to the set of edges
 			edges.add(current_edge);
