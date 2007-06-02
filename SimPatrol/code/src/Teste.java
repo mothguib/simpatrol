@@ -22,8 +22,10 @@ public class Teste {
 		System.out.println(grafo.toXML(0));		
 		
 		// trecho do simulador de tempo real...
-		//RealTimeSimulator simulator = new RealTimeSimulator(600, grafo, null, null);
+		//RealTimeSimulator simulator = new RealTimeSimulator(60, grafo, null, null);
 		//simulator.startSimulation();
+		//System.out.println(grafo.toXML(0));
+		
 		
 		// trecho do simulador em ciclos...
 		ClosedSociety soc = new ClosedSociety();
