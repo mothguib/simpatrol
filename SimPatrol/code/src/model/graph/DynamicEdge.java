@@ -4,13 +4,14 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
+import model.interfaces.Dynamic;
 import util.tpd.TimeProbabilityDistribution;
 
 /** Implements dynamic edges of a Graph object,
  *  that can appear and disappear with a specific time
  *  probability distribution. */
-public class DynamicEdge extends Edge {
-	/* Attributes. */	
+public class DynamicEdge extends Edge implements Dynamic {
+	/* Attributes. */
 	/** The time probability distribution for the edge appearing. */
 	private TimeProbabilityDistribution appearing_pd;
 
