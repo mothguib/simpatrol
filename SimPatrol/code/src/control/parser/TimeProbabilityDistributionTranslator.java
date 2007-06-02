@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import util.tpd.EmpiricalTimeProbabilityDistribution;
 import util.tpd.NormalTimeProbabilityDistribution;
+import util.tpd.SpecificTimeProbabilityDistribution;
 import util.tpd.TimeProbabilityDistribution;
 import util.tpd.TimeProbabilityDistributionTypes;
 import util.tpd.UniformTimeProbabilityDistribution;
@@ -57,6 +58,11 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 					answer[i] = new NormalTimeProbabilityDistribution(seed, parameters[0], parameters[1]);
 					break;
 				}
+				case TimeProbabilityDistributionTypes.SPECIFIC: {
+					double[] parameters = getSpecificTPDParameter(tpd_element);
+					answer[i] = new SpecificTimeProbabilityDistribution(seed, parameters[0], (int) parameters[1]);
+					break;
+				}
 			}
 			
 			// configures the new tpd
@@ -70,8 +76,7 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 	
 	/** Obtains the uniform time probability distributions from the
 	 *  given tpd element.
-	 *  @param tpd_element The XML source containing the uniform tpd's parameters.
-	 *  @see UniformTimeProbabilityDistribution */
+	 *  @param tpd_element The XML source containing the uniform tpd's parameters. */
 	private static double getUniformTPDParameter(Element tpd_element) {
 		// obtains the nodes with the "tpd_parameter" tag
 		NodeList tpd_parameter_nodes = tpd_element.getElementsByTagName("tpd_parameter");
@@ -85,8 +90,7 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 	
 	/** Obtains the empirical time probability distributions from the
 	 *  given tpd element.
-	 *  @param tpd_element The XML source containing the empirical tpd's parameters.
-	 *  @see EmpiricalTimeProbabilityDistribution */
+	 *  @param tpd_element The XML source containing the empirical tpd's parameters. */
 	private static double[] getEmpiricalTPDParameter(Element tpd_element) {		
 		// obtains the nodes with the "tpd_parameter" tag
 		NodeList tpd_parameter_nodes = tpd_element.getElementsByTagName("tpd_parameter");
@@ -109,8 +113,7 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 	
 	/** Obtains the normal time probability distributions from the
 	 *  given tpd element.
-	 *  @param tpd_element The XML source containing the normal tpd's parameters.
-	 *  @see NormalTimeProbabilityDistribution */
+	 *  @param tpd_element The XML source containing the normal tpd's parameters. */
 	private static double[] getNormalTPDParameter(Element tpd_element) {
 		// obtains the nodes with the "tpd_parameter" tag
 		NodeList tpd_parameter_nodes = tpd_element.getElementsByTagName("tpd_parameter");
@@ -130,4 +133,27 @@ public abstract class TimeProbabilityDistributionTranslator extends Translator {
 		// returns the answer
 		return answer;
 	}
+	
+	/** Obtains the specific time probability distribution from the
+	 *  given tpd element.
+	 *  @param tpd_element The XML source containing the specific tpd's parameters. */
+	private static double[] getSpecificTPDParameter(Element tpd_element) {
+		// obtains the nodes with the "tpd_parameter" tag
+		NodeList tpd_parameter_nodes = tpd_element.getElementsByTagName("tpd_parameter");
+		
+		// the answer for the method
+		double[] answer = new double[2];
+		
+		// for each ocurrence (probability and time)
+		for(int i = 0; i < 2; i++) {
+			// obtains the current tpd parameter element
+			Element tpd_parameter_element = (Element) tpd_parameter_nodes.item(i);
+			
+			// adds the current parameter value to the answer
+			answer[i] =  Double.parseDouble(tpd_parameter_element.getAttribute("value"));
+		}
+		
+		// returns the answer
+		return answer;
+	}	
 }

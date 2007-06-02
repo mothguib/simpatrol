@@ -12,7 +12,7 @@
 <!ATTLIST tpd id ID #REQUIRED>
 <!ATTLIST tpd seed CDATA #REQUIRED>
 <!ATTLIST tpd next_bool_count CDATA #REQUIRED>
-<!ATTLIST tpd type (0 | 1 | 2) #REQUIRED>
+<!ATTLIST tpd type (0 | 1 | 2 | 3) #REQUIRED>
 
 <!-- TPD PARAMETER -->
 <!ELEMENT tpd_parameter EMPTY>

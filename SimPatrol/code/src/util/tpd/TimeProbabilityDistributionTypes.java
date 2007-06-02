@@ -12,4 +12,5 @@ public abstract class TimeProbabilityDistributionTypes {
 	public static final int UNIFORM = 0;
 	public static final int EMPIRICAL = 1;
 	public static final int NORMAL = 2;
+	public static final int SPECIFIC = 3;
 }
