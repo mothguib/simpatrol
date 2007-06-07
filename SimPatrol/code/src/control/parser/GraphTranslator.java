@@ -11,7 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import util.tpd.TimeProbabilityDistribution;
+import util.etpd.EventTimeProbabilityDistribution;
 import model.agent.Agent;
 import model.graph.DynamicEdge;
 import model.graph.DynamicVertex;
@@ -21,7 +21,7 @@ import model.graph.Stigma;
 import model.graph.Vertex;
 
 /** Implements a translator that obtains Graph objects from
- *  XML files.
+ *  XML files or sources.
  *  @see Graph */
 public abstract class GraphTranslator extends Translator {
 	/** Obtains the graph from the given XML source file.
@@ -47,6 +47,34 @@ public abstract class GraphTranslator extends Translator {
 		
 		// returns the graph
 		return answer;
+	}
+	
+	/** Obtains the graph from the given XML element.
+	 *  @param xml_element The XML source containing the graph.
+	 *  @return The graph from the XML source. */
+	public static Graph getGraph(Element xml_element) {
+		// obtains the node with the "graph" tag
+		NodeList graph_node = xml_element.getElementsByTagName("graph");
+		
+		// obtains the graph element
+		Element graph_element = (Element) graph_node.item(0);
+		
+		// obtains the data
+		String id = graph_element.getAttribute("id");
+		String label = graph_element.getAttribute("label");		
+		
+		// obtains the vertexes
+		Vertex[] vertexes = getVertexes(graph_element);
+		
+		// obtains the edges
+		getEdges(graph_element, vertexes);
+		
+		// creates the new graph and configures it
+		Graph answer = new Graph(label, vertexes);
+		answer.setObjectId(id);
+		
+		// returns the graph
+		return answer;		
 	}
 	
 	/** Obtains the vertexes from the given XML element.
@@ -77,12 +105,12 @@ public abstract class GraphTranslator extends Translator {
 			Stigma[] stigmas = getStigmas(vertex_element);
 			
 			// obtains the time probability distributions
-			TimeProbabilityDistribution[] tpds = TimeProbabilityDistributionTranslator.getTimeProbabilityDistribution(vertex_element);
+			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(vertex_element);
 			
 			// instatiates the new vertex
 			Vertex current_vertex = null;
-			if(tpds == null) current_vertex = new Vertex(label);
-			else current_vertex = new DynamicVertex(label, tpds[0], tpds[1], is_appearing);
+			if(etpds.length == 0) current_vertex = new Vertex(label);
+			else current_vertex = new DynamicVertex(label, etpds[0], etpds[1], is_appearing);
 			
 			// configures the new vertex
 			current_vertex.setObjectId(id);
@@ -135,7 +163,7 @@ public abstract class GraphTranslator extends Translator {
 			Stigma[] stigmas = getStigmas(edge_element);						
 			
 			// obtains the time probability distributions
-			TimeProbabilityDistribution[] tpds = TimeProbabilityDistributionTranslator.getTimeProbabilityDistribution(edge_element);
+			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(edge_element);
 			
 			// finds the correspondent emitter and collector vertexes
 			Vertex emitter = null;
@@ -157,8 +185,8 @@ public abstract class GraphTranslator extends Translator {
 			
 			// instantiates the new edge
 			Edge current_edge = null;
-			if(tpds == null) current_edge = new Edge(emitter, collector, oriented, length);
-			else current_edge = new DynamicEdge(emitter, collector, oriented, length, tpds[0], tpds[1], is_appearing);
+			if(etpds.length == 0) current_edge = new Edge(emitter, collector, oriented, length);
+			else current_edge = new DynamicEdge(emitter, collector, oriented, length, etpds[0], etpds[1], is_appearing);
 			
 			// configures the new edge
 			current_edge.setObjectId(id);

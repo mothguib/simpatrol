@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Document   : PD.dtd
+    Version    : 1.0
+    Date       : May 28th, 2007, 12:05
+    Description: SimPatrol's Probability Distributions DTD
+-->
+
+<!-- ETPD - Event Time Probability Distribution -->
+<!ELEMENT etpd (pd_parameter*)>
+<!ATTLIST etpd id ID #REQUIRED>
+<!ATTLIST etpd seed CDATA #REQUIRED>
+<!ATTLIST etpd next_bool_count CDATA #REQUIRED>
+<!ATTLIST etpd type (0 | 1 | 2 | 3) #REQUIRED>
+
+<!-- IPD - Integer Probability Distribution -->
+<!ELEMENT ipd (pd_parameter*)>
+<!ATTLIST ipd id ID #REQUIRED>
+<!ATTLIST ipd seed CDATA #REQUIRED>
+<!ATTLIST ipd type (0 | 1 | 2) #REQUIRED>
+
+<!-- PD PARAMETER -->
+<!ELEMENT pd_parameter EMPTY>
+<!ATTLIST pd_parameter value CDATA #REQUIRED>

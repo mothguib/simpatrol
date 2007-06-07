@@ -22,21 +22,21 @@ public class DynamicityControllerDaemon extends ClockedDaemon {
 	public void act() {
 		// if the dynamic object is appering
 		if(this.object.isAppearing()) {
-			// atualizes the appearing tpd
-			this.object.getAppearingTPD().nextBoolean();
+			// atualizes the appearing etpd
+			this.object.getAppearingETPD().nextBoolean();
 			
 			// verifies if the object must disappear now
-			if(this.object.getDisappearingTPD().nextBoolean())
+			if(this.object.getDisappearingETPD().nextBoolean())
 				this.object.setIsAppearing(false);
 		}
 		// else
 		else {
 			// verifies if the object must appear now
-			if(this.object.getAppearingTPD().nextBoolean())
+			if(this.object.getAppearingETPD().nextBoolean())
 				this.object.setIsAppearing(true);
 			
-			// atualizes the disappearing tpd
-			this.object.getDisappearingTPD().nextBoolean();
+			// atualizes the disappearing etpd
+			this.object.getDisappearingETPD().nextBoolean();
 		}
 	}
 }

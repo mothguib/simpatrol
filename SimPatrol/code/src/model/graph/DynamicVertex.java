@@ -8,21 +8,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import model.interfaces.Dynamic;
-import util.tpd.TimeProbabilityDistribution;
+import util.etpd.EventTimeProbabilityDistribution;
 
 /** Implements dynamic vertexes of a Graph object,
- *  that can appear and disappear with a specific time
+ *  that can appear and disappear with a specific event time
  *  probability distribution. */
 public class DynamicVertex extends Vertex implements Dynamic {
 	/* Attributes. */
 	/** Registers if the vertex is appearing. */
 	private boolean is_appearing;
 	
-	/** The time probability distribution for the vertex appearing. */
-	private TimeProbabilityDistribution appearing_pd;
+	/** The event time probability distribution for the vertex appearing. */
+	private EventTimeProbabilityDistribution appearing_pd;
 	
-	/** The time probability distribution for the vertex disappearing. */
-	private TimeProbabilityDistribution disappearing_pd;
+	/** The event time probability distribution for the vertex disappearing. */
+	private EventTimeProbabilityDistribution disappearing_pd;
 	
 	/** Memorizes which edges were appearing before the vertex disappeared. */
 	private Set<Edge> appearing_edges;
@@ -33,7 +33,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 	 * @param appearing_pd The time probability distribution for the vertex appearing.
 	 * @param diappearing_pd The time probability distribution for the vertex disappearing.
 	 * @param is_appearing TRUE, if the vertex is appearing, FALSE if not. */
-	public DynamicVertex(String label, TimeProbabilityDistribution appearing_pd, TimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
+	public DynamicVertex(String label, EventTimeProbabilityDistribution appearing_pd, EventTimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
 		super(label);
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = disappearing_pd;
@@ -137,11 +137,11 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		return buffer.toString();
 	}
 	
-	public TimeProbabilityDistribution getAppearingTPD() {
+	public EventTimeProbabilityDistribution getAppearingETPD() {
 		return this.appearing_pd;
 	}
 	
-	public TimeProbabilityDistribution getDisappearingTPD() {
+	public EventTimeProbabilityDistribution getDisappearingETPD() {
 		return this.disappearing_pd;
 	}
 }

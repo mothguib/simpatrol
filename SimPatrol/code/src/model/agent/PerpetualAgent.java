@@ -1,18 +1,18 @@
+/* PerpetualAgent.java */
+
+/* The package of this class. */
 package model.agent;
 
-/**
- * @model.uin <code>design:node:::1c8f6f17ujey8-7t467k</code>
- */
+/* Imported classes and/or interfaces. */
+import model.graph.Vertex;
+
+/** Implements the agents that compound the 
+ *  closed societies of SimPatrol. */
 public class PerpetualAgent extends Agent {
-
-	public String toXML(int identation) {
-		// TODO Auto-generated method stub
-		return null;
+	/* Methods. */
+	/** Constructor.
+	 *  @param vertex The vertex that the agent comes from. */
+	public PerpetualAgent(Vertex vertex) {
+		super(vertex);
 	}
-
-	public void setObjectId(String object_id) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

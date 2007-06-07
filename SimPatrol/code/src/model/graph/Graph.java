@@ -21,8 +21,7 @@ public class Graph implements XMLable {
 	/** The set of vertexes of the graph. */
 	private Set<Vertex> vertexes;
 	
-	/** The set of edges of the graph.
-	 *  Its default value is null. */
+	/** The set of edges of the graph. */
 	private Set<Edge> edges = null;
 
 	/** The label of the graph. */

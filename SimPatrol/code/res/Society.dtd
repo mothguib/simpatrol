@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Document   : Society.dtd
+    Version    : 1.0
+    Date       : May 31th, 2007, 15:24
+    Description: SimPatrol's Agents and Societies DTD
+-->
+
+<!-- SOCIETY  -->
+<!ELEMENT society (agent*, (ipd, (nest_vertex_ipd_pair*)?)?)>
+<!ATTLIST society id ID #REQUIRED>
+<!ATTLIST society label CDATA #REQUIRED>
+<!ATTLIST society is_closed CDATA "true">
+
+<!-- AGENT -->
+<!ELEMENT agent EMPTY>
+<!ATTLIST agent id ID #REQUIRED>
+<!ATTLIST agent state CDATA #REQUIRED>
+<!ATTLIST agent vertex_id IDREF #REQUIRED>
+<!ATTLIST agent edge_id IDREF "null">
+<!ATTLIST agent elapsed_length CDATA #REQUIRED>
+<!ATTLIST agent stamina CDATA #REQUIRED>
+<!ATTLIST agent life_time CDATA "-1">
+
+<!-- NEST VERTEX - IPD PAIR -->
+<!ELEMENT nest_vertex_ipd_pair (ipd)>
+<!ATTLIST nest_vertex_ipd_pair vertex_id ID #REQUIRED>

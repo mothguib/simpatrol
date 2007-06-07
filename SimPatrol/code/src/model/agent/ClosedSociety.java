@@ -1,45 +1,15 @@
+/* ClosedSociety.java */
+
+/* The package of this class. */
 package model.agent;
 
-import java.util.Collection;
-
-/**
- * @model.uin <code>design:node:::61xy5f17ujey8-szti53</code>
- */
+/** Implements the closed societies of agents of SimPatrol. */
 public class ClosedSociety extends Society {
-
-	Agent[] agents = {new PerpetualAgent()};		
-	
-	/**
-	 * @model.uin <code>design:node:::1c8f6f17ujey8-7t467k</code>
-	 */
-	public Collection perpetualAgent;
-
-	public String toXML(int identation) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void start() {
-		agents[0].start();
-	}
-	
-	public void stop() {
-		agents[0].stop();
-	}
-
-	@Override
-	public Agent[] getAgents() {
-		// TODO Auto-generated method stub
-		return agents;
-	}
-
-	public String getObjectId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setObjectId(String object_id) {
-		// TODO Auto-generated method stub
-		
+	/* Methods. */
+	/** Constructor.
+	 *  @param label The label of the closed society.
+	 *  @param perpetual_agents The perpetual agents that compound the closed society. */
+	public ClosedSociety(String label, PerpetualAgent[] perpetual_agents) {
+		super(label, perpetual_agents);
 	}
 }

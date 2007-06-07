@@ -5,18 +5,18 @@ package model.graph;
 
 /* Imported classes and/or interfaces. */
 import model.interfaces.Dynamic;
-import util.tpd.TimeProbabilityDistribution;
+import util.etpd.EventTimeProbabilityDistribution;
 
 /** Implements dynamic edges of a Graph object,
- *  that can appear and disappear with a specific time
+ *  that can appear and disappear with a specific event time
  *  probability distribution. */
 public class DynamicEdge extends Edge implements Dynamic {
 	/* Attributes. */
-	/** The time probability distribution for the edge appearing. */
-	private TimeProbabilityDistribution appearing_pd;
+	/** The event time probability distribution for the edge appearing. */
+	private EventTimeProbabilityDistribution appearing_pd;
 
-	/** The time probability distribution for the edge disappearing. */
-	private TimeProbabilityDistribution disappearing_pd;
+	/** The event time probability distribution for the edge disappearing. */
+	private EventTimeProbabilityDistribution disappearing_pd;
 	
 	/* Methods. */
 	/** Contructor for non-oriented dynamic edges (dynamic non-arcs).
@@ -26,7 +26,7 @@ public class DynamicEdge extends Edge implements Dynamic {
 	 *  @param appearing_pd The time probability distribution for the edge appearing.
 	 *  @param diappearing_pd The time probability distribution for the edge disappearing.
 	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */
-	public DynamicEdge(Vertex vertex_1, Vertex vertex_2, double length, TimeProbabilityDistribution appearing_pd, TimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
+	public DynamicEdge(Vertex vertex_1, Vertex vertex_2, double length, EventTimeProbabilityDistribution appearing_pd, EventTimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
 		super(vertex_1, vertex_2, false, length);
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = disappearing_pd;
@@ -41,7 +41,7 @@ public class DynamicEdge extends Edge implements Dynamic {
 	 *  @param appearing_pd The time probability distribution for the edge appearing.
 	 *  @param diappearing_pd The time probability distribution for the edge disappearing.
 	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */	
-	public DynamicEdge(Vertex emitter, Vertex collector, boolean oriented, double length, TimeProbabilityDistribution appearing_pd, TimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
+	public DynamicEdge(Vertex emitter, Vertex collector, boolean oriented, double length, EventTimeProbabilityDistribution appearing_pd, EventTimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
 		super(emitter, collector, oriented, length);
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = appearing_pd;
@@ -75,11 +75,11 @@ public class DynamicEdge extends Edge implements Dynamic {
 		return buffer.toString();
 	}
 	
-	public TimeProbabilityDistribution getAppearingTPD() {
+	public EventTimeProbabilityDistribution getAppearingETPD() {
 		return this.appearing_pd;
 	}
 	
-	public TimeProbabilityDistribution getDisappearingTPD() {
+	public EventTimeProbabilityDistribution getDisappearingETPD() {
 		return this.disappearing_pd;
 	}
 }

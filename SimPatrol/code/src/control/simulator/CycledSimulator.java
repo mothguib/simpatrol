@@ -74,21 +74,21 @@ public class CycledSimulator extends Simulator {
 			if(dynamic_objects[i] instanceof Vertex)
 				// verifies if the vertex is appearing
 				if(dynamic_objects[i].isAppearing()) {
-					// atualizes the appearing tpd
-					dynamic_objects[i].getAppearingTPD().nextBoolean();
+					// atualizes the appearing etpd
+					dynamic_objects[i].getAppearingETPD().nextBoolean();
 					
 					// verifies if the vertex must disappear now
-					if(dynamic_objects[i].getDisappearingTPD().nextBoolean())
+					if(dynamic_objects[i].getDisappearingETPD().nextBoolean())
 						dynamic_objects[i].setIsAppearing(false);					
 				}
 				// else
 				else {
 					// verifies if the vertex must appear now
-					if(dynamic_objects[i].getAppearingTPD().nextBoolean())
+					if(dynamic_objects[i].getAppearingETPD().nextBoolean())
 						dynamic_objects[i].setIsAppearing(true);
 					
-					// atualizes the disappearing tpd
-					dynamic_objects[i].getDisappearingTPD().nextBoolean();
+					// atualizes the disappearing etpd
+					dynamic_objects[i].getDisappearingETPD().nextBoolean();
 				}
 		
 		// 2. treats the others graph's objects
@@ -96,21 +96,21 @@ public class CycledSimulator extends Simulator {
 			if(!(dynamic_objects[i] instanceof Vertex))
 				// verifies if the object is appearing
 				if(dynamic_objects[i].isAppearing()) {
-					// atualizes the appearing tpd
-					dynamic_objects[i].getAppearingTPD().nextBoolean();
+					// atualizes the appearing etpd
+					dynamic_objects[i].getAppearingETPD().nextBoolean();
 					
 					// verifies if the object must disappear now
-					if(dynamic_objects[i].getDisappearingTPD().nextBoolean())
+					if(dynamic_objects[i].getDisappearingETPD().nextBoolean())
 						dynamic_objects[i].setIsAppearing(false);					
 				}
 				// else
 				else {
 					// verifies if the object must appear now
-					if(dynamic_objects[i].getAppearingTPD().nextBoolean())
+					if(dynamic_objects[i].getAppearingETPD().nextBoolean())
 						dynamic_objects[i].setIsAppearing(true);
 					
-					// atualizes the disappearing tpd
-					dynamic_objects[i].getDisappearingTPD().nextBoolean();
+					// atualizes the disappearing etpd
+					dynamic_objects[i].getDisappearingETPD().nextBoolean();
 				}
 		
 		// TODO trata outros objetos dinamicos (ex: agentes) 
