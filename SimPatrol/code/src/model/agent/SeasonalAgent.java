@@ -15,9 +15,6 @@ public class SeasonalAgent extends Agent implements Dynamic {
 	/** The event time probability distribution for the death of the agent. */
 	private EventTimeProbabilityDistribution death_time_pd;
 	
-	/** The society of the agent. */
-	private OpenSociety society;
-	
 	/* Methods. */
 	/** Constructor.
 	 *  @param vertex The vertex that the agent comes from.
@@ -26,13 +23,6 @@ public class SeasonalAgent extends Agent implements Dynamic {
 		super(vertex);
 		this.death_time_pd = death_time_pd;
 	}
-	
-	/** Configures the open society of the agent.
-	 *  @param society The society of the agent. */
-	public void setSociety(OpenSociety society) {
-		this.society = society;
-	}
-	
 	
 	public String toXML(int identation) {
 		// holds the answer being constructed
@@ -43,14 +33,15 @@ public class SeasonalAgent extends Agent implements Dynamic {
 			// deletes the closing tag
 			int last_valid_index = buffer.lastIndexOf("/>");
 			buffer.delete(last_valid_index, buffer.length());
-			
-			// applies the identation
-			for(int j = 0; j < identation + 1; j++)
-				buffer.append("\t");
+			buffer.append(">\n");
 			
 			// writes the death tpd
 			buffer.append(this.death_time_pd.toXML(identation + 1));			
 		}
+		
+		// closes the agent tag
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		buffer.append("</agent>\n");
 		
 		// returns the answer
 		return buffer.toString();
@@ -77,16 +68,8 @@ public class SeasonalAgent extends Agent implements Dynamic {
 			// stops the thread working
 			this.stopWorking();
 			
-			// removes the agent from its society
-			this.society.removeAgent(this);
-			
-			// nullifies the agent
-			try {
-				this.finalize();
-			}
-			catch (Throwable e) {
-				e.printStackTrace();
-			}
+			// TODO apagar linha abaixo
+			System.out.println("agent " + this.getObjectId() + " died");
 		}
 	}		
 }

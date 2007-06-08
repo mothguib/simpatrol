@@ -28,9 +28,6 @@ public class OpenSociety extends Society {
 	 *  @param max_agents_count The maximum number of agents the society can have. If it's set to -1, there's no maximum. */
 	public OpenSociety(String label, SeasonalAgent[] seasonal_agents, Vertex[] nest_vertexes, int max_agents_count) {
 		super(label, seasonal_agents);
-				
-		for(int i = 0; i < seasonal_agents.length; i++)
-			seasonal_agents[i].setSociety(this);
 		
 		if(nest_vertexes != null && nest_vertexes.length > 0) {
 			this.nest_vertexes = new HashSet<Vertex>();
@@ -54,11 +51,11 @@ public class OpenSociety extends Society {
 		
 		// changes the society type
 		int index_type = buffer.lastIndexOf("is_closed=\"true\"");
-		buffer.replace(index_type + 11, 4, "false");
+		buffer.replace(index_type + 11, index_type + 11 + 4, "false");
 		
 		// changes the maximum number of agents
 		int index_max_agents_count = buffer.lastIndexOf("max_agents_count=\"-1\"");
-		buffer.replace(index_max_agents_count + 18, 2, String.valueOf(this.max_agents_count));
+		buffer.replace(index_max_agents_count + 18, index_max_agents_count + 18 + 2, String.valueOf(this.max_agents_count));
 
 		// adds the nest vertexes, if necessary
 		if(this.nest_vertexes != null) {
