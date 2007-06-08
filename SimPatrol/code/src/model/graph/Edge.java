@@ -22,9 +22,8 @@ public class Edge implements XMLable {
 	/** The collector of this edge, if it is an arc. */
 	protected Vertex collector;
 	
-	/** The set of stigmas eventually deposited by a patroller.
-	 *  Its default value is NULL. */
-	protected Set<Stigma> stigmas = null;
+	/** The set of stigmas eventually deposited by a patroller. */
+	protected Set<Stigma> stigmas;
 
 	/** The lenght of the edge. */
 	private double length;
@@ -32,9 +31,6 @@ public class Edge implements XMLable {
 	/** Expresses if this edge is visible in the graph.
 	 *  Its default value is TRUE. */
 	private boolean visibility = true;
-	
-	/** Registers if the edge is oriented (is an arc). */
-	private boolean oriented;
 	
 	/** Verifies if the edge is appearing.
 	 * 
@@ -60,7 +56,7 @@ public class Edge implements XMLable {
 	public Edge(Vertex emitter, Vertex collector, boolean oriented, double length) {
 		this.emitter = emitter;
 		this.collector = collector;
-		this.oriented = oriented;
+		this.stigmas = null;
 		
 		// if the edge is an arc...
 		if(oriented) {
@@ -91,6 +87,22 @@ public class Edge implements XMLable {
 		else this.stigmas = null;
 	}
 	
+	/** Obtains the set of stigmas of the edge.
+	 *  @return The set of stigmas of the edge.*/
+	public Stigma[] getStigmas() {
+		Stigma[] answer = new Stigma[0];
+		
+		if(this.stigmas != null) {
+			answer = new Stigma[this.stigmas.size()];
+			
+			Object[] stigmas_array = this.stigmas.toArray();			
+			for(int i = 0; i < stigmas_array.length; i++)
+				answer[i] = (Stigma) stigmas_array[i];
+		}
+		
+		return answer;
+	}
+	
 	/** Configures the visibility of the edge.
 	 * @param visibility The visibility. */
 	public void setVisibility(boolean visibility) {
@@ -111,6 +123,7 @@ public class Edge implements XMLable {
 	 * 
 	 *  An edge can have dynamic behavior, if one of its vertexes
 	 *  is dynamic.
+	 *  
 	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */
 	public void setIsAppearing(boolean is_appearing) {		
 		// if is_appearing is TRUE
@@ -161,11 +174,14 @@ public class Edge implements XMLable {
 			if(((DynamicVertex)this.collector).isInAppearingEdges(this))
 				is_in_dynamic_collector_memory = true;
 		
+		// registers if the edge is oriented
+		boolean oriented = !this.emitter.isCollectorOf(this);
+		
 		// fills the buffer 
 		buffer.append("<edge id=\"" + this.id + 
 				      "\" emitter_id=\"" + this.emitter.getObjectId() +
 				      "\" collector_id=\"" + this.collector.getObjectId() +
-				      "\" oriented=\"" + this.oriented +
+				      "\" oriented=\"" + oriented +
 				      "\" length=\"" + this.length +
 				      "\" visibility=\"" + this.visibility +
 				      "\" is_appearing=\"" + this.is_appearing +

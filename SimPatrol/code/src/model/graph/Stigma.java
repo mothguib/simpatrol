@@ -14,6 +14,11 @@ public class Stigma implements XMLable {
 	 *  Not part of the patrol problem modelling. */
 	private String id;
 	
+	/** The object id of the agent that deposited
+	 *  the stigma.
+	 *  Not part of the patrol problem modelling. */
+	private String agent_id;
+	
 	/** The agent patroller that deposited the stigma. */
 	private Agent agent;
 	
@@ -22,6 +27,28 @@ public class Stigma implements XMLable {
 	 *  @param agent The agent patroller that deposited the stigma. */
 	public Stigma(Agent agent) {
 		this.agent = agent;
+	}
+	
+	/** Constructor.
+	 * 
+	 *  Not part of the patrol problem modelling.
+	 *  The stigma is created incomplete (without its agent)
+	 *  needing posterior completion.
+	 * 
+	 *  @param agent_id The agent's id reference. */
+	public Stigma(String agent_id) {
+		this.agent_id = agent_id;
+	}
+	
+	/** Completes the stigma object, searching among the given
+	 *  agents, which one is its agent.
+	 *  @param agents The agents to be searched. */
+	public void completeStigma(Agent[] agents) {
+		for(int i = 0; i < agents.length; i++)
+			if(agents[i].getObjectId().equals(this.agent_id)) {
+				this.agent = agents[i];
+				return;
+			}
 	}
 	
 	public String toXML(int identation) {

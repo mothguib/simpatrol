@@ -6,7 +6,6 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import model.interfaces.Dynamic;
 import model.interfaces.XMLable;
 
@@ -22,7 +21,7 @@ public class Graph implements XMLable {
 	private Set<Vertex> vertexes;
 	
 	/** The set of edges of the graph. */
-	private Set<Edge> edges = null;
+	private Set<Edge> edges;
 
 	/** The label of the graph. */
 	private String label;
@@ -53,7 +52,7 @@ public class Graph implements XMLable {
 	
 	/** Obtains the dynamic objects in the graph.
 	 *  @return The dynamic vertexes and edges. */
-	public Dynamic[] getDynamicComponents() {
+	public Dynamic[] getDynamicObjects() {
 		// the set of dynamic objects
 		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
 		

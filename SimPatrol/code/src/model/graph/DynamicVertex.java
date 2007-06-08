@@ -6,7 +6,6 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import model.interfaces.Dynamic;
 import util.etpd.EventTimeProbabilityDistribution;
 
@@ -37,8 +36,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		super(label);
 		this.appearing_pd = appearing_pd;
 		this.disappearing_pd = disappearing_pd;
-		this.is_appearing = is_appearing;
-		
+		this.is_appearing = is_appearing;		
 		this.appearing_edges = new HashSet<Edge>();
 	}
 
@@ -110,19 +108,24 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		
 		// finds the appearing attribute, atualizing it if necessary
 		if(!this.is_appearing) {
-			int index_appearing_value = buffer.lastIndexOf("true");
-			buffer.replace(index_appearing_value, index_appearing_value + 4, "false");
+			int index_appearing_value = buffer.lastIndexOf("is_appearing=\"true\"");
+			buffer.replace(index_appearing_value + 14, index_appearing_value + 4, "false");
 		}
 		
 		// removes the closing of the xml tag
 		int last_valid_index = 0;
 		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else last_valid_index = buffer.indexOf("\n\t</vertex>");
+		else {
+			StringBuffer closing_tag = new StringBuffer();			
+			for(int i = 0; i < identation; i++) closing_tag.append("\t");
+			closing_tag.append("</vertex>");
+			
+			last_valid_index = buffer.indexOf(closing_tag.toString());
+		}
 		
 		buffer.delete(last_valid_index, buffer.length());
 
 		// adds the time probability distributions
-		buffer.append("\n");
 		buffer.append(this.appearing_pd.toXML(identation + 1));
 		buffer.append(this.disappearing_pd.toXML(identation + 1));
 		

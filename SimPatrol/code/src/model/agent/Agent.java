@@ -67,7 +67,7 @@ public abstract class Agent extends Thread implements XMLable {
 	}
 		
 	/** Returns the agent state.
-	 *  @return The agent's state. */
+	 *  @return The state of the agent. */
 	public int getAgentState() {
 		return this.state;
 	}
@@ -100,7 +100,7 @@ public abstract class Agent extends Thread implements XMLable {
 	
 	public void run() {
 		while(!this.stop_working) {
-			// TODO implementar... o que está abaixo é temporário
+			// TODO implementar... o que está abaixo é temporário!!!
 			int temp_perc = (int)(Math.pow(Math.random() * 10000, 2));			
 			for(int i = 0; i < temp_perc; i++);			
 			this.state = AgentStates.JUST_ACTED;
@@ -129,13 +129,7 @@ public abstract class Agent extends Thread implements XMLable {
 		
 		buffer.append("\" elapsed_length=\"" + this.elapsed_length +
 				      "\" stamina=\"" + this.stamina +
-				      "\" life_time=\"-1" +
-				      "\">\n");
-		
-		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");		
-		buffer.append("</agent>\n");
+				      "\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();

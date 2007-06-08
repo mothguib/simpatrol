@@ -16,17 +16,14 @@ public class Vertex implements XMLable {
 	 *  Not part of the patrol problem modelling. */
 	private String id;
 	
-	/** The set of edges whose emitter is this vertex.
-	 *  Its default value is NULL. */
-	protected Set<Edge> in_edges = null;
+	/** The set of edges whose emitter is this vertex. */
+	protected Set<Edge> in_edges;
 
-	/** The set of edges whose collector is this vertex.
-	 *  Its defaultvalue is NULL. */
-	protected Set<Edge> out_edges = null;
+	/** The set of edges whose collector is this vertex. */
+	protected Set<Edge> out_edges;
 
-	/** The set of stigmas eventually deposited by a patroller.
-	 *  Its default value is NULL. */
-	protected Set<Stigma> stigmas = null;
+	/** The set of stigmas eventually deposited by a patroller. */
+	protected Set<Stigma> stigmas;
 
 	/** The label of the vertex. */
 	private String label;
@@ -52,6 +49,9 @@ public class Vertex implements XMLable {
 	 *  @param label The label of the vertex. */
 	public Vertex(String label) {
 		this.label = label;
+		this.in_edges = null;
+		this.out_edges = null;
+		this.stigmas = null;
 		this.idleness = 0;
 	}
 	
@@ -81,7 +81,7 @@ public class Vertex implements XMLable {
 		this.in_edges.add(in_arc);
 	}
 	
-	/** Returns the edges set of the vertex.
+	/** Returns the set of edges of the vertex.
 	 *  @return The edges associated with the vertex.*/
 	public Edge[] getEdges() {
 		int in_edges_size = 0;
@@ -121,6 +121,22 @@ public class Vertex implements XMLable {
 		else this.stigmas = null;
 	}
 	
+	/** Obtains the set of stigmas of the vertex.
+	 *  @return The set of stigmas of the vertex.*/
+	public Stigma[] getStigmas() {
+		Stigma[] answer = new Stigma[0];
+		
+		if(this.stigmas != null) {
+			answer = new Stigma[this.stigmas.size()];
+			
+			Object[] stigmas_array = this.stigmas.toArray();			
+			for(int i = 0; i < stigmas_array.length; i++)
+				answer[i] = (Stigma) stigmas_array[i];
+		}
+		
+		return answer;
+	}	
+	
 	/** Configures the priority of the vertex.
 	 * @param priority The priority. */
 	public void setPriority(int priority) {
@@ -143,7 +159,21 @@ public class Vertex implements XMLable {
 	 * @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
 	public void setFuel(boolean fuel) {
 		this.fuel = fuel;
-	}	
+	}
+	
+	/** Verifies if the vertex is the collector of a given edge.
+	 *  @param edge The edge whose collector is supposed to be the vertex.
+	 *  @return TRUE if the vertex is the collector of the edge, FALSE if not. */
+	public boolean isCollectorOf(Edge edge) {
+		return this.in_edges.contains(edge);
+	}
+	
+	/** Verifies if the vertex is the emitter of a given edge.
+	 *  @param edge The edge whose emitter is supposed to be the vertex.
+	 *  @return TRUE if the vertex is the emitter of the edge, FALSE if not. */
+	public boolean isEmitterOf(Edge edge) {
+		return this.out_edges.contains(edge);
+	}
 	
 	public String toXML(int identation) {
 		// holds the answer being constructed

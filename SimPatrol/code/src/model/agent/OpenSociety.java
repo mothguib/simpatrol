@@ -4,128 +4,88 @@
 package model.agent;
 
 /* Imported classes and/or interfaces. */
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
-import util.ipd.IntegerProbabilityDistribution;
 import model.graph.Vertex;
 
 /** Implements the open societies of agents of SimPatrol. */
 public class OpenSociety extends Society {
 	/* Attributes. */
-	/** The vertexes where new agents are born. */
+	/** The vertexes where new agents can be born. */
 	private Set<Vertex> nest_vertexes;
 	
-	/** The probability distributions for each agent birth quantity per
-	 *  nest vertex . */
-	private Set<IntegerProbabilityDistribution> birth_quantity_ipds;
-	
-	/** The propability distribution for the life time of the new agents. */
-	private IntegerProbabilityDistribution life_time_ipd;
-	
+	/** The maximum number of agents the society can have.
+	 * 
+	 *  If it's set to -1, there's no maximum.
+	 * */
+	private int max_agents_count;
+
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the closed society.
 	 *  @param seasonal_agents The seasonal agents that compound the open society.
-	 *  @param nest_vertex The vertexes where new agents are born.
-	 *  @param birth_quantity_ipds The probability distributions for each agent birth quantity per nest vertex.
-	 *  @param life_time_ipd The propability distribution for the life time of the new agents. */
-	public OpenSociety(String label, SeasonalAgent[] seasonal_agents, Vertex[] nest_vertexes, IntegerProbabilityDistribution[] birth_quantity_ipds, IntegerProbabilityDistribution life_time_ipd) {
+	 *  @param nest_vertexes The vertexes where new agents can be born.
+	 *  @param max_agents_count The maximum number of agents the society can have. If it's set to -1, there's no maximum. */
+	public OpenSociety(String label, SeasonalAgent[] seasonal_agents, Vertex[] nest_vertexes, int max_agents_count) {
 		super(label, seasonal_agents);
+				
+		for(int i = 0; i < seasonal_agents.length; i++)
+			seasonal_agents[i].setSociety(this);
 		
 		if(nest_vertexes != null && nest_vertexes.length > 0) {
-			this.nest_vertexes = new LinkedHashSet<Vertex>();
+			this.nest_vertexes = new HashSet<Vertex>();
 			for(int i = 0; i < nest_vertexes.length; i++)
 				this.nest_vertexes.add(nest_vertexes[i]);
 		}
 		else this.nest_vertexes = null;
 		
-		if(birth_quantity_ipds != null && birth_quantity_ipds.length > 0) {
-			this.birth_quantity_ipds = new LinkedHashSet<IntegerProbabilityDistribution>();
-			for(int i = 0; i < birth_quantity_ipds.length; i++)
-				this.birth_quantity_ipds.add(birth_quantity_ipds[i]);
-		}
-		else this.birth_quantity_ipds = null;
-		
-		this.life_time_ipd = life_time_ipd;
+		this.max_agents_count = max_agents_count;		
 	}
 	
-	/** Creates new agents, if it's the case. */
-	public void createNewAgents() {
-		// if nest vertexes and ipds are defined
-		if(this.nest_vertexes != null && this.birth_quantity_ipds != null) {			
-			Object[] nest_vertexes_array = this.nest_vertexes.toArray();
-			Object[] birth_quantity_ipds_array = this.birth_quantity_ipds.toArray();
-			
-			// for each nest vertex
-			for(int i = 0; i < nest_vertexes_array.length; i++) {
-				// registers how many agents shall be created
-				int new_agents_count = 0;
-
-				if(i < birth_quantity_ipds_array.length)
-					new_agents_count = ((IntegerProbabilityDistribution) birth_quantity_ipds_array[i]).nextInt();
-				
-				// creates each one of the new agents
-				for(int j = 0; j < new_agents_count; j++) {
-					// creates a new agent
-					SeasonalAgent new_agent = new SeasonalAgent((Vertex) nest_vertexes_array[i], this.life_time_ipd.nextInt());
-															
-					// produces and configures an id for the new agent
-					String id = new_agent.getClass().getName() + "@" + Integer.toHexString(new_agent.hashCode()) + "#" + String.valueOf(System.currentTimeMillis() + i + j);
-					new_agent.setObjectId(id);
-					
-					// adds the new agent to the society
-					this.agents.add(new_agent);
-					
-					// starts the new agent
-					new_agent.start();
-				}
-			}
-		}
+	/** Removes a given agent from the society. 
+	 *  @param agent The agent to be removed. */
+	public void removeAgent(SeasonalAgent agent) {
+		this.agents.remove(agent);
 	}
 	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer(super.toXML(identation));
 		
-		// changes the society type from 0 (closed) to 1 (open)
-		int index_type = buffer.lastIndexOf("true");
-		buffer.replace(index_type, 4, "false");
+		// changes the society type
+		int index_type = buffer.lastIndexOf("is_closed=\"true\"");
+		buffer.replace(index_type + 11, 4, "false");
+		
+		// changes the maximum number of agents
+		int index_max_agents_count = buffer.lastIndexOf("max_agents_count=\"-1\"");
+		buffer.replace(index_max_agents_count + 18, 2, String.valueOf(this.max_agents_count));
 
-		// deletes the final closing tag "</society>"
-		int index_final_tag = buffer.indexOf("</society>");
-		buffer.delete(index_final_tag, buffer.length());
-		
-		// adds the ipd for the life time of the new agents
-		buffer.append(this.life_time_ipd.toXML(identation + 1));
-		
-		// adds the nest vertex - ipd pairs
-		if(this.nest_vertexes != null && this.birth_quantity_ipds != null) {
-			Object[] nest_vertexes_array = this.nest_vertexes.toArray();
-			Object[] birth_quantity_ipds_array = this.birth_quantity_ipds.toArray();
+		// adds the nest vertexes, if necessary
+		if(this.nest_vertexes != null) {
+			// deletes the closing tag "</society>"
+			StringBuffer closing_tag = new StringBuffer();			
+			for(int i = 0; i < identation; i++) closing_tag.append("\t");
+			closing_tag.append("</society>");
 			
-			// for each nest vertex
-			for(int i = 0; i < nest_vertexes_array.length; i++) {
+			int last_valid_index = buffer.indexOf(closing_tag.toString());
+			buffer.delete(last_valid_index, buffer.length());
+			
+			// adds the nest vertexes tags
+			Object[] vertexes_array = this.nest_vertexes.toArray();
+			for(int i = 0; i < vertexes_array.length; i++) {
 				// applies the identation
 				for(int j = 0; j < identation + 1; j++)
 					buffer.append("\t");
 				
-				// fills the buffer with the "nest_vertex_ipd_pair" tag
-				buffer.append("<nest_vertex_ipd_pair vertex_id=\">" + ((Vertex) nest_vertexes_array[i]).getObjectId() +
-						      "\">\n");
-				if(i < birth_quantity_ipds_array.length)
-					buffer.append(((IntegerProbabilityDistribution)birth_quantity_ipds_array[i]).toXML(identation + 2));
-				
-				for(int j = 0; j < identation + 1; j++)
-					buffer.append("\t");
-				
-				buffer.append("</nest_vertex_ipd_pair vertex_id>\n");
+				// writes the "nest_vertex" tag
+				buffer.append("<nest_vertex vertex_id = \"" + ((Vertex) vertexes_array[i]).getObjectId() + "\"/>\n");				
 			}
+			
+			// finishes the buffer content
+			for(int i = 0; i < identation; i++)
+				buffer.append("\t");		
+			buffer.append("</society>\n");
 		}
-		
-		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");		
-		buffer.append("</society>\n");		
 		
 		// returns the buffer content
 		return buffer.toString();

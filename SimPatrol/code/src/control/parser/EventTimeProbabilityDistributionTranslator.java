@@ -6,12 +6,12 @@ package control.parser;
 /* Imported classes and/or interfaces. */
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import util.etpd.EmpiricalTimeProbabilityDistribution;
-import util.etpd.NormalTimeProbabilityDistribution;
-import util.etpd.SpecificTimeProbabilityDistribution;
+import util.etpd.EmpiricalEventTimeProbabilityDistribution;
+import util.etpd.NormalEventTimeProbabilityDistribution;
+import util.etpd.SpecificEventTimeProbabilityDistribution;
 import util.etpd.EventTimeProbabilityDistribution;
 import util.etpd.EventTimeProbabilityDistributionTypes;
-import util.etpd.UniformTimeProbabilityDistribution;
+import util.etpd.UniformEventTimeProbabilityDistribution;
 
 /** Implements a translator thar obtains event time probability distributions
  *  from a given xml source.
@@ -31,10 +31,10 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 			return new EventTimeProbabilityDistribution[0];
 		
 		// the answer of the method
-		EventTimeProbabilityDistribution[] answer = new EventTimeProbabilityDistribution[2];
+		EventTimeProbabilityDistribution[] answer = new EventTimeProbabilityDistribution[etpd_nodes.getLength()];
 		
-		// for the two ocurrences
-		for(int i = 0; i < 2; i++) {
+		// for the ocurrences
+		for(int i = 0; i < answer.length; i++) {
 			// obtains the current etpd element
 			Element etpd_element = (Element) etpd_nodes.item(i);
 			
@@ -47,21 +47,21 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 			// instantiates the new etpd and configures it
 			switch(type) {
 				case EventTimeProbabilityDistributionTypes.UNIFORM: {
-					answer[i] = new UniformTimeProbabilityDistribution(seed, getUniformETPDParameter(etpd_element));
+					answer[i] = new UniformEventTimeProbabilityDistribution(seed, getETPDParameters(etpd_element)[0]);
 					break;
 				}
 				case EventTimeProbabilityDistributionTypes.EMPIRICAL: {
-					answer[i] = new EmpiricalTimeProbabilityDistribution(seed, getEmpiricalETPDParameter(etpd_element));
+					answer[i] = new EmpiricalEventTimeProbabilityDistribution(seed, getETPDParameters(etpd_element));
 					break;
 				}
 				case EventTimeProbabilityDistributionTypes.NORMAL: {
-					double[] parameters = getNormalETPDParameter(etpd_element);
-					answer[i] = new NormalTimeProbabilityDistribution(seed, parameters[0], parameters[1]);
+					double[] parameters = getETPDParameters(etpd_element);
+					answer[i] = new NormalEventTimeProbabilityDistribution(seed, parameters[0], parameters[1]);
 					break;
 				}
 				case EventTimeProbabilityDistributionTypes.SPECIFIC: {
-					double[] parameters = getSpecificETPDParameter(etpd_element);
-					answer[i] = new SpecificTimeProbabilityDistribution(seed, parameters[0], (int) parameters[1]);
+					double[] parameters = getETPDParameters(etpd_element);
+					answer[i] = new SpecificEventTimeProbabilityDistribution(seed, parameters[0], (int) parameters[1]);
 					break;
 				}
 			}
@@ -75,26 +75,11 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 		return answer;
 	}
 	
-	/** Obtains the uniform event time probability distributions from the
+	/** Obtains the probability distribution parameters from a
 	 *  given etpd element.
-	 *  @param etpd_element The XML source containing the uniform etpd's parameters.
-	 *  @return The uniform etpd parameter. */
-	private static double getUniformETPDParameter(Element etpd_element) {
-		// obtains the nodes with the "pd_parameter" tag
-		NodeList etpd_parameter_nodes = etpd_element.getElementsByTagName("pd_parameter");
-		
-		// obtains the etpd parameter element
-		Element etpd_parameter_element = (Element) etpd_parameter_nodes.item(0);
-		
-		// returns the parameter value
-		return Double.parseDouble(etpd_parameter_element.getAttribute("value"));	
-	}
-	
-	/** Obtains the empirical event time probability distributions from the
-	 *  given etpd element.
-	 *  @param etpd_element The XML source containing the empirical etpd's parameters.
-	 *  @return The empirical etpd parameters. */
-	private static double[] getEmpiricalETPDParameter(Element etpd_element) {		
+	 *  @param etpd_element The XML source containing the etpd's parameters.
+	 *  @return The etpd's parameters. */
+	private static double[] getETPDParameters(Element etpd_element) {		
 		// obtains the nodes with the "pd_parameter" tag
 		NodeList etpd_parameter_nodes = etpd_element.getElementsByTagName("pd_parameter");
 		
@@ -113,52 +98,4 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 		// returns the answer
 		return answer;
 	}
-	
-	/** Obtains the normal event time probability distributions from the
-	 *  given etpd element.
-	 *  @param etpd_element The XML source containing the normal etpd's parameters.
-	 *  @return The normal etpd parameters; 1st the mean, 2nd the standard deviation. */
-	private static double[] getNormalETPDParameter(Element etpd_element) {
-		// obtains the nodes with the "pd_parameter" tag
-		NodeList etpd_parameter_nodes = etpd_element.getElementsByTagName("pd_parameter");
-		
-		// the answer for the method
-		double[] answer = new double[2];
-		
-		// for each ocurrence (mean and standard deviation)
-		for(int i = 0; i < 2; i++) {
-			// obtains the current etpd parameter element
-			Element etpd_parameter_element = (Element) etpd_parameter_nodes.item(i);
-			
-			// adds the current parameter value to the answer
-			answer[i] =  Double.parseDouble(etpd_parameter_element.getAttribute("value"));
-		}
-		
-		// returns the answer
-		return answer;
-	}
-	
-	/** Obtains the specific event time probability distribution from the
-	 *  given etpd element.
-	 *  @param etpd_element The XML source containing the specific etpd's parameters.
-	 *  @return The specific etpd parameters; 1st the probability, 2nd the time. */
-	private static double[] getSpecificETPDParameter(Element etpd_element) {
-		// obtains the nodes with the "pd_parameter" tag
-		NodeList etpd_parameter_nodes = etpd_element.getElementsByTagName("pd_parameter");
-		
-		// the answer for the method
-		double[] answer = new double[2];
-		
-		// for each ocurrence (probability and time)
-		for(int i = 0; i < 2; i++) {
-			// obtains the current etpd parameter element
-			Element etpd_parameter_element = (Element) etpd_parameter_nodes.item(i);
-			
-			// adds the current parameter value to the answer
-			answer[i] =  Double.parseDouble(etpd_parameter_element.getAttribute("value"));
-		}
-		
-		// returns the answer
-		return answer;
-	}	
 }

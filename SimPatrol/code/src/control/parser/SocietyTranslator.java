@@ -6,7 +6,6 @@ package control.parser;
 /* Imported classes and/or interfaces. */
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import util.ipd.IntegerProbabilityDistribution;
 import model.agent.Agent;
 import model.agent.ClosedSociety;
 import model.agent.OpenSociety;
@@ -14,12 +13,19 @@ import model.agent.PerpetualAgent;
 import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Edge;
+import model.graph.Stigma;
 import model.graph.Vertex;
 
 /** Implements a translator that obtains Society objects from
  *  XML sources.
  *  @see Society */
 public abstract class SocietyTranslator extends Translator {
+	/* Methods */
+	/** Obtains the societies from the given XML element.
+	 *  @param xml_element The XML source containing the societies.
+	 *  @param vertexes The set of vertexes in a simulation.
+	 *  @param edges The set of edges in a simulation.
+	 *  @return The societies from the XML source. */		
 	public Society[] getSocieties(Element xml_element, Vertex[] vertexes, Edge[] edges) {
 		// obtains the nodes with the "society" tag
 		NodeList society_nodes = xml_element.getElementsByTagName("society");
@@ -33,26 +39,23 @@ public abstract class SocietyTranslator extends Translator {
 		
 		// for all the ocurrences
 		for(int i = 0; i < answer.length; i++) {
-			// obtains the current agent element
+			// obtains the current society element
 			Element society_element = (Element) society_nodes.item(i);
 			
 			// obtains the data
 			String id = society_element.getAttribute("id");
 			String label = society_element.getAttribute("label");
 			boolean is_closed = Boolean.parseBoolean(society_element.getAttribute("is_closed"));
+			int max_agents_count = Integer.parseInt(society_element.getAttribute("max_agents_cout"));
 			
 			// obtains the agents
 			boolean are_perpetual_agents = true; 
 			if(!is_closed) are_perpetual_agents = false;
 			Agent[] agents = getAgents(society_element, are_perpetual_agents, vertexes, edges);
 			
-			// obtains the eventual ipd for the life time of the agents
-			IntegerProbabilityDistribution ipd_life_time = null;
-			if(!is_closed) ipd_life_time = IntegerProbabilityDistributionTranslator.getIntegerProbabilityDistribution(society_element)[0];
-			
-			// obtains the eventual nest_vertex - ipd pairs
-			Object[] nest_vertex_ipd_pairs = null;
-			if(!is_closed) nest_vertex_ipd_pairs = getNestVertexes_IPDs(society_element, vertexes);
+			// obtains the eventual nest vertexes references
+			Vertex[] nest_vertexes = null;
+			if(!is_closed) nest_vertexes = getNestVertexes(society_element, vertexes);
 			
 			// creates and configures the society
 			Society society = null;
@@ -68,11 +71,27 @@ public abstract class SocietyTranslator extends Translator {
 				for(int j = 0; j < seasonal_agents.length; j++)
 					seasonal_agents[j] = (SeasonalAgent) agents[j];
 				
-				society = new OpenSociety(label, seasonal_agents, (Vertex[]) nest_vertex_ipd_pairs[0], (IntegerProbabilityDistribution[]) nest_vertex_ipd_pairs[1], ipd_life_time);
+				society = new OpenSociety(label, seasonal_agents, nest_vertexes, max_agents_count);
 			}
 			society.setObjectId(id);
 			
-			// puts on the answer
+			// completes the enventual stigmas of the vertexes and edges
+			// i. e. connects the stigma to its agent
+			for(int j = 0; j < vertexes.length; j++) {
+				Stigma[] stigmas = vertexes[j].getStigmas();
+				
+				for(int k = 0; k < stigmas.length; k++)
+					stigmas[k].completeStigma(agents);
+			}
+			
+			for(int j = 0; j < edges.length; j++) {
+				Stigma[] stigmas = edges[j].getStigmas();
+				
+				for(int k = 0; k < stigmas.length; k++)
+					stigmas[k].completeStigma(agents);
+			}
+						
+			// puts in the answer
 			answer[i] = society;
 		}
 		
@@ -109,7 +128,6 @@ public abstract class SocietyTranslator extends Translator {
 			String edge_id = agent_element.getAttribute("edge_id");
 			int elapsed_length = Integer.parseInt(agent_element.getAttribute("elapsed_length"));
 			int stamina = Integer.parseInt(agent_element.getAttribute("stamina"));
-			int life_time = Integer.parseInt(agent_element.getAttribute("life_time"));
 			
 			// finds the vertex of the agent
 			Vertex vertex = null;
@@ -126,12 +144,11 @@ public abstract class SocietyTranslator extends Translator {
 					edge = edges[j];
 					break;
 				}
-			
-			// instatiates and cofigures the new agent
-			Agent agent = null;
-			
+
+			// instatiates and configures the new agent
+			Agent agent = null;			
 			if(are_perpetual_agents) agent = new PerpetualAgent(vertex);
-			else agent = new SeasonalAgent(vertex, life_time);
+			else agent = new SeasonalAgent(vertex, EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
 			
 			agent.setObjectId(id);
 			agent.setState(state);
@@ -146,48 +163,39 @@ public abstract class SocietyTranslator extends Translator {
 		return answer;		
 	}
 	
-	/** Obtains the nest_vertex - ipd pairs from the given XML element.
-	 *  @param xml_element The XML source containing the agents.
+	/** Obtains the nest vertexes of an eventual open society from
+	 *  the given XML element.
+	 *  @param xml_element The XML source containing the nest vertexes.
 	 *  @param vertexes The set of vertexes in a simulation.
-	 *  @return The nest vertexes and correspondent ipds from the XML source. */
-	private static Object[] getNestVertexes_IPDs(Element xml_element, Vertex[] vertexes) {
-		// The answer of the method
-		Object[] answer = new Object[2];
-		Vertex[] nest_vertexes = null;
-		IntegerProbabilityDistribution[] ipds = null;
+	 *  @return The nest vertexes of the open society. */
+	private static Vertex[] getNestVertexes(Element xml_element, Vertex[] vertexes) {
+		// obtains the nodes with the "nest_vertex" tag
+		NodeList nest_vertex_nodes = xml_element.getElementsByTagName("nest_vertex");
 		
-		// obtains the nodes with the "nest_vertex_ipd_pair" tag
-		NodeList nest_vertex_ipd_nodes = xml_element.getElementsByTagName("nest_vertex_ipd_pair");
+		// is there any nest vertex?
+		if(nest_vertex_nodes.getLength() == 0)
+			return new Vertex[0];
 		
-		// is there any nest_vertex - ipd pair?
-		if(nest_vertex_ipd_nodes.getLength() == 0)
-			return answer;
-		else {
-			nest_vertexes = new Vertex[nest_vertex_ipd_nodes.getLength()];
-			ipds = new IntegerProbabilityDistribution[nest_vertex_ipd_nodes.getLength()];
-		}
+		// the answer of the method
+		Vertex[] answer = new Vertex[nest_vertex_nodes.getLength()];
 		
-		// for each ocurrence of the pair
-		for(int i = 0; i < nest_vertex_ipd_nodes.getLength(); i++) {
-			// obtains the current nest_vertex - ipd pair element
-			Element nest_vertex_ipd_element = (Element) nest_vertex_ipd_nodes.item(i);
+		// for each node
+		for(int i = 0; i < answer.length; i++) {
+			// obtains the current nest vertex element
+			Element nest_vertex_element = (Element) nest_vertex_nodes.item(i);
 			
-			// obtains the nest vertex id
-			String nest_vertex_id = nest_vertex_ipd_element.getAttribute("vertex_id");
+			// obtains the data
+			String vertex_id = nest_vertex_element.getAttribute("vertex_id");
 			
-			// obtains the ipd
-			ipds[i] = IntegerProbabilityDistributionTranslator.getIntegerProbabilityDistribution(nest_vertex_ipd_element)[0]; 
-			
-			// obtains the nest vertex
+			// finds the correspondent vertex
 			for(int j = 0; j < vertexes.length; j++)
-				if(vertexes[j].getObjectId().equals(nest_vertex_id)) {
-					nest_vertexes[i] = vertexes[j];
+				if(vertexes[j].getObjectId().equals(vertex_id)) {
+					answer[i] = vertexes[j];
 					break;
 				}
-		}		
-		// returns the answer
-		answer[0] = nest_vertexes;
-		answer[1] = ipds;
+		}
+		
+		// return the answer
 		return answer;
 	}
 }

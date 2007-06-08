@@ -1,32 +1,36 @@
-/* EmpiricalTimeProbabilityDistribution.java */
+/* NormalEventTimeProbabilityDistribution.java */
 
 /* The package of this class. */
 package util.etpd;
 
 /* Imported classes and/or interfaces. */
-import cern.jet.random.Empirical;
-import cern.jet.random.EmpiricalWalker;
+import cern.jet.random.Normal;
 
 /** Implements the probability distributions of happening
  *  an event based on the time of simulation that are given
- *  by an empirical method. */
-public class EmpiricalTimeProbabilityDistribution extends EventTimeProbabilityDistribution {	
+ *  by a normal function. */
+public class NormalEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
 	/* Attributes. */
-	/** The discrete empirical distribution.  */
-	private double[] distribution;	
+	/** The mean of the normal function. */
+	private double mean;
+	
+	/** The standard deviation of the normal function. */
+	private double standard_deviation;
 	
 	/* Methods. */
 	/** Constructor.
 	 *  @param seed The seed for the random number generation.
-	 *  @param distribution The empirical distribution. */
-	public EmpiricalTimeProbabilityDistribution(int seed, double[] distribution) {
+	 *  @param mean The mean of the normal function.
+	 *  @param standard_deviation The standard deviation of the normal function. */
+	public NormalEventTimeProbabilityDistribution(int seed, double mean, double standard_deviation) {
 		super(seed);
-		this.distribution = distribution;
+		this.mean = mean;
+		this.standard_deviation = standard_deviation;
 		
 		// never forget to instantiate this.rn_distributor!!!
-		this.rn_distributor = new EmpiricalWalker(this.distribution, Empirical.NO_INTERPOLATION, this.rn_generator);
+		this.rn_distributor = new Normal(this.mean, this.standard_deviation, this.rn_generator); 
 	}
-	
+
 	public boolean nextBoolean() {
 		// never forget to increase next_bool_counter, before any code!
 		this.next_bool_counter++;
@@ -47,17 +51,20 @@ public class EmpiricalTimeProbabilityDistribution extends EventTimeProbabilityDi
 		buffer.append("<etpd id=\"" + this.getObjectId() +
 				      "\" seed=\"" + this.seed +
 				      "\" next_bool_count=\"" + this.next_bool_counter +
-				      "\" type=\"" + EventTimeProbabilityDistributionTypes.EMPIRICAL +
+				      "\" type=\"" + EventTimeProbabilityDistributionTypes.NORMAL +
 				      "\">\n");
 		
-		// completes the buffer content
-		for(int i = 0; i < this.distribution.length; i++) {
-			// applies the identation
-			for(int j = 0; j < identation + 1; j++)
-				buffer.append("\t");
-			
-			buffer.append("<pd_parameter value=\"" + this.distribution[i] + "\"/>\n");
-		}
+		// puts the mean value
+		for(int i = 0; i < identation + 1; i++)
+			buffer.append("\t");
+		
+		buffer.append("<pd_parameter value=\"" + this.mean + "\"/>\n");
+		
+		// puts the standard deviation value
+		for(int i = 0; i < identation + 1; i++)
+			buffer.append("\t");
+		
+		buffer.append("<pd_parameter value=\"" + this.standard_deviation + "\"/>\n");
 		
 		// finishes the buffer content
 		for(int i = 0; i < identation; i++)
@@ -66,6 +73,6 @@ public class EmpiricalTimeProbabilityDistribution extends EventTimeProbabilityDi
 		buffer.append("</etpd>\n");
 		
 		// returns the buffer content
-		return buffer.toString();		
+		return buffer.toString();
 	}
 }
