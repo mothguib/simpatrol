@@ -109,7 +109,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		// finds the appearing attribute, atualizing it if necessary
 		if(!this.is_appearing) {
 			int index_appearing_value = buffer.lastIndexOf("is_appearing=\"true\"");
-			buffer.replace(index_appearing_value + 14, index_appearing_value + 4, "false");
+			buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
 		}
 		
 		// removes the closing of the xml tag

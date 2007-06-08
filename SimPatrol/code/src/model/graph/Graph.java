@@ -50,6 +50,18 @@ public class Graph implements XMLable {
 			this.edges = null;
 	}
 	
+	/** Obtains the vertexes of the graph.
+	 *  @return The vertexes of the graph. */
+	public Vertex[] getVertexes() {
+		Object[] vertexes_array = this.vertexes.toArray();
+		Vertex[] answer = new Vertex[vertexes_array.length];
+		
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Vertex) vertexes_array[i];
+		
+		return answer;
+	}
+	
 	/** Obtains the dynamic objects in the graph.
 	 *  @return The dynamic vertexes and edges. */
 	public Dynamic[] getDynamicObjects() {
