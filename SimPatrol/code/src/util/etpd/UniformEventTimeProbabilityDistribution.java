@@ -48,8 +48,8 @@ public class UniformEventTimeProbabilityDistribution extends EventTimeProbabilit
 		// partially fills the buffer 
 		buffer.append("<etpd id=\"" + this.getObjectId() + 
 				      "\" seed=" + this.seed +
-				      "\" next_bool_count=" + this.next_bool_counter +
-				      "\" type=" + EventTimeProbabilityDistributionTypes.UNIFORM +
+				      "\" next_bool_count=\"" + this.next_bool_counter +
+				      "\" type=\"" + EventTimeProbabilityDistributionTypes.UNIFORM +
 				      "\">\n");
 		
 		// puts the probability value

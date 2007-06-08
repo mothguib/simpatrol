@@ -56,9 +56,9 @@ public class SpecificEventTimeProbabilityDistribution extends EventTimeProbabili
 		
 		// partially fills the buffer 
 		buffer.append("<etpd id=\"" + this.getObjectId() + 
-				      "\" seed=" + this.seed +
-				      "\" next_bool_count=" + this.next_bool_counter +
-				      "\" type=" + EventTimeProbabilityDistributionTypes.SPECIFIC +
+				      "\" seed=\"" + this.seed +
+				      "\" next_bool_count=\"" + this.next_bool_counter +
+				      "\" type=\"" + EventTimeProbabilityDistributionTypes.SPECIFIC +
 				      "\">\n");
 		
 		// puts the probability value
