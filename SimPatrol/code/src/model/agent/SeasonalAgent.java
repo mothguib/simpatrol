@@ -16,6 +16,9 @@ public class SeasonalAgent extends Agent implements Dynamic {
 	/** The event time probability distribution for the death of the agent. */
 	private EventTimeProbabilityDistribution death_time_pd;
 	
+	/** Registers if the agent is dead. */
+	private boolean is_dead;
+	
 	/* Methods. */
 	/** Constructor.
 	 *  @param vertex The vertex that the agent comes from.
@@ -23,6 +26,13 @@ public class SeasonalAgent extends Agent implements Dynamic {
 	public SeasonalAgent(Vertex vertex, EventTimeProbabilityDistribution death_time_pd) {
 		super(vertex);
 		this.death_time_pd = death_time_pd;
+		this.is_dead = false;
+	}
+	
+	/** Verifies if the agent is already dead.
+	 *  @return TRUE if the agent is dead, FALSE if not. */
+	public boolean isDead() {
+		return this.is_dead;
 	}
 	
 	public String toXML(int identation) {
@@ -59,18 +69,21 @@ public class SeasonalAgent extends Agent implements Dynamic {
 	}
 
 	public boolean isAppearing() {
-		// the agent is always appearing
+		// the agent, if alive, is always appering
 		return true;
 	}
 
 	public void setIsAppearing(boolean is_appearing) {
 		// if the agent is supposed to disappear, it dies
 		if(!is_appearing) {
+			// kills the agent
+			this.is_dead = true;
+			
 			// stops the thread working
 			this.stopWorking();
 			
 			// TODO apagar linha abaixo
-			System.out.println("agent " + this.getObjectId() + " died");
+			System.out.println("agent " + this.getObjectId() + " died");			
 		}
 	}		
 }

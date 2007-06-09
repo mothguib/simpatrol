@@ -190,7 +190,7 @@ public class Vertex implements XMLable {
 				      "\" visibility=\"" + this.visibility +
 				      "\" idleness=\"" + this.idleness +
 				      "\" fuel=\"" + this.fuel +
-					  "\" is_appearing=\"true\"");
+					  "\" is_appearing=\"true");
 		
 		// treats the ocurrency of stigmas
 		if(this.stigmas != null) {

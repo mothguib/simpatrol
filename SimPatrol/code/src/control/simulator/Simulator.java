@@ -6,6 +6,9 @@ package control.simulator;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+import model.agent.Agent;
+import model.agent.OpenSociety;
+import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Graph;
 import model.interfaces.Dynamic;
@@ -45,23 +48,36 @@ public abstract class Simulator {
 	/** Constructor.
 	 *  @param simulation_time The time of simulation.
 	 *  @param graph The graph to be pattroled.
+	 *  @param societies The societies of the simulation
 	 *  @param analysis_report_daemon The daemon to attend requisitios for analysis reports.
 	 *  @param simulation_log_daemon The daemon to produce logs of the simulation. */
-	public Simulator(int simulation_time, Graph graph, AnalysisReportDaemon analysis_report_daemon, SimulationLogDaemon simulation_log_daemon) {
+	public Simulator(int simulation_time, Graph graph, Society[] societies, AnalysisReportDaemon analysis_report_daemon, SimulationLogDaemon simulation_log_daemon) {
 		this.simulation_time = simulation_time;
 		this.graph = graph;
-		this.analysis_report_daemon = analysis_report_daemon;
-		this.simulation_log_daemon = simulation_log_daemon;
 		
 		this.societies = new HashSet<Society>();
+		for(int i = 0; i < societies.length; i++)
+			this.societies.add(societies[i]);
+		
+		this.analysis_report_daemon = analysis_report_daemon;
+		this.simulation_log_daemon = simulation_log_daemon;
+
 		this.perception_daemons = new HashSet<PerceptionDaemon>();
 		this.action_daemons = new HashSet<ActionDaemon>();
 	}
 	
-	/** Adds a given society to the simulator.
-	 *  @param society The society to be added. */	
-	public void addSociety(Society society) {
-		this.societies.add(society);
+	/** Starts the societies of agents of the simulator. */
+	protected void startSocieties() {
+		Object[] societies_array = this.societies.toArray();
+		for(int i = 0; i < societies_array.length; i++)
+			((Society) societies_array[i]).startAgents();
+	}
+	
+	/** Stops the societies of agents of the simulator. */
+	protected void stopSocieties() {
+		Object[] societies_array = this.societies.toArray();
+		for(int i = 0; i < societies_array.length; i++)
+			((Society) societies_array[i]).stopAgents();
 	}
 	
 	/** Obtains the dynamic objects of the simulation. */
@@ -70,11 +86,18 @@ public abstract class Simulator {
 		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
 		
 		// obtains the dynamic objects in the graph
-		Dynamic[] dynamic_from_graph = this.graph.getDynamicComponents();
+		Dynamic[] dynamic_from_graph = this.graph.getDynamicObjects();
 		for(int i = 0; i < dynamic_from_graph.length; i++)
 			dynamic_objects.add(dynamic_from_graph[i]);
 		
-		// TODO completar com outros objetos dinamicos (ex: agentes!)
+		// obtains the dynamic agents
+		Object[] societies_array = this.societies.toArray();
+		for(int i = 0; i < societies_array.length; i++)
+			if(societies_array[i] instanceof OpenSociety) {
+				Agent[] agents = ((OpenSociety) societies_array[i]).getAgents();
+				for(int j = 0; j < agents.length; j++)
+					dynamic_objects.add((SeasonalAgent) agents[j]);
+			}
 		
 		// returns the answer
 		Object[] dynamic_objects_array = dynamic_objects.toArray();

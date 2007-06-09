@@ -27,6 +27,7 @@ public class Stigma implements XMLable {
 	 *  @param agent The agent patroller that deposited the stigma. */
 	public Stigma(Agent agent) {
 		this.agent = agent;
+		this.agent_id = this.agent.getObjectId();
 	}
 	
 	/** Constructor.
@@ -59,14 +60,9 @@ public class Stigma implements XMLable {
 		for(int i = 0; i < identation; i++)
 			buffer.append("\t");
 		
-		// checks if the stigma's agent is still active (not null)
-		// if yes, obtais its id
-		String agent_id = null;
-		if(this.agent != null) agent_id = this.agent.getObjectId();
-		
-		// fills the buffer 
+		// fills the buffer
 		buffer.append("<stigma id=\"" + this.id + 
-				      "\" agent_id=\"" + agent_id +
+				      "\" agent_id=\"" + this.agent_id +
 				      "\"/>\n");		
 		
 		// returns the buffer content

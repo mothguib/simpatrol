@@ -3,9 +3,10 @@
 /* The package of this class. */
 package control.daemon;
 
+/* Imported classes and/or interfaces. */
 import model.interfaces.Dynamic;
 
-/** Implements the daemons that assures the vertexes and edges 
+/** Implements the daemons that assures the vertexes, edges and agents 
  *  dynamic behavior. */
 public class DynamicityControllerDaemon extends ClockedDaemon {
 	/* Attributes. */
@@ -18,6 +19,13 @@ public class DynamicityControllerDaemon extends ClockedDaemon {
 	public DynamicityControllerDaemon(Dynamic object) {
 		this.object = object;
 	}
+	
+	/** Returns the dynamic object controlled by the daemon.
+	 *  @return The dynamic object. */
+	public Dynamic getDynamicObject() {
+		return this.object;
+	}
+	
 	
 	public void act() {
 		// if the dynamic object is appering
