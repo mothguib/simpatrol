@@ -5,6 +5,7 @@ package model.agent;
 
 /* Imported classes and/or interfaces. */
 import util.etpd.EventTimeProbabilityDistribution;
+import util.etpd.UniformEventTimeProbabilityDistribution;
 import model.graph.Vertex;
 import model.interfaces.Dynamic;
 
@@ -50,7 +51,7 @@ public class SeasonalAgent extends Agent implements Dynamic {
 	public EventTimeProbabilityDistribution getAppearingETPD() {
 		// the agent never appears again, after disappearing
 		// (actually, it dies)
-		return null;
+		return new UniformEventTimeProbabilityDistribution(0, 0);
 	}
 
 	public EventTimeProbabilityDistribution getDisappearingETPD() {
