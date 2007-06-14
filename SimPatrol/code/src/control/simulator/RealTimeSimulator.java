@@ -7,12 +7,11 @@ package control.simulator;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
-
-import model.agent.OpenSociety;
 import model.agent.Society;
 import model.graph.Graph;
 import model.interfaces.Dynamic;
-import control.daemon.AgentsDeathControllerDaemon;
+import model.interfaces.Mortal;
+import control.daemon.MortalityControllerDaemon;
 import control.daemon.AnalysisReportDaemon;
 import control.daemon.DynamicityControllerDaemon;
 import control.daemon.SimulationLogDaemon;
@@ -25,13 +24,13 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 	/** The chronometer of the real time simulation. */
 	private Chronometer chronometer;
 	
-	/** The daemons that assure the dynamic objects correct behaviour.
+	/** The daemons that assure the dynamic objects the correct behaviour.
 	 *  Its default value is NULL. */
 	private Set<DynamicityControllerDaemon> dynamic_daemons = null;
 	
-	/** The daemon that collects the dead agents as a kind of
-	 *  garbage collector. */
-	private AgentsDeathControllerDaemon agents_death_daemon;
+	/** The daemons that assure the mortal objects the correct beaviour.
+	 *  Its default value is NULL. */
+	private Set<MortalityControllerDaemon> mortal_daemons= null;
 	
 	/* Methods. */
 	/** Constructor.
@@ -49,8 +48,8 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 		// creates the dynamicity controller daemons, if necessary
 		this.createDynamicityControllerDaemons();
 		
-		// creates the agents' death controller daemon, if necessary
-		this.createAgentsDeathControllerDaemon();
+		// creates the mortality controller daemons, if necessary
+		this.createMortalityControllerDaemons();
 		
 		// TODO continue creating!!!
 	}
@@ -61,7 +60,7 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 		// obtains the dynamic objects
 		Dynamic[] dynamic_objects = this.getDynamicObjects();
 		
-		// if there are dynamic objects
+		// if there are any dynamic objects
 		if(dynamic_objects.length > 0) {
 			// initiates the dynamic daemons set
 			this.dynamic_daemons = new HashSet<DynamicityControllerDaemon>();
@@ -73,13 +72,40 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 		else this.dynamic_daemons = null;
 	}
 	
+	/** Obtains the mortal objects and creates the
+	 *  respective mortality controller daemons. */
+	private void createMortalityControllerDaemons() {
+		// obtains the mortal objects
+		Mortal[] mortal_objects = this.getMortalObjects();
+		
+		// if there are any mortal objects
+		if(mortal_objects.length > 0) {
+			// initiates the mortal daemons set
+			this.mortal_daemons = new HashSet<MortalityControllerDaemon>();
+			
+			// for each one, creates a mortality controller daemon
+			for(int i = 0; i < mortal_objects.length; i++)
+				this.mortal_daemons.add(new MortalityControllerDaemon(mortal_objects[i], this));
+		}
+		else this.mortal_daemons = null;
+	}
+	
 	/** Starts each one of the current dynamicity controller daemons. */
 	private void startDynamicityControllerDaemons() {
 		if(this.dynamic_daemons != null) {
 			Object[] dynamic_daemons_array = this.dynamic_daemons.toArray();
 			for(int i = 0; i < dynamic_daemons_array.length; i++)
 				((DynamicityControllerDaemon) dynamic_daemons_array[i]).startWorking();
-		}		
+		}
+	}
+	
+	/** Starts each one of the current mortality controller daemons. */
+	private void startMortalityControllerDaemons() {
+		if(this.mortal_daemons != null) {
+			Object[] mortal_daemons_array = this.mortal_daemons.toArray();
+			for(int i = 0; i < mortal_daemons_array.length; i++)
+				((MortalityControllerDaemon) mortal_daemons_array[i]).startWorking();
+		}
 	}
 	
 	/** Stops each one of current dynamicity controller daemons. */
@@ -91,38 +117,31 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 		}
 	}
 	
-	/** Creates the agents' death controller daemon. */
-	private void createAgentsDeathControllerDaemon() {
-		// obtains the open societies
-		OpenSociety[] open_societies = null;
-		Set<OpenSociety> open_societies_set = new HashSet<OpenSociety>();
-		
-		Object[] societies_array = this.societies.toArray();
-		for(int i = 0; i < societies_array.length; i++)
-			if(societies_array[i] instanceof OpenSociety)
-				open_societies_set.add((OpenSociety) societies_array[i]);
-		
-		if(open_societies_set.size() > 0) {
-			open_societies = new OpenSociety[open_societies_set.size()];
-			Object[] open_societies_array = open_societies_set.toArray();
-			for(int i = 0; i < open_societies_array.length; i++)
-				open_societies[i] = (OpenSociety) open_societies_array[i];			
+	/** Stops each one of current mortality controller daemons. */
+	private void stopMortalityControllerDaemons() {
+		if(this.mortal_daemons != null) {
+			Object[] mortal_daemons_array = this.mortal_daemons.toArray();
+			for(int i = 0; i < mortal_daemons_array.length; i++)
+				((MortalityControllerDaemon) mortal_daemons_array[i]).stopWorking();
 		}
-		
-		// if there are open societies
-		if(open_societies != null && open_societies.length > 0)
-			this.agents_death_daemon = new AgentsDeathControllerDaemon(open_societies, this.dynamic_daemons);
+	}
+	
+	/** Removes a given mortality controller daemon from
+	 *  the set of mortality controller daemons.
+	 *  @param mortal_daemon The mortality controller daemon to be removed. */
+	public void removeMortalityControllerDaemon(MortalityControllerDaemon mortal_daemon) {
+		this.mortal_daemons.remove(mortal_daemon);
 	}
 	
 	public void startSimulation() {
 		// starts the chronometer
 		this.chronometer.start();
 		
-		// starts the agents' death controller daemon
-		this.agents_death_daemon.start();
-		
 		// starts the dynamicity controller daemons
 		this.startDynamicityControllerDaemons();
+		
+		// starts the mortality controller daemons
+		this.startMortalityControllerDaemons();
 		
 		// starts the societies
 		this.startSocieties();
@@ -131,11 +150,11 @@ public class RealTimeSimulator extends Simulator implements Chronometerable {
 	}
 	
 	public void stopSimulation() {
-		// stops the agents' death controller daemon
-		this.agents_death_daemon.stopWorking();
-		
 		// stops the dynamicity controller daemons
 		this.stopDynamicityControllerDaemons();
+		
+		// stops the mortality controller daemons
+		this.stopMortalityControllerDaemons();
 		
 		// stops the societies
 		this.stopSocieties();

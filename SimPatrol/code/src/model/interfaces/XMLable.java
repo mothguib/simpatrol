@@ -11,10 +11,10 @@ public interface XMLable {
 	public String toXML(int identation);
 	
 	/** Forces the object to have a unique id.
-	 *  @return The object id. */
+	 *  @return The id of the object. */
 	public String getObjectId();
 	
 	/** Forces the object to have a unique id.
-	 *  @param object_id The object id. */
+	 *  @param object_id The id of the object. */
 	public void setObjectId(String object_id);
 }

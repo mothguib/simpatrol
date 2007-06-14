@@ -70,7 +70,6 @@ public abstract class Society implements XMLable {
 		buffer.append("<society id=\"" + this.id + 
 				      "\" label=\"" + this.label +
 				      "\" is_closed=\"true" +
-				      "\" max_agents_count=\"-1" +
 				      "\">\n");
 		
 		// inserts the agents

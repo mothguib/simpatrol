@@ -80,11 +80,11 @@ public class DynamicEdge extends Edge implements Dynamic {
 		return buffer.toString();
 	}
 	
-	public EventTimeProbabilityDistribution getAppearingETPD() {
+	public EventTimeProbabilityDistribution getAppearingTPD() {
 		return this.appearing_pd;
 	}
 	
-	public EventTimeProbabilityDistribution getDisappearingETPD() {
+	public EventTimeProbabilityDistribution getDisappearingTPD() {
 		return this.disappearing_pd;
 	}
 }

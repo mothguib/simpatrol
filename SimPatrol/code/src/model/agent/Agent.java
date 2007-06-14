@@ -15,9 +15,12 @@ public abstract class Agent extends Thread implements XMLable {
 	/** Registers if the agent shall stop working. */
 	private boolean stop_working;
 	
-	/** The object id of the vertex.
+	/** The object id of the agent.
 	 *  Not part of the patrol problem modelling. */
 	private String id;
+	
+	/** The label of the agent. */
+	private String label;
 	
 	/** The state of the agent. */
 	private int state;
@@ -29,7 +32,7 @@ public abstract class Agent extends Thread implements XMLable {
 	private Edge edge;
 	
 	/** Registers where the agent is on the edge,
-	 *  i. e. how much of the edge remains for
+	 *  i.e. how much of the edge remains for
 	 *  the agent to pass through it. */
 	private double elapsed_length;
 	
@@ -39,8 +42,10 @@ public abstract class Agent extends Thread implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
-	 *  @param vertex The vertex that the agent comes from. */
-	public Agent(Vertex vertex) {
+	 *  @param vertex The vertex that the agent comes from.
+	 *  @param label The label of the agent. */
+	public Agent(String label, Vertex vertex) {
+		this.label = label;
 		this.vertex = vertex;
 		
 		this.state = AgentStates.JUST_ACTED; // the agent is ready to perceive!
@@ -66,8 +71,9 @@ public abstract class Agent extends Thread implements XMLable {
 		// TODO implementar!!!
 	}
 		
-	/** Returns the agent state.
-	 *  @return The state of the agent. */
+	/** Returns the state of the agent.
+	 *  @return The state of the agent.
+	 *  @see AgentStates */
 	public int getAgentState() {
 		return this.state;
 	}
@@ -78,15 +84,15 @@ public abstract class Agent extends Thread implements XMLable {
 	}
 	
 	/** Configures the state of the agent.
-	 *  @param state The state of the agent. 
-	 *  @see AgentStates */	
+	 *  @param state The state of the agent.
+	 *  @see AgentStates */
 	public void setState(int state) {
 		this.state = state;
 	}
 	
 	/** Configures the edge of the agent, as well as its position on it.
 	 *  @param edge The edge of the agent.
-	 *  @param elapsed_length Where the agent os on the edge */	
+	 *  @param elapsed_length Where the agent is on the edge. */	
 	public void setEdge(Edge edge, int elapsed_length) {
 		this.edge = edge;
 		this.elapsed_length = elapsed_length;
@@ -120,6 +126,7 @@ public abstract class Agent extends Thread implements XMLable {
 		
 		// fills the buffer 
 		buffer.append("<agent id=\"" + this.id +
+					  "\" label=\"" + this.label +
 				      "\" state=\"" + this.state +
 				      "\" vertex_id=\"" + this.vertex.getObjectId() +
 				      "\" edge_id=\"");

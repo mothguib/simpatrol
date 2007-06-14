@@ -11,8 +11,9 @@ import model.graph.Vertex;
 public class PerpetualAgent extends Agent {
 	/* Methods. */
 	/** Constructor.
-	 *  @param vertex The vertex that the agent comes from. */
-	public PerpetualAgent(Vertex vertex) {
-		super(vertex);
+	 *  @param vertex The vertex that the agent comes from.
+	 *  @param label The label of the agent. */
+	public PerpetualAgent(String label, Vertex vertex) {
+		super(label, vertex);
 	}
 }

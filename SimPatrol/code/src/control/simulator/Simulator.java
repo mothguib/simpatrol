@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import model.agent.Agent;
 import model.agent.OpenSociety;
-import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Graph;
 import model.interfaces.Dynamic;
+import model.interfaces.Mortal;
 import control.daemon.ActionDaemon;
 import control.daemon.PerceptionDaemon;
 import control.daemon.SimulationLogDaemon;
@@ -20,21 +20,21 @@ import control.daemon.AnalysisReportDaemon;
 /** Implements the simulator of the patrolling task. */
 public abstract class Simulator {
 	/* Atributes. */
-	/** The time of simulation.
+	/** The total time of simulation.
 	 * 
 	 *  Measured in cycles, if the simulator is a cycled one,
 	 *  or in seconds, if it is a real time one. */
 	protected int simulation_time;
 
 	/** The graph of the simulation. */
-	protected Graph graph;
+	private Graph graph;
 	
 	/** The set of societies of agents involved with the simulation. */
-	protected Set<Society> societies;
+	private Set<Society> societies;
 	
 	/** The set of daemons that attend requisitions of perceptions. */
 	private Set<PerceptionDaemon> perception_daemons;
-
+	
 	/** The set of daemons that attend requisitions of actions. */
 	private Set<ActionDaemon> action_daemons;
 	
@@ -80,7 +80,8 @@ public abstract class Simulator {
 			((Society) societies_array[i]).stopAgents();
 	}
 	
-	/** Obtains the dynamic objects of the simulation. */
+	/** Obtains the dynamic objects of the simulation.
+	 *  @return The dynamic objects of the simulation. */
 	protected Dynamic[] getDynamicObjects() {
 		// holds the dynamic objects
 		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
@@ -90,14 +91,7 @@ public abstract class Simulator {
 		for(int i = 0; i < dynamic_from_graph.length; i++)
 			dynamic_objects.add(dynamic_from_graph[i]);
 		
-		// obtains the dynamic agents
-		Object[] societies_array = this.societies.toArray();
-		for(int i = 0; i < societies_array.length; i++)
-			if(societies_array[i] instanceof OpenSociety) {
-				Agent[] agents = ((OpenSociety) societies_array[i]).getAgents();
-				for(int j = 0; j < agents.length; j++)
-					dynamic_objects.add((SeasonalAgent) agents[j]);
-			}
+		// TODO obtains another eventual dynamic objects...
 		
 		// returns the answer
 		Object[] dynamic_objects_array = dynamic_objects.toArray();
@@ -105,6 +99,36 @@ public abstract class Simulator {
 		for(int i = 0; i <answer.length; i++)
 			answer[i] = (Dynamic) dynamic_objects_array[i];		
 		return answer;
+	}
+	
+	/** Obtains the mortal objects of the simulation.
+	 *  @return The mortal objects of the simulation. */
+	protected Mortal[] getMortalObjects() {
+		// holds the mortal objects
+		Set<Mortal> mortal_objects = new HashSet<Mortal>();
+		
+		// obtains the mortal objects in the societies (mortal agents)
+		// for each society
+		Object[] societies_array = this.societies.toArray();
+		for(int i = 0; i < societies_array.length; i++)
+			// if the society is an open one
+			if(societies_array[i] instanceof OpenSociety) {
+				// obtains its agents
+				Agent[] agents = ((OpenSociety) societies_array[i]).getAgents();
+				
+				// adds each one to the set of mortal objects
+				for(int j = 0; j < agents.length; j++)
+					mortal_objects.add((Mortal) agents[j]);
+			}
+		
+		// TODO obtains another eventual mortal objects...
+		
+		// returns the answer
+		Object[] mortal_objects_array = mortal_objects.toArray();
+		Mortal[] answer = new Mortal[mortal_objects_array.length];
+		for(int i = 0; i <answer.length; i++)
+			answer[i] = (Mortal) mortal_objects_array[i];		
+		return answer;		
 	}
 	
 	/** Starts the simulation. */

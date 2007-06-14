@@ -33,23 +33,22 @@ public class Teste {
 		Vertex[] vertexes = grafo.getVertexes();		
 		
 		// criação de uma sociedade fechada
-		PerpetualAgent agent_11 = new PerpetualAgent(vertexes[0]);
-		PerpetualAgent agent_12 = new PerpetualAgent(vertexes[0]);
-		PerpetualAgent agent_13 = new PerpetualAgent(vertexes[0]);
+		PerpetualAgent agent_11 = new PerpetualAgent("agent_11", vertexes[0]);
+		PerpetualAgent agent_12 = new PerpetualAgent("agent_12", vertexes[0]);
+		PerpetualAgent agent_13 = new PerpetualAgent("agent_13", vertexes[0]);
 		PerpetualAgent[] agents_1 = {agent_11, agent_12, agent_13};
 		ClosedSociety closed_society = new ClosedSociety("perpétua", agents_1);
 		System.out.println(closed_society.toXML(0));
 		
 		// criação de uma sociedade aberta
-		SpecificEventTimeProbabilityDistribution etpd_1 = new SpecificEventTimeProbabilityDistribution(1000, 1, 100);
+		SpecificEventTimeProbabilityDistribution etpd_1 = new SpecificEventTimeProbabilityDistribution(1000, 1, 50);
 		SpecificEventTimeProbabilityDistribution etpd_2 = new SpecificEventTimeProbabilityDistribution(1000, 1, 50);
 		SpecificEventTimeProbabilityDistribution etpd_3 = new SpecificEventTimeProbabilityDistribution(1000, 0, 10);
-		SeasonalAgent agent_21 = new SeasonalAgent(vertexes[0], etpd_1);
-		SeasonalAgent agent_22 = new SeasonalAgent(vertexes[0], etpd_2);
-		SeasonalAgent agent_23 = new SeasonalAgent(vertexes[0], etpd_3);
+		SeasonalAgent agent_21 = new SeasonalAgent("agent_21", vertexes[0], etpd_1);
+		SeasonalAgent agent_22 = new SeasonalAgent("agent_22", vertexes[0], etpd_2);
+		SeasonalAgent agent_23 = new SeasonalAgent("agent_23", vertexes[0], etpd_3);
 		SeasonalAgent[] agents_2 = {agent_21, agent_22, agent_23};
-		Vertex[] nest_vertexes = {vertexes[0]};
-		OpenSociety open_society = new OpenSociety("sazonal", agents_2, nest_vertexes, 3);
+		OpenSociety open_society = new OpenSociety("sazonal", agents_2);
 		System.out.println(open_society.toXML(0));
 		
 		Society[] societies = {closed_society, open_society};
