@@ -8,10 +8,9 @@
 -->
 
 <!-- ETPD - Event Time Probability Distribution -->
-<!ELEMENT etpd (pd_parameter*)>
-<!ATTLIST etpd id ID #REQUIRED>
+<!ELEMENT etpd (pd_parameter+)>
 <!ATTLIST etpd seed CDATA #REQUIRED>
-<!ATTLIST etpd next_bool_count CDATA #REQUIRED>
+<!ATTLIST etpd next_bool_count CDATA "-1">
 <!ATTLIST etpd type (0 | 1 | 2 | 3) #REQUIRED>
 
 <!-- PD PARAMETER -->

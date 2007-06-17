@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Document   : Message.dtd
+    Version    : 1.0
+    Date       : Jun 13th, 2007, 12:35
+    Description: SimPatrol's Messages DTD
+-->
+
+<!-- MESSAGE -->
+<!ELEMENT message (society?)>
+<!ATTLIST message type (0 | 1 | 2) #REQUIRED>
+<!ATTLIST message sender_address CDATA #IMPLIED>
+<!ATTLIST message sender_socket CDATA #IMPLIED>

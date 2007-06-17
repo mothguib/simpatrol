@@ -7,13 +7,12 @@
     Description: SimPatrol's Graph DTD
 -->
 
-<!-- GRAPH  -->
-<!ELEMENT graph (vertex*, (edge*)?)>
-<!ATTLIST graph id ID #REQUIRED>
+<!-- GRAPH -->
+<!ELEMENT graph (vertex+, edge*)>
 <!ATTLIST graph label CDATA #REQUIRED>
 
 <!-- VERTEX -->
-<!ELEMENT vertex ((stigma*)?, (etpd, etpd)?)>
+<!ELEMENT vertex (stigma*, (etpd, etpd)?)>
 <!ATTLIST vertex id ID #REQUIRED>
 <!ATTLIST vertex label CDATA #REQUIRED>
 <!ATTLIST vertex priority CDATA "0">
@@ -23,7 +22,7 @@
 <!ATTLIST vertex is_appearing CDATA "true">
 
 <!-- EDGE -->
-<!ELEMENT edge ((stigma*)?, (etpd, etpd)?)>
+<!ELEMENT edge (stigma*, (etpd, etpd)?)>
 <!ATTLIST edge id ID #REQUIRED>
 <!ATTLIST edge emitter_id IDREF #REQUIRED>
 <!ATTLIST edge collector_id IDREF #REQUIRED>
@@ -36,5 +35,3 @@
 
 <!-- STIGMA -->
 <!ELEMENT stigma EMPTY>
-<!ATTLIST stigma id ID #REQUIRED>
-<!ATTLIST stigma agent_id IDREF #REQUIRED>
