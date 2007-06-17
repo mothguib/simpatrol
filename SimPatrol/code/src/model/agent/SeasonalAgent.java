@@ -10,7 +10,7 @@ import model.interfaces.Mortal;
 
 /** Implements the agents that compound the 
  *  open societies of SimPatrol. */
-public class SeasonalAgent extends Agent implements Mortal {
+public final class SeasonalAgent extends Agent implements Mortal {
 	/* Attributes. */
 	/** The probability distribution for the death time of the agent. */
 	private EventTimeProbabilityDistribution death_tpd;

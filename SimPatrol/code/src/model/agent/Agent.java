@@ -42,8 +42,8 @@ public abstract class Agent extends Thread implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
-	 *  @param vertex The vertex that the agent comes from.
-	 *  @param label The label of the agent. */
+	 *  @param label The label of the agent.
+	 *  @param vertex The vertex that the agent comes from. */
 	public Agent(String label, Vertex vertex) {
 		this.label = label;
 		this.vertex = vertex;
@@ -128,14 +128,14 @@ public abstract class Agent extends Thread implements XMLable {
 		buffer.append("<agent id=\"" + this.id +
 					  "\" label=\"" + this.label +
 				      "\" state=\"" + this.state +
-				      "\" vertex_id=\"" + this.vertex.getObjectId() +
-				      "\" edge_id=\"");
+				      "\" vertex_id=\"" + this.vertex.getObjectId());
 		
-		if(this.edge != null) buffer.append(this.edge.getObjectId());
-		else buffer.append(this.edge);
+		if(this.edge != null) {
+			buffer.append("\" edge_id=\"" + this.edge.getObjectId() +
+					      "\" elapsed_length=\"" + this.elapsed_length);
+		}
 		
-		buffer.append("\" elapsed_length=\"" + this.elapsed_length +
-				      "\" stamina=\"" + this.stamina +
+		buffer.append("\" stamina=\"" + this.stamina +
 				      "\"/>\n");
 		
 		// returns the buffer content

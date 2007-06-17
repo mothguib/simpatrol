@@ -8,7 +8,7 @@ import model.graph.Vertex;
 
 /** Implements the agents that compound the 
  *  closed societies of SimPatrol. */
-public class PerpetualAgent extends Agent {
+public final class PerpetualAgent extends Agent {
 	/* Methods. */
 	/** Constructor.
 	 *  @param vertex The vertex that the agent comes from.

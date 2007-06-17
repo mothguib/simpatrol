@@ -11,9 +11,9 @@ import model.interfaces.XMLable;
 /** Implements the societies of agents of SimPatrol. */
 public abstract class Society implements XMLable {
 	/* Attributes. */
-	/** The object id of the graph.
+	/** The object id of the society.
 	 *  Not part of the patrol problem modelling. */
-	private String id;
+	private String id;	
 	
 	/** The label of the society. */	
 	private String label;
@@ -33,29 +33,10 @@ public abstract class Society implements XMLable {
 			this.agents.add(agents[i]);
 	}
 	
-	/** Activates the agents of the society. */
-	public void startAgents() {
-		Object[] agents_array = this.agents.toArray();
-		for(int i = 0; i < agents_array.length; i++)
-			((Agent) agents_array[i]).start();
-	}
-	
-	/** Deactivates the agents of the society. */
-	public void stopAgents() {
-		Object[] agents_array = this.agents.toArray();
-		for(int i = 0; i < agents_array.length; i++)
-			((Agent) agents_array[i]).stopWorking();
-	}
-	
-	/** Returns the agents of the society. */
-	public Agent[] getAgents() {
-		Object[] agents_array = this.agents.toArray();
-		
-		Agent[] answer = new Agent[agents_array.length];
-		for(int i = 0; i < answer.length; i++)
-			answer[i] = (Agent) agents_array[i];
-		
-		return answer;
+	/** Returns the label of the society.
+	 *  @return The label of the society. */
+	public String getLabel() {
+		return this.label;
 	}
 	
 	public String toXML(int identation) {
@@ -63,24 +44,26 @@ public abstract class Society implements XMLable {
 		StringBuffer buffer = new StringBuffer();
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<society id=\"" + this.id + 
+		buffer.append("<society id=\"" + this.id +
 				      "\" label=\"" + this.label +
-				      "\" is_closed=\"true" +
-				      "\">\n");
+				      "\" is_closed=\"true");
 		
-		// inserts the agents
+		// inserts the agents, if there are some, and closes the main tag
 		Object[] agents_array = this.agents.toArray();
-		for(int i = 0; i < agents_array.length; i++)
-			buffer.append(((Agent) agents_array[i]).toXML(identation + 1));
-		
-		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");		
-		buffer.append("</society>\n");		
+		if(agents_array.length > 0) {
+			buffer.append("\">\n");
+			
+			for(int i = 0; i < agents_array.length; i++)
+				buffer.append(((Agent) agents_array[i]).toXML(identation + 1));
+			
+			// finishes the buffer content
+			for(int i = 0; i < identation; i++) buffer.append("\t");		
+			buffer.append("</society>\n");
+		}		
+		else buffer.append("\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();

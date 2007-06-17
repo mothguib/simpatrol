@@ -4,7 +4,7 @@
 package model.agent;
 
 /** Implements the closed societies of agents of SimPatrol. */
-public class ClosedSociety extends Society {
+public final class ClosedSociety extends Society {
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the closed society.

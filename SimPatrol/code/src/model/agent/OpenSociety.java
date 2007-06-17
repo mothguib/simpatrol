@@ -4,7 +4,7 @@
 package model.agent;
 
 /** Implements the open societies of agents of SimPatrol. */
-public class OpenSociety extends Society {	
+public final class OpenSociety extends Society {	
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the closed society.
@@ -29,7 +29,11 @@ public class OpenSociety extends Society {
 		
 		// changes the society type
 		int index_type = buffer.lastIndexOf("is_closed=\"true\"");
-		buffer.replace(index_type + 11, index_type + 11 + 4, "false");
+		if(index_type > -1) buffer.replace(index_type + 11, index_type + 11 + 4, "false");
+		else {
+			int index_bigger = buffer.indexOf(">");
+			buffer.insert(index_bigger, "is_closed=\"false\"");
+		}
 		
 		// returns the buffer content
 		return buffer.toString();
