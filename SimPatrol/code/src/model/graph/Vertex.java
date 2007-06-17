@@ -138,25 +138,25 @@ public class Vertex implements XMLable {
 	}	
 	
 	/** Configures the priority of the vertex.
-	 * @param priority The priority. */
+	 *  @param priority The priority. */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 	
 	/** Configures the visibility of the vertex.
-	 * @param visibility The visibility. */
+	 *  @param visibility The visibility. */
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
 	}
 	
 	/** Configures the idleness of the vertex.
-	 * @param idleness The idleness. */
+	 *  @param idleness The idleness. */
 	public void setIdleness(int idleness) {
 		this.idleness = idleness;
 	}
 	
 	/** Configures if the vertex is a fuel recharging point.
-	 * @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
+	 *  @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
 	public void setFuel(boolean fuel) {
 		this.fuel = fuel;
 	}
@@ -180,8 +180,7 @@ public class Vertex implements XMLable {
 		StringBuffer buffer = new StringBuffer();
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// fills the buffer 
 		buffer.append("<vertex id=\"" + this.id + 
@@ -200,10 +199,8 @@ public class Vertex implements XMLable {
 			for(int i = 0; i < stigmas_array.length; i++)
 				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
 			
-			// applies the identation
-			for(int i = 0; i < identation; i++)
-				buffer.append("\t");
-			
+			// applies the identation and closes the tag
+			for(int i = 0; i < identation; i++) buffer.append("\t");
 			buffer.append("</vertex>\n");
 		}
 		else buffer.append("\"/>\n");

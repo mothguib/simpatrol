@@ -11,12 +11,8 @@ import model.interfaces.XMLable;
 
 /** Implements graphs that represent the territories to be
  *  patrolled. */
-public class Graph implements XMLable {
+public final class Graph implements XMLable {
 	/* Attributes. */
-	/** The object id of the graph.
-	 *  Not part of the patrol problem modelling. */
-	private String id;
-	
 	/** The set of vertexes of the graph. */
 	private Set<Vertex> vertexes;
 	
@@ -62,7 +58,19 @@ public class Graph implements XMLable {
 		return answer;
 	}
 	
-	/** Obtains the dynamic objects in the graph.
+	/** Obtains the edges of the graph.
+	 *  @return The edges of the graph. */
+	public Edge[] getEdges() {
+		Object[] edges_array = this.edges.toArray();
+		Edge[] answer = new Edge[edges_array.length];
+		
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Edge) edges_array[i];
+		
+		return answer;
+	}	
+	
+	/** Obtains the dynamic objects of the graph.
 	 *  @return The dynamic vertexes and edges. */
 	public Dynamic[] getDynamicObjects() {
 		// the set of dynamic objects
@@ -95,13 +103,10 @@ public class Graph implements XMLable {
 		StringBuffer buffer = new StringBuffer();
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// fills the buffer 
-		buffer.append("<graph id=\"" + this.id + 
-				      "\" label=\"" + this.label +
-				      "\">\n");
+		buffer.append("<graph label=\"" + this.label + "\">\n");
 		
 		// inserts the vertexes
 		Object[] vertexes_array = this.vertexes.toArray();
@@ -116,9 +121,7 @@ public class Graph implements XMLable {
 		}
 		
 		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
-
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		buffer.append("</graph>\n");		
 		
 		// returns the buffer content
@@ -126,10 +129,12 @@ public class Graph implements XMLable {
 	}
 
 	public String getObjectId() {
-		return this.id;
+		// a graph doesn't need an id
+		return null;
 	}
 
 	public void setObjectId(String object_id) {
-		this.id = object_id;
+		// a graph doesn't need an id
+		// so, do nothing
 	}
 }

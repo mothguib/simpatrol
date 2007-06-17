@@ -4,54 +4,11 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
-import model.agent.Agent;
 import model.interfaces.XMLable;
 
 /** Implements an eventual stigma deposited by a patroller. */
 public class Stigma implements XMLable {
-	/* Attributes. */
-	/** The object id of the stigma.
-	 *  Not part of the patrol problem modelling. */
-	private String id;
-	
-	/** The object id of the agent that deposited
-	 *  the stigma.
-	 *  Not part of the patrol problem modelling. */
-	private String agent_id;
-	
-	/** The agent patroller that deposited the stigma. */
-	private Agent agent;
-	
 	/* Methods. */
-	/** Constructor.
-	 *  @param agent The agent patroller that deposited the stigma. */
-	public Stigma(Agent agent) {
-		this.agent = agent;
-		this.agent_id = this.agent.getObjectId();
-	}
-	
-	/** Constructor.
-	 * 
-	 *  Not part of the patrol problem modelling.
-	 *  The stigma is created incomplete (without its agent)
-	 *  needing posterior completion.
-	 * 
-	 *  @param agent_id The agent's id reference. */
-	public Stigma(String agent_id) {
-		this.agent_id = agent_id;
-	}
-	
-	/** Completes the stigma object, searching among the given
-	 *  agents, which one is its agent.
-	 *  @param agents The agents to be searched. */
-	public void completeStigma(Agent[] agents) {
-		for(int i = 0; i < agents.length; i++)
-			if(agents[i].getObjectId().equals(this.agent_id)) {
-				this.agent = agents[i];
-				return;
-			}
-	}
-	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
@@ -61,19 +18,19 @@ public class Stigma implements XMLable {
 			buffer.append("\t");
 		
 		// fills the buffer
-		buffer.append("<stigma id=\"" + this.id + 
-				      "\" agent_id=\"" + this.agent_id +
-				      "\"/>\n");		
+		buffer.append("<stigma/>\n");		
 		
 		// returns the buffer content
 		return buffer.toString();
 	}
 
 	public String getObjectId() {
-		return this.id;
+		// a stigma doesn't need an id
+		return null;
 	}
 
 	public void setObjectId(String object_id) {
-		this.id = object_id;		
+		// a stigma doesn't need an id
+		// so, do nothing		
 	}
 }

@@ -34,10 +34,8 @@ public class Edge implements XMLable {
 	
 	/** Verifies if the edge is appearing.
 	 * 
-	 *  An edge can disappear, if one of its vertexes is dynamic.
-	 *  
-	 *  Its default value is TRUE. */
-	protected boolean is_appearing = true;
+	 *  An edge can disappear, if one of its vertexes is dynamic. */
+	protected boolean is_appearing;
 	
 	/* Methods. */
 	/** Contructor for non-oriented edges (non-arcs).
@@ -73,6 +71,18 @@ public class Edge implements XMLable {
 		}
 		
 		this.length = length;
+		
+		// configures the is_appearing attribute, based on
+		// emitter and collector vertexes
+		this.is_appearing = true;
+		
+		if(emitter instanceof DynamicVertex)
+			if(!((DynamicVertex) emitter).isAppearing())
+				this.is_appearing = false;
+		
+		if(collector instanceof DynamicVertex) 
+			if(!((DynamicVertex) collector).isAppearing())
+				this.is_appearing = false;
 	}
 	
 	/** Configures the set of stigmas of the edge.
@@ -146,17 +156,12 @@ public class Edge implements XMLable {
 		System.out.println(this.getObjectId() + " appearing " + this.is_appearing);
 	}
 	
-	public String getObjectId() {
-		return this.id;
-	}
-
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// verifies if the emitter is a dynamic
 		// vertex and if the edge is in its memory
@@ -196,10 +201,8 @@ public class Edge implements XMLable {
 			for(int i = 0; i < stigmas_array.length; i++)
 				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
 			
-			// applies the identation
-			for(int i = 0; i < identation; i++)
-				buffer.append("\t");
-			
+			// applies the identation and closes the tag
+			for(int i = 0; i < identation; i++) buffer.append("\t");			
 			buffer.append("</edge>\n");
 		}
 		else buffer.append("\"/>\n");
@@ -207,7 +210,11 @@ public class Edge implements XMLable {
 		// returns the buffer content
 		return buffer.toString();
 	}
-
+	
+	public String getObjectId() {
+		return this.id;
+	}
+	
 	public void setObjectId(String object_id) {
 		this.id = object_id;
 	}

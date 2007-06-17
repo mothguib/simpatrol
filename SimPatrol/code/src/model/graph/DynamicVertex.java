@@ -12,34 +12,47 @@ import util.etpd.EventTimeProbabilityDistribution;
 /** Implements dynamic vertexes of a Graph object,
  *  that can appear and disappear with a specific event time
  *  probability distribution. */
-public class DynamicVertex extends Vertex implements Dynamic {
+public final class DynamicVertex extends Vertex implements Dynamic {
 	/* Attributes. */
 	/** Registers if the vertex is appearing. */
 	private boolean is_appearing;
 	
-	/** The event time probability distribution for the vertex appearing. */
-	private EventTimeProbabilityDistribution appearing_pd;
+	/** The time probability distribution for the vertex appearing. */
+	private EventTimeProbabilityDistribution appearing_tpd;
 	
-	/** The event time probability distribution for the vertex disappearing. */
-	private EventTimeProbabilityDistribution disappearing_pd;
+	/** The time probability distribution for the vertex disappearing. */
+	private EventTimeProbabilityDistribution disappearing_tpd;
 	
-	/** Memorizes which edges were appearing before the vertex disappeared. */
+	/** Memorizes which edges were appearing before the vertex eventually disappeared. */
 	private Set<Edge> appearing_edges;
 	
 	/* Methods. */
 	/** Constructor.
 	 * @param label The label of the vertex.
-	 * @param appearing_pd The time probability distribution for the vertex appearing.
-	 * @param diappearing_pd The time probability distribution for the vertex disappearing.
+	 * @param appearing_tpd The time probability distribution for the vertex appearing.
+	 * @param diappearing_tpd The time probability distribution for the vertex disappearing.
 	 * @param is_appearing TRUE, if the vertex is appearing, FALSE if not. */
-	public DynamicVertex(String label, EventTimeProbabilityDistribution appearing_pd, EventTimeProbabilityDistribution disappearing_pd, boolean is_appearing) {
+	public DynamicVertex(String label, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing) {
 		super(label);
-		this.appearing_pd = appearing_pd;
-		this.disappearing_pd = disappearing_pd;
-		this.is_appearing = is_appearing;		
+		this.appearing_tpd = appearing_tpd;
+		this.disappearing_tpd = disappearing_tpd;
+		this.is_appearing = is_appearing;
 		this.appearing_edges = new HashSet<Edge>();
 	}
-
+	
+	/** Verifies if a given edge is in the memory of appearing edges.
+	 *  @param edge The edge to be verified.
+	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
+	public boolean isInAppearingEdges(Edge edge) {
+		return this.appearing_edges.contains(edge);
+	}
+	
+	/** Adds a given edge to the memory of appearing edges of the vertex.
+	 *  @param edge The edge to be added to the memory. */
+	public void addAppearingEdge(Edge edge) {
+		this.appearing_edges.add(edge);
+	}	
+	
 	/** Returns if the vertex is appearing.
 	 *  @return TRUE, if the vertex is appearing, FALSE if not. */
 	public boolean isAppearing() {
@@ -50,6 +63,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 	 *  @param is_appearing TRUE, if the vertex is appearing, FALSE if not. */
 	public void setIsAppearing(boolean is_appearing) {
 		this.is_appearing = is_appearing;
+		
 		// TODO retirar codigo abaixo!!
 		System.out.println(this.getObjectId() + " appearing " + this.is_appearing);
 		
@@ -63,7 +77,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 				for(int i = 0; i < edges_array.length; i++)
 					if(((Edge) edges_array[i]).isAppearing()) {
 						this.appearing_edges.add((Edge) edges_array[i]);
-						((Edge) edges_array[i]).setIsAppearing(is_appearing);
+						((Edge) edges_array[i]).setIsAppearing(false);
 					}
 			}
 			
@@ -73,7 +87,7 @@ public class DynamicVertex extends Vertex implements Dynamic {
 				for(int i = 0; i < edges_array.length; i++)
 					if(((Edge) edges_array[i]).isAppearing()) {
 						this.appearing_edges.add((Edge) edges_array[i]);
-						((Edge) edges_array[i]).setIsAppearing(is_appearing);
+						((Edge) edges_array[i]).setIsAppearing(false);
 					}
 			}						
 		}
@@ -89,19 +103,6 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		}
 	}
 	
-	/** Verifies if a given edge is in the memory of appearing edges.
-	 *  @param edge The edge to be verified.
-	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
-	public boolean isInAppearingEdges(Edge edge) {
-		return this.appearing_edges.contains(edge);
-	}
-	
-	/** Adds a given edge to the memory of appearing edges of the vertex.
-	 *  @param edge The edge to be added to the memory. */
-	public void addAppearingEdge(Edge edge) {
-		this.appearing_edges.add(edge);
-	}
-	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer(super.toXML(identation));
@@ -109,7 +110,11 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		// finds the appearing attribute, atualizing it if necessary
 		if(!this.is_appearing) {
 			int index_appearing_value = buffer.lastIndexOf("is_appearing=\"true\"");
-			buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
+			if(index_appearing_value > -1) buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
+			else {
+				int index_bigger = buffer.indexOf(">");
+				buffer.insert(index_bigger, " is_appearing=\"false\"");
+			}
 		}
 		
 		// removes the closing of the xml tag
@@ -126,12 +131,11 @@ public class DynamicVertex extends Vertex implements Dynamic {
 		buffer.delete(last_valid_index, buffer.length());
 
 		// adds the time probability distributions
-		buffer.append(this.appearing_pd.toXML(identation + 1));
-		buffer.append(this.disappearing_pd.toXML(identation + 1));
+		buffer.append(this.appearing_tpd.toXML(identation + 1));
+		buffer.append(this.disappearing_tpd.toXML(identation + 1));
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// closes the tags
 		buffer.append("</vertex>\n");
@@ -141,10 +145,10 @@ public class DynamicVertex extends Vertex implements Dynamic {
 	}
 	
 	public EventTimeProbabilityDistribution getAppearingTPD() {
-		return this.appearing_pd;
+		return this.appearing_tpd;
 	}
 	
 	public EventTimeProbabilityDistribution getDisappearingTPD() {
-		return this.disappearing_pd;
+		return this.disappearing_tpd;
 	}
 }
