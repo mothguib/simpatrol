@@ -32,7 +32,7 @@ public final class OpenSociety extends Society {
 		if(index_type > -1) buffer.replace(index_type + 11, index_type + 11 + 4, "false");
 		else {
 			int index_bigger = buffer.indexOf(">");
-			buffer.insert(index_bigger, "is_closed=\"false\"");
+			buffer.insert(index_bigger, " is_closed=\"false\"");
 		}
 		
 		// returns the buffer content
