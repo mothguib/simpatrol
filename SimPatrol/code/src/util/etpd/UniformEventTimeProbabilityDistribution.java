@@ -42,26 +42,20 @@ public class UniformEventTimeProbabilityDistribution extends EventTimeProbabilit
 		StringBuffer buffer = new StringBuffer();
 		
 		// applies the identation
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// partially fills the buffer 
-		buffer.append("<etpd id=\"" + this.getObjectId() + 
-				      "\" seed=" + this.seed +
+		buffer.append("<etpd seed=" + this.seed +
 				      "\" next_bool_count=\"" + this.next_bool_counter +
 				      "\" type=\"" + EventTimeProbabilityDistributionTypes.UNIFORM +
 				      "\">\n");
 		
 		// puts the probability value
-		for(int i = 0; i < identation + 1; i++)
-			buffer.append("\t");
-		
+		for(int i = 0; i < identation + 1; i++) buffer.append("\t");		
 		buffer.append("<pd_parameter value=\"" + this.probability + "\"/>\n");
 		
 		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
-		
+		for(int i = 0; i < identation; i++) buffer.append("\t");
 		buffer.append("</etpd>\n");
 		
 		// returns the buffer content

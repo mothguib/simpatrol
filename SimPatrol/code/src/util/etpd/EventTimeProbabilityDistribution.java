@@ -11,11 +11,7 @@ import cern.jet.random.engine.MersenneTwister;
 /** Implements probability distributions of hapenning an event,
  *  based on the time of simulation. */
 public abstract class EventTimeProbabilityDistribution implements XMLable {
-	/* Attributes. */
-	/** The id of the object.
-	 *  Not part of the patrol problem modelling. */
-	private String id;
-	
+	/* Attributes. */	
 	/** The seed for the random number generator. */
 	protected int seed;
 	
@@ -62,10 +58,12 @@ public abstract class EventTimeProbabilityDistribution implements XMLable {
 	}
 	
 	public String getObjectId() {
-		return this.id;
+		// an etpd doesn't need an id
+		return null;
 	}
 	
 	public void setObjectId(String object_id) {
-		this.id = object_id;
+		// an etpd doesn't need an id
+		// so, do nothing
 	}
 }

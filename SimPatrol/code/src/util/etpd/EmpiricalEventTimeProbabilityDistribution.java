@@ -44,8 +44,7 @@ public class EmpiricalEventTimeProbabilityDistribution extends EventTimeProbabil
 			buffer.append("\t");
 		
 		// partially fills the buffer 
-		buffer.append("<etpd id=\"" + this.getObjectId() +
-				      "\" seed=\"" + this.seed +
+		buffer.append("<etpd seed=\"" + this.seed +
 				      "\" next_bool_count=\"" + this.next_bool_counter +
 				      "\" type=\"" + EventTimeProbabilityDistributionTypes.EMPIRICAL +
 				      "\">\n");
@@ -53,16 +52,14 @@ public class EmpiricalEventTimeProbabilityDistribution extends EventTimeProbabil
 		// completes the buffer content
 		for(int i = 0; i < this.distribution.length; i++) {
 			// applies the identation
-			for(int j = 0; j < identation + 1; j++)
-				buffer.append("\t");
+			for(int j = 0; j < identation + 1; j++) buffer.append("\t");
 			
+			// inserts the parameters			
 			buffer.append("<pd_parameter value=\"" + this.distribution[i] + "\"/>\n");
 		}
 		
 		// finishes the buffer content
-		for(int i = 0; i < identation; i++)
-			buffer.append("\t");
-		
+		for(int i = 0; i < identation; i++) buffer.append("\t");		
 		buffer.append("</etpd>\n");
 		
 		// returns the buffer content
