@@ -12,7 +12,7 @@ public abstract class ObjectIdGenerator {
 		
 		id.append(object.getClass().getName() + "@" +
 				  Integer.toHexString(object.hashCode()) + "#" +
-				  (Math.random() * 100));
+				  (Math.random()));
 		
 		return id.toString();
 	}
