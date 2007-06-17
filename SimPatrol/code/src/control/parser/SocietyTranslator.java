@@ -6,6 +6,8 @@ package control.parser;
 /* Imported classes and/or interfaces. */
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import util.ObjectIdGenerator;
 import model.agent.Agent;
 import model.agent.ClosedSociety;
 import model.agent.OpenSociety;
@@ -13,7 +15,6 @@ import model.agent.PerpetualAgent;
 import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Edge;
-import model.graph.Stigma;
 import model.graph.Vertex;
 
 /** Implements a translator that obtains Society objects from
@@ -26,13 +27,9 @@ public abstract class SocietyTranslator extends Translator {
 	 *  @param vertexes The set of vertexes in a simulation.
 	 *  @param edges The set of edges in a simulation.
 	 *  @return The societies from the XML source. */		
-	public Society[] getSocieties(Element xml_element, Vertex[] vertexes, Edge[] edges) {
+	public static Society[] getSocieties(Element xml_element, Vertex[] vertexes, Edge[] edges) {
 		// obtains the nodes with the "society" tag
 		NodeList society_nodes = xml_element.getElementsByTagName("society");
-		
-		// is there any society node?
-		if(society_nodes.getLength() == 0)
-			return new Society[0];
 		
 		// the answer of the method
 		Society[] answer = new Society[society_nodes.getLength()];
@@ -45,14 +42,19 @@ public abstract class SocietyTranslator extends Translator {
 			// obtains the data
 			String id = society_element.getAttribute("id");
 			String label = society_element.getAttribute("label");
-			boolean is_closed = Boolean.parseBoolean(society_element.getAttribute("is_closed"));
+			String str_is_closed = society_element.getAttribute("is_closed");
 			
-			// obtains the agents
+			// decides if the society is closed or not
+			boolean is_closed = true;
+			if(str_is_closed != null)
+				is_closed = Boolean.parseBoolean(str_is_closed);
+			
+			// obtains the agents			
 			boolean are_perpetual_agents = true; 
 			if(!is_closed) are_perpetual_agents = false;
 			Agent[] agents = getAgents(society_element, are_perpetual_agents, vertexes, edges);
 			
-			// creates and configures the society
+			// creates the society
 			Society society = null;
 			if(is_closed) {
 				PerpetualAgent[] perpetual_agents = new PerpetualAgent[agents.length];
@@ -68,25 +70,10 @@ public abstract class SocietyTranslator extends Translator {
 				
 				society = new OpenSociety(label, seasonal_agents);
 			}
+			
+			// configures the society and puts in the answer
+			if(id == null) id = ObjectIdGenerator.generateObjectId(society);
 			society.setObjectId(id);
-			
-			// completes the enventual stigmas of the vertexes and edges
-			// i. e. connects the stigma to its agent
-			for(int j = 0; j < vertexes.length; j++) {
-				Stigma[] stigmas = vertexes[j].getStigmas();
-				
-				for(int k = 0; k < stigmas.length; k++)
-					stigmas[k].completeStigma(agents);
-			}
-			
-			for(int j = 0; j < edges.length; j++) {
-				Stigma[] stigmas = edges[j].getStigmas();
-				
-				for(int k = 0; k < stigmas.length; k++)
-					stigmas[k].completeStigma(agents);
-			}
-						
-			// puts in the answer
 			answer[i] = society;
 		}
 		
@@ -104,10 +91,6 @@ public abstract class SocietyTranslator extends Translator {
 		// obtains the nodes with the "agent" tag
 		NodeList agent_nodes = xml_element.getElementsByTagName("agent");
 		
-		// is there any agent node?
-		if(agent_nodes.getLength() == 0)
-			return new Agent[0];
-		
 		// the answer of the method
 		Agent[] answer = new Agent[agent_nodes.getLength()];
 		
@@ -119,11 +102,11 @@ public abstract class SocietyTranslator extends Translator {
 			// obtains the data
 			String id = agent_element.getAttribute("id");
 			String label = agent_element.getAttribute("label");
-			int state = Integer.parseInt(agent_element.getAttribute("state"));
+			String str_state = agent_element.getAttribute("state");
 			String vertex_id = agent_element.getAttribute("vertex_id");
 			String edge_id = agent_element.getAttribute("edge_id");
-			int elapsed_length = Integer.parseInt(agent_element.getAttribute("elapsed_length"));
-			int stamina = Integer.parseInt(agent_element.getAttribute("stamina"));
+			String str_elapsed_length = agent_element.getAttribute("elapsed_length");
+			String str_stamina = agent_element.getAttribute("stamina");
 			
 			// finds the vertex of the agent
 			Vertex vertex = null;
@@ -135,20 +118,34 @@ public abstract class SocietyTranslator extends Translator {
 			
 			// finds the eventual edge of the agent
 			Edge edge = null;
-			for(int j = 0; j < edges.length; j++)
-				if(edges[j].getObjectId().equals(edge_id)) {
-					edge = edges[j];
-					break;
-				}
-
-			// instatiates and configures the new agent
+			if(edge_id != null)
+				for(int j = 0; j < edges.length; j++)
+					if (edges[j].getObjectId().equals(edge_id)) {
+						edge = edges[j];
+						break;
+					}
+			
+			// instatiates the new agent
 			Agent agent = null;
 			if(are_perpetual_agents) agent = new PerpetualAgent(label, vertex);
 			else agent = new SeasonalAgent(label, vertex, EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
 			
+			// configures the new agent
+			if(id == null) id = ObjectIdGenerator.generateObjectId(agent);
 			agent.setObjectId(id);
-			agent.setState(state);
-			agent.setEdge(edge, elapsed_length);
+			
+			if(str_state != null) agent.setState(Integer.parseInt(str_state));
+			
+			if(edge != null) {
+				int elapsed_length = 0;
+				if(str_elapsed_length != null)
+					elapsed_length = Integer.parseInt(str_elapsed_length);
+				
+				agent.setEdge(edge, elapsed_length);
+			}
+			
+			int stamina = 1;
+			if(str_stamina != null) stamina = Integer.parseInt(str_stamina);
 			agent.setStamina(stamina);
 			
 			// puts on the answer

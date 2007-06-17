@@ -17,20 +17,21 @@ import model.graph.Graph;
 import model.graph.Stigma;
 import model.graph.Vertex;
 
-/** Implements a translator that obtains Graph objects from
- *  XML files or sources.
+/** Implements a translator that obtains Graph objects from XML files.
  *  @see Graph */
 public abstract class GraphTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the graph from a given XML source file.
 	 *  @param xml_file_path The XML source file containing the graph.
-	 *  @return The graph from the XML source file. */
+	 *  @return The graph from the XML source file. 
+	 *  @throws IOException 
+	 *  @throws SAXException 
+	 *  @throws ParserConfigurationException */
 	public static Graph getGraph(String xml_file_path) throws ParserConfigurationException, SAXException, IOException {
 		// parses the xml file in a graph element
-		Element graph_element = Translator.parse(xml_file_path);
+		Element graph_element = parseFile(xml_file_path);
 		
 		// obtains the data
-		String id = graph_element.getAttribute("id");
 		String label = graph_element.getAttribute("label");		
 		
 		// obtains the vertexes
@@ -39,53 +40,8 @@ public abstract class GraphTranslator extends Translator {
 		// obtains the edges
 		getEdges(graph_element, vertexes);
 		
-		// creates the new graph and configures it
-		Graph answer = new Graph(label, vertexes);
-		answer.setObjectId(id);
-		
-		// returns the graph
-		return answer;
-	}
-	
-	/** Obtains the graphs from the given XML element.
-	 *  @param xml_element The XML source containing the graphs.
-	 *  @return The graphs from the XML source. */
-	public static Graph[] getGraphs(Element xml_element) {
-		// obtains the nodes with the "graph" tag
-		NodeList graph_node = xml_element.getElementsByTagName("graph");
-		
-		// is there any graph node?
-		if(graph_node.getLength() == 0)
-			return new Graph[0];
-		
-		// the answer to the method
-		Graph[] answer = new Graph[graph_node.getLength()];
-		
-		// for each graph_node
-		for(int i = 0; i < answer.length; i++) {
-			// obtains the current graph element
-			Element graph_element = (Element) graph_node.item(i);
-			
-			// obtains the data
-			String id = graph_element.getAttribute("id");
-			String label = graph_element.getAttribute("label");		
-			
-			// obtains the vertexes
-			Vertex[] vertexes = getVertexes(graph_element);
-			
-			// obtains the edges
-			getEdges(graph_element, vertexes);
-			
-			// creates the new graph and configures it
-			Graph graph = new Graph(label, vertexes);
-			graph.setObjectId(id);
-			
-			// adds to the answer
-			answer[i] = graph;
-		}
-		
-		// returns the answer
-		return answer;		
+		// creates the new graph and returns it
+		return new Graph(label, vertexes);
 	}
 	
 	/** Obtains the vertexes from the given XML element.
@@ -106,17 +62,21 @@ public abstract class GraphTranslator extends Translator {
 			// obtains the data
 			String id = vertex_element.getAttribute("id");
 			String label = vertex_element.getAttribute("label");
-			int priority = Integer.parseInt(vertex_element.getAttribute("priority"));
-			boolean visibility = Boolean.parseBoolean(vertex_element.getAttribute("visibility"));
-			int idleness = Integer.parseInt(vertex_element.getAttribute("idleness"));
-			boolean fuel = Boolean.parseBoolean(vertex_element.getAttribute("fuel"));
-			boolean is_appearing = Boolean.parseBoolean(vertex_element.getAttribute("is_appearing"));
+			String str_priority = vertex_element.getAttribute("priority");
+			String str_visibility = vertex_element.getAttribute("visibility");
+			String str_idleness = vertex_element.getAttribute("idleness");
+			String str_fuel = vertex_element.getAttribute("fuel");
+			String str_is_appearing = vertex_element.getAttribute("is_appearing");
 			
 			// obtains the stigmas
 			Stigma[] stigmas = getStigmas(vertex_element);
 			
 			// obtains the time probability distributions
 			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(vertex_element);
+			
+			// verifies if the vertex is appearing
+			boolean is_appearing = true;
+			if(str_is_appearing != null) is_appearing = Boolean.parseBoolean(str_is_appearing);
 			
 			// instatiates the new vertex
 			Vertex current_vertex = null;
@@ -125,10 +85,23 @@ public abstract class GraphTranslator extends Translator {
 			
 			// configures the new vertex
 			current_vertex.setObjectId(id);
+			
+			int priority = 0;
+			if(str_priority != null) priority = Integer.parseInt(str_priority);
 			current_vertex.setPriority(priority);
+			
+			boolean visibility = true;
+			if(str_visibility != null) visibility = Boolean.parseBoolean(str_visibility);
 			current_vertex.setVisibility(visibility);
+			
+			int idleness = 0;
+			if(str_idleness != null) idleness = Integer.parseInt(str_idleness);
 			current_vertex.setIdleness(idleness);
+			
+			boolean fuel = false;
+			if(str_fuel != null) fuel = Boolean.parseBoolean(str_fuel);
 			current_vertex.setFuel(fuel);
+			
 			current_vertex.setStigmas(stigmas);
 			
 			// adds the new vertex to the answer
@@ -147,28 +120,24 @@ public abstract class GraphTranslator extends Translator {
 		// obtains the nodes with the "edge" tag
 		NodeList edge_nodes = xml_element.getElementsByTagName("edge");
 		
-		// is there any edge node?
-		if(edge_nodes.getLength() == 0)
-			return new Edge[0];
-		
 		// the answer to the method
 		Edge[] answer = new Edge[edge_nodes.getLength()];		
 		
 		// for each ocurrence
 		for(int i = 0; i < answer.length; i++) {
 			// obtains the current edge element
-			Element edge_element = (Element)edge_nodes.item(i);
+			Element edge_element = (Element) edge_nodes.item(i);
 			
 			// obtains the data
 			String id = edge_element.getAttribute("id");
 			String emitter_id = edge_element.getAttribute("emitter_id");
 			String collector_id = edge_element.getAttribute("collector_id");
-			boolean oriented = Boolean.parseBoolean(edge_element.getAttribute("oriented"));
+			String str_oriented = edge_element.getAttribute("oriented");
 			double length = Double.parseDouble(edge_element.getAttribute("length"));
-			boolean visibility = Boolean.parseBoolean(edge_element.getAttribute("visibility"));
-			boolean is_appearing = Boolean.parseBoolean(edge_element.getAttribute("is_appearing"));
-			boolean is_in_dynamic_emitter_memory = Boolean.parseBoolean(edge_element.getAttribute("is_in_dynamic_emitter_memory"));
-			boolean is_in_dynamic_collector_memory = Boolean.parseBoolean(edge_element.getAttribute("is_in_dynamic_collector_memory"));
+			String str_visibility = edge_element.getAttribute("visibility");
+			String str_is_appearing = edge_element.getAttribute("is_appearing");
+			String str_is_in_dynamic_emitter_memory = edge_element.getAttribute("is_in_dynamic_emitter_memory");
+			String str_is_in_dynamic_collector_memory = edge_element.getAttribute("is_in_dynamic_collector_memory");
 			
 			// obtains the stigmas
 			Stigma[] stigmas = getStigmas(edge_element);						
@@ -194,6 +163,14 @@ public abstract class GraphTranslator extends Translator {
 				}					
 			}
 			
+			// decides if the edge is oriented
+			boolean oriented = false;
+			if(str_oriented != null) oriented = Boolean.parseBoolean(str_oriented);
+			
+			// decides if the edge is appearing
+			boolean is_appearing = true;
+			if(str_is_appearing != null) is_appearing = Boolean.parseBoolean(str_is_appearing);
+			
 			// instantiates the new edge
 			Edge current_edge = null;
 			if(etpds.length == 0) current_edge = new Edge(emitter, collector, oriented, length);
@@ -201,14 +178,23 @@ public abstract class GraphTranslator extends Translator {
 			
 			// configures the new edge
 			current_edge.setObjectId(id);
+			
+			boolean visibility = true;
+			if(str_visibility != null) visibility = Boolean.parseBoolean(str_visibility);
 			current_edge.setVisibility(visibility);
 			current_edge.setStigmas(stigmas);
+			
+			// decides if the edge is in the emitter and collector appearing memories
+			boolean is_in_dynamic_emitter_memory = false;
+			boolean is_in_dynamic_collector_memory = false;
+			if(str_is_in_dynamic_emitter_memory != null) is_in_dynamic_emitter_memory = Boolean.parseBoolean(str_is_in_dynamic_emitter_memory);
+			if(str_is_in_dynamic_collector_memory != null) is_in_dynamic_collector_memory = Boolean.parseBoolean(str_is_in_dynamic_collector_memory);
 			
 			// if the emitter is a dynamic vertex and
 			// the current edge is in its memory of appearing edges
 			if(emitter instanceof DynamicVertex && is_in_dynamic_emitter_memory)
 				((DynamicVertex) emitter).addAppearingEdge(current_edge);
-						
+			
 			// if the collector is a dynamic vertex and
 			// the current edge is in its memory of appearing edges
 			if(collector instanceof DynamicVertex && is_in_dynamic_collector_memory)
@@ -229,27 +215,21 @@ public abstract class GraphTranslator extends Translator {
 		// obtains the nodes with the "stigma" tag
 		NodeList stigma_nodes = vertex_edge_element.getElementsByTagName("stigma");
 		
-		// is there any stigma node?
-		if(stigma_nodes.getLength() == 0)
-			return new Stigma[0];
-		
 		// the answer to the method
 		Stigma[] answer = new Stigma[stigma_nodes.getLength()];
 		
 		// for each ocurrence
 		for(int i = 0; i < answer.length; i++) {
 			// obtains the current stigma element
-			Element stigma_element = (Element)stigma_nodes.item(i);
+			//Element stigma_element = (Element)stigma_nodes.item(i);
 			
 			// obtains the data
-			String id = stigma_element.getAttribute("id");
-			String agent_id = stigma_element.getAttribute("agent_id");
+			// no data yet to obtain
 			
-			// instantiates the new stigma and configures it
-			Stigma current_stigma = new Stigma(agent_id);
-			current_stigma.setObjectId(id);
+			// instantiates the new stigma
+			Stigma current_stigma = new Stigma();
 			
-			//adds the new stigma to the answer
+			// adds the new stigma to the answer
 			answer[i] = current_stigma;
 		}
 		

@@ -42,7 +42,7 @@ public class ActionIntentionParser {
 	 * @param requisition
 	 * @model.uin <code>design:node:::byxoyf17vbztqo7zwz7:7fxyuf17vbztqy5hrpa</code>
 	 */
-	private void requireAction(ActionRequisition requisition) {
+	public void requireAction(ActionRequisition requisition) {
 		/* default generated stub */;
 
 	}

@@ -13,7 +13,7 @@ import util.etpd.EventTimeProbabilityDistribution;
 import util.etpd.EventTimeProbabilityDistributionTypes;
 import util.etpd.UniformEventTimeProbabilityDistribution;
 
-/** Implements a translator thar obtains event time probability distributions
+/** Implements a translator that obtains event time probability distributions
  *  from a given xml source.
  *  @see EventTimeProbabilityDistribution */
 public abstract class EventTimeProbabilityDistributionTranslator extends Translator {
@@ -26,22 +26,17 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 		// obtains the nodes with the "etpd" tag
 		NodeList etpd_nodes = xml_element.getElementsByTagName("etpd");
 		
-		// are there any etpd nodes?
-		if(etpd_nodes.getLength() == 0)
-			return new EventTimeProbabilityDistribution[0];
-		
 		// the answer of the method
 		EventTimeProbabilityDistribution[] answer = new EventTimeProbabilityDistribution[etpd_nodes.getLength()];
 		
-		// for the ocurrences
+		// for each ocurrence
 		for(int i = 0; i < answer.length; i++) {
 			// obtains the current etpd element
 			Element etpd_element = (Element) etpd_nodes.item(i);
 			
 			// obtains the data
-			String id = etpd_element.getAttribute("id");
 			int seed = Integer.parseInt(etpd_element.getAttribute("seed"));
-			int next_bool_count = Integer.parseInt(etpd_element.getAttribute("next_bool_count"));
+			String str_next_bool_count = etpd_element.getAttribute("next_bool_count");
 			int type = Integer.parseInt(etpd_element.getAttribute("type"));
 			
 			// instantiates the new etpd and configures it
@@ -66,9 +61,9 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 				}
 			}
 			
-			// configures the new etpd
-			answer[i].setObjectId(id);
-			answer[i].setNext_bool_counter(next_bool_count);			
+			// configures the new etpd, if necessary
+			if(str_next_bool_count != null)
+				answer[i].setNext_bool_counter(Integer.parseInt(str_next_bool_count));			
 		}
 		
 		// returns the answer
@@ -92,7 +87,7 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 			Element etpd_parameter_element = (Element) etpd_parameter_nodes.item(i);
 			
 			// adds the current parameter value to the answer
-			answer[i] =  Double.parseDouble(etpd_parameter_element.getAttribute("value"));
+			answer[i] = Double.parseDouble(etpd_parameter_element.getAttribute("value"));
 		}
 		
 		// returns the answer
