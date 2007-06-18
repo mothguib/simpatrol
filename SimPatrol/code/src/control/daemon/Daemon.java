@@ -28,9 +28,15 @@ public abstract class Daemon extends Thread {
 		this.connection = new Connection(local_socket_number, this.buffer);
 	}
 	
+	/** Returns the number of the local UDP socket
+	 *  of the connection of the Daemon.
+	 *  @return the number of the local UDP socket. */
+	public int getUDPSocketNumber() {
+		return this.connection.getUDPSocketNumber();
+	}
+	
 	public void start() {
 		super.start();
 		this.connection.start();
 	}
-	
 }
