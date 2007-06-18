@@ -39,6 +39,18 @@ public abstract class Society implements XMLable {
 		return this.label;
 	}
 	
+	/** Returns the agents of the society.
+	 *  @return The set of agents of the society. */
+	public Agent[] getAgents() {
+		Object[] agents_array = this.agents.toArray();
+		
+		Agent[] answer = new Agent[agents_array.length];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Agent) agents_array[i];
+		
+		return answer;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
