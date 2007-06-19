@@ -10,7 +10,7 @@ import cern.jet.random.EmpiricalWalker;
 /** Implements the probability distributions of happening
  *  an event based on the time of simulation that are given
  *  uniformly by a single probability value. */
-public class UniformEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
+public final class UniformEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
 	/* Attributes. */
 	/** The probability value of happening an associated event.
 	 *  Its value must belong to the interval [0,1].  */

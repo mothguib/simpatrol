@@ -9,7 +9,7 @@ import cern.jet.random.EmpiricalWalker;
 
 /** Implements the probability distributions of happening
  *  an event based on a specific time of the simulation. */
-public class SpecificEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
+public final class SpecificEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
 	/* Attributes. */
 	/** The probability value of happening an associated event.
 	 *  Its value must belong to the interval [0,1].  */

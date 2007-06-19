@@ -7,7 +7,7 @@ package util.clock;
 import java.util.Calendar;
 
 /** Implements a real time clock. */
-public class Clock extends Thread {
+public final class Clock extends Thread {
 	/* Attributes. */
 	/** Registers if the clock shall stop working. */
 	private boolean stop_working;

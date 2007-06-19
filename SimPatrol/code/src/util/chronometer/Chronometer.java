@@ -7,7 +7,7 @@ package util.chronometer;
 import java.util.Calendar;
 
 /** Implements a chronometer. */
-public class Chronometer extends Thread {
+public final class Chronometer extends Thread {
 	/* Attributes. */
 	/** The object to be chronometrized. */
 	private Chronometerable object;

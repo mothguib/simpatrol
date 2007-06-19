@@ -1,7 +1,7 @@
 /* UDPSocket.java */
 
 /* The package of this class. */
-package util;
+package util.udp;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.net.SocketException;
 public final class UDPSocket {
 	/* Attributes. */
 	/** The size of the buffer to be read from the UDP socket. */
-	private static final int BUFFER_SIZE = 1024;
+	private static final int BUFFER_SIZE = 32768;
 	
 	/** The java 2 native UDP socket. */
 	private DatagramSocket socket;
@@ -30,10 +30,10 @@ public final class UDPSocket {
 
 	/* Methods. */
 	/** Constructor.
-	 *  @param socket_number The number of the local UDP socket. 
+	 *  @param socket_number The number of the UDP socket. 
 	 *  @throws SocketException */
-	public UDPSocket(int local_socket_number) throws SocketException {
-		this.local_socket_number = local_socket_number;
+	public UDPSocket(int socket_number) throws SocketException {
+		this.local_socket_number = socket_number;
 		this.socket = new DatagramSocket(this.local_socket_number);
 	}
 	
@@ -68,5 +68,11 @@ public final class UDPSocket {
 		this.remote_socket_address = InetAddress.getByName(remote_socket_address);
 		this.remote_socket_number = remote_socket_number;
 		this.send(message);
+	}
+	
+	/** Returns the number of the UDP socket.
+	 *  @return The number of the UDP socket. */
+	public int getSocketNumber() {
+		return this.local_socket_number;
 	}
 }

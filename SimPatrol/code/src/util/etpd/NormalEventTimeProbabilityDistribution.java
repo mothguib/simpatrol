@@ -9,7 +9,7 @@ import cern.jet.random.Normal;
 /** Implements the probability distributions of happening
  *  an event based on the time of simulation that are given
  *  by a normal function. */
-public class NormalEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
+public final class NormalEventTimeProbabilityDistribution extends EventTimeProbabilityDistribution {
 	/* Attributes. */
 	/** The mean of the normal function. */
 	private double mean;
