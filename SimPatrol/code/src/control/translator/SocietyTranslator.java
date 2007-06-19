@@ -131,7 +131,7 @@ public abstract class SocietyTranslator extends Translator {
 			else agent = new SeasonalAgent(label, vertex, EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
 			
 			// configures the new agent
-			if(id == null) id = ObjectIdGenerator.generateObjectId(agent);
+			if(id.length() == 0) id = ObjectIdGenerator.generateObjectId(agent);
 			agent.setObjectId(id);
 			
 			if(str_state.length() > 0) agent.setState(Integer.parseInt(str_state));
