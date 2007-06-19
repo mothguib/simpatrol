@@ -1,10 +1,11 @@
+/* Perception.java */
+
+/* The package of this class. */
 package model.perception;
 
+/* Imported classes and/or interfaces. */
 import model.interfaces.XMLable;
 
-/**
- * @model.uin <code>design:node:::9gi2yf17uk7386paoue</code>
- */
+/** Implements the perceptions of the agents of SimPatrol. */
 public abstract class Perception implements XMLable {
-
 }
