@@ -8,7 +8,7 @@ import model.limitation.Limitation;
 
 /** Implements the permissions that control the actions of an agent
  *  in SimPatrol.  */
-public class ActionPermission extends Permission {
+public final class ActionPermission extends Permission {
 	/* Attributes */
 	/** The type of the allowed actions. */
 	private int action_type;
