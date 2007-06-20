@@ -5,18 +5,21 @@ package model.permission;
 
 /* Imported classes and/or interfaces. */
 import model.limitation.Limitation;
+import model.perception.PerceptionTypes;
 
 /** Implements the permissions that control the perceptions of an agent
  *  in SimPatrol.  */
 public final class PerceptionPermission extends Permission {
 	/* Attributes */
-	/** The type of the allowed perceptions. */
+	/** The type of the allowed perceptions.
+	 *  @see PerceptionTypes */
 	private int perception_type;
 	
 	/* Methods. */
 	/** Constructor.
 	 *  @param limitations The limitations imposed to the agent.
-	 *  @param perception_type The type of the allowed perceptions. */
+	 *  @param perception_type The type of the allowed perceptions.
+	 *  @see PerceptionTypes */
 	public PerceptionPermission(Limitation[] limitations, int perception_type) {
 		super(limitations);
 		this.perception_type = perception_type;

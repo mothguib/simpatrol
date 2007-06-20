@@ -4,19 +4,22 @@
 package model.permission;
 
 /* Imported classes and/or interfaces. */
+import model.action.ActionType;
 import model.limitation.Limitation;
 
 /** Implements the permissions that control the actions of an agent
  *  in SimPatrol.  */
 public final class ActionPermission extends Permission {
 	/* Attributes */
-	/** The type of the allowed actions. */
+	/** The type of the allowed actions.
+	 *  @see ActionType */
 	private int action_type;
 	
 	/* Methods. */
 	/** Constructor.
 	 *  @param limitations The limitations imposed to the agent.
-	 *  @param action_type The type of the allowed actions. */
+	 *  @param action_type The type of the allowed actions.
+	 *  @see ActionType */
 	public ActionPermission(Limitation[] limitations, int action_type) {
 		super(limitations);
 		this.action_type = action_type;
