@@ -6,22 +6,21 @@ package view.connection;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.net.SocketException;
-
 import util.Queue;
-import util.UDPSocket;
+import util.udp.UDPSocket;
 
 /** Implements the active connections of SimPatrol. */
 public class Connection extends Thread {
 	/* Attributes. */
 	/** Registers if the agent shall stop working. */
-	private boolean stop_working;
+	protected boolean stop_working;
 	
 	/** The UDP socket of the connection. */
-	private UDPSocket socket;
+	protected UDPSocket socket;
 	
 	/** The buffer where the connection writes the received
 	 *  messages. */
-	private Queue<String> buffer;
+	protected Queue<String> buffer;
 	
 	/* Methods. */
 	/** Constructor.
@@ -53,6 +52,12 @@ public class Connection extends Thread {
 	 *  @throws IOException */
 	public void send(String message, String remote_socket_address, int remote_socket_number) throws IOException {
 		this.socket.send(message, remote_socket_address, remote_socket_number);
+	}
+	
+	/** Return the number of UDP socket.
+	 *  @return The number of the UDP soket. */
+	public int getUDPSocketNumber() {
+		return this.socket.getSocketNumber();
 	}
 	
 	public void run() {
