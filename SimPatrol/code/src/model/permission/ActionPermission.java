@@ -4,7 +4,7 @@
 package model.permission;
 
 /* Imported classes and/or interfaces. */
-import model.action.ActionType;
+import model.action.ActionTypes;
 import model.limitation.Limitation;
 
 /** Implements the permissions that control the actions of an agent
@@ -12,14 +12,14 @@ import model.limitation.Limitation;
 public final class ActionPermission extends Permission {
 	/* Attributes */
 	/** The type of the allowed actions.
-	 *  @see ActionType */
+	 *  @see ActionTypes */
 	private int action_type;
 	
 	/* Methods. */
 	/** Constructor.
 	 *  @param limitations The limitations imposed to the agent.
 	 *  @param action_type The type of the allowed actions.
-	 *  @see ActionType */
+	 *  @see ActionTypes */
 	public ActionPermission(Limitation[] limitations, int action_type) {
 		super(limitations);
 		this.action_type = action_type;
