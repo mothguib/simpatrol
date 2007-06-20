@@ -16,6 +16,12 @@ import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Edge;
 import model.graph.Vertex;
+import model.limitation.DepthLimitation;
+import model.limitation.Limitation;
+import model.limitation.LimitationTypes;
+import model.limitation.StaminaLimitation;
+import model.permission.ActionPermission;
+import model.permission.PerceptionPermission;
 
 /** Implements a translator that obtains Society objects from
  *  XML sources.
@@ -127,8 +133,8 @@ public abstract class SocietyTranslator extends Translator {
 			
 			// instatiates the new agent
 			Agent agent = null;
-			if(are_perpetual_agents) agent = new PerpetualAgent(label, vertex);
-			else agent = new SeasonalAgent(label, vertex, EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
+			if(are_perpetual_agents) agent = new PerpetualAgent(label, vertex, getAllowedPerceptions(agent_element), getAllowedActions(agent_element));
+			else agent = new SeasonalAgent(label, vertex, getAllowedPerceptions(agent_element), getAllowedActions(agent_element), EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
 			
 			// configures the new agent
 			if(id.length() == 0) id = ObjectIdGenerator.generateObjectId(agent);
@@ -154,5 +160,123 @@ public abstract class SocietyTranslator extends Translator {
 		
 		// returns the answer
 		return answer;		
-	}	
+	}
+	
+	/** Obtains the allowed perceptions from the given XML element.
+	 *  @param xml_element The XML source containing the perception permissions.
+	 *  @return The allowed perceptions from the XML source. */
+	private static PerceptionPermission[] getAllowedPerceptions(Element xml_element) {
+		// obtains the nodes with the "allowed_perception" tag
+		NodeList allowed_perception_nodes = xml_element.getElementsByTagName("allowed_perception");
+		
+		// the answer of the method
+		PerceptionPermission[] answer = new PerceptionPermission[allowed_perception_nodes.getLength()];
+		
+		// for all the ocurrences
+		for(int i = 0; i < answer.length; i++) {
+			// obtains the current allowed_perception element
+			Element allowed_perception_element = (Element) allowed_perception_nodes.item(i);
+			
+			// obtains the data
+			int perception_type = Integer.parseInt(allowed_perception_element.getAttribute("type"));
+
+			// instatiates the new allowed_perception
+			PerceptionPermission allowed_perception =  new PerceptionPermission(getLimitations(allowed_perception_element), perception_type);
+
+			// puts on the answer
+			answer[i] = allowed_perception;
+		}
+		
+		// returns the answer
+		return answer;
+	}
+	
+	/** Obtains the allowed actions from the given XML element.
+	 *  @param xml_element The XML source containing the action permissions.
+	 *  @return The allowed actions from the XML source. */
+	private static ActionPermission[] getAllowedActions(Element xml_element) {
+		// obtains the nodes with the "allowed_action" tag
+		NodeList allowed_action_nodes = xml_element.getElementsByTagName("allowed_action");
+		
+		// the answer of the method
+		ActionPermission[] answer = new ActionPermission[allowed_action_nodes.getLength()];
+		
+		// for all the ocurrences
+		for(int i = 0; i < answer.length; i++) {
+			// obtains the current allowed_perception element
+			Element allowed_action_element = (Element) allowed_action_nodes.item(i);
+			
+			// obtains the data
+			int action_type = Integer.parseInt(allowed_action_element.getAttribute("type"));
+
+			// instatiates the new allowed_action
+			ActionPermission allowed_action =  new ActionPermission(getLimitations(allowed_action_element), action_type);
+
+			// puts on the answer
+			answer[i] = allowed_action;
+		}
+		
+		// returns the answer
+		return answer;
+	}
+	
+	/** Obtains the limitations from the given XML element.
+	 *  @param xml_element The XML source containing the limitations.
+	 *  @return The limitations from the XML source. */
+	private static Limitation[] getLimitations(Element xml_element) {
+		// obtains the nodes with the "limitation" tag
+		NodeList limitation_nodes = xml_element.getElementsByTagName("limitation");
+		
+		// the answer of the method
+		Limitation[] answer = new Limitation[limitation_nodes.getLength()];
+		
+		// for all the ocurrences
+		for(int i = 0; i < answer.length; i++) {
+			// obtains the current limitation element
+			Element limitation_element = (Element) limitation_nodes.item(i);
+			
+			// obtains the data
+			int limitation_type = Integer.parseInt(limitation_element.getAttribute("type"));
+
+			// instatiates the new limitation
+			switch(limitation_type) {
+				case(LimitationTypes.DEPTH_LIMITATION): {
+					int parameter = Integer.parseInt(getLimitationParameters(limitation_element)[0]);
+					answer[i] = new DepthLimitation(parameter);
+					break;
+				}
+				case(LimitationTypes.STAMINA_LIMITATION): {
+					int parameter = Integer.parseInt(getLimitationParameters(limitation_element)[0]);
+					answer[i] = new StaminaLimitation(parameter);
+					break;
+				}
+			}
+		}
+		
+		// returns the answer
+		return answer;
+	}
+	
+	/** Obtains the limitation parameters from the given XML element.
+	 *  @param xml_element The XML source containing the limitation parameters.
+	 *  @return The limitation parameters from the XML source. */
+	private static String[] getLimitationParameters(Element xml_element) {
+		// obtains the nodes with the "lmt_parameter" tag
+		NodeList lmt_parameter_nodes = xml_element.getElementsByTagName("lmt_parameter");
+		
+		// the answer of the method
+		String[] answer = new String[lmt_parameter_nodes.getLength()];
+		
+		// for all the ocurrences
+		for(int i = 0; i < answer.length; i++) {
+			// obtains the current limitation parameter element
+			Element lmt_parameter_element = (Element) lmt_parameter_nodes.item(i);
+			
+			// obtains the parameter
+			answer[i] = lmt_parameter_element.getAttribute("value");
+		}
+		
+		// returns the answer
+		return answer;
+	}
 }
