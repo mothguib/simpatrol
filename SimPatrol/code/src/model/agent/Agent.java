@@ -4,17 +4,19 @@
 package model.agent;
 
 /* Imported classes and/or interfaces. */
+import java.util.HashSet;
+import java.util.Set;
+
 import model.interfaces.XMLable;
 import model.graph.Vertex;
 import model.graph.Edge;
 import model.perception.Perception;
+import model.permission.ActionPermission;
+import model.permission.PerceptionPermission;
 
 /** Implements the internal agents of SimPatrol. */
-public abstract class Agent extends Thread implements XMLable {
+public abstract class Agent implements XMLable {
 	/* Attributes. */
-	/** Registers if the agent shall stop working. */
-	private boolean stop_working;
-	
 	/** The object id of the agent.
 	 *  Not part of the patrol problem modelling. */
 	private String id;
@@ -22,7 +24,8 @@ public abstract class Agent extends Thread implements XMLable {
 	/** The label of the agent. */
 	private String label;
 	
-	/** The state of the agent. */
+	/** The state of the agent.
+	 *  @see AgentStates */
 	private int state;
 	
 	/** The vertex that the agent comes from. */
@@ -40,11 +43,19 @@ public abstract class Agent extends Thread implements XMLable {
 	 *  Its default value is 1.0. */
 	private double stamina = 1.0;
 	
+	/** The set of allowed perceptions. */
+	protected Set<PerceptionPermission> allowed_perceptions;
+	
+	/** The set of allowed actions. */
+	protected Set<ActionPermission> allowed_actions;
+	
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the agent.
-	 *  @param vertex The vertex that the agent comes from. */
-	public Agent(String label, Vertex vertex) {
+	 *  @param vertex The vertex that the agent comes from.
+	 *  @param allowed_perceptions The allowed perceptions to the agent.
+	 *  @param allowed_actions The allowed actions to the agent. */
+	public Agent(String label, Vertex vertex, PerceptionPermission[] allowed_perceptions, ActionPermission[] allowed_actions) {
 		this.label = label;
 		this.vertex = vertex;
 		
@@ -52,7 +63,19 @@ public abstract class Agent extends Thread implements XMLable {
 		this.edge = null;
 		this.elapsed_length = 0;
 		
-		this.stop_working = false; // thread control
+		if(allowed_perceptions != null && allowed_perceptions.length > 0) {
+			this.allowed_perceptions = new HashSet<PerceptionPermission>();
+			for(int i = 0; i < allowed_perceptions.length; i++)
+				this.allowed_perceptions.add(allowed_perceptions[i]);
+		}
+		else this.allowed_perceptions = null;
+		
+		if(allowed_actions != null && allowed_actions.length > 0) {
+			this.allowed_actions = new HashSet<ActionPermission>();
+			for(int i = 0; i < allowed_actions.length; i++)
+				this.allowed_actions.add(allowed_actions[i]);
+		}
+		else this.allowed_actions = null;
 	}
 	
 	/**
@@ -78,11 +101,6 @@ public abstract class Agent extends Thread implements XMLable {
 		return this.state;
 	}
 	
-	/** Indicates that the agent must stop working. */
-	public void stopWorking() {
-		this.stop_working = true;
-	}
-	
 	/** Configures the state of the agent.
 	 *  @param state The state of the agent.
 	 *  @see AgentStates */
@@ -104,18 +122,6 @@ public abstract class Agent extends Thread implements XMLable {
 		this.stamina = stamina;
 	}
 	
-	public void run() {
-		while(!this.stop_working) {
-			// TODO implementar... o que está abaixo é temporário!!!
-			int temp_perc = (int)(Math.pow(Math.random() * 10000, 2));			
-			for(int i = 0; i < temp_perc; i++);			
-			this.state = AgentStates.JUST_ACTED;
-			int temp_act = (int)(Math.pow(Math.random() * 10000, 2));
-			for(int i = 0; i < temp_act; i++);
-			this.state = AgentStates.JUST_ACTED;
-		}
-	}
-		
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
@@ -134,9 +140,30 @@ public abstract class Agent extends Thread implements XMLable {
 			buffer.append("\" edge_id=\"" + this.edge.getObjectId() +
 					      "\" elapsed_length=\"" + this.elapsed_length);
 		}
+
+		buffer.append("\" stamina=\"" + this.stamina);
 		
-		buffer.append("\" stamina=\"" + this.stamina +
-				      "\"/>\n");
+		// puts the eventual allowed perceptions
+		if(this.allowed_perceptions != null) {
+			Object[] allowed_perceptions_array = this.allowed_perceptions.toArray();
+			for(int i = 0; i < allowed_perceptions_array.length; i++)
+				((PerceptionPermission) allowed_perceptions_array[i]).toXML(identation + 1);
+		}
+		
+		// puts the eventual allowed actions
+		if(this.allowed_actions != null) {
+			Object[] allowed_actions_array = this.allowed_actions.toArray();
+			for(int i = 0; i < allowed_actions_array.length; i++)
+				((ActionPermission) allowed_actions_array[i]).toXML(identation + 1);
+		}
+		
+		// closes the main tag
+		if(this.allowed_perceptions == null && this.allowed_actions == null)
+			buffer.append("\"/>\n");
+		else {
+			for(int i = 0; i < identation; i++) buffer.append("\t");
+			buffer.append("</agent>\n");
+		}
 		
 		// returns the buffer content
 		return buffer.toString();
