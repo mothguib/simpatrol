@@ -1,9 +1,11 @@
+/* Action.java */
+
+/* The package of this class. */
 package model.action;
 
+/* Imported classes and/or interfaces. */
 import model.interfaces.XMLable;
 
-/**
- * @model.uin <code>design:node:::bjwddf17ugxj12olap6</code>
- */
+/** Implements the actions of the agents of SimPatrol. */
 public abstract class Action implements XMLable {
 }
