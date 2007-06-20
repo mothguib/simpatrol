@@ -1,48 +1,59 @@
+/* AgentConnection.java */
+
+/* The package of this class. */
 package view.connection;
 
-import control.requisition.PerceptionRequisitionQueue;
-import control.parser.ActionIntentionParser;
-import model.perception.Perception;
+/* Imported classes and/or interfaces. */
+import java.io.IOException;
+import java.net.SocketException;
+import util.Queue;
 
-/**
- * @model.uin <code>design:node:::cmvoxf17vflv5-nneeo7</code>
- */
-public class AgentConnection extends Connection {
-
-	/**
-	 * @model.uin <code>design:node:::9wao5f17vcg2cqgz4qq</code>
-	 */
-	public PerceptionRequisitionQueue perceptionRequisitionQueue;
-
-	/**
-	 * @model.uin <code>design:node:::7fxyuf17vbztqy5hrpa</code>
-	 */
-	public ActionIntentionParser actionIntentionParser;
-
-	/**
-	 * @param requisition
-	 * @model.uin <code>design:node:::9i2dgf17vflv56yn6e6:cmvoxf17vflv5-nneeo7</code>
-	 */
-	public void requirePerception(String requisition) {
-		/* default generated stub */;
-
+/** Implements the connections with the external agents. */
+public final class AgentConnection extends Connection {
+	/* Attributes. */
+	/** The buffer where the connection writes the received
+	 *  perception messages. */
+	private Queue<String> perception_buffer;
+	
+	/** The buffer where the connection writes the received
+	 *  action messages. */
+	private Queue<String> action_buffer;
+	
+	/* Methods. */
+	/** Constructor.
+	 *  @throws SocketException */
+	public AgentConnection(int local_socket_number, Queue<String> perception_buffer, Queue<String> action_buffer) throws SocketException {
+		super(local_socket_number, perception_buffer);
+		this.perception_buffer = this.buffer;
+		this.action_buffer = action_buffer;
 	}
-
-	/**
-	 * @param perception
-	 * @model.uin <code>design:node:::a6xbqf17vflv5-5eb1h4:cmvoxf17vflv5-nneeo7</code>
-	 */
-	public void setGrantedPerception(Perception perception) {
-		/* default generated stub */;
-
-	}
-
-	/**
-	 * @param intention
-	 * @model.uin <code>design:node:::f087pf17vflv5-suaw9n:cmvoxf17vflv5-nneeo7</code>
-	 */
-	public void intendAction(String intention) {
-		/* default generated stub */;
-
-	}
+	
+	public void run() {
+		while(!this.stop_working) {
+			String message = null;
+			
+			try {
+				message = this.socket.receive();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			// decides if the message is a perception or action
+			// related message
+			StringBuffer buffer = new StringBuffer(message);
+			int ref_index = buffer.indexOf("<requisition");
+			buffer.delete(0, ref_index);
+			ref_index = buffer.indexOf("type");
+			buffer.delete(0, ref_index);
+			ref_index = buffer.indexOf("\"");
+			buffer.delete(0, ref_index);
+			ref_index = buffer.indexOf("\"");
+			String ref = buffer.substring(0, ref_index);
+			
+			// TODO corrigir abaixo, colocando requisition types!!!
+			if(Integer.parseInt(ref) == 0) this.perception_buffer.insert(message);
+			else this.action_buffer.insert(message);
+		}
+	}	
 }
