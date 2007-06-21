@@ -19,11 +19,6 @@ public abstract class Message implements XMLable {
 	public Message(XMLable content) {
 		this.content = content;
 	}
-
-	/** Returns the type of the message.
-	 *  @return The type of the message.
-	 *  @see MessageTypes */
-	protected abstract int getType();
 	
 	public String getObjectId() {
 		// a message doesn't need an id
@@ -41,8 +36,7 @@ public abstract class Message implements XMLable {
 		
 		// applies the identation and fills the "message" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<message type=\"" + this.getType() +
-				      "\"/>\n");
+		buffer.append("<message>\n");
 		
 		// puts the content
 		buffer.append(this.content.toXML(identation + 1));
