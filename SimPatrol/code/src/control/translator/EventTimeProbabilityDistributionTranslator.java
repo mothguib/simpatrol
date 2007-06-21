@@ -14,7 +14,7 @@ import util.etpd.EventTimeProbabilityDistributionTypes;
 import util.etpd.UniformEventTimeProbabilityDistribution;
 
 /** Implements a translator that obtains event time probability distributions
- *  from a given xml source.
+ *  from a given XML source.
  *  @see EventTimeProbabilityDistribution */
 public abstract class EventTimeProbabilityDistributionTranslator extends Translator {
 	/* Methods. */
