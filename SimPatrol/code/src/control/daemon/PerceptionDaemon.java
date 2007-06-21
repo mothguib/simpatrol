@@ -1,40 +1,32 @@
+/* PerceptionDaemon.java */
+
+/* The package of this class. */
 package control.daemon;
 
-import java.util.Set;
-import java.util.Collection;
-import control.requisition.PerceptionRequisitionQueue;
-import model.agent.Agent;
+/* Imported classes and/or interfaces. */
+import java.net.SocketException;import model.agent.Agent;
 
-/**
- * @model.uin <code>design:node:::f1mcnf17vaioyh63h3f</code>
- */
-public class PerceptionDaemon extends Daemon {
+/** Implements the daemons of SimPatrol that attend
+ *  an agent's requisitions for perceptions. */
+public final class PerceptionDaemon extends AgentDaemon {
+	/* Methods. */
+	/** Constructor.
+	 * 
+	 *  From super() constructor, creates its own connection, however with
+	 *  the invalid socket number "-1".
+	 *  
+	 *  As ActionDaemons and PerceptionDaemons share the same connection,
+	 *  they must have their AgentConnection object configured by
+	 *  their setConnection method.
+	 *  
+	 *  @param agent The agent whose intentions are attended.
+	 *  @see ActionDaemon
+	 *  @throws SocketException */
+	public PerceptionDaemon(Agent agent) throws SocketException {
+		super(agent);
+	}
 
-	/**
-	 * @model.uin <code>design:node:::brd6kf17vchyi-vfij57</code>
-	 */
-	public Set allowed_perceptions;
-
-	/**
-	 * @model.uin <code>design:node:::i172kf17ujey8agupu8</code>
-	 */
-	public Agent agent;
-
-	/**
-	 * @model.uin <code>design:node:::9gi2yf17uk7386paoue</code>
-	 */
-	public Collection perception;
-
-	/**
-	 * @model.uin <code>design:node:::9wao5f17vcg2cqgz4qq</code>
-	 */
-	public PerceptionRequisitionQueue perceptionRequisitionQueue;
-
-	/**
-	 * @model.uin <code>design:node:::3hgasf17vaioy-fsar0r:f1mcnf17vaioyh63h3f</code>
-	 */
-	private void grantPerceptionRequisition() {
-		/* default generated stub */;
-
+	public void run() {
+		// TODO implementar!!!
 	}
 }
