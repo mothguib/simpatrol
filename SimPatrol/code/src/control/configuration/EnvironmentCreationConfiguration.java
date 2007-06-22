@@ -19,6 +19,12 @@ public class EnvironmentCreationConfiguration extends Configuration {
 		this.environment = environment;
 	}
 	
+	/** Returns the environment of the configuration.
+	 *  @return The environment breing created. */
+	public Environment getEnvironment() {
+		return this.environment;
+	}
+	
 	public int getType() {
 		return ConfigurationTypes.ENVIRONMENT_CREATION;
 	}
