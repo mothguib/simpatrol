@@ -20,8 +20,8 @@ import control.simulator.Simulator;
 import control.translator.MessageTranslator;
 
 /** Implements the main daemon of SimPatrol, the one that
- *  controls the graph remote submission, as well as the creation
- *  of societies and agents. */
+ *  controls the environment remote submission, as well as the creation
+ *  of agents and starting of the simulation. */
 public final class MainDaemon extends Daemon {
 	/* Attributes. */
 	/** Registers if the daemon shall stop working. */
