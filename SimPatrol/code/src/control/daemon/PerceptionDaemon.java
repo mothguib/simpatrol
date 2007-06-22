@@ -27,6 +27,9 @@ public final class PerceptionDaemon extends AgentDaemon {
 	}
 
 	public void run() {
+		// screen message
+		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Listening to some requisition...");
+		
 		// TODO implementar!!!
 	}
 }

@@ -35,8 +35,14 @@ public abstract class Daemon extends Thread {
 		return this.connection.getUDPSocketNumber();
 	}
 	
+	/** Returns the buffer listened by the daemon.
+	 *  @return The buffer shared by the daemon with the connection, for the exchange of messages. */
+	public Queue<String> getBuffer() {
+		return this.buffer;
+	}
+	
 	public void start() {
 		super.start();
-		this.connection.start();
+		if(!this.connection.isAlive()) this.connection.start();
 	}
 }

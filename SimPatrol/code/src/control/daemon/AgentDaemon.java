@@ -30,12 +30,16 @@ public abstract class AgentDaemon extends Daemon {
 	 *  @see PerceptionDaemon
 	 *  @throws SocketException */
 	public AgentDaemon(Agent agent) throws SocketException {
-		super(-1);
+		// creates the daemon with a random temporary connection
+		super((int) (Math.random() * 1000));		
+		
+		// configures the agent of the daemon
 		this.agent = agent;
 	}
 	
 	/** Configures the connection of the daemon. */
 	public void setConnection(AgentConnection connection) {
+		this.connection = null;
 		this.connection = connection;
 	}
 }

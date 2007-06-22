@@ -27,6 +27,9 @@ public final class ActionDaemon extends AgentDaemon {
 	}
 
 	public void run() {
+		// screen message
+		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Listening to some intention...");
+		
 		// TODO implementar!!!
 	}
 }
