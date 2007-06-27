@@ -4,8 +4,14 @@
 package control.translator;
 
 /* Imported classes and/or interfaces. */
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import util.etpd.EventTimeProbabilityDistribution;
 import model.Environment;
 import model.agent.Agent;
@@ -31,7 +37,27 @@ import model.permission.PerceptionPermission;
  *  from XML source elements.
  *  @see Environment */
 public class EnvironmentTranslator extends Translator {
-	/* Methods. */
+	/* Methods. */	
+	/** Obtains the environment from the given XML file path.
+	 *  @param xml_file_path The XML file source containing the environment.
+	 *  @return The environment from the XML file source. 
+	 *  @throws IOException 
+	 *  @throws SAXException 
+	 *  @throws ParserConfigurationException */
+	public static Environment getEnvironment(String xml_file_path) throws ParserConfigurationException, SAXException, IOException {
+		// parses the file containing the environment
+		Element environment_element = parseFile(xml_file_path);
+		
+		// obtains the graph
+		Graph graph = getGraphs(environment_element)[0];
+		
+		// obtains the societies
+		Society[] societies = getSocieties(environment_element, graph);
+		
+		// creates the new graph and returns it
+		return new Environment(graph, societies);
+	}
+	
 	/** Obtains the environments from the given XML element.
 	 *  @param xml_element The XML source containing the environments.
 	 *  @return The environments from the XML source. */
@@ -51,7 +77,7 @@ public class EnvironmentTranslator extends Translator {
 			Graph graph = getGraphs(environment_element)[0];
 			
 			// obtains the societies
-			Society[] societies = getSocieties(environment_element, graph.getVertexes(), graph.getEdges());
+			Society[] societies = getSocieties(environment_element, graph);
 			
 			// creates the new graph and adds to the answer
 			answer[i] = new Environment(graph, societies);
@@ -291,7 +317,7 @@ public class EnvironmentTranslator extends Translator {
 		
 		// for each ocurrence
 		for(int i = 0; i < answer.length; i++) {
-			// TODO new stigma implementations shall reflect changes here
+			// WARNING new stigma implementations shall reflect changes here
 			
 			// adds the new stigma to the answer
 			answer[i] = new Stigma();
@@ -304,10 +330,9 @@ public class EnvironmentTranslator extends Translator {
 	/* Methods */
 	/** Obtains the societies from the given XML element.
 	 *  @param xml_element The XML source containing the societies.
-	 *  @param vertexes The set of vertexes in the simulation.
-	 *  @param edges The set of edges in the simulation.
+	 *  @param graph The graph of the simulation.
 	 *  @return The societies from the XML source. */		
-	private static Society[] getSocieties(Element xml_element, Vertex[] vertexes, Edge[] edges) {
+	private static Society[] getSocieties(Element xml_element, Graph graph) {
 		// obtains the nodes with the "society" tag
 		NodeList society_nodes = xml_element.getElementsByTagName("society");
 		
@@ -332,7 +357,7 @@ public class EnvironmentTranslator extends Translator {
 			// obtains the agents			
 			boolean are_perpetual_agents = true; 
 			if(!is_closed) are_perpetual_agents = false;
-			Agent[] agents = getAgents(society_element, are_perpetual_agents, vertexes, edges);
+			Agent[] agents = getAgents(society_element, are_perpetual_agents, graph);
 			
 			// creates the society (closed or open)
 			Society society = null;
@@ -367,10 +392,13 @@ public class EnvironmentTranslator extends Translator {
 	/** Obtains the agents from the given XML element.
 	 *  @param xml_element The XML source containing the agents.
 	 *  @param are_perpetual_agents TRUE, if the society of the agents is closed, FALSE if not.
-	 *  @param vertexes The set of vertexes in the simulation.
-	 *  @param edges The set of edges in the simulation.
+	 *  @param graph The graph of the simulation.
 	 *  @return The agents from the XML source. */
-	private static Agent[] getAgents(Element xml_element, boolean are_perpetual_agents, Vertex[] vertexes, Edge[] edges) {
+	public static Agent[] getAgents(Element xml_element, boolean are_perpetual_agents, Graph graph) {
+		// obtains the vertexes and edges of the graph
+		Vertex[] vertexes = graph.getVertexes();
+		Edge[] edges = graph.getEdges();
+		
 		// obtains the nodes with the "agent" tag
 		NodeList agent_nodes = xml_element.getElementsByTagName("agent");
 		
@@ -415,8 +443,13 @@ public class EnvironmentTranslator extends Translator {
 				agent = new PerpetualAgent(label, vertex, getAllowedPerceptions(agent_element), getAllowedActions(agent_element));
 			}
 			else {
+				// obtains the eventual death time pd
+				EventTimeProbabilityDistribution[] read_death_tpd = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element);
+				EventTimeProbabilityDistribution death_tpd = null;
+				if(read_death_tpd.length > 0) death_tpd = read_death_tpd[0];
+				
 				// new seasonal agent
-				agent = new SeasonalAgent(label, vertex, getAllowedPerceptions(agent_element), getAllowedActions(agent_element), EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(agent_element)[0]);
+				agent = new SeasonalAgent(label, vertex, getAllowedPerceptions(agent_element), getAllowedActions(agent_element), death_tpd);
 			}
 			
 			// configures the new agent
@@ -541,7 +574,7 @@ public class EnvironmentTranslator extends Translator {
 					break;
 				}
 				
-				// TODO new limitations shall introduce new code here
+				// WARNING new limitations shall introduce new code here
 			}
 		}
 		
