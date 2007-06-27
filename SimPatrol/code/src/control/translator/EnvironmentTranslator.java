@@ -36,7 +36,7 @@ import model.permission.PerceptionPermission;
 /** Implements a translator that obtains Environment objects
  *  from XML source elements.
  *  @see Environment */
-public class EnvironmentTranslator extends Translator {
+public abstract class EnvironmentTranslator extends Translator {
 	/* Methods. */	
 	/** Obtains the environment from the given XML file path.
 	 *  @param xml_file_path The XML file source containing the environment.
