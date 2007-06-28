@@ -153,7 +153,7 @@ public class Edge implements XMLable {
 		this.is_appearing = is_appearing;
 		
 		// screen message
-		System.out.println("[Simpatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
+		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
 	}
 	
 	public String toXML(int identation) {
