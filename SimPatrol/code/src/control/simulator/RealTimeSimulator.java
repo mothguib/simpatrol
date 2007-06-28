@@ -10,9 +10,12 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+
+import model.graph.Vertex;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
 import control.robot.DynamicityControllerRobot;
+import control.robot.IdlenessControllerRobot;
 import control.robot.MortalityControllerRobot;
 import util.chronometer.Chronometer;
 import util.chronometer.Chronometerable;
@@ -31,6 +34,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 *  Its default value is NULL. */
 	private Set<MortalityControllerRobot> mortal_robots = null;
 	
+	/** The robots that assure the vertexes the correct idleness measurement. */
+	private Set<IdlenessControllerRobot> idleness_robots;
+	
 	/* Methods. */
 	/** Constructor.
 	 *  @param local_socket_number The number of the UDP socket of the main connection. 
@@ -39,6 +45,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 *  @throws ParserConfigurationException */	
 	public RealTimeSimulator(int local_socket_number) throws ParserConfigurationException, SAXException, IOException {
 		super(local_socket_number);
+		this.idleness_robots = new HashSet<IdlenessControllerRobot>();
 	}
 	
 	/** Obtains the dynamic objects and creates the
@@ -77,6 +84,18 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		else this.mortal_robots = null;
 	}
 	
+	/** Obtains the vertexes and creates the
+	 *  respective idleness controller robots. */
+	private void createIdlenessControllerDaemons() {
+		// obtains the vertexes
+		Vertex[] vertexes = this.environment.getGraph().getVertexes();
+		
+		// for each vertex
+		for(int i = 0; i < vertexes.length; i++)
+			// creates an idleness controller robot
+			this.idleness_robots.add(new IdlenessControllerRobot(vertexes[i]));
+	}	
+	
 	/** Starts each one of the current dynamicity controller robots. */
 	private void startDynamicityControllerRobots() {
 		if(this.dynamic_robots != null) {
@@ -95,6 +114,13 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		}
 	}
 	
+	/** Starts each one of the idleness controller robots. */
+	private void startIdlenessControllerRobots() {
+		Object[] idleness_robots_array = this.idleness_robots.toArray();
+		for(int i = 0; i < idleness_robots_array.length; i++)
+			((IdlenessControllerRobot) idleness_robots_array[i]).startWorking();
+	}
+	
 	/** Stops each one of current dynamicity controller robots. */
 	private void stopDynamicityControllerRobots() {
 		if(this.dynamic_robots != null) {
@@ -111,6 +137,13 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			for(int i = 0; i < mortal_robots_array.length; i++)
 				((MortalityControllerRobot) mortal_robots_array[i]).stopWorking();
 		}
+	}
+	
+	/** Stops each one of the idleness controller robots. */
+	private void stopIdlenessControllerRobots() {
+		Object[] idleness_robots_array = this.idleness_robots.toArray();
+		for(int i = 0; i < idleness_robots_array.length; i++)
+			((IdlenessControllerRobot) idleness_robots_array[i]).stopWorking();
 	}
 	
 	/** Removes a given mortality controller robot from
@@ -134,6 +167,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		// creates the mortality controller robots
 		this.createMortalityControllerDaemons();
 		
+		// creates the idleness controller robots
+		this.createIdlenessControllerDaemons();
+		
 		// 2nd. starting things
 		// starts the chronometer
 		this.chronometer.start();
@@ -143,6 +179,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// starts the mortality controller robots
 		this.startMortalityControllerRobots();
+		
+		// starts the idleness controller robots
+		this.startIdlenessControllerRobots();
 	}
 	
 	public void stopSimulation() {
@@ -155,6 +194,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// stops the mortality controller robots
 		this.stopMortalityControllerRobots();
+		
+		// stops the idleness controller robots
+		this.stopIdlenessControllerRobots();
 	}
 	
 	public void startWorking() { 		
