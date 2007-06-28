@@ -64,8 +64,8 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 	public void setIsAppearing(boolean is_appearing) {
 		this.is_appearing = is_appearing;
 		
-		// TODO retirar codigo abaixo!!
-		System.out.println(this.getObjectId() + " appearing " + this.is_appearing);
+		// screen message
+		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
 		
 		// if is_appering is FALSE, memorizes the edges that are appearing
 		if(!is_appearing) {
