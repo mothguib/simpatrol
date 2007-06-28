@@ -17,6 +17,12 @@ public final class OpenSociety extends Society {
 			seasonal_agents[i].setSociety(this);			
 	}
 	
+	/** Adds a given agent to the society.
+	 *  @param agent The agent to be added. */
+	public void addAgent(SeasonalAgent agent) {
+		this.agents.add(agent);
+	}
+	
 	/** Removes a given agent from the society. 
 	 *  @param agent The agent to be removed. */
 	public void removeAgent(SeasonalAgent agent) {
