@@ -55,6 +55,9 @@ public final class MainDaemon extends Daemon {
 	public void stopWorking() {
 		this.stop_working = true;
 		
+		// stops its connection
+		this.connection.stopWorking();
+		
 		// screen message
 		System.out.println("[SimPatrol.MainDaemon] Stopped working.");
 	}
