@@ -23,7 +23,7 @@ public final class SocketNumberGenerator {
 	/** Constructor.
 	 *  @param basis The value taken as basis for the socket number generation. */
 	public SocketNumberGenerator(int basis) {
-		this.rn_generator = new MersenneTwister();
+		this.rn_generator = new MersenneTwister((int) System.currentTimeMillis());
 		this.rn_distribuitor = new Normal(basis, STD_DEVIATION, this.rn_generator);
 	}
 	
