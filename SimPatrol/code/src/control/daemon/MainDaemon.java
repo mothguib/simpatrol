@@ -54,6 +54,9 @@ public final class MainDaemon extends Daemon {
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
 		this.stop_working = true;
+		
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon] Stopped working.");
 	}
 	
 	/** Treats a given message eventually containing

@@ -34,6 +34,9 @@ public final class ActionDaemon extends AgentDaemon {
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
 		this.stop_working = true;
+		
+		// screen message
+		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");
 	}
 	
 	public void run() {
