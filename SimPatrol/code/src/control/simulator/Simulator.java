@@ -179,5 +179,8 @@ public abstract class Simulator {
 		
 		// stops the action daemons
 		this.stopActionDaemons();
+		
+		// exits the application
+		System.exit(0);
 	}
 }
