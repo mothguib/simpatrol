@@ -4,6 +4,7 @@
 package control.robot;
 
 /* Imported classes and/or interfaces. */
+import model.graph.DynamicVertex;
 import model.graph.Vertex;
 import control.simulator.RealTimeSimulator;
 
@@ -25,7 +26,11 @@ public final class IdlenessControllerRobot extends Robot {
 
 	public void act() {
 		// increments the idleness of the vertex
-		this.vertex.incIdleness();
+		// if it's appearing
+		if(this.vertex instanceof DynamicVertex) {
+			if(((DynamicVertex) this.vertex).isAppearing())
+				this.vertex.incIdleness();
+		}
+		else this.vertex.incIdleness();
 	}
-
 }
