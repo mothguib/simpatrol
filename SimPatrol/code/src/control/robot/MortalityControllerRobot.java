@@ -42,7 +42,7 @@ public final class MortalityControllerRobot extends Robot {
 			this.stopWorking();
 			
 			// removes this robot from the rt simulator
-			this.simulator.removeMortalityControllerDaemon(this);
+			this.simulator.removeMortalityControllerRobot(this);
 		}			
 	}
 }
