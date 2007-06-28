@@ -30,6 +30,24 @@ public final class Environment implements XMLable {
 		for(int i = 0; i < societies.length; i++)
 			this.societies.add(societies[i]);
 	}
+	
+	/** Returns the societies of the environment.
+	 *  @return The societies. */
+	public Society[] getSocieties() {
+		Object[] societies_array = this.societies.toArray();		
+		Society[] answer = new Society[societies_array.length];
+		
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (Society) societies_array[i];
+		
+		return answer;
+	}
+	
+	/** Returns the graph of the environment.
+	 *  @return The graph. */
+	public Graph getGraph() {
+		return this.graph;
+	}
 
 	public String getObjectId() {
 		// an environment doesn't need an id
