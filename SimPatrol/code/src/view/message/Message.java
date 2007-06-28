@@ -8,7 +8,7 @@ import model.interfaces.XMLable;
 
 /** Implements the messages received and sent between SimPatrol and
  *  the external actors. */
-public abstract class Message implements XMLable {
+public final class Message implements XMLable {
 	/* Attributes. */
 	/** The content of the message. */
 	private XMLable content;
@@ -18,6 +18,12 @@ public abstract class Message implements XMLable {
 	 *  @param content The content of the message. */
 	public Message(XMLable content) {
 		this.content = content;
+	}
+	
+	/** Returns the content of the message.
+	 *  @return The content of the message. */
+	public XMLable getContent() {
+		return this.content;
 	}
 	
 	public String getObjectId() {
