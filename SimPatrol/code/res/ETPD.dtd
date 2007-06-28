@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-    Document   : ETPD.dtd
-    Version    : 1.0
-    Date       : May 28th, 2007, 12:05
-    Description: SimPatrol's Event Time Probability Distributions DTD
--->
-
 <!-- ETPD - Event Time Probability Distribution -->
 <!ELEMENT etpd (pd_parameter+)>
 <!ATTLIST etpd seed CDATA #REQUIRED>
