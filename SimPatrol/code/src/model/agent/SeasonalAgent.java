@@ -76,7 +76,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 		this.society.removeAgent(this);
 		
 		// screen message
-		System.out.println("[SimPatrol.Agent(" + this.getObjectId() + ")]" + " morreu.");
+		System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " died.");
 	}
 
 	public EventTimeProbabilityDistribution getDeathTPD() {
