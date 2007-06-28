@@ -15,9 +15,6 @@ public final class Clock extends Thread {
 	/** The object to be clocked. */
 	private Clockable object;
 	
-	/** Holds the current time being clocked. */
-	private int current_time;
-	
 	/** The clock count step.
 	 *  The default value is one second.*/
 	private int step = 1;
@@ -31,7 +28,6 @@ public final class Clock extends Thread {
 	 *  @param object The object to be clocked. */
 	public Clock(Clockable object) {
 		this.object = object;
-		this.current_time = 0;
 		this.stop_working = false;
 	}
 	
@@ -46,13 +42,7 @@ public final class Clock extends Thread {
 	public void setUnity(int unity) {
 		this.unity = unity;
 	}
-	
-	/** Returns the current clocked time.
-	 * @return The current clocked time. */
-	public int getCurrentTime() {
-		return this.current_time;
-	}
-	
+
 	/** Indicates that the clock must stop working. */
 	public void stopWorking() {
 		this.stop_working = true;
@@ -68,7 +58,6 @@ public final class Clock extends Thread {
 			if(next_ref - prev_ref > this.step - 1) {
 				prev_ref = Calendar.getInstance().get(this.unity);
 				this.object.act();
-				this.current_time++;
 			}
 		}
 	}
