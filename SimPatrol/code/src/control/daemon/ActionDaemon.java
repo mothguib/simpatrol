@@ -35,8 +35,11 @@ public final class ActionDaemon extends AgentDaemon {
 	public void stopWorking() {
 		this.stop_working = true;
 		
+		// stops its connection
+		this.connection.stopWorking();
+		
 		// screen message
-		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");
+		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");		
 	}
 	
 	public void run() {

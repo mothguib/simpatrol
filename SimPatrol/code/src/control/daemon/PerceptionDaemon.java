@@ -35,6 +35,9 @@ public final class PerceptionDaemon extends AgentDaemon {
 	public void stopWorking() {
 		this.stop_working = true;
 		
+		// stops its connection
+		this.connection.stopWorking();
+		
 		// screen message
 		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");
 	}
