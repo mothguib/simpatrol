@@ -13,7 +13,7 @@ public final class ActionDaemon extends AgentDaemon {
 	/** Constructor.
 	 * 
 	 *  From super() constructor, creates its own connection, however with
-	 *  the invalid socket number "-1".
+	 *  a random socket number.
 	 *  
 	 *  As ActionDaemons and PerceptionDaemons share the same connection,
 	 *  they must have their AgentConnection object configured by

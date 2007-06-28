@@ -18,8 +18,8 @@ public abstract class AgentDaemon extends Daemon {
 	/* Methods. */	
 	/** Constructor.
 	 * 
-	 *  From super() constructor, creates its own connection, however with
-	 *  the invalid socket number "-1".
+	 *  Creates its own connection, however with
+	 *  a random socket number.
 	 *  
 	 *  As subclassses ActionDaemons and PerceptionDaemons share the same connection,
 	 *  they must have their AgentConnection object configured by

@@ -13,10 +13,15 @@ import view.connection.AgentConnection;
 import view.message.Message;
 import model.Environment;
 import model.agent.Agent;
+import model.agent.OpenSociety;
+import model.agent.SeasonalAgent;
 import model.agent.Society;
-import model.interfaces.XMLable;
+import control.configuration.AgentCreationConfiguration;
 import control.configuration.EnvironmentCreationConfiguration;
+import control.configuration.Orientation;
+import control.configuration.SimulationConfiguration;
 import control.simulator.Simulator;
+import control.simulator.SimulatorStates;
 import control.translator.MessageTranslator;
 
 /** Implements the main daemon of SimPatrol, the one that
@@ -29,12 +34,9 @@ public final class MainDaemon extends Daemon {
 	
 	/** The simulator of SimPatrol. */
 	private Simulator simulator;
-
-	/** The generator of numbers for the UDP socket connections. */
-	private SocketNumberGenerator socket_number_generator;
 	
-	/** The environment of the simulation. */
-	private Environment environment;
+	/** The generator of numbers for the UDP socket connections. */
+	private SocketNumberGenerator socket_number_generator;	
 		
 	/* Methods. */
 	/** Constructor.
@@ -43,10 +45,10 @@ public final class MainDaemon extends Daemon {
 	 *  @throws SocketException */
 	public MainDaemon(Simulator simulator, int local_socket) throws SocketException {
 		super(local_socket);
-		this.simulator = simulator;
-		this.stop_working = false;
+		
+		this.stop_working = false;		
+		this.simulator = simulator;				
 		this.socket_number_generator = new SocketNumberGenerator(local_socket);
-		this.environment = null;
 	}
 	
 	/** Indicates that the daemon must stop working. */
@@ -54,124 +56,246 @@ public final class MainDaemon extends Daemon {
 		this.stop_working = true;
 	}
 	
-	/** Obtains the environment of the simulation. 
-	 *  @throws IOException 
-	 *  @throws SAXException 
-	 *  @throws ParserConfigurationException */
-	private void listenToEnvironment() throws ParserConfigurationException, SAXException, IOException {
-		// screen message
-		System.out.println("[SimPatrol.MainDaemon] Listening to the environment's configuration...");
-		
-		// while there's no environment
-		while(this.environment == null) {
-			// listens to some message
-			String str_message = null;
-			do {
-				str_message = this.buffer.remove();
-			} while(str_message == null);
+	/** Treats a given message eventually containing
+	 *  an "environment creation configuration".
+	 *  @param message The message to be treated. 
+	 *  @throws IOException */
+	private void treatEnvironmentCreationConfiguration(Message message) throws IOException {
+		// if the content of the message is
+		// an "environment creation configuration"
+		if(message.getContent() instanceof EnvironmentCreationConfiguration) {
+			// obtains the "environment creation configuration"
+			EnvironmentCreationConfiguration configuration = (EnvironmentCreationConfiguration) message.getContent();
 			
-			// mounts the message and obtains its content
-			XMLable content = MessageTranslator.getMessage(str_message).getContent();
+			// obtains the environment
+			Environment environment = configuration.getEnvironment();
 			
-			// if the content is an environment creation configuration
-			if(content instanceof EnvironmentCreationConfiguration) {
-				// obtains the environment
-				this.environment = ((EnvironmentCreationConfiguration) content).getEnvironment();
+			// screen message
+			System.out.println("[SimPatrol.MainDaemon] Environment obtained:");
+			System.out.print(environment.toXML(0));
+			
+			// sets the environment of the simulator
+			this.simulator.setEnvironment(environment);
+			
+			// creates the orientation to the remote contact
+			Orientation orientation = new Orientation();
+			
+			// obtains the societies of the environment
+			Society[] societies = environment.getSocieties();
+			
+			// for each society of the environment
+			for(int i = 0; i < societies.length; i++) {
+				// obtains its agents
+				Agent[] agents = societies[i].getAgents();
+				
+				// for each agent
+				for(int j = 0; j < agents.length; j++) {
+					// obtains its perception and action daemons
+					AgentDaemon[] agent_daemons = this.getAgentDaemons(agents[j]);
+					
+					// adds its agent daemons to the simulator
+					this.simulator.addPerceptionDaemon((PerceptionDaemon) agent_daemons[0]);
+					this.simulator.addActionDaemon((ActionDaemon) agent_daemons[1]);
+					
+					// starts the agent daemons
+					agent_daemons[0].start();
+					agent_daemons[1].start();
+					
+					// fills the orientation
+					orientation.addItem(agent_daemons[0].getUDPSocketNumber(), agents[j].getObjectId());
+				}
+			}
+			
+			// sends the orientation as a message to the remote contact
+			Message orientation_message = new Message(orientation);
+			this.connection.send(orientation_message.toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		}
+	}
+
+	/** Treats a given message eventually containing
+	 *  a "simulation configuration".
+	 *  @param message The message to be treated. 
+	 *  @throws IOException */
+	private void treatSimulationConfiguration(Message message) throws IOException {
+		// if the content of the message is
+		// a "simulation configuration"
+		if(message.getContent() instanceof SimulationConfiguration) {
+			// obtains the "simulation configuration"
+			SimulationConfiguration configuration = (SimulationConfiguration) message.getContent();
+			
+			// if the simulator is still in the CONFIGURING state
+			if(this.simulator.getState() == SimulatorStates.CONFIGURING) {
+				// starts the simulation
+				this.simulator.startSimulation(configuration.getSimulation_time());
 				
 				// screen message
-				System.out.println("[SimPatrol.MainDaemon] Environment obtained:");
-				System.out.print(this.environment.toXML(0));
-				
-				// activates the agent daemons for the eventual agents
-				Society[] societies = this.environment.getSocieties();
-				for(int i = 0; i < societies.length; i++)
-					this.addAgentDaemons(societies[i].getAgents());				
-				
-				// sends the orientation message to the remote contact
-				// TODO implementar!
+				System.out.println("[SimPatrol.MainDaemon] Simulation started:");
+				System.out.println("Planned simulation time: " + configuration.getSimulation_time());
 			}
+			
+			// sends an empty orientation message to the remote contact
+			Message orientation_message = new Message(new Orientation());
+			this.connection.send(orientation_message.toXML(0), configuration.getSender_address(), configuration.getSender_socket());			
+		}
+	}
+
+	/** Treats a given message eventually containing
+	 *  an "agent creation configuration".
+	 *  @param message The message to be treated. 
+	 *  @throws IOException */
+	private void treatAgentCreationConfiguration(Message message) throws IOException {
+		// if the content of the message is
+		// an "agent creation configuration"
+		if(message.getContent() instanceof AgentCreationConfiguration) {
+			// obtains the "agent creation configuration"
+			AgentCreationConfiguration configuration = (AgentCreationConfiguration) message.getContent();
+			
+			// creates the orientation to the remote contact
+			Orientation orientation = new Orientation();
+			
+			// obtains the agent
+			Agent agent = configuration.getAgent();
+			
+			// obtains the id of the society where the agent must be added
+			String society_id = configuration.getSociety_id();
+			
+			// tries to find the society with the obtained id
+			Society society = null;
+			Society[] societies = this.simulator.getEnvironment().getSocieties();			
+			for(int i = 0; i < societies.length; i++)
+				if(societies[i].getObjectId().equals(society_id))
+					society = societies[i];
+			
+			// if the society exists and is an open society
+			if(society instanceof OpenSociety) {
+				// adds the new agent to the society
+				((OpenSociety) society).addAgent((SeasonalAgent) agent);
+				
+				// obtains its perception and action daemons
+				AgentDaemon[] agent_daemons = this.getAgentDaemons(agent);
+				
+				// adds its agent daemons to the simulator
+				this.simulator.addPerceptionDaemon((PerceptionDaemon) agent_daemons[0]);
+				this.simulator.addActionDaemon((ActionDaemon) agent_daemons[1]);
+				
+				// starts the agent daemons
+				agent_daemons[0].start();
+				agent_daemons[1].start();
+				
+				// fills the orientation
+				orientation.addItem(agent_daemons[0].getUDPSocketNumber(), agent.getObjectId());
+				
+				// screen message
+				System.out.println("[SimPatrol.MainDaemon] Agent added:");
+				System.out.print(agent.toXML(0));
+			}
+			// else, fills the orientation with a wrong socket number (-1)		
+			else orientation.addItem(-1, agent.getObjectId());
+			
+			// sends the orientation as a message to the remote contact
+			Message orientation_message = new Message(orientation);
+			this.connection.send(orientation_message.toXML(0), configuration.getSender_address(), configuration.getSender_socket());
 		}
 	}
 	
-	/** Adds agent daemons to the simulator, based on the given agents.
-	 *  @param agents The agents whose daemons must be created. */
-	private void addAgentDaemons(Agent[] agents) {
-		// for each agent
-		for(int i = 0; i < agents.length; i++) {
-			// generates a socket number
-			int socket_number = this.socket_number_generator.generateSocketNumber();
+	/** Obtains the agent daemons for the given agent. */
+	private AgentDaemon[] getAgentDaemons(Agent agent) {
+		// the answer for the method
+		AgentDaemon[] answer = new AgentDaemon[2];
+		
+		// creates a perception daemon
+		PerceptionDaemon perception_daemon = null;
+		while(perception_daemon == null)
+			try { perception_daemon = new PerceptionDaemon(agent); }
+			catch(SocketException e) { perception_daemon = null; };
+		
+		// creates an action daemon
+		ActionDaemon action_daemon = null;
+		while(action_daemon == null)
+			try { action_daemon = new ActionDaemon(agent); }
+			catch(SocketException e) { action_daemon = null; };
 			
-			// creates a perception daemon
-			PerceptionDaemon perception_daemon = null;
-			while(perception_daemon == null) {
-				try { perception_daemon = new PerceptionDaemon(agents[i]); }
-				catch(SocketException e) { perception_daemon = null; };
-			}
-			
-			// creates an action daemon
-			ActionDaemon action_daemon = null;
-			while(action_daemon == null) {
-				try { action_daemon = new ActionDaemon(agents[i]); }
-				catch(SocketException e) { action_daemon = null; };
-			}
-			
-			// creates a new agent connection
-			AgentConnection connection = null;
-			try { connection = new AgentConnection(socket_number, perception_daemon.getBuffer(), action_daemon.getBuffer()); }
-			catch(SocketException e) {
-				// try again
-				Agent[] try_again = {agents[i]};
-				this.addAgentDaemons(try_again);
-			}
-			
-			// configures the perception and action daemons connection
-			perception_daemon.setConnection(connection);
-			action_daemon.setConnection(connection);
-			
-			// adds the daemons to the simulator
-			this.simulator.addPerceptionDaemon(perception_daemon);
-			this.simulator.addActionDaemon(action_daemon);
-			
-			// starts the daemons
-			perception_daemon.start();
-			action_daemon.start();
-		}		
+		// creates a new agent connection
+		AgentConnection connection = null;
+		while(connection == null)
+			try { connection = new AgentConnection(this.socket_number_generator.generateSocketNumber(), perception_daemon.getBuffer(), action_daemon.getBuffer()); }
+			catch(SocketException e) { connection = null; };
+		
+		// configures the perception and action daemons' connection
+		perception_daemon.setConnection(connection);
+		action_daemon.setConnection(connection);
+		
+		// adds the daemons to the answer
+		answer[0] = perception_daemon;
+		answer[1] = action_daemon;
+		
+		// returns the answer
+		return answer;
 	}
 	
 	public void run() {
-		// listens to the environment
-		try { this.listenToEnvironment(); }
-		catch (ParserConfigurationException e1) { e1.printStackTrace(); }
-		catch (SAXException e1) { e1.printStackTrace(); }
-		catch (IOException e1) { e1.printStackTrace(); }
-		
-		// listens to configurations
-		// screen message
-		System.out.println("[SimPatrol.MainDaemon] Listening to some configuration...");
-		
-		// whenever the daemon is active
-		while(!this.stop_working) {
-			// tries to obtain a message from the buffer
-			String str_message = this.buffer.remove();
+		// 1st. listens to some message of "environment configuration creation"
+		while(this.simulator.getEnvironment() == null) {
+			// screen message
+			System.out.println("[SimPatrol.MainDaemon] Listening to some environment...");
 			
-			// if there's a message
-			if(str_message != null) {
-				// obtains the message object
-				Message message = null;
-				try { message = MessageTranslator.getMessage(str_message); }
+			// obtains a string message from the buffer
+			String str_message = null;
+			while(str_message == null)
+				str_message = this.buffer.remove();
+			
+			// obtains the message object
+			Message message = null;
+			try { message = MessageTranslator.getMessage(str_message); }
+			catch (ParserConfigurationException e) { e.printStackTrace(); }
+			catch (SAXException e) { e.printStackTrace(); }
+			catch (IOException e) { e.printStackTrace();}
+			
+			// if it's a valid message
+			if(message != null)
+				try { this.treatEnvironmentCreationConfiguration(message); }
+				catch (IOException e) { this.simulator.setEnvironment(null); };
+		}
+		
+		// 2nd.
+		// forever, listen to some message of "agent creation configuration"
+		// or "simulation configuration"
+		while(!this.stop_working) {
+			// screen message
+			System.out.println("[SimPatrol.MainDaemon] Listening to some configuration...");
+			
+			// obtains a string message from the buffer
+			String str_message = null;
+			while(str_message == null)
+				str_message = this.buffer.remove();
+			
+			// obtains the message object and
+			// tries to obtain it as a "simulation configuration" message
+			Message message = null;
+			try { message = MessageTranslator.getMessage(str_message); }
+			catch (ParserConfigurationException e) { e.printStackTrace(); }
+			catch (SAXException e) { e.printStackTrace(); }
+			catch (IOException e) { e.printStackTrace(); }
+			
+			// if succeded (message is not null), treats the "simulation configuration"
+			if(message != null)
+				try { this.treatSimulationConfiguration(message); }
+				catch (IOException e1) { e1.printStackTrace(); }
+				
+			else {
+				try { message = MessageTranslator.getAgentCreationConfigurationMessage(str_message, this.simulator.getEnvironment().getGraph()); }
 				catch (ParserConfigurationException e) { e.printStackTrace(); }
-				catch (SAXException e) { e.printStackTrace();}
-				catch (IOException e) { e.printStackTrace(); }
+				catch (SAXException e) { e.printStackTrace(); }
+				catch (IOException e) { e.printStackTrace(); };
 				
-				// depending on the type of the message
-				// TODO implementar!!
-				
-				// screen message
-				System.out.println("[SimPatrol.MainDaemon] Listening to some configuration...");
+				// the treatment
+				if(message != null)
+					try { this.treatAgentCreationConfiguration(message); }
+					catch (IOException e) { e.printStackTrace(); };
 			}
 		}
 		
-		// stops the connection
+		// 3rd. stops the connection
 		this.connection.stopWorking();
 	}
 }
