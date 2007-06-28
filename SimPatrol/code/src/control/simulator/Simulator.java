@@ -36,7 +36,7 @@ public abstract class Simulator {
 	private int state;
 	
 	/** The environment of the simulation. */
-	private Environment environment;
+	protected Environment environment;
 	
 	/* Methods. */
 	/** Constructor.
