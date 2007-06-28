@@ -9,6 +9,10 @@ import java.net.SocketException;import model.agent.Agent;
 /** Implements the daemons of SimPatrol that attend
  *  an agent's intentions of actions. */
 public final class ActionDaemon extends AgentDaemon {
+	/* Attributes. */
+	/** Registers if the daemon shall stop working. */
+	private boolean stop_working;
+	
 	/* Methods. */
 	/** Constructor.
 	 * 
@@ -24,12 +28,19 @@ public final class ActionDaemon extends AgentDaemon {
 	 *  @throws SocketException */
 	public ActionDaemon(Agent agent) throws SocketException {
 		super(agent);
+		this.stop_working = false;
 	}
-
+	
+	/** Indicates that the daemon must stop working. */
+	public void stopWorking() {
+		this.stop_working = true;
+	}
+	
 	public void run() {
 		// screen message
 		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Listening to some intention...");
 		
+		while(!this.stop_working);
 		// TODO implementar!!!
 	}
 }

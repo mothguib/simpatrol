@@ -97,10 +97,6 @@ public final class MainDaemon extends Daemon {
 					this.simulator.addPerceptionDaemon((PerceptionDaemon) agent_daemons[0]);
 					this.simulator.addActionDaemon((ActionDaemon) agent_daemons[1]);
 					
-					// starts the agent daemons
-					agent_daemons[0].start();
-					agent_daemons[1].start();
-					
 					// fills the orientation
 					orientation.addItem(agent_daemons[0].getUDPSocketNumber(), agents[j].getObjectId());
 				}
@@ -177,10 +173,6 @@ public final class MainDaemon extends Daemon {
 				// adds its agent daemons to the simulator
 				this.simulator.addPerceptionDaemon((PerceptionDaemon) agent_daemons[0]);
 				this.simulator.addActionDaemon((ActionDaemon) agent_daemons[1]);
-				
-				// starts the agent daemons
-				agent_daemons[0].start();
-				agent_daemons[1].start();
 				
 				// fills the orientation
 				orientation.addItem(agent_daemons[0].getUDPSocketNumber(), agent.getObjectId());

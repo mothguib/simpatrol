@@ -9,6 +9,10 @@ import java.net.SocketException;import model.agent.Agent;
 /** Implements the daemons of SimPatrol that attend
  *  an agent's requisitions for perceptions. */
 public final class PerceptionDaemon extends AgentDaemon {
+	/* Attributes. */
+	/** Registers if the daemon shall stop working. */
+	private boolean stop_working;
+	
 	/* Methods. */
 	/** Constructor.
 	 * 
@@ -24,12 +28,19 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 *  @throws SocketException */
 	public PerceptionDaemon(Agent agent) throws SocketException {
 		super(agent);
+		this.stop_working = false;
 	}
-
+	
+	/** Indicates that the daemon must stop working. */
+	public void stopWorking() {
+		this.stop_working = true;
+	}
+	
 	public void run() {
 		// screen message
 		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Listening to some requisition...");
 		
+		while(!this.stop_working);
 		// TODO implementar!!!
 	}
 }
