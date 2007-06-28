@@ -175,6 +175,11 @@ public class Vertex implements XMLable {
 		return this.out_edges.contains(edge);
 	}
 	
+	/** Increments the idleness of the vertex. */
+	public void incIdleness() {
+		this.idleness++;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
