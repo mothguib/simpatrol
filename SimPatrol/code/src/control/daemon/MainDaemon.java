@@ -292,8 +292,5 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); };
 			}
 		}
-		
-		// 3rd. stops the connection
-		this.connection.stopWorking();
 	}
 }
