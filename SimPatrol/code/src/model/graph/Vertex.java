@@ -178,6 +178,9 @@ public class Vertex implements XMLable {
 	/** Increments the idleness of the vertex. */
 	public void incIdleness() {
 		this.idleness++;
+		
+		// screen message
+		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " idleness " + this.idleness + ".");		
 	}
 	
 	public String toXML(int identation) {
