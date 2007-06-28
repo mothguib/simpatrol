@@ -37,7 +37,7 @@ public class Vertex implements XMLable {
 	private boolean visibility = true;
 
 	/** Registers the idleness of this vertex. */
-	private int idleness;
+	protected int idleness;
 
 	/** Expresses if this vertex is a point of recharging the energy
 	 *  of the patrollers.

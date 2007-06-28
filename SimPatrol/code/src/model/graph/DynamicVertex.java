@@ -68,6 +68,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
 		
 		// if is_appering is FALSE, memorizes the edges that are appearing
+		// and resets its idleness
 		if(!is_appearing) {
 			this.appearing_edges = new HashSet<Edge>();
 			
@@ -89,7 +90,10 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 						this.appearing_edges.add((Edge) edges_array[i]);
 						((Edge) edges_array[i]).setIsAppearing(false);
 					}
-			}						
+			}
+			
+			// resets its idleness
+			this.idleness = 0;
 		}
 		// if is_appearing is TRUE...
 		else {
