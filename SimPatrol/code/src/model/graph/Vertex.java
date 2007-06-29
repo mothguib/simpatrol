@@ -175,9 +175,10 @@ public class Vertex implements XMLable {
 		return this.out_edges.contains(edge);
 	}
 	
-	/** Increments the idleness of the vertex. */
-	public void incIdleness() {
-		this.idleness++;
+	/** Increments the idleness of the vertex by the given factor.
+	 *  @param factor The factor added to the idleness. */
+	public void incIdleness(int factor) {
+		this.idleness = this.idleness + factor;
 		
 		// screen message
 		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " idleness " + this.idleness + ".");		
