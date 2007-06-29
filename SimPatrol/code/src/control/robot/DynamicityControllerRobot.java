@@ -23,24 +23,26 @@ public final class DynamicityControllerRobot extends Robot {
 		this.object = object;
 	}
 	
-	public void act() {
-		// if the dynamic object is appering
-		if(this.object.isAppearing()) {
-			// atualizes the appearing tpd
-			this.object.getAppearingTPD().nextBoolean();
+	public void act(int time_gap) {
+		for(int i = 0; i < time_gap; i++) {		
+			// if the dynamic object is appering
+			if(this.object.isAppearing()) {			
+				// atualizes the appearing tpd
+				this.object.getAppearingTPD().nextBoolean();
 			
-			// verifies if the object must disappear now
-			if(this.object.getDisappearingTPD().nextBoolean())
-				this.object.setIsAppearing(false);
-		}
-		// else
-		else {
-			// verifies if the object must appear now
-			if(this.object.getAppearingTPD().nextBoolean())
-				this.object.setIsAppearing(true);
+				// verifies if the object must disappear now
+				if(this.object.getDisappearingTPD().nextBoolean())
+					this.object.setIsAppearing(false);
+			}
+			// else
+			else {
+				// verifies if the object must appear now
+				if(this.object.getAppearingTPD().nextBoolean())
+					this.object.setIsAppearing(true);
 			
-			// atualizes the disappearing tpd
-			this.object.getDisappearingTPD().nextBoolean();
+				// atualizes the disappearing tpd
+				this.object.getDisappearingTPD().nextBoolean();
+			}
 		}
 	}
 }
