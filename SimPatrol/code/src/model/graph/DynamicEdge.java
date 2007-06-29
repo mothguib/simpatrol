@@ -41,7 +41,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	public DynamicEdge(Vertex emitter, Vertex collector, boolean oriented, double length, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing) {
 		super(emitter, collector, oriented, length);
 		this.appearing_tpd = appearing_tpd;
-		this.disappearing_tpd = appearing_tpd;
+		this.disappearing_tpd = disappearing_tpd;
 		
 		// configures the is_appearing attribute, based on
 		// emitter and collector vertexes
