@@ -56,8 +56,8 @@ public final class Clock extends Thread {
 			
 			if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
 			if(next_ref - prev_ref > this.step - 1) {
-				prev_ref = Calendar.getInstance().get(this.unity);
-				this.object.act();
+				this.object.act(next_ref - prev_ref);
+				prev_ref = Calendar.getInstance().get(this.unity); 				
 			}
 		}
 	}
