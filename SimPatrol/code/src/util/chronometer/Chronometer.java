@@ -67,8 +67,8 @@ public final class Chronometer extends Thread {
 			
 			if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;			
 			if(next_ref - prev_ref > this.step - 1) {
-				prev_ref = Calendar.getInstance().get(this.unity);
 				this.elapsed_time = this.elapsed_time + (next_ref - prev_ref);
+				prev_ref = Calendar.getInstance().get(this.unity);				
 			}
 			
 			// checks if the elapsed time hit the deadline
