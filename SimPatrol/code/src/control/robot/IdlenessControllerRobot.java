@@ -24,13 +24,13 @@ public final class IdlenessControllerRobot extends Robot {
 		this.vertex = vertex;
 	}
 
-	public void act() {
+	public void act(int time_gap) {
 		// increments the idleness of the vertex
 		// if it's appearing
 		if(this.vertex instanceof DynamicVertex) {
 			if(((DynamicVertex) this.vertex).isAppearing())
-				this.vertex.incIdleness();
+				this.vertex.incIdleness(time_gap);
 		}
-		else this.vertex.incIdleness();
+		else this.vertex.incIdleness(time_gap);
 	}
 }
