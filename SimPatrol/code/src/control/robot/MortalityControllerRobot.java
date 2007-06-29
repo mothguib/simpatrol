@@ -29,20 +29,22 @@ public final class MortalityControllerRobot extends Robot {
 		this.simulator = simulator;
 	}
 
-	public void act() {
-		// obtains the probability distribution for the death of the mortal object
-		EventTimeProbabilityDistribution death_tpd = this.object.getDeathTPD();
-		
-		// verifies if the object must die now
-		if(death_tpd != null && death_tpd.nextBoolean()) {
-			// kills the object
-			this.object.die();
+	public void act(int time_gap) {
+		for(int i = 0; i < time_gap; i++) {
+			// obtains the probability distribution for the death of the mortal object
+			EventTimeProbabilityDistribution death_tpd = this.object.getDeathTPD();
 			
-			// stops this robot
-			this.stopWorking();
-			
-			// removes this robot from the rt simulator
-			this.simulator.removeMortalityControllerRobot(this);
-		}			
+			// if there's a death tpd and the object must die now 
+			if(death_tpd != null && death_tpd.nextBoolean()) {
+				// kills the object
+				this.object.die();
+				
+				// stops this robot
+				this.stopWorking();
+				
+				// removes this robot from the rt simulator
+				this.simulator.removeMortalityControllerRobot(this);
+			}
+		}
 	}
 }
