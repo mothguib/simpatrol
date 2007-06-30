@@ -67,7 +67,13 @@ public class Connection extends Thread {
 	 *  @throws SocketException */
 	public void start(int local_socket_number) throws SocketException {
 		this.socket = new UDPSocket(local_socket_number);
-		this.start();
+		super.start();
+	}
+	
+	/** Give preference to use this.start(int local_socket_number). */
+	@Deprecated
+	public void start() {
+		super.start();
 	}
 	
 	public void run() {
