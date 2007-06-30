@@ -20,12 +20,10 @@ public abstract class Daemon extends Thread {
 	protected Queue<String> buffer;
 	
 	/* Methods. */
-	/** Constructor.
-	 *  @param local_socket_number The number of the local UDP socket.
-	 *  @throws SocketException */
-	public Daemon(int local_socket_number) throws SocketException {
+	/** Constructor. */
+	public Daemon() {
 		this.buffer = new Queue<String>();
-		this.connection = new Connection(local_socket_number, this.buffer);
+		this.connection = new Connection(this.buffer);		
 	}
 	
 	/** Returns the number of the local UDP socket
@@ -41,8 +39,17 @@ public abstract class Daemon extends Thread {
 		return this.buffer;
 	}
 	
+	/** Starts the work of the daemon.
+	 *  @param local_socket_number The number of the local UDP socket. 
+	 *  @throws SocketException */
+	public void start(int local_socket_number) throws SocketException {
+		if(!this.connection.isAlive()) this.connection.start(local_socket_number);
+		super.start();
+	}
+	
+	/** Give preference to use this.start(int local_socket_number) */
+	@Deprecated
 	public void start() {
 		super.start();
-		if(!this.connection.isAlive()) this.connection.start();
 	}
 }

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import util.udp.SocketNumberGenerator;
 import view.connection.AgentConnection;
 import view.message.Message;
 import model.Environment;
@@ -35,20 +34,15 @@ public final class MainDaemon extends Daemon {
 	/** The simulator of SimPatrol. */
 	private Simulator simulator;
 	
-	/** The generator of numbers for the UDP socket connections. */
-	private SocketNumberGenerator socket_number_generator;	
-		
 	/* Methods. */
 	/** Constructor.
 	 *  @param simulator The SimPatrol's simulator.
-	 * 	@param local_socket_number The number of the local UDP socket.
 	 *  @throws SocketException */
-	public MainDaemon(Simulator simulator, int local_socket) throws SocketException {
-		super(local_socket);
+	public MainDaemon(Simulator simulator) throws SocketException {
+		super();
 		
 		this.stop_working = false;		
-		this.simulator = simulator;				
-		this.socket_number_generator = new SocketNumberGenerator(local_socket);
+		this.simulator = simulator;
 	}
 	
 	/** Indicates that the daemon must stop working. */
@@ -202,22 +196,13 @@ public final class MainDaemon extends Daemon {
 		AgentDaemon[] answer = new AgentDaemon[2];
 		
 		// creates a perception daemon
-		PerceptionDaemon perception_daemon = null;
-		while(perception_daemon == null)
-			try { perception_daemon = new PerceptionDaemon(agent); }
-			catch(SocketException e) { perception_daemon = null; };
+		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent);
 		
 		// creates an action daemon
-		ActionDaemon action_daemon = null;
-		while(action_daemon == null)
-			try { action_daemon = new ActionDaemon(agent); }
-			catch(SocketException e) { action_daemon = null; };
-			
+		ActionDaemon action_daemon = new ActionDaemon(agent);
+		
 		// creates a new agent connection
-		AgentConnection connection = null;
-		while(connection == null)
-			try { connection = new AgentConnection(this.socket_number_generator.generateSocketNumber(), perception_daemon.getBuffer(), action_daemon.getBuffer()); }
-			catch(SocketException e) { connection = null; };
+		AgentConnection connection = new AgentConnection(perception_daemon.getBuffer(), action_daemon.getBuffer());
 		
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);
