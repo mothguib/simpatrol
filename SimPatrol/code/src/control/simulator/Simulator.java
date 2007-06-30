@@ -5,6 +5,7 @@ package control.simulator;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,6 +16,8 @@ import model.agent.Society;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
 import org.xml.sax.SAXException;
+
+import util.udp.SocketNumberGenerator;
 import control.daemon.ActionDaemon;
 import control.daemon.MainDaemon;
 import control.daemon.PerceptionDaemon;
@@ -31,6 +34,9 @@ public abstract class Simulator {
 	/** The set of action daemons of SimPatrol. */
 	private Set<ActionDaemon> action_daemons;
 	
+	/** The generator of the numbers for the eventually created UDP sockets. */
+	private SocketNumberGenerator socket_number_generator;
+	
 	/** Holds the current state of the simulator.
 	 *  @see SimulatorStates */
 	private int state;
@@ -46,12 +52,15 @@ public abstract class Simulator {
 	 *  @throws ParserConfigurationException */
 	public Simulator(int local_socket_number) throws ParserConfigurationException, SAXException, IOException {
 		// creates and starts the main daemon
-		this.main_daemon = new MainDaemon(this, local_socket_number);
-		this.main_daemon.start();
+		this.main_daemon = new MainDaemon(this);
+		this.main_daemon.start(local_socket_number);
 		
 		// initiates the sets of agent_daemons
 		this.perception_daemons = new HashSet<PerceptionDaemon>();
 		this.action_daemons = new HashSet<ActionDaemon>();
+		
+		// initiates the generator of the numbers of the UDP sockets
+		this.socket_number_generator = new SocketNumberGenerator(local_socket_number);
 		
 		// sets the current state as CONFIGURING
 		this.state = SimulatorStates.CONFIGURING;
@@ -62,18 +71,20 @@ public abstract class Simulator {
 	
 	/** Adds a given perception daemon to the set of perception daemons,
 	 *  and starts it.
-	 *  @param perception_daemon The perception daemon to be added. */
-	public void addPerceptionDaemon(PerceptionDaemon perception_daemon) {
+	 *  @param perception_daemon The perception daemon to be added. 
+	 *  @throws SocketException */
+	public void addPerceptionDaemon(PerceptionDaemon perception_daemon) throws SocketException {
 		this.perception_daemons.add(perception_daemon);
-		perception_daemon.start();
+		perception_daemon.start(this.socket_number_generator.generateSocketNumber());
 	}
 	
 	/** Adds a given action daemon to the set of action daemons,
 	 *  and starts it.
-	 *  @param action_daemon The action daemon to be added. */
-	public void addActionDaemon(ActionDaemon action_daemon) {
+	 *  @param action_daemon The action daemon to be added. 
+	 *  @throws SocketException */
+	public void addActionDaemon(ActionDaemon action_daemon) throws SocketException {
 		this.action_daemons.add(action_daemon);
-		action_daemon.start();
+		action_daemon.start(this.socket_number_generator.generateSocketNumber());
 	}
 	
 	/** Returns the state of the simulator.
