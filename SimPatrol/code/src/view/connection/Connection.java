@@ -24,13 +24,11 @@ public class Connection extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
-	 *  @param local_socket_number The number of the local UDP socket.
-	 *  @param buffer The buffer where the connection writes the received messages.
-	 *  @throws SocketException */
-	public Connection(int local_socket_number, Queue<String> buffer) throws SocketException {
-		this.socket = new UDPSocket(local_socket_number);
-		this.buffer = buffer;
+	 *  @param buffer The buffer where the connection writes the received messages. */
+	public Connection(Queue<String> buffer) {
 		this.stop_working = false;
+		this.socket = null;
+		this.buffer = buffer;
 	}
 
 	/** Indicates that the connection must stop working. */
@@ -42,7 +40,8 @@ public class Connection extends Thread {
 	 *  @param message The string message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
-		this.socket.send(message);
+		if(this.socket != null)
+			this.socket.send(message);
 	}
 	
 	/** Sends a given string message.
@@ -51,13 +50,24 @@ public class Connection extends Thread {
 	 *  @param remote_socket_number The number of the UDP socket of the receiver. 
 	 *  @throws IOException */
 	public void send(String message, String remote_socket_address, int remote_socket_number) throws IOException {
-		this.socket.send(message, remote_socket_address, remote_socket_number);
+		if(this.socket != null)
+			this.socket.send(message, remote_socket_address, remote_socket_number);
 	}
 	
-	/** Return the number of UDP socket.
-	 *  @return The number of the UDP soket. */
+	/** Return the number of UDP socket connection.
+	 *  @return The number of the UDP socket, if previously created; -1 if not. */
 	public int getUDPSocketNumber() {
-		return this.socket.getSocketNumber();
+		if(this.socket != null)
+			return this.socket.getSocketNumber();
+		else return -1;
+	}
+	
+	/** Starts the work of the connection.
+	 *  @param The number of the UDP socket.
+	 *  @throws SocketException */
+	public void start(int local_socket_number) throws SocketException {
+		this.socket = new UDPSocket(local_socket_number);
+		this.start();
 	}
 	
 	public void run() {
