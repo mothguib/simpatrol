@@ -14,9 +14,9 @@ import model.graph.Vertex;
 import org.xml.sax.SAXException;
 
 import util.etpd.SpecificEventTimeProbabilityDistribution;
-import control.parser.GraphTranslator;
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
+import control.simulator.Simulator;
 
 public class Teste {
 
@@ -27,7 +27,7 @@ public class Teste {
 	 * @throws ParserConfigurationException 
 	 */
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {		
-		// leitura do grafo
+		/*// leitura do grafo
 		Graph grafo = GraphTranslator.getGraph("c:/teste.txt");
 		System.out.println(grafo.toXML(0));
 		Vertex[] vertexes = grafo.getVertexes();		
@@ -63,7 +63,9 @@ public class Teste {
 		
 		System.out.println(grafo.toXML(0));
 		System.out.println(closed_society.toXML(0));
-		System.out.println(open_society.toXML(0));
+		System.out.println(open_society.toXML(0));*/
+		
+		RealTimeSimulator simulador = new RealTimeSimulator(5000);
 	}
 
 }
