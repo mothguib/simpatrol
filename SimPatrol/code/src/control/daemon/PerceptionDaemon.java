@@ -79,11 +79,15 @@ public final class PerceptionDaemon extends AgentDaemon {
 				// obtains the requisition
 				Requisition requisition = (Requisition) message.getContent();
 				
-				// while can't attend the requisition, do nothing
-				while(!this.can_attend);
+				// screen message
+				System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Requisition received:");
+				System.out.println(requisition.toXML(0));
 				
 				// the perception to be sent to the remote agent
 				Perception perception = null;
+				
+				// while can't attend the requisition, do nothing
+				while(!this.can_attend);
 				
 				// depending on the type of the requisition
 				switch(requisition.getPerception_type()) {
