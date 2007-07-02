@@ -12,6 +12,8 @@ import org.xml.sax.SAXException;
 import control.configuration.AgentCreationConfiguration;
 import control.configuration.Configuration;
 import control.configuration.Orientation;
+import control.requisition.Answer;
+import control.requisition.Requisition;
 import view.message.Message;
 
 /** Implements a translator that obtains messages from a given xml source.
@@ -35,19 +37,25 @@ public abstract class MessageTranslator extends Translator {
 		Element message_element = parseString(xml_string);
 		
 		// tries to obtain its content
-		// 1st: tries to obtain a configuration
+		// 1st: tries to obtain a requisition
+		Requisition[] requisitions = RequisitionTranslator.getRequisitions(message_element);
+		if(requisitions.length > 0) return new Message(requisitions[0]);
+		
+		// 2nd: tries to obtain a configuration
 		// (except for an "agent creation configuration")
 		Configuration[] configurations = ConfigurationTranslator.getConfigurations(message_element);
 		if(configurations.length > 0) return new Message(configurations[0]);
 		
-		// 2nd: tries to obtain an orientation
+		// 3rd: tries to obtain an orientation
 		Orientation[] orientations = ConfigurationTranslator.getOrientations(message_element);
 		if(orientations.length > 0) return new Message(orientations[0]);
 		
-		// TODO continuar e colocar na ordem ótima...
-		// 3rd: tries to obtain a requisition
 		// 4th: tries to obtain an answer
-		// 5th: tries to obtain an intention		
+		Answer[] answers = RequisitionTranslator.getAnswers(message_element);
+		if(answers.length > 0) return new Message(answers[0]);
+		
+		// TODO continuar e colocar na ordem ótima...		
+		// 5th: tries to obtain an intention
 		
 		// default answer
 		return null;
