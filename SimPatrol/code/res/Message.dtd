@@ -42,4 +42,4 @@
 <!ATTLIST requisition percetion_type (0) #REQUIRED>
 
 <!-- ANSWER -->
-<!ELEMENT answer (perception?)>
+<!ELEMENT answer (perception)>
