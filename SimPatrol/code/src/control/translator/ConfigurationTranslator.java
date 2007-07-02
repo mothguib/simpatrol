@@ -23,7 +23,8 @@ import control.configuration.SimulationConfiguration;
 
 /** Implements a translator that obtains configurations and orientations
  *  from a given XML source.
- *  @see Configuration */
+ *  @see Configuration
+ *  @see Orientation */
 public abstract class ConfigurationTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the configurations from the given XML element, except
