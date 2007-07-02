@@ -22,6 +22,12 @@ public final class Requisition implements XMLable {
 		this.perception_type = perception_type;
 	}
 	
+	/** Returns the type of perception required by the requisition.
+	 *  @return The type of the required perception. */
+	public int getPerception_type() {
+		return this.perception_type;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
