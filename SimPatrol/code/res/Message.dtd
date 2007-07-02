@@ -36,3 +36,10 @@
 <!ELEMENT ort_item EMPTY>
 <!ATTLIST ort_item agent_id CDATA #REQUIRED>
 <!ATTLIST ort_item socket CDATA #REQUIRED>
+
+<!-- REQUISITION -->
+<!ELEMENT requisition (EMPTY)>
+<!ATTLIST requisition percetion_type (0) #REQUIRED>
+
+<!-- ANSWER -->
+<!ELEMENT answer (perception?)>
