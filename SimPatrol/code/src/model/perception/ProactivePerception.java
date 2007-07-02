@@ -1,7 +1,9 @@
+/* ProactivePerception.java */
+
+/* The package of this class. */
 package model.perception;
 
-/**
- * @model.uin <code>design:node:::1uaqgf17uk73831ko5y</code>
- */
+/** Implements the perceptions of the agents of SimPatrol that
+ *  are produced by the simulator without requisitions. */
 public abstract class ProactivePerception extends Perception {
 }

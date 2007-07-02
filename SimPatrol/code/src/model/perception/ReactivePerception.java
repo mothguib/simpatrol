@@ -1,7 +1,9 @@
+/* ReactivePerception.java */
+
+/* The package of this class. */
 package model.perception;
 
-/**
- * @model.uin <code>design:node:::dombnf17uk738-eya5nv</code>
- */
+/** Implements the perceptions of the agents of SimPatrol that
+ *  are produced by the simulator only if required. */
 public abstract class ReactivePerception extends Perception {
 }
