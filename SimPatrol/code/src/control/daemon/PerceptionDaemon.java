@@ -81,7 +81,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 				
 				// screen message
 				System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Requisition obtained:");
-				System.out.println(requisition.toXML(0));
+				System.out.print(requisition.toXML(0));
 				
 				// the perception to be sent to the remote agent
 				Perception perception = null;
@@ -116,7 +116,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 						
 						// screen message
 						System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Perception produced:");
-						System.out.println(perception.toXML(0));
+						System.out.print(perception.toXML(0));
 					}
 					catch (IOException e) { e.printStackTrace(); }
 				}
