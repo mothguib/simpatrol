@@ -48,18 +48,12 @@ public final class Environment implements XMLable {
 	public Graph getGraph() {
 		return this.graph;
 	}
-
-	public String getObjectId() {
-		// an environment doesn't need an id
-		return null;
-	}
-
-	public void setObjectId(String object_id) {
-		// an environment doesn't need an id
-		// so, do nothing
-	}
-
-	public String toXML(int identation) {
+	
+	/** Obtains the XML version of this environment at the current moment.
+	 *  @param identation The identation to organize the XML. 
+	 *  @param current_time The current time, measured in cycles or in seconds.
+	 *  @return The XML version of this environment at the current moment. */	
+	public String toXML(int identation, int current_time) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -68,7 +62,7 @@ public final class Environment implements XMLable {
 		buffer.append("<environment>\n");
 		
 		// fills the buffer with the graph
-		buffer.append(this.graph.toXML(identation + 1));
+		buffer.append(this.graph.toXML(identation + 1, current_time));
 		
 		// fills the buffer with the societies
 		Object[] societies_array = this.societies.toArray();
@@ -81,5 +75,21 @@ public final class Environment implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();		
+	}
+	
+	/** Give preference to use this.toXML(int identation, int current_time) 
+	 * @deprecated */
+	public String toXML(int identation) {
+		return this.toXML(identation, (int) (System.currentTimeMillis() / 1000));
+	}
+	
+	public String getObjectId() {
+		// an environment doesn't need an id
+		return null;
+	}
+
+	public void setObjectId(String object_id) {
+		// an environment doesn't need an id
+		// so, do nothing
 	}
 }
