@@ -70,7 +70,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 		// returns the answer
 		return buffer.toString();
 	}
-
+	
 	public void die() {
 		// removes the agent from its society
 		this.society.removeAgent(this);
@@ -78,7 +78,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 		// screen message
 		System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " died.");
 	}
-
+	
 	public EventTimeProbabilityDistribution getDeathTPD() {
 		return this.death_tpd;
 	}
