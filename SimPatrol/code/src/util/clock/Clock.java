@@ -25,8 +25,10 @@ public final class Clock extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param name The name of the thread of the clock.
 	 *  @param object The object to be clocked. */
-	public Clock(Clockable object) {
+	public Clock(String name, Clockable object) {
+		super(name);
 		this.object = object;
 		this.stop_working = false;
 	}
