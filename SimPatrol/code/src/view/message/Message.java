@@ -45,6 +45,10 @@ public final class Message implements XMLable {
 		return buffer.toString();
 	}
 	
+	public boolean equals(XMLable object) {
+		return super.equals(object);
+	}
+	
 	public String getObjectId() {
 		// a message doesn't need an id
 		return null;
@@ -53,5 +57,5 @@ public final class Message implements XMLable {
 	public void setObjectId(String object_id) {
 		// a message doesn't need an id
 		// so, do nothing
-	}	
+	}
 }
