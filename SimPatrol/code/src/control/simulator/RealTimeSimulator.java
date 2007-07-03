@@ -140,7 +140,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// sets the current time to the graph, in order
 		// to calculate the idleness of the vertexes
-		this.environment.getGraph().setCurrentTime((int) System.currentTimeMillis() / 1000);
+		this.environment.getGraph().setCurrentTime(this.chronometer.getElapsedTime());
 		
 		// starts the dynamicity controller robots
 		this.startDynamicityControllerRobots();
@@ -159,6 +159,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// stops the mortality controller robots
 		this.stopMortalityControllerRobots();
+		
+		// TODO retirar linha abaixo!
+		System.out.println(this.environment.getGraph().toXML(0, this.chronometer.getElapsedTime()));
 	}
 	
 	public void startWorking() { 		
