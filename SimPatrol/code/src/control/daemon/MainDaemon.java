@@ -73,7 +73,7 @@ public final class MainDaemon extends Daemon {
 			
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Environment obtained:");
-			System.out.print(environment.toXML(0, (int) (System.currentTimeMillis() / 1000)));
+			System.out.print(environment.toXML(0, 0));
 			
 			// sets the environment of the simulator
 			this.simulator.setEnvironment(environment);
