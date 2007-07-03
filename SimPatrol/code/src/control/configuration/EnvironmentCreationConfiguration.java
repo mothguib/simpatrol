@@ -33,8 +33,12 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 	protected int getType() {
 		return ConfigurationTypes.ENVIRONMENT_CREATION; 
 	}
-
-	public String toXML(int identation) {
+	
+	/** Obtains the XML version of this configuration at the current moment.
+	 *  @param identation The identation to organize the XML. 
+	 *  @param current_time The current time, measured in cycles or in seconds.
+	 *  @return The XML version of this configuration at the current moment. */	
+	public String toXML(int identation, int current_time) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -46,7 +50,7 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 				      "\">\n");
 		
 		// puts the environment
-		buffer.append(this.environment.toXML(identation + 1));
+		buffer.append(this.environment.toXML(identation + 1, current_time));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
@@ -55,4 +59,10 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 		// return the answer to the method
 		return buffer.toString();
 	}
+	
+	/** Give preference to use this.toXML(int identation, int current_time) 
+	 * @deprecated */
+	public String toXML(int identation) {
+		return this.toXML(identation, (int) (System.currentTimeMillis() / 1000));
+	}	
 }
