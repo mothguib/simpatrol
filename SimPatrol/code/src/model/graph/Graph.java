@@ -162,7 +162,7 @@ public final class Graph implements XMLable {
 						
 						// obtains the edge between the starting vertex and its
 						// current neighbour
-						Edge[] edges = starting_vertex.getCommonEdges(neighbourhood[i]);
+						Edge[] edges = starting_vertex.getConnectingEdges(neighbourhood[i]);
 						
 						// for each edge
 						for(int j = 0; j < edges.length; j++) {
@@ -219,7 +219,11 @@ public final class Graph implements XMLable {
 		return null;
 	}
 	
-	public String toXML(int identation) {
+	/** Obtains the XML version of this graph at the current moment.
+	 *  @param identation The identation to organize the XML. 
+	 *  @param current_time The current time, measured in cycles or in seconds.
+	 *  @return The XML version of this graph at the current moment. */	
+	public String toXML(int identation, int current_time) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -232,7 +236,7 @@ public final class Graph implements XMLable {
 		// inserts the vertexes
 		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++)
-			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1));
+			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1, current_time));
 		
 		// inserts the edges
 		if(this.edges != null) {
@@ -247,6 +251,12 @@ public final class Graph implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();
+	}
+	
+	/** Give preference to use this.toXML(int identation, int current_time) 
+	 * @deprecated */
+	public String toXML(int identation) {
+		return this.toXML(identation, (int) (System.currentTimeMillis() / 1000));
 	}
 	
 	public String getObjectId() {

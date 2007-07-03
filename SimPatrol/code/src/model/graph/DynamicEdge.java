@@ -56,6 +56,18 @@ public final class DynamicEdge extends Edge implements Dynamic {
 				this.is_appearing = false;		
 	}
 	
+	/** Obtains a copy of the edge with the given copies of vertexes.
+	 *  @param copy_emitter The copy of the emitter.
+	 *  @param copy_collector The copy of the collector.
+	 *  @return The copy of the edge.*/
+	public DynamicEdge getCopy(Vertex copy_emitter, Vertex copy_collector) {
+		DynamicEdge answer = (DynamicEdge)super.getCopy(copy_emitter, copy_collector);
+		answer.appearing_tpd = this.appearing_tpd;
+		answer.disappearing_tpd = this.disappearing_tpd;
+
+		return answer;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer(super.toXML(identation));

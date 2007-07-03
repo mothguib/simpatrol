@@ -156,6 +156,34 @@ public class Edge implements XMLable {
 		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
 	}
 	
+	/** Returns the vertex of the edge that is not the
+	 *  one passed as a parameter.
+	 *  @param vertex The vertex whose pair is wanted.
+	 *  @return The other vertex of the edge. */
+	public Vertex getOtherVertex(Vertex vertex) {
+		if(this.collector.equals(vertex)) return this.emitter;
+		else return this.collector;
+	}
+	
+	/** Obtains a copy of the edge with the given copies of vertexes.
+	 *  @param copy_emitter The copy of the emitter.
+	 *  @param copy_collector The copy of the collector.
+	 *  @return The copy of the edge.*/
+	public Edge getCopy(Vertex copy_emitter, Vertex copy_collector) {
+		// registers if the original edge is oriented
+		boolean oriented = !this.emitter.isCollectorOf(this);
+		
+		// the copy		
+		Edge copy_edge = new Edge(copy_emitter, copy_collector, oriented, this.length);
+		copy_edge.id = this.id;
+		copy_edge.stigmas = this.stigmas;
+		copy_edge.visibility = this.visibility;
+		copy_edge.is_appearing = this.is_appearing;
+		
+		// returns the answer
+		return copy_edge;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
@@ -210,6 +238,12 @@ public class Edge implements XMLable {
 		// returns the buffer content
 		return buffer.toString();
 	}
+	
+	public boolean equals(Object object) {
+		if(object instanceof XMLable)
+			return this.id.equals(((XMLable) object).getObjectId());
+		else return super.equals(object);
+	}	
 	
 	public String getObjectId() {
 		return this.id;

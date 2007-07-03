@@ -6,6 +6,9 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+
+import control.simulator.CycledSimulator;
+import control.simulator.RealTimeSimulator;
 import model.interfaces.XMLable;
 
 /** Implements the vertexes of a Graph object.
@@ -35,10 +38,15 @@ public class Vertex implements XMLable {
 	/** Expresses if this vertex is visible in the graph.
 	 *  Its default value is TRUE. */
 	private boolean visibility = true;
-
-	/** Registers the idleness of this vertex. */
-	protected int idleness;
-
+	
+	/** Registers the last time when this vertex
+	 *  was visited by an agent. Measured in cycles,
+	 *  if the simulator is a cycled one, or in seconds,
+	 *  if it's a real time one.
+	 *  @see CycledSimulator
+	 *  @see RealTimeSimulator */
+	private int last_visit_time;
+	
 	/** Expresses if this vertex is a point of recharging the energy
 	 *  of the patrollers.
 	 *  Its default value is FALSE. */
@@ -52,7 +60,7 @@ public class Vertex implements XMLable {
 		this.in_edges = null;
 		this.out_edges = null;
 		this.stigmas = null;
-		this.idleness = 0;
+		this.last_visit_time = 0;
 	}
 	
 	/** Adds the passed edge to the vertex.
@@ -149,10 +157,10 @@ public class Vertex implements XMLable {
 		this.visibility = visibility;
 	}
 	
-	/** Configures the idleness of the vertex.
-	 *  @param idleness The idleness. */
-	public void setIdleness(int idleness) {
-		this.idleness = idleness;
+	/** Configures the last time this vertex was visited.
+	 *  @param time The time of the last visit, measured in cycles or in seconds. */
+	public void setLast_visit_time(int time) {
+		this.last_visit_time = time;
 	}
 	
 	/** Configures if the vertex is a fuel recharging point.
@@ -175,16 +183,118 @@ public class Vertex implements XMLable {
 		return this.out_edges.contains(edge);
 	}
 	
-	/** Increments the idleness of the vertex by the given factor.
-	 *  @param factor The factor added to the idleness. */
-	public void incIdleness(int factor) {
-		this.idleness = this.idleness + factor;
-		
-		// screen message
-		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " idleness " + this.idleness + ".");		
+	/** Configures the idleness of the vertex.
+	 *  @param idleness The idleness of the vertex, measured in cycles, or in seconds. */
+	public void setIdleness(int idleness) {
+		this.last_visit_time = this.last_visit_time - idleness;
 	}
 	
-	public String toXML(int identation) {
+	/** Calculates the idleness of the vertex at the current moment.
+	 *  @param current_time The current time to be considered in the calculation of the idleness. */
+	public int getIdleness(int current_time) {
+		return current_time - this.last_visit_time;
+	}
+	
+	/** Returns a copy of the vertex, with no edges.
+	 *  @return The copy of the vertex, without the edges. */
+	public Vertex getCopy() {
+		Vertex answer = new Vertex(this.label);
+		answer.id = this.id;
+		answer.stigmas = this.stigmas;
+		answer.priority = this.priority;
+		answer.visibility = this.visibility;
+		answer.last_visit_time = this.last_visit_time;
+		answer.fuel = this.fuel;
+		
+		return answer;
+	}
+	
+	/** Returns all the vertexes in the neighbourhood.
+	 *  @return The set of vertexes in the neighbourhood. */
+	public Vertex[] getNeighbourhood() {
+		// holds the set of neighbour vertexes
+		Set<Vertex> neighbourhood = new HashSet<Vertex>(); 
+		
+		// for each edge whose emitter is this vertex
+		if(this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for(int i = 0; i < out_edges_array.length; i++) {
+				// obtains the other vertex
+				Vertex other_vertex = ((Edge) out_edges_array[i]).getOtherVertex(this);
+				
+				// adds it to set of neighbours
+				neighbourhood.add(other_vertex);
+			}
+		}
+		
+		// for each edge whose collector is this vertex
+		if(this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
+			for(int i = 0; i < in_edges_array.length; i++) {
+				// obtains the other vertex
+				Vertex other_vertex = ((Edge) in_edges_array[i]).getOtherVertex(this);
+				
+				// adds it to set of neighbours
+				neighbourhood.add(other_vertex);
+			}
+		}
+		
+		// mounts and returns the answer
+		Object[] neighbourhood_array = neighbourhood.toArray();
+		Vertex[] answer = new Vertex[neighbourhood_array.length];
+		for(int i = 0; i < neighbourhood_array.length; i++)
+			answer[i] = (Vertex) neighbourhood_array[i];
+		return answer;
+	}
+	
+	/** Returns all the edges between this vertex and the given one.
+	 *  @param vertex The adjacent vertex whose edges shared with this vertex are to be returned.
+	 *  @return The edges in common between this vertex and the given one. */
+	public Edge[] getConnectingEdges(Vertex vertex) {
+		// holds the answer to the method
+		Set<Edge> shared_edges = new HashSet<Edge>();
+		
+		// for each edge whose emitter is this vertex
+		if(this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for(int i = 0; i < out_edges_array.length; i++) {
+				// obtains the current edge
+				Edge current_edge = (Edge) out_edges_array[i];
+				
+				// if the given vertex is the collector of the current edge,
+				// adds it to the answer
+				if(vertex.isCollectorOf(current_edge))
+					shared_edges.add(current_edge);
+			}
+		}
+		
+		// for each edge whose collector is this vertex
+		if(this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
+			for(int i = 0; i < in_edges_array.length; i++) {
+				// obtains the current edge
+				Edge current_edge = (Edge) in_edges_array[i];
+				
+				// if the given vertex is the emitter of the current edge,
+				// adds it to the answer
+				if(vertex.isEmitterOf(current_edge))
+					shared_edges.add(current_edge);
+			}
+		}
+		
+		// mounts and returns the answer
+		Object[] shared_edges_array = shared_edges.toArray();
+		Edge[] answer = new Edge[shared_edges_array.length];
+		for(int i = 0; i < shared_edges_array.length; i++)
+			answer[i] = (Edge) shared_edges_array[i];
+		return answer;
+	}
+	
+	/** Obtains the XML version of this vertex at the current moment.
+	 *  @param identation The identation to organize the XML. 
+	 *  @param current_time The current time, measured in cycles or in seconds.
+	 *  @return The XML version of this vertex at the current moment. */
+	public String toXML(int identation, int current_time) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -196,7 +306,7 @@ public class Vertex implements XMLable {
 				      "\" label=\"" + this.label +
 				      "\" priority=\"" + this.priority +
 				      "\" visibility=\"" + this.visibility +
-				      "\" idleness=\"" + this.idleness +
+				      "\" idleness=\"" + this.getIdleness(current_time) +
 				      "\" fuel=\"" + this.fuel +
 					  "\" is_appearing=\"true");
 		
@@ -217,6 +327,18 @@ public class Vertex implements XMLable {
 		// returns the buffer content
 		return buffer.toString();
 	}
+	
+	/** Give preference to use this.toXML(int identation, int current_time) 
+	 * @deprecated */
+	public String toXML(int identation) {
+		return this.toXML(identation, (int) (System.currentTimeMillis() / 1000));
+	}
+	
+	public boolean equals(Object object) {
+		if(object instanceof XMLable)
+			return this.id.equals(((XMLable) object).getObjectId());
+		else return super.equals(object);
+	} 
 	
 	public String getObjectId() {
 		return this.id;
