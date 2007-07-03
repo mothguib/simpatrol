@@ -98,16 +98,6 @@ public final class Graph implements XMLable {
 		return answer;
 	}
 	
-	/** Sets the given current time for all the vertexes of the graph,
-	 *  in order to use it as a basis to calculate the idlenesses.
-	 *  @param current_time The current time, measured in cycles or in seconds. */
-	public void setCurrentTime(int current_time) {
-		// for each vertex
-		Object[] vertexes_array = this.vertexes.toArray();
-		for(int i = 0; i < vertexes_array.length; i++)
-			((Vertex) vertexes_array[i]).setCurrentTime(current_time);
-	}
-	
 	/** Obtains a subgraph from the graph, starting from the given
 	 *  vertex and walking in depth-first mode, until the given
 	 *  depth is reached.
