@@ -45,10 +45,6 @@ public final class Message implements XMLable {
 		return buffer.toString();
 	}
 	
-	public boolean equals(XMLable object) {
-		return super.equals(object);
-	}
-	
 	public String getObjectId() {
 		// a message doesn't need an id
 		return null;
