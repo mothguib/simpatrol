@@ -63,6 +63,6 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 	/** Give preference to use this.toXML(int identation, int current_time) 
 	 * @deprecated */
 	public String toXML(int identation) {
-		return this.toXML(identation, (int) (System.currentTimeMillis() / 1000));
+		return this.toXML(identation, 0);
 	}	
 }
