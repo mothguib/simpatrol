@@ -24,8 +24,10 @@ public class Connection extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param name The name of the thread of the connection.
 	 *  @param buffer The buffer where the connection writes the received messages. */
-	public Connection(Queue<String> buffer) {
+	public Connection(String name, Queue<String> buffer) {
+		super(name);
 		this.stop_working = false;
 		this.socket = null;
 		this.buffer = buffer;
@@ -70,8 +72,8 @@ public class Connection extends Thread {
 		super.start();
 	}
 	
-	/** Give preference to use this.start(int local_socket_number). */
-	@Deprecated
+	/** Give preference to use this.start(int local_socket_number).
+	 *  @deprecated */
 	public void start() {
 		super.start();
 	}

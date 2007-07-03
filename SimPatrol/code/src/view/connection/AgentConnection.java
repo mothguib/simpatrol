@@ -19,11 +19,12 @@ public final class AgentConnection extends Connection {
 	private Queue<String> action_buffer;
 	
 	/* Methods. */
-	/** Constructor. 
+	/** Constructor.
+	 *  @param name The name of the thread of the connection. 
 	 *  @param perception_buffer The buffer where the connection writes the received perception messages.
 	 *  @param action_buffer The buffer where the connection writes the received action messages. */
-	public AgentConnection(Queue<String> perception_buffer, Queue<String> action_buffer) {
-		super(perception_buffer);
+	public AgentConnection(String name, Queue<String> perception_buffer, Queue<String> action_buffer) {
+		super(name, perception_buffer);
 		this.perception_buffer = this.buffer;
 		this.action_buffer = action_buffer;
 	}
