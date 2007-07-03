@@ -61,7 +61,7 @@ public class Client {
 	    "</message>";
 		
 		String start =  "<message>" +		
-		"<configuration type=\"2\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"120\"/>" +
+		"<configuration type=\"2\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"60\"/>" +
 	    "</message>";
 		
 		UDPSocket socket = new UDPSocket(7000);
