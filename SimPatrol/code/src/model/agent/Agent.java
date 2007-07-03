@@ -169,6 +169,12 @@ public abstract class Agent implements XMLable {
 		return buffer.toString();
 	}
 	
+	public boolean equals(Object object) {
+		if(object instanceof XMLable)
+			return this.id.equals(((XMLable) object).getObjectId());
+		else return super.equals(object);
+	}
+	
 	public String getObjectId() {
 		return this.id;
 	}
