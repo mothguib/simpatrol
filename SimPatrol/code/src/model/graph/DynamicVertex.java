@@ -124,7 +124,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 	 *  this.setIsAppearing(boolean is_appearing, int current_time).
 	 *  @deprecated */
 	public void setIsAppearing(boolean is_appearing) {
-		this.setIsAppearing(is_appearing, (int) (System.currentTimeMillis() / 1000));
+		this.setIsAppearing(is_appearing, 0);
 	}
 	
 	/** Obtains the XML version of this vertex at the current moment.
