@@ -195,6 +195,13 @@ public class Vertex implements XMLable {
 		return current_time - this.last_visit_time;
 	}
 	
+	/** Configures the current time to be considered in the calculation of
+	 *  the idleness of this vertex.
+	 *  @param current_time The current time, measured in cycles or in seconds. */
+	public void setCurrentTime(int current_time) {
+		this.last_visit_time = this.last_visit_time + current_time;
+	}
+	
 	/** Returns a copy of the vertex, with no edges.
 	 *  @return The copy of the vertex, without the edges. */
 	public Vertex getCopy() {
