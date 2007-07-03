@@ -57,6 +57,10 @@ public abstract class EventTimeProbabilityDistribution implements XMLable {
 			this.rn_distributor.nextInt();
 	}
 	
+	public boolean equals(XMLable object) {
+		return super.equals(object);
+	}
+	
 	public String getObjectId() {
 		// an etpd doesn't need an id
 		return null;
