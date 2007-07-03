@@ -20,10 +20,11 @@ public final class ActionDaemon extends AgentDaemon {
 	 *  PerceptionDaemon object. So the connection must be set by the
 	 *  setConenction() method.
 	 *  @see PerceptionDaemon
-	 * 
+	 *
+	 *  @name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
-	public ActionDaemon(Agent agent) {
-		super(agent);
+	public ActionDaemon(String name, Agent agent) {
+		super(name, agent);
 		this.stop_working = false;
 	}
 	

@@ -36,10 +36,11 @@ public final class MainDaemon extends Daemon {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param name The name of the thread of the daemon.
 	 *  @param simulator The SimPatrol's simulator.
 	 *  @throws SocketException */
-	public MainDaemon(Simulator simulator) throws SocketException {
-		super();
+	public MainDaemon(String name, Simulator simulator) throws SocketException {
+		super(name);
 		
 		this.stop_working = false;		
 		this.simulator = simulator;
@@ -72,7 +73,7 @@ public final class MainDaemon extends Daemon {
 			
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Environment obtained:");
-			System.out.print(environment.toXML(0));
+			System.out.print(environment.toXML(0, (int) (System.currentTimeMillis() / 1000)));
 			
 			// sets the environment of the simulator
 			this.simulator.setEnvironment(environment);
@@ -196,13 +197,13 @@ public final class MainDaemon extends Daemon {
 		AgentDaemon[] answer = new AgentDaemon[2];
 		
 		// creates a perception daemon
-		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent);
+		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent);
 		
 		// creates an action daemon
-		ActionDaemon action_daemon = new ActionDaemon(agent);
+		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s perception daemon", agent);
 		
 		// creates a new agent connection
-		AgentConnection connection = new AgentConnection(perception_daemon.getBuffer(), action_daemon.getBuffer());
+		AgentConnection connection = new AgentConnection(agent.getObjectId() + "'s connection", perception_daemon.getBuffer(), action_daemon.getBuffer());
 		
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);

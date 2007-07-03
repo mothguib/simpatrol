@@ -24,8 +24,10 @@ public abstract class AgentDaemon extends Daemon {
 	 *  @see PerceptionDaemon
 	 *  @see ActionDaemon
 	 * 
+	 *  @param name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
-	public AgentDaemon(Agent agent) {
+	public AgentDaemon(String name, Agent agent) {
+		super(name);
 		this.buffer = new Queue<String>();
 		this.agent = agent;
 	}

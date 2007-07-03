@@ -39,9 +39,10 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 *  setConenction() method.
 	 *  @see ActionDaemon
 	 *  
+	 *  @name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
-	public PerceptionDaemon(Agent agent) {
-		super(agent);
+	public PerceptionDaemon(String name, Agent agent) {
+		super(name, agent);
 		this.stop_working = false;
 		this.can_attend = true;
 	}

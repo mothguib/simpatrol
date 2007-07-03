@@ -20,10 +20,12 @@ public abstract class Daemon extends Thread {
 	protected Queue<String> buffer;
 	
 	/* Methods. */
-	/** Constructor. */
-	public Daemon() {
+	/** Constructor.
+	 *  @param name The name of the thread of the daemon. */
+	public Daemon(String name) {
+		super(name);
 		this.buffer = new Queue<String>();
-		this.connection = new Connection(this.buffer);		
+		this.connection = new Connection(name + "'s connection", this.buffer);		
 	}
 	
 	/** Returns the number of the local UDP socket
@@ -47,8 +49,8 @@ public abstract class Daemon extends Thread {
 		super.start();
 	}
 	
-	/** Give preference to use this.start(int local_socket_number) */
-	@Deprecated
+	/** Give preference to use this.start(int local_socket_number)
+	 * @deprecated */
 	public void start() {
 		super.start();
 	}
