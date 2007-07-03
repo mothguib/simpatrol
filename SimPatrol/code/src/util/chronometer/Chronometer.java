@@ -28,9 +28,11 @@ public final class Chronometer extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param name The name of the thread of the chronometer.
 	 *  @param object The object to be chronometrized.
 	 *  @param deadline The deadline, when the chronometer must stop working. */
-	public Chronometer(Chronometerable object, int deadline) {
+	public Chronometer(String name, Chronometerable object, int deadline) {
+		super(name);
 		this.object = object;
 		this.deadline = deadline;
 		this.elapsed_time = 0;		
