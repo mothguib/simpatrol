@@ -22,9 +22,11 @@ public final class MortalityControllerRobot extends Robot {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param clock_thread_name The name of the thread of the clock of this robot.
 	 *  @param object The mortal object to be controlled.
 	 *  @param simulator The real time simulator to have its mortal objects dead. */
-	public MortalityControllerRobot(Mortal object, RealTimeSimulator simulator) {
+	public MortalityControllerRobot(String clock_thread_name, Mortal object, RealTimeSimulator simulator) {
+		super(clock_thread_name);
 		this.object = object;
 		this.simulator = simulator;
 	}

@@ -11,10 +11,17 @@ import util.clock.Clockable;
 public abstract class Robot implements Clockable {
 	/* Attributes. */
 	/** The clock of the robot. */
-	private Clock clock = new Clock(this);
+	private Clock clock;
 	
 	/* Methods. */
-	/** Starts the clock's work, and so the robot's. */
+	/** Constructor.
+	 *  @param clock_thread_name The name of the thread of the clock of this robot. */
+	public Robot(String clock_thread_name) {
+		this.clock = new Clock(clock_thread_name, this);
+	}
+	
+	/** Starts the clock's work, and so the robot's.
+	 *  @param name The name of the thread of the clock of this robot. */
 	public void startWorking() {
 		this.clock.start();
 	}

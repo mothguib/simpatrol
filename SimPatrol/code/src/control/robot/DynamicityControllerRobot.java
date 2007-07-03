@@ -18,8 +18,10 @@ public final class DynamicityControllerRobot extends Robot {
 	
 	/* Methods. */
 	/** Constructor.
+	 *  @param clock_thread_name The name of the thread of the clock of this robot.
 	 *  @param object The dynamic object to be controlled. */
-	public DynamicityControllerRobot(Dynamic object) {		
+	public DynamicityControllerRobot(String clock_thread_name, Dynamic object) {
+		super(clock_thread_name);
 		this.object = object;
 	}
 	
