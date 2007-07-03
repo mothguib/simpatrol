@@ -52,7 +52,7 @@ public abstract class Simulator {
 	 *  @throws ParserConfigurationException */
 	public Simulator(int local_socket_number) throws ParserConfigurationException, SAXException, IOException {
 		// creates and starts the main daemon
-		this.main_daemon = new MainDaemon(this);
+		this.main_daemon = new MainDaemon("main daemon", this);
 		this.main_daemon.start(local_socket_number);
 		
 		// initiates the sets of agent_daemons
