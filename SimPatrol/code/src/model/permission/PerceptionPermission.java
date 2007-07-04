@@ -25,6 +25,13 @@ public final class PerceptionPermission extends Permission {
 		this.perception_type = perception_type;
 	}
 	
+	/** Returns the type of the allowed perception.
+	 *  @return The type of the allowed perception.
+	 *  @see PerceptionTypes */
+	public int getPerception_type() {
+		return this.perception_type;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();

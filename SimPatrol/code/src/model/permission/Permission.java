@@ -29,6 +29,21 @@ public abstract class Permission implements XMLable {
 		else this.limitations = null;
 	}
 	
+	/** Returns the limitations of the permission.
+	 *  @return The limitations of the permission. */
+	public Limitation[] getLimitations() {
+		Limitation[] answer = new Limitation[0];
+		
+		if(this.limitations != null) {
+			Object[] limitations_array = this.limitations.toArray();
+			answer = new Limitation[limitations_array.length];
+			for(int i = 0; i < answer.length; i++)
+				answer[i] = (Limitation) limitations_array[i];
+		}
+		
+		return answer;
+	}
+	
 	public String getObjectId() {
 		// a permission doesn't need an id
 		return null;
