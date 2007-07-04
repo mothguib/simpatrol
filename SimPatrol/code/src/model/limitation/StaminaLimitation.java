@@ -31,7 +31,7 @@ public final class StaminaLimitation extends Limitation {
 		for(int i = 0; i < identation; i++) buffer.append("\t");
 		
 		// fills the buffer
-		buffer.append("<limitation type=\"" + LimitationTypes.STAMINA_LIMITATION + "\">/n");
+		buffer.append("<limitation type=\"" + LimitationTypes.STAMINA_LIMITATION + "\">\n");
 		
 		// puts the parameters of the limitation
 		for(int i = 0; i < identation + 1; i++) buffer.append("\t");
@@ -39,7 +39,7 @@ public final class StaminaLimitation extends Limitation {
 		
 		// closes the main tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("</limitation_type>");
+		buffer.append("</limitation>\n");
 		
 		// returns the answer
 		return buffer.toString();

@@ -20,7 +20,7 @@ public final class PerceptionPermission extends Permission {
 	 *  @param limitations The limitations imposed to the agent.
 	 *  @param perception_type The type of the allowed perceptions.
 	 *  @see PerceptionTypes */
-	public PerceptionPermission(Limitation[] limitations, int perception_type) {
+	public PerceptionPermission(Limitation[] limitations, int perception_type) {		
 		super(limitations);
 		this.perception_type = perception_type;
 	}
@@ -55,7 +55,7 @@ public final class PerceptionPermission extends Permission {
 			buffer.append("</allowed_perception>\n");
 		}
 		else buffer.append("\"/>\n");
-
+		
 		// returns the answer
 		return buffer.toString();
 	}

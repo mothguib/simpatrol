@@ -93,7 +93,7 @@ public abstract class ConfigurationTranslator extends Translator {
 		// mounts and returns the answer
 		Configuration[] answer = new Configuration[configurations.size()];
 		for(int i = 0; i < answer.length; i++)
-			answer[i] = configurations.remove(i);
+			answer[i] = configurations.get(i);
 		return answer;		
 	}
 	
@@ -109,7 +109,7 @@ public abstract class ConfigurationTranslator extends Translator {
 		List<AgentCreationConfiguration> configurations = new LinkedList<AgentCreationConfiguration>();
 				
 		// for each configuration_node
-		for(int i = 0; i < configurations.size(); i++) {
+		for(int i = 0; i < configuration_node.getLength(); i++) {
 			// obtains the current configuration element
 			Element configuration_element = (Element) configuration_node.item(i);
 			
@@ -134,7 +134,7 @@ public abstract class ConfigurationTranslator extends Translator {
 		// mounts and returns the answer
 		AgentCreationConfiguration[] answer = new AgentCreationConfiguration[configurations.size()];
 		for(int i = 0; i < answer.length; i++)
-			answer[i] = configurations.remove(i);
+			answer[i] = configurations.get(i);
 		return answer;
 	}
 	

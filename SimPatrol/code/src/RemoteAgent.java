@@ -10,7 +10,7 @@ public class RemoteAgent {
 		
 		UDPSocket socket = new UDPSocket(8000);
 		
-		String msg = "<message><requisition perception_type=\"0\"/></message>";
+		String msg = "<message><requisition perception_type=\"1\"/></message>";
 		socket.send(msg, "127.0.0.1", socket_number);
 		System.out.println(socket.receive());		
 	}

@@ -50,7 +50,7 @@
 
 <!-- ALLOWED PERCEPTION -->
 <!ELEMENT allowed_perception (limitation*)>
-<!ATTLIST allowed_perception type (0) #REQUIRED>
+<!ATTLIST allowed_perception type (0 | 1) #REQUIRED>
 
 <!-- ALLOWED ACTION -->
 <!ELEMENT allowed_action (limitation*)>

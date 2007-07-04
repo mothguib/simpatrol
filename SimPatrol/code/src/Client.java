@@ -14,7 +14,13 @@ public class Client {
 		
 		String new_ag = "<message>" +
 		"<configuration type=\"1\" sender_address=\"127.0.0.1\" sender_socket=\"7005\" parameter=\"s1\">" +
-		"<agent id=\"a4\" label=\"Priscila\" vertex_id=\"v1\"/>" +
+		"<agent id=\"a4\" label=\"Priscila\" vertex_id=\"v1\">" +
+		"<allowed_perception type=\"1\">" +
+		"<limitation type=\"0\">" +
+		"<lmt_parameter value=\"1\"/>" +
+		"</limitation>" +
+		"</allowed_perception>" +
+		"</agent>" +
 	    "</configuration>" +
 	    "</message>";
 		

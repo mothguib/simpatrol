@@ -39,7 +39,7 @@
 
 <!-- REQUISITION -->
 <!ELEMENT requisition (EMPTY)>
-<!ATTLIST requisition percetion_type (0) #REQUIRED>
+<!ATTLIST requisition percetion_type (0 | 1) #REQUIRED>
 
 <!-- ANSWER -->
 <!ELEMENT answer (perception)>

@@ -242,7 +242,7 @@ public final class MainDaemon extends Daemon {
 		}
 		
 		// 2nd.
-		// forever, listen to some message of "agent creation configuration"
+		// forever, listen to some message of "simulation configuration"
 		// or "simulation configuration"
 		while(!this.stop_working) {
 			// screen message
