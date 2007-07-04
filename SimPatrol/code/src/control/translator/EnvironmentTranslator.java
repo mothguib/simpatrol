@@ -90,7 +90,7 @@ public abstract class EnvironmentTranslator extends Translator {
 	/** Obtains the graphs from the given XML element.
 	 *  @param xml_element The XML source containing the graphs.
 	 *  @return The graphs from the XML source. */
-	private static Graph[] getGraphs(Element xml_element) {
+	public static Graph[] getGraphs(Element xml_element) {
 		// obtains the nodes with the "graph" tag
 		NodeList graph_node = xml_element.getElementsByTagName("graph");
 		
