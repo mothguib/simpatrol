@@ -200,7 +200,7 @@ public final class MainDaemon extends Daemon {
 		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent);
 		
 		// creates an action daemon
-		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s perception daemon", agent);
+		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s action daemon", agent);
 		
 		// creates a new agent connection
 		AgentConnection connection = new AgentConnection(agent.getObjectId() + "'s connection", perception_daemon.getBuffer(), action_daemon.getBuffer());
