@@ -7,7 +7,7 @@ package model.graph;
 import java.util.HashSet;
 import java.util.Set;
 
-import util.timemeter.Timemeter;
+import util.timemeter.Timemeterable;
 
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
@@ -56,7 +56,7 @@ public class Vertex implements XMLable {
 	
 	/** Counts the time.
 	 *  Shared by all the vertexes. */
-	private static Timemeter time_counter; 
+	private static Timemeterable time_counter; 
 	
 	/* Methods. */
 	/** Constructor.
@@ -183,7 +183,7 @@ public class Vertex implements XMLable {
 	
 	/** Configures the time counter of the vertexes.
 	 *  @param counter The time counter. */
-	public static void setTime_counter(Timemeter counter) {
+	public static void setTime_counter(Timemeterable counter) {
 		time_counter = counter;
 	}
 	
@@ -198,7 +198,7 @@ public class Vertex implements XMLable {
 	public int getIdleness() {
 		if(time_counter != null)
 			return time_counter.getElapsedTime() - this.last_visit_time;
-		else return -1;
+		else return Math.abs(this.last_visit_time);
 	}
 	
 	/** Verifies if the vertex is the collector of a given edge.
