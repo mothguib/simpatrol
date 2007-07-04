@@ -155,9 +155,6 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// stops the mortality controller robots
 		this.stopMortalityControllerRobots();
-		
-		// TODO retirar linha abaixo!
-		System.out.println(this.environment.getGraph().toXML(0, this.chronometer.getElapsedTime()));
 	}
 	
 	public void startWorking() { 		
