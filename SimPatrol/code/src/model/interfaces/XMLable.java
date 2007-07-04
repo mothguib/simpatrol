@@ -10,11 +10,6 @@ public interface XMLable {
 	 *  @return The XML version of the object. */
 	public String toXML(int identation);
 	
-	/** Obtains the XMLable object from the given XML string source.
-	 *  @param xml_string The XML string source containing the object to be obtained.
-	 *  @return The XMLable java object. */
-	public XMLable getObject(String xml_string);
-	
 	/** Forces the object to have a unique id.
 	 *  @return The id of the object. */
 	public String getObjectId();

@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import util.timemeter.Timemeter;
 import model.interfaces.Dynamic;
 import model.interfaces.XMLable;
 
@@ -29,9 +27,8 @@ public final class Graph implements XMLable {
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the graph.
-	 *  @param vertexes The vertexes of the graph.
-	 *  @param time_counter The couter of time, for the correct calculation of the idlenesses of the vertexes. */
-	public Graph(String label, Vertex[] vertexes, Timemeter time_counter) {
+	 *  @param vertexes The vertexes of the graph. */
+	public Graph(String label, Vertex[] vertexes) {
 		this.label = label;
 		
 		this.vertexes = new HashSet<Vertex>();
@@ -49,9 +46,6 @@ public final class Graph implements XMLable {
 		
 		if(this.edges.size() == 0)
 			this.edges = null;
-		
-		// sets the time counter to the vertexes
-		Vertex.setTime_counter(time_counter);
 	}
 	
 	/** Obtains the vertexes of the graph.
@@ -132,7 +126,7 @@ public final class Graph implements XMLable {
 		
 		// the answer for the method
 		Vertex[] starting_vertex = {vertex.getCopy()};
-		Graph answer = new Graph(this.label, starting_vertex, Vertex.getTime_counter());
+		Graph answer = new Graph(this.label, starting_vertex);
 		answer.edges = new HashSet<Edge>();
 		
 		// expands the answer until the given depth is reached
@@ -158,7 +152,7 @@ public final class Graph implements XMLable {
 		
 		// the answer for the method
 		Vertex[] initial_vertexes = {starting_vertex};
-		Graph answer = new Graph(this.label, initial_vertexes, Vertex.getTime_counter());
+		Graph answer = new Graph(this.label, initial_vertexes);
 		answer.edges = new HashSet<Edge>();
 		
 		// adds the starting vertex to the ones to be treated

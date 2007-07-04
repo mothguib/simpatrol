@@ -10,12 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import model.graph.Vertex;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
 import control.robot.DynamicityControllerRobot;
 import control.robot.MortalityControllerRobot;
-import util.chronometer.Chronometer;
-import util.chronometer.Chronometerable;
+import util.timemeter.Chronometer;
+import util.timemeter.Chronometerable;
 
 /** Implements a real time simulator of the patrolling task. */
 public final class RealTimeSimulator extends Simulator implements Chronometerable {
@@ -125,8 +126,9 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		super.startSimulation(simulation_time);
 		
 		// 1st. creating things
-		// creates the chronometer
+		// creates the chronometer and sets it to the vertexes of the graph
 		this.chronometer = new Chronometer("chronometer", this, simulation_time);
+		Vertex.setTime_counter(this.chronometer);
 		
 		// creates the dynamicity controller robots
 		this.createDynamicityControllerRobots();

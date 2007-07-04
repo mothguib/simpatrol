@@ -21,10 +21,11 @@ import view.message.Message;
 public abstract class MessageTranslator extends Translator {
 	/* Methods. */	
 	/** Obtains the message from the given xml string, except
-	 *  for messages containing an "agent creation configuration".
+	 *  for messages containing an "agent creation configuration" or
+	 *  "environment creation configuration".
 	 *  
 	 *  To obtain messages with an "agent creation configuration",
-	 *  use getAgentCreationConfigurationMessage() 
+	 *  use getAgentCreationConfigurationMessage(). 
 	 *  
 	 *  @param xml_string The XML source containing the message to be translated.
 	 *  @return The message. 
@@ -42,7 +43,7 @@ public abstract class MessageTranslator extends Translator {
 		if(requisitions.length > 0) return new Message(requisitions[0]);
 		
 		// 2nd: tries to obtain a configuration
-		// (except for an "agent creation configuration")
+		// (except for "agent creation" configurations)
 		Configuration[] configurations = ConfigurationTranslator.getConfigurations(message_element);
 		if(configurations.length > 0) return new Message(configurations[0]);
 		
@@ -78,5 +79,5 @@ public abstract class MessageTranslator extends Translator {
 		if(configurations.length > 0)
 			return new Message(configurations[0]);
 		else return null;
-	}
+	}	
 }

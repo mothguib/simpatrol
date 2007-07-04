@@ -28,12 +28,12 @@ import control.configuration.SimulationConfiguration;
 public abstract class ConfigurationTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the configurations from the given XML element, except
-	 *  for the "agent creation configurations".
+	 *  for the "agent creation" configurations.
 	 *  
-	 *  Use getAgentCreationConfigurations() in order to
-	 *  obtain "agent creation configurations".
-	 *  
+	 *  To obtain "agent creation" configurations, use
+	 *  getAgentCreationConfigurations(Element xml_element, Graph graph).
 	 *  @see AgentCreationConfiguration
+	 *  
 	 *  @param xml_element The XML source containing the configurations.
 	 *  @return The configurations from the XML source. 
 	 *  @throws IOException 
@@ -67,7 +67,7 @@ public abstract class ConfigurationTranslator extends Translator {
 					
 					// if there's an environment, it's ok
 					if(read_environment.length > 0) environment = read_environment[0];
-					// if not, obtains it from the eventual path held in the parameter attribute
+				    // if not, obtains it from the eventual path held in the parameter attribute
 					else {
 						String path = configuration_element.getAttribute("parameter");
 						environment = EnvironmentTranslator.getEnvironment(path);						
@@ -75,6 +75,7 @@ public abstract class ConfigurationTranslator extends Translator {
 					
 					// new environment creation configuration
 					configurations.add(new EnvironmentCreationConfiguration(sender_address, sender_socket, environment));
+					
 					break;
 				}
 				case(ConfigurationTypes.SIMULATION_CONFIGURATION): {
@@ -83,6 +84,7 @@ public abstract class ConfigurationTranslator extends Translator {
 					
 					// new simulation configuration
 					configurations.add(new SimulationConfiguration(sender_address, sender_socket, simulation_time));
+					
 					break;
 				}
 			}
@@ -92,7 +94,7 @@ public abstract class ConfigurationTranslator extends Translator {
 		Configuration[] answer = new Configuration[configurations.size()];
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = configurations.remove(i);
-		return answer;
+		return answer;		
 	}
 	
 	/** Obtains the configurations to add new agents from the given XML element.
@@ -103,11 +105,11 @@ public abstract class ConfigurationTranslator extends Translator {
 		// obtains the nodes with the "configuration" tag
 		NodeList configuration_node = xml_element.getElementsByTagName("configuration");
 		
-		// the answer to the method
-		AgentCreationConfiguration[] answer = new AgentCreationConfiguration[configuration_node.getLength()];
-		
+		// Holds the answer for the method
+		List<AgentCreationConfiguration> configurations = new LinkedList<AgentCreationConfiguration>();
+				
 		// for each configuration_node
-		for(int i = 0; i < answer.length; i++) {
+		for(int i = 0; i < configurations.size(); i++) {
 			// obtains the current configuration element
 			Element configuration_element = (Element) configuration_node.item(i);
 			
@@ -125,11 +127,14 @@ public abstract class ConfigurationTranslator extends Translator {
 				Agent agent = EnvironmentTranslator.getAgents(configuration_element, false, graph)[0];
 				
 				// new agent creation configuration
-				answer[i] = new AgentCreationConfiguration(sender_address, sender_socket, agent, society_id);
+				configurations.add(new AgentCreationConfiguration(sender_address, sender_socket, agent, society_id));
 			}
 		}
 		
-		// returns the answer
+		// mounts and returns the answer
+		AgentCreationConfiguration[] answer = new AgentCreationConfiguration[configurations.size()];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = configurations.remove(i);
 		return answer;
 	}
 	

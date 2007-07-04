@@ -73,7 +73,7 @@ public final class MainDaemon extends Daemon {
 			
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Environment obtained:");
-			System.out.print(environment.toXML(0, 0));
+			System.out.print(environment.toXML(0));
 			
 			// sets the environment of the simulator
 			this.simulator.setEnvironment(environment);
@@ -197,7 +197,7 @@ public final class MainDaemon extends Daemon {
 		AgentDaemon[] answer = new AgentDaemon[2];
 		
 		// creates a perception daemon
-		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent);
+		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent, this.simulator.getEnvironment().getGraph());
 		
 		// creates an action daemon
 		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s action daemon", agent);

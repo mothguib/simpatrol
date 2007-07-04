@@ -187,12 +187,6 @@ public class Vertex implements XMLable {
 		time_counter = counter;
 	}
 	
-	/** Returns the time counter of the vertexes.
-	 *  @return The counter of time of the vertexes. */
-	public static Timemeter getTime_counter() {
-		return time_counter;
-	}
-	
 	/** Configures the idleness of the vertex.
 	 *  @param idleness The idleness of the vertex, measured in cycles, or in seconds. */
 	public void setIdleness(int idleness) {
@@ -202,7 +196,9 @@ public class Vertex implements XMLable {
 	/** Calculates the idleness of the vertex at the current moment.
 	 *  @return The idleness of the vertex. */
 	public int getIdleness() {
-		return time_counter.getElapsedTime() - this.last_visit_time;
+		if(time_counter != null)
+			return time_counter.getElapsedTime() - this.last_visit_time;
+		else return -1;
 	}
 	
 	/** Verifies if the vertex is the collector of a given edge.

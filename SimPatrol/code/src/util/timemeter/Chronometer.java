@@ -57,6 +57,10 @@ public final class Chronometer extends Timemeter implements Runnable {
 		this.unity = unity;
 	}
 	
+	public void start() {
+		this.run();
+	}
+	
 	public void run() {
 		// lets the chronometrized object start working
 		this.object.startWorking();
