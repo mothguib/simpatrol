@@ -49,11 +49,7 @@ public final class Environment implements XMLable {
 		return this.graph;
 	}
 	
-	/** Obtains the XML version of this environment at the current moment.
-	 *  @param identation The identation to organize the XML. 
-	 *  @param current_time The current time, measured in cycles or in seconds.
-	 *  @return The XML version of this environment at the current moment. */	
-	public String toXML(int identation, int current_time) {
+	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -62,7 +58,7 @@ public final class Environment implements XMLable {
 		buffer.append("<environment>\n");
 		
 		// fills the buffer with the graph
-		buffer.append(this.graph.toXML(identation + 1, current_time));
+		buffer.append(this.graph.toXML(identation + 1));
 		
 		// fills the buffer with the societies
 		Object[] societies_array = this.societies.toArray();
@@ -75,12 +71,6 @@ public final class Environment implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();		
-	}
-	
-	/** Give preference to use this.toXML(int identation, int current_time) 
-	 * @deprecated */
-	public String toXML(int identation) {
-		return this.toXML(identation, 0);
 	}
 	
 	public String getObjectId() {
