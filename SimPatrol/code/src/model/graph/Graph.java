@@ -101,17 +101,21 @@ public final class Graph implements XMLable {
 	/** Obtains a subgraph from the graph, starting from the given
 	 *  vertex and walking in depth-first mode, until the given
 	 *  depth is reached.
+	 *  
+	 *  Only the appearing and visible elements (vertexes and edges) are
+	 *  added to the subgraph. 
+	 *  
 	 *  @param vertex The starting point to obtain the subgraph.
 	 *  @param depth The depth to reach when walking in depth-first mode.
 	 *  @return A subgraph starting from the given vertex and with the given depth. */
-	public Graph getSubgraph(Vertex vertex, int depth) {
+	public synchronized Graph getVisibleSubgraph(Vertex vertex, int depth) {
 		// the answer for the method
 		Vertex[] starting_vertex = {vertex.getCopy()};
 		Graph answer = new Graph(this.label, starting_vertex);
 		answer.edges = new HashSet<Edge>();
 		
 		// expands the answer until the given depth is reached
-		this.addDepth(answer, vertex, depth, new HashSet<Vertex>());
+		this.addVisibleDepth(answer, vertex, depth, new HashSet<Vertex>());
 		
 		// if there are no edges in the answer, nullifies its set of edges
 		if(answer.edges.size() == 0) answer.edges = null;
@@ -123,21 +127,19 @@ public final class Graph implements XMLable {
 	/** Expands the given subgraph until the given depth is reached, in a depth-first
 	 *  recursive manner. The vertex where the expansion is started and a set
 	 *  of already expanded vertexes must be informed.
+	 *  
+	 *  Only the visible and appearing elements (vertexes and edges)
+	 *  are respectively expanded and considered.
+	 *  
 	 *  @param subgraph The subgraph to be expanded.
 	 *  @param starting_vertex The vertex where the expansion is started.
 	 *  @param depth The depth limit for the expansion.
 	 *  @param already_expanded_vertexes The vertexes not to be expanded. */
-	private void addDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
+	private synchronized void addVisibleDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
 		// if the depth is valid
 		if(depth > -1) {
-			// tries to obtain the copy of the starting vertex from the given subgraph
+			// obtains the copy of the starting vertex from the given subgraph
 			Vertex starting_vertex_copy = subgraph.getVertex(starting_vertex.getObjectId());
-			
-			// if the copy is null, creates it and adds to the subgraph
-			if(starting_vertex_copy == null) {
-				starting_vertex_copy = starting_vertex.getCopy();
-				subgraph.vertexes.add(starting_vertex_copy);
-			}
 			
 			// adds the starting vertex to the vertexes already expanded
 			already_expanded_vertexes.add(starting_vertex);
@@ -149,40 +151,49 @@ public final class Graph implements XMLable {
 				
 				// for each vertex of the neighbourhood
 				for(int i = 0; i < neighbourhood.length; i++) {
-					// if it isn't in the vertexes already expandend
-					if(!already_expanded_vertexes.contains(neighbourhood[i])) {
-						// tries to obtain a copy of it from the given subgraph
-						Vertex neighbour_copy = subgraph.getVertex(neighbourhood[i].getObjectId());
-						
-						// if the copy is null, creates it and adds to the subgraph
-						if(neighbour_copy == null) {
-							neighbour_copy = neighbourhood[i].getCopy();
-							subgraph.vertexes.add(neighbour_copy);
-						}
-						
-						// obtains the edge between the starting vertex and its
-						// current neighbour
-						Edge[] edges = starting_vertex.getConnectingEdges(neighbourhood[i]);
-						
-						// for each edge
-						for(int j = 0; j < edges.length; j++) {
-							// if there isn't a copy of it in the given
-							// subgraph
-							if(subgraph.getEdge(edges[j].getObjectId()) == null) {
-								// creates the copy and adds to the subgraph
-								Edge current_edge_copy = null;
-								if(starting_vertex.isEmitterOf(edges[j]))
-									current_edge_copy = edges[j].getCopy(starting_vertex_copy, neighbour_copy);
-								else
-									current_edge_copy = edges[j].getCopy(neighbour_copy, starting_vertex_copy);
-								
-								subgraph.edges.add(current_edge_copy);
+					// if the current vertex is visible and appearing
+					if(neighbourhood[i].isVisible() &&
+							(!(neighbourhood[i] instanceof DynamicVertex)
+									||
+					        ((DynamicVertex) neighbourhood[i]).isAppearing())) {
+						// if it isn't in the vertexes already expandend
+						if(!already_expanded_vertexes.contains(neighbourhood[i])) {
+							// tries to obtain a copy of it from the given subgraph
+							Vertex neighbour_copy = subgraph.getVertex(neighbourhood[i].getObjectId());
+							
+							// if the copy is null, creates it and adds to the subgraph
+							if(neighbour_copy == null) {
+								neighbour_copy = neighbourhood[i].getCopy();
+								subgraph.vertexes.add(neighbour_copy);
 							}
+							
+							// obtains the edge between the starting vertex and its
+							// current neighbour
+							Edge[] edges = starting_vertex.getConnectingEdges(neighbourhood[i]);
+							
+							// for each edge
+							for(int j = 0; j < edges.length; j++) {
+								// if the current edge is visible and appearing
+								if(edges[j].isVisible() && edges[j].isAppearing()) {
+									// if there isn't a copy of it in the given
+									// subgraph
+									if(subgraph.getEdge(edges[j].getObjectId()) == null) {
+										// creates the copy and adds to the subgraph
+										Edge current_edge_copy = null;
+										if(starting_vertex.isEmitterOf(edges[j]))
+											current_edge_copy = edges[j].getCopy(starting_vertex_copy, neighbour_copy);
+										else
+											current_edge_copy = edges[j].getCopy(neighbour_copy, starting_vertex_copy);
+										
+										subgraph.edges.add(current_edge_copy);
+									}								
+								}
+							}
+							
+							// calls this method recursively, starting from the
+							// current neighbour
+							this.addVisibleDepth(subgraph, neighbourhood[i], depth - 1, already_expanded_vertexes);
 						}
-						
-						// calls this method recursively, starting from the
-						// current neighbour
-						this.addDepth(subgraph, neighbourhood[i], depth - 1, already_expanded_vertexes);
 					}
 				}
 			}

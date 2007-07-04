@@ -169,6 +169,12 @@ public class Vertex implements XMLable {
 		this.fuel = fuel;
 	}
 	
+	/** Verifies the visibility of the vertex.
+	 *  @return TRUE if the vertex is visible, FALSE if not. */
+	public boolean isVisible() {
+		return this.visibility;
+	}
+	
 	/** Verifies if the vertex is the collector of a given edge.
 	 *  @param edge The edge whose collector is supposed to be the vertex.
 	 *  @return TRUE if the vertex is the collector of the edge, FALSE if not. */

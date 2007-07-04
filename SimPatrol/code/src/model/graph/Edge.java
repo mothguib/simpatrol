@@ -119,6 +119,12 @@ public class Edge implements XMLable {
 		this.visibility = visibility;
 	}
 	
+	/** Verifies the visibility of the edge.
+	 *  @return TRUE if the edge is visible, FALSE if not. */
+	public boolean isVisible() {
+		return this.visibility;
+	}	
+	
 	/** Returns if the edge is appearing.
 	 * 
 	 *  An edge can have dynamic behavior, if one of its vertexes
