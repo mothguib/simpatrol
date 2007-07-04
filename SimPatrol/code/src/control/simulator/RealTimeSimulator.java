@@ -138,7 +138,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		
 		// 2nd. starting things
 		// starts the chronometer
-		this.chronometer.start();
+		this.chronometer.run();
 		
 		// starts the dynamicity controller robots
 		this.startDynamicityControllerRobots();
