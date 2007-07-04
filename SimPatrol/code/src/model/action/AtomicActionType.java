@@ -4,7 +4,7 @@ package model.action;
  * @model.uin <code>design:node:::1ap6if17ugxj1jmswgw</code>
  */
 
-public class AtomicActionType extends ActionType {
+public class AtomicActionType extends ActionTypes {
 	public static final AtomicActionType MOVE_ACTION = new AtomicActionType(
 			"MOVE_ACTION");
 

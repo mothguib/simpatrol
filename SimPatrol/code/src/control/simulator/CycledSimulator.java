@@ -4,6 +4,7 @@
 package control.simulator;
 
 /* Imported classes and/or interfaces. */
+import model.Environment;
 import model.agent.Agent;
 import model.agent.AgentStates;
 import model.agent.OpenSociety;
@@ -17,7 +18,7 @@ import control.daemon.SimulationLogDaemon;
 
 /** Implements the simulator that counts the simulation time
  *  based on the agents' reasoning cycle. */
-public class CycledSimulator extends Simulator {
+public class CycledSimulator extends Environment {
 	/* Attributes. */
 	/** Holds how many cycles were simulated. */
 	private int elapsed_cycles;

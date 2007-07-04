@@ -71,10 +71,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		return this.is_appearing;
 	}
 	
-	/** Configures if the vertex is appearing.
-	 *  @param is_appearing TRUE, if the vertex is appearing, FALSE if not.
-	 *  @param current_time The current time, measured in cycles or in seconds. */
-	public void setIsAppearing(boolean is_appearing, int current_time) {
+	public void setIsAppearing(boolean is_appearing) {
 		this.is_appearing = is_appearing;
 		
 		// screen message
@@ -104,9 +101,6 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 						((Edge) edges_array[i]).setIsAppearing(false);
 					}
 			}
-			
-			// resets its idleness
-			this.setLast_visit_time(current_time);
 		}
 		// if is_appearing is TRUE...
 		else {
@@ -118,13 +112,6 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 			// clears the memorized appearing edges
 			this.appearing_edges.clear();
 		}
-	}
-	
-	/** Give preference to use
-	 *  this.setIsAppearing(boolean is_appearing, int current_time).
-	 *  @deprecated */
-	public void setIsAppearing(boolean is_appearing) {
-		this.setIsAppearing(is_appearing, 0);
 	}
 	
 	/** Obtains the XML version of this vertex at the current moment.
