@@ -41,7 +41,7 @@ public final class DynamicityControllerRobot extends Robot {
 				// verifies if the object must appear now
 				if(this.object.getAppearingTPD().nextBoolean())
 					this.object.setIsAppearing(true);
-			
+				
 				// atualizes the disappearing tpd
 				this.object.getDisappearingTPD().nextBoolean();
 			}
