@@ -5,7 +5,11 @@ package model.graph;
 
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+
+import util.timemeter.Timemeter;
 import model.interfaces.Dynamic;
 import model.interfaces.XMLable;
 
@@ -25,8 +29,9 @@ public final class Graph implements XMLable {
 	/* Methods. */
 	/** Constructor.
 	 *  @param label The label of the graph.
-	 *  @param vertexes The vertexes of the graph. */
-	public Graph(String label, Vertex[] vertexes) {
+	 *  @param vertexes The vertexes of the graph.
+	 *  @param time_counter The couter of time, for the correct calculation of the idlenesses of the vertexes. */
+	public Graph(String label, Vertex[] vertexes, Timemeter time_counter) {
 		this.label = label;
 		
 		this.vertexes = new HashSet<Vertex>();
@@ -44,6 +49,9 @@ public final class Graph implements XMLable {
 		
 		if(this.edges.size() == 0)
 			this.edges = null;
+		
+		// sets the time counter to the vertexes
+		Vertex.setTime_counter(time_counter);
 	}
 	
 	/** Obtains the vertexes of the graph.
@@ -105,13 +113,26 @@ public final class Graph implements XMLable {
 	 *  Only the appearing and visible elements (vertexes and edges) are
 	 *  added to the subgraph. 
 	 *  
+	 *  If the given depth is set to -1, the entire visible and appearing
+	 *  graph's reaching elements are returned.
+	 *  
 	 *  @param vertex The starting point to obtain the subgraph.
 	 *  @param depth The depth to reach when walking in depth-first mode.
 	 *  @return A subgraph starting from the given vertex and with the given depth. */
 	public synchronized Graph getVisibleSubgraph(Vertex vertex, int depth) {
+		// if the given starting vertex is not visibile or appearing, returns null
+		if(!vertex.visibility ||
+		  (vertex instanceof DynamicVertex
+				  &&
+		  !((DynamicVertex) vertex).isAppearing())) return null;
+		
+		// if the given depth is -1, return the entire visible graph
+		if(depth == -1)
+			return this.getVisibleGraph(vertex);
+		
 		// the answer for the method
 		Vertex[] starting_vertex = {vertex.getCopy()};
-		Graph answer = new Graph(this.label, starting_vertex);
+		Graph answer = new Graph(this.label, starting_vertex, Vertex.getTime_counter());
 		answer.edges = new HashSet<Edge>();
 		
 		// expands the answer until the given depth is reached
@@ -121,6 +142,91 @@ public final class Graph implements XMLable {
 		if(answer.edges.size() == 0) answer.edges = null;
 		
 		// returns the answer
+		return answer;
+	}
+	
+	/** Obtains the visible and appearing elements connected with the given
+	 *  starting vertex.
+	 *  @param starting_vertex The vertex to start walking into the graph in a breadth-first manner.
+	 *  @return The obtained graph. */
+	private synchronized Graph getVisibleGraph(Vertex starting_vertex) {
+		// holds the vertexes to be treated
+		List<Vertex> pending_vertexes = new LinkedList<Vertex>();
+		
+		// holds the vertexes already treated
+		List<Vertex> treated_vertexes = new LinkedList<Vertex>();
+		
+		// the answer for the method
+		Vertex[] initial_vertexes = {starting_vertex};
+		Graph answer = new Graph(this.label, initial_vertexes, Vertex.getTime_counter());
+		answer.edges = new HashSet<Edge>();
+		
+		// adds the starting vertex to the ones to be treated
+		pending_vertexes.add(starting_vertex);
+		
+		// while there are still vertexes to treat
+		while(pending_vertexes.size() > 0) {
+			// removes the current vertex from the ones to be treated
+			Vertex current_vertex = pending_vertexes.remove(0);
+			
+			// if it was not treated yet
+			if(!treated_vertexes.contains(current_vertex)) {
+				// adds it to the treated ones
+				treated_vertexes.add(current_vertex);
+				
+				// obtains its copy from the answer
+				Vertex current_vertex_copy = answer.getVertex(current_vertex.getObjectId());
+				
+				// obtains its neighbourhood
+				Vertex[] neighbourhood = current_vertex.getNeighbourhood();
+				
+				// for each neighbour
+				for(int i = 0; i < neighbourhood.length; i++) {
+					// if the current neighbour is visible and is appearing
+					if(neighbourhood[i].visibility &&
+					  (!(neighbourhood[i] instanceof DynamicVertex)
+							  ||
+					  ((DynamicVertex) neighbourhood[i]).isAppearing())) {
+						// if it not in the already treated ones
+						if(!treated_vertexes.contains(neighbourhood[i])) {
+							// creates a copy of it
+							Vertex current_neighbour_copy = neighbourhood[i].getCopy();
+							
+							// adds the copy of it to the answer of the method
+							answer.vertexes.add(current_neighbour_copy);
+							
+							// obtains all the edges between the current
+							// treated vertex and its current neighbour
+							Edge[] edges = current_vertex.getConnectingEdges(neighbourhood[i]);
+							
+							// for each edge
+							for(int j = 0; j < edges.length; j++) {
+								// if the current edge is visible and is appearing
+								if(edges[j].isVisible() && edges[j].isAppearing()) {
+									// obtains a copy of it
+									Edge edge_copy = null;
+									if(current_vertex.isEmitterOf(edges[j]))
+										edge_copy = edges[j].getCopy(current_vertex_copy, current_neighbour_copy);
+									else
+										edge_copy = edges[j].getCopy(current_neighbour_copy, current_vertex_copy);
+									
+									// adds to the answer
+									answer.edges.add(edge_copy);
+								}
+							}
+							
+							// adds the current neighbour to the vertexes to be treated
+							pending_vertexes.add(neighbourhood[i]);								
+						}
+					}
+				}
+			}
+		}
+		
+		// if there are no egdes in the answer, nullifies it
+		if(answer.edges.size() == 0) answer.edges = null;
+		
+		// returns the answer for the method
 		return answer;
 	}
 	
@@ -230,11 +336,7 @@ public final class Graph implements XMLable {
 		return null;
 	}
 	
-	/** Obtains the XML version of this graph at the current moment.
-	 *  @param identation The identation to organize the XML. 
-	 *  @param current_time The current time, measured in cycles or in seconds.
-	 *  @return The XML version of this graph at the current moment. */	
-	public String toXML(int identation, int current_time) {
+	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -247,7 +349,7 @@ public final class Graph implements XMLable {
 		// inserts the vertexes
 		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++)
-			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1, current_time));
+			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1));
 		
 		// inserts the edges
 		if(this.edges != null) {
@@ -262,12 +364,6 @@ public final class Graph implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();
-	}
-	
-	/** Give preference to use this.toXML(int identation, int current_time) 
-	 * @deprecated */
-	public String toXML(int identation) {
-		return this.toXML(identation, 0);
 	}
 	
 	public String getObjectId() {

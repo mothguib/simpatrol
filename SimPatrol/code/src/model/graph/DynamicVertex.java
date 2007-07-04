@@ -40,33 +40,6 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		this.appearing_edges = new HashSet<Edge>();
 	}
 	
-	/** Returns a copy of the vertex, with no edges.
-	 *  @return The copy of the vertex, without the edges. */
-	public DynamicVertex getCopy() {
-		DynamicVertex answer = new DynamicVertex(this.label, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
-		answer.id = this.id;
-		answer.stigmas = this.stigmas;
-		answer.priority = this.priority;
-		answer.visibility = this.visibility;
-		answer.last_visit_time = this.last_visit_time;
-		answer.fuel = this.fuel;
-		
-		return answer;
-	}
-	
-	/** Verifies if a given edge is in the memory of appearing edges.
-	 *  @param edge The edge to be verified.
-	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
-	public boolean isInAppearingEdges(Edge edge) {
-		return this.appearing_edges.contains(edge);
-	}
-	
-	/** Adds a given edge to the memory of appearing edges of the vertex.
-	 *  @param edge The edge to be added to the memory. */
-	public void addAppearingEdge(Edge edge) {
-		this.appearing_edges.add(edge);
-	}	
-	
 	/** Returns if the vertex is appearing.
 	 *  @return TRUE, if the vertex is appearing, FALSE if not. */
 	public boolean isAppearing() {
@@ -116,13 +89,36 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		}
 	}
 	
-	/** Obtains the XML version of this vertex at the current moment.
-	 *  @param identation The identation to organize the XML. 
-	 *  @param current_time The current time, measured in cycles or in seconds.
-	 *  @return The XML version of this vertex at the current moment. */	
-	public String toXML(int identation, int current_time) {
+	/** Verifies if a given edge is in the memory of appearing edges.
+	 *  @param edge The edge to be verified.
+	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
+	public boolean isInAppearingEdges(Edge edge) {
+		return this.appearing_edges.contains(edge);
+	}
+	
+	/** Adds a given edge to the memory of appearing edges of the vertex.
+	 *  @param edge The edge to be added to the memory. */
+	public void addAppearingEdge(Edge edge) {
+		this.appearing_edges.add(edge);
+	}
+	
+	/** Returns a copy of the vertex, with no edges.
+	 *  @return The copy of the vertex, without the edges. */
+	public DynamicVertex getCopy() {
+		DynamicVertex answer = new DynamicVertex(this.label, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
+		answer.id = this.id;
+		answer.stigmas = this.stigmas;
+		answer.priority = this.priority;
+		answer.visibility = this.visibility;
+		answer.fuel = this.fuel;
+		answer.last_visit_time = this.last_visit_time;		
+		
+		return answer;
+	}
+	
+	public String toXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation, current_time));
+		StringBuffer buffer = new StringBuffer(super.toXML(identation));
 		
 		// finds the appearing attribute, atualizing it if necessary
 		if(!this.is_appearing) {

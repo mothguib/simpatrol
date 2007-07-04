@@ -7,6 +7,8 @@ package model.graph;
 import java.util.HashSet;
 import java.util.Set;
 
+import util.timemeter.Timemeter;
+
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import model.interfaces.XMLable;
@@ -39,6 +41,11 @@ public class Vertex implements XMLable {
 	 *  Its default value is TRUE. */
 	protected boolean visibility = true;
 	
+	/** Expresses if this vertex is a point of recharging the energy
+	 *  of the patrollers.
+	 *  Its default value is FALSE. */
+	protected boolean fuel = false;	
+	
 	/** Registers the last time when this vertex
 	 *  was visited by an agent. Measured in cycles,
 	 *  if the simulator is a cycled one, or in seconds,
@@ -47,10 +54,9 @@ public class Vertex implements XMLable {
 	 *  @see RealTimeSimulator */
 	protected int last_visit_time;
 	
-	/** Expresses if this vertex is a point of recharging the energy
-	 *  of the patrollers.
-	 *  Its default value is FALSE. */
-	protected boolean fuel = false;
+	/** Counts the time.
+	 *  Shared by all the vertexes. */
+	private static Timemeter time_counter; 
 	
 	/* Methods. */
 	/** Constructor.
@@ -143,7 +149,7 @@ public class Vertex implements XMLable {
 		}
 		
 		return answer;
-	}	
+	}
 	
 	/** Configures the priority of the vertex.
 	 *  @param priority The priority. */
@@ -157,11 +163,11 @@ public class Vertex implements XMLable {
 		this.visibility = visibility;
 	}
 	
-	/** Configures the last time this vertex was visited.
-	 *  @param time The time of the last visit, measured in cycles or in seconds. */
-	public void setLast_visit_time(int time) {
-		this.last_visit_time = time;
-	}
+	/** Verifies the visibility of the vertex.
+	 *  @return TRUE if the vertex is visible, FALSE if not. */
+	public boolean isVisible() {
+		return this.visibility;
+	}	
 	
 	/** Configures if the vertex is a fuel recharging point.
 	 *  @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
@@ -169,10 +175,34 @@ public class Vertex implements XMLable {
 		this.fuel = fuel;
 	}
 	
-	/** Verifies the visibility of the vertex.
-	 *  @return TRUE if the vertex is visible, FALSE if not. */
-	public boolean isVisible() {
-		return this.visibility;
+	/** Configures the last time this vertex was visited.
+	 *  @param time The time of the last visit, measured in cycles or in seconds. */
+	public void setLast_visit_time(int time) {
+		this.last_visit_time = time;
+	}
+	
+	/** Configures the time counter of the vertexes.
+	 *  @param counter The time counter. */
+	public static void setTime_counter(Timemeter counter) {
+		time_counter = counter;
+	}
+	
+	/** Returns the time counter of the vertexes.
+	 *  @return The counter of time of the vertexes. */
+	public static Timemeter getTime_counter() {
+		return time_counter;
+	}
+	
+	/** Configures the idleness of the vertex.
+	 *  @param idleness The idleness of the vertex, measured in cycles, or in seconds. */
+	public void setIdleness(int idleness) {
+		this.last_visit_time = this.last_visit_time - idleness;
+	}
+	
+	/** Calculates the idleness of the vertex at the current moment.
+	 *  @return The idleness of the vertex. */
+	public int getIdleness() {
+		return time_counter.getElapsedTime() - this.last_visit_time;
 	}
 	
 	/** Verifies if the vertex is the collector of a given edge.
@@ -189,18 +219,6 @@ public class Vertex implements XMLable {
 		return this.out_edges.contains(edge);
 	}
 	
-	/** Configures the idleness of the vertex.
-	 *  @param idleness The idleness of the vertex, measured in cycles, or in seconds. */
-	public void setIdleness(int idleness) {
-		this.last_visit_time = this.last_visit_time - idleness;
-	}
-	
-	/** Calculates the idleness of the vertex at the current moment.
-	 *  @param current_time The current time to be considered in the calculation of the idleness. */
-	public int getIdleness(int current_time) {
-		return current_time - this.last_visit_time;
-	}
-	
 	/** Returns a copy of the vertex, with no edges.
 	 *  @return The copy of the vertex, without the edges. */
 	public Vertex getCopy() {
@@ -209,8 +227,8 @@ public class Vertex implements XMLable {
 		answer.stigmas = this.stigmas;
 		answer.priority = this.priority;
 		answer.visibility = this.visibility;
-		answer.last_visit_time = this.last_visit_time;
 		answer.fuel = this.fuel;
+		answer.last_visit_time = this.last_visit_time;
 		
 		return answer;
 	}
@@ -296,11 +314,7 @@ public class Vertex implements XMLable {
 		return answer;
 	}
 	
-	/** Obtains the XML version of this vertex at the current moment.
-	 *  @param identation The identation to organize the XML. 
-	 *  @param current_time The current time, measured in cycles or in seconds.
-	 *  @return The XML version of this vertex at the current moment. */
-	public String toXML(int identation, int current_time) {
+	public String toXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -312,7 +326,7 @@ public class Vertex implements XMLable {
 				      "\" label=\"" + this.label +
 				      "\" priority=\"" + this.priority +
 				      "\" visibility=\"" + this.visibility +
-				      "\" idleness=\"" + this.getIdleness(current_time) +
+				      "\" idleness=\"" + this.getIdleness() +
 				      "\" fuel=\"" + this.fuel +
 					  "\" is_appearing=\"true");
 		
@@ -332,12 +346,6 @@ public class Vertex implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();
-	}
-	
-	/** Give preference to use this.toXML(int identation, int current_time) 
-	 * @deprecated */
-	public String toXML(int identation) {
-		return this.toXML(identation, 0);
 	}
 	
 	public boolean equals(Object object) {
