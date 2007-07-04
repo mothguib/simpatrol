@@ -14,7 +14,7 @@ public class Edge implements XMLable {
 	/* Attributes. */
 	/** The object id of the edge.
 	 *  Not part of the patrol problem modelling. */
-	private String id;
+	protected String id;
 	
 	/** The emitter of this edge, if it is an arc. */
 	protected Vertex emitter;
@@ -26,11 +26,11 @@ public class Edge implements XMLable {
 	protected Set<Stigma> stigmas;
 
 	/** The lenght of the edge. */
-	private double length;
+	protected double length;
 
 	/** Expresses if this edge is visible in the graph.
 	 *  Its default value is TRUE. */
-	private boolean visibility = true;
+	protected boolean visibility = true;
 	
 	/** Verifies if the edge is appearing.
 	 * 

@@ -61,10 +61,17 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	 *  @param copy_collector The copy of the collector.
 	 *  @return The copy of the edge.*/
 	public DynamicEdge getCopy(Vertex copy_emitter, Vertex copy_collector) {
-		DynamicEdge answer = (DynamicEdge)super.getCopy(copy_emitter, copy_collector);
-		answer.appearing_tpd = this.appearing_tpd;
-		answer.disappearing_tpd = this.disappearing_tpd;
-
+		// registers if the original edge is oriented
+		boolean oriented = !this.emitter.isCollectorOf(this);
+		
+		// the copy		
+		DynamicEdge answer = new DynamicEdge(copy_emitter, copy_collector, oriented, this.length, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
+		answer.id = this.id;
+		answer.stigmas = this.stigmas;
+		answer.visibility = this.visibility;
+		answer.is_appearing = this.is_appearing;
+		
+		// returns the answer
 		return answer;
 	}
 	

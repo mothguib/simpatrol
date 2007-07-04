@@ -17,7 +17,7 @@ public class Vertex implements XMLable {
 	/* Atributes. */
 	/** The object id of the vertex.
 	 *  Not part of the patrol problem modelling. */
-	private String id;
+	protected String id;
 	
 	/** The set of edges whose emitter is this vertex. */
 	protected Set<Edge> in_edges;
@@ -29,15 +29,15 @@ public class Vertex implements XMLable {
 	protected Set<Stigma> stigmas;
 
 	/** The label of the vertex. */
-	private String label;
+	protected String label;
 
 	/** The priority to visit this vertex.
 	 *  Its default value is ZERO. */
-	private int priority = 0;
+	protected int priority = 0;
 
 	/** Expresses if this vertex is visible in the graph.
 	 *  Its default value is TRUE. */
-	private boolean visibility = true;
+	protected boolean visibility = true;
 	
 	/** Registers the last time when this vertex
 	 *  was visited by an agent. Measured in cycles,
@@ -45,12 +45,12 @@ public class Vertex implements XMLable {
 	 *  if it's a real time one.
 	 *  @see CycledSimulator
 	 *  @see RealTimeSimulator */
-	private int last_visit_time;
+	protected int last_visit_time;
 	
 	/** Expresses if this vertex is a point of recharging the energy
 	 *  of the patrollers.
 	 *  Its default value is FALSE. */
-	private boolean fuel = false;
+	protected boolean fuel = false;
 	
 	/* Methods. */
 	/** Constructor.

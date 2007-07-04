@@ -43,11 +43,13 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 	/** Returns a copy of the vertex, with no edges.
 	 *  @return The copy of the vertex, without the edges. */
 	public DynamicVertex getCopy() {
-		DynamicVertex answer = (DynamicVertex) super.getCopy();
-		answer.is_appearing = this.is_appearing;
-		answer.appearing_tpd = this.appearing_tpd;
-		answer.disappearing_tpd = this.disappearing_tpd;
-		answer.appearing_edges = this.appearing_edges;
+		DynamicVertex answer = new DynamicVertex(this.label, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
+		answer.id = this.id;
+		answer.stigmas = this.stigmas;
+		answer.priority = this.priority;
+		answer.visibility = this.visibility;
+		answer.last_visit_time = this.last_visit_time;
+		answer.fuel = this.fuel;
 		
 		return answer;
 	}
