@@ -7,14 +7,20 @@ package model.limitation;
 public final class StaminaLimitation extends Limitation {
 	/* Attributes. */
 	/** The cost of stamina associated with the permission. */
-	private int cost;
+	private double cost;
 	
 	/* Methods. */
 	/** Constructor.
 	 *  @param cost The cost of stamina associated with the parmission. */
-	public StaminaLimitation(int cost) {
+	public StaminaLimitation(double cost) {
 		super();
 		this.cost = cost;
+	}
+	
+	/** Returns the cost of the limitation.
+	 *  @return The cost of the limitation. */
+	public double getCost() {
+		return this.cost;
 	}
 	
 	public String toXML(int identation) {

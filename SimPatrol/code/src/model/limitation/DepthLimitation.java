@@ -18,6 +18,12 @@ public final class DepthLimitation extends Limitation {
 		this.depth = depth;
 	}
 	
+	/** Returns the deth of this limitation.
+	 *  @return The depth of this limitation. */
+	public int getDepth() {
+		return this.depth;
+	}
+	
 	public String toXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
