@@ -19,11 +19,7 @@ public class GraphPerception extends ReactivePerception {
 		this.graph = graph;
 	}
 	
-	/** Obtains the XML version of this perception at the current moment.
-	 *  @param identation The identation to organize the XML. 
-	 *  @param current_time The current time, measured in cycles or in seconds.
-	 *  @return The XML version of this perception at the current moment. */	
-	public String toXML(int identation, int current_time) {
+	public String toXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -32,7 +28,7 @@ public class GraphPerception extends ReactivePerception {
 		buffer.append("<perception>\n");
 		
 		// puts the graph
-		buffer.append(this.graph.toXML(identation + 1, current_time));
+		buffer.append(this.graph.toXML(identation + 1));
 		
 		// applies the identationand opens the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
@@ -40,11 +36,5 @@ public class GraphPerception extends ReactivePerception {
 		
 		// returns the answer
 		return buffer.toString();
-	}
-	
-	/** Give preference to use this.toXML(int identation, int current_time) 
-	 * @deprecated */
-	public String toXML(int identation) {
-		return this.toXML(identation, 0);
 	}	
 }
