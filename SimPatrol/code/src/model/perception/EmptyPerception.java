@@ -3,7 +3,7 @@
 /* The package of this class. */
 package model.perception;
 
-/** Implements the perceptions that actually don't require anything. */
+/** Implements the perceptions that actually don't require any perception. */
 public final class EmptyPerception extends ProactivePerception {
 	/* Methods. */
 	public String toXML(int identation) {
