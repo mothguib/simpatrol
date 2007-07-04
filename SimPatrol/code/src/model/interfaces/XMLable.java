@@ -6,9 +6,14 @@ package model.interfaces;
 /** Lets the objects that implement it have a XML version. */
 public interface XMLable {
 	/** Traduces the object to XML, formatted in the given identation.
-	 * @param identation The identation to print the XML version of the object.
-	 * @return The XML version of the object. */
+	 *  @param identation The identation to print the XML version of the object.
+	 *  @return The XML version of the object. */
 	public String toXML(int identation);
+	
+	/** Obtains the XMLable object from the given XML string source.
+	 *  @param xml_string The XML string source containing the object to be obtained.
+	 *  @return The XMLable java object. */
+	public XMLable getObject(String xml_string);
 	
 	/** Forces the object to have a unique id.
 	 *  @return The id of the object. */
