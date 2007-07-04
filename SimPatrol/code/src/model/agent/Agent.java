@@ -6,11 +6,9 @@ package model.agent;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import model.interfaces.XMLable;
 import model.graph.Vertex;
 import model.graph.Edge;
-import model.perception.Perception;
 import model.permission.ActionPermission;
 import model.permission.PerceptionPermission;
 
@@ -78,22 +76,6 @@ public abstract class Agent implements XMLable {
 		else this.allowed_actions = null;
 	}
 	
-	/**
-	 * @param perception
-	 * @model.uin <code>design:node:::4nanf17ujey8-fenk9p:i172kf17ujey8agupu8</code>
-	 */
-	public void setPerception(Perception perception) {
-		// TODO implementar!!!
-	}
-
-	/**
-	 * @param requisition
-	 * @model.uin <code>design:node:::dlwtnf17ujey8bzkqn9:i172kf17ujey8agupu8</code>
-	 */
-	public void requireBroadcastingPercetion(String requisition) {
-		// TODO implementar!!!
-	}
-		
 	/** Returns the state of the agent.
 	 *  @return The state of the agent.
 	 *  @see AgentStates */
@@ -120,6 +102,39 @@ public abstract class Agent implements XMLable {
 	 *  @param stamina The stamina of the agent. */	
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
+	}
+	
+	/** Returns the stamina of the agent.
+	 *  @return The stamina of the agent. */
+	public double getStamina() {
+		return this.stamina;
+	}
+	
+	/** Decrements the stamina of the agent by the given factor.
+	 *  @param factor The factor to be decremented from the value of stamina. */
+	public void decStamina(double factor) {
+		this.stamina = this.stamina - factor;
+	}
+	
+	/** Returns the vertex that the agent comes from.
+	 *  @return The vertex that agent comes from. */
+	public Vertex getVertex() {
+		return this.vertex;
+	}
+	
+	/** Returns the allowes perceptions for the agent.
+	 *  @return The permissions of perceptions. */
+	public PerceptionPermission[] getAllowedPerceptions() {
+		PerceptionPermission[] answer = new PerceptionPermission[0];
+		
+		if(this.allowed_perceptions != null) {
+			Object[] allowed_perceptions_array = this.allowed_perceptions.toArray();
+			answer = new PerceptionPermission[allowed_perceptions_array.length];
+			for(int i = 0; i < answer.length; i++)
+				answer[i] = (PerceptionPermission) allowed_perceptions_array[i];
+		}
+		
+		return answer;
 	}
 	
 	public String toXML(int identation) {
