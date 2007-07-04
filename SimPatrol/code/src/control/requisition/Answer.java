@@ -47,15 +47,12 @@ public final class Answer implements XMLable {
 	}
 	
 	public String getObjectId() {
-		// TODO Auto-generated method stub
+		// an answer doesn't need an id
 		return null;
 	}
 
 	public void setObjectId(String object_id) {
-		// TODO Auto-generated method stub
-
+		// an answer doesn't need an id
+		// so do nothing
 	}
-
-	
-
 }
