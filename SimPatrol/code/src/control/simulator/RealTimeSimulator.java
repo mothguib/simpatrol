@@ -95,7 +95,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		}
 	}
 	
-	/** Stops each one of current dynamicity controller robots. */
+	/** Stops each one of the current dynamicity controller robots. */
 	private void stopDynamicityControllerRobots() {
 		if(this.dynamic_robots != null) {
 			Object[] dynamic_robots_array = this.dynamic_robots.toArray();
@@ -104,7 +104,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		}
 	}
 	
-	/** Stops each one of current mortality controller robots. */
+	/** Stops each one of the current mortality controller robots. */
 	private void stopMortalityControllerRobots() {
 		if(this.mortal_robots != null) {
 			Object[] mortal_robots_array = this.mortal_robots.toArray();
