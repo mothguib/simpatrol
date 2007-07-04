@@ -7,16 +7,16 @@ package util.timemeter;
 import java.util.Calendar;
 
 /** Implements a chronometer. */
-public final class Chronometer extends Timemeter implements Runnable {
+public final class Chronometer extends Thread implements Timemeterable {
 	/* Attributes. */
-	/** The name of the thread of the chronometer. */
-	private String name;
-	
 	/** The object to be chronometrized. */
 	private Chronometerable object;
 	
+	/** Holds the elapsed time. */
+	private int elapsed_time;
+	
 	/** Holds the deadline, when the chronometer must stop working. */
-	private int deadline;
+	private int deadline;		
 	
 	/** The chronometer count step.
 	 *  The default value is one second.*/
@@ -32,16 +32,10 @@ public final class Chronometer extends Timemeter implements Runnable {
 	 *  @param object The object to be chronometrized.
 	 *  @param deadline The deadline, when the chronometer must stop working. */
 	public Chronometer(String name, Chronometerable object, int deadline) {
-		super();
-		this.name = name;
+		super(name);
 		this.object = object;
-		this.deadline = deadline;	
-	}
-	
-	/** Returns the name of the thread of the chronometer.
-	 *  @return The name of the thread of the chronometer. */
-	public String getName() {
-		return this.name;
+		this.deadline = deadline;
+		this.elapsed_time = 0;
 	}
 	
 	/** Changes the chronometer's counting step.
@@ -57,8 +51,8 @@ public final class Chronometer extends Timemeter implements Runnable {
 		this.unity = unity;
 	}
 	
-	public void start() {
-		this.run();
+	public int getElapsedTime() {
+		return this.elapsed_time;
 	}
 	
 	public void run() {
