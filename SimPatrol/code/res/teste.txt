@@ -31,20 +31,24 @@
 
 		<edge id="e2" emitter_id="v1" collector_id="v3" length="6"/>
 		<edge id="e3" emitter_id="v3" collector_id="v4" length="2"/>
-
-
 		<edge id="e4" emitter_id="v3" collector_id="v2" length="6"/>
 	</graph>
 
 	<society id="s1" label="viajantes" is_closed="false">
 		<agent id="a1" label="Daniel" vertex_id="v1">
-			<etpd seed="100" type="3">
-				<pd_parameter value="1"/>
+			<etpd seed="100" type="2">
 				<pd_parameter value="30"/>
+				<pd_parameter value="1"/>
 			</etpd>
 		</agent>
 
-		<agent id="a2" label="Josue" vertex_id="v4"/>
+		<agent id="a2" label="Josue" vertex_id="v4">
+			<etpd seed="100" type="0">
+				<pd_parameter value="0.35"/>
+			</etpd>
+		</agent>
+
+
 		<agent id="a3" label="Geber" vertex_id="v3"/>
 	</society>
 </environment>
