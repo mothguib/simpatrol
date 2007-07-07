@@ -6,8 +6,8 @@ package control.configuration;
 /* Imported classes and/or interfaces. */
 import model.interfaces.XMLable;
 
-/** Implements objects that express configurations to
- *  a simulation of the patrolling task. */
+/** Implements objects that express configurations of
+ *  a simulation of the patrolling task performed by SimPatrol. */
 public abstract class Configuration implements XMLable {
 	/* Attributes. */
 	/** The IP address of the sender of the configuration. */
@@ -18,7 +18,8 @@ public abstract class Configuration implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
-	 *  @param sender_address The The IP address of the sender of the configuration.
+	 * 
+	 *  @param sender_address The IP address of the sender of the configuration.
 	 *  @param sender_socket The number of the UDP socket of the sender. */
 	public Configuration(String sender_address, int sender_socket) {
 		this.sender_address = sender_address;
@@ -27,6 +28,7 @@ public abstract class Configuration implements XMLable {
 	
 	/** Returns the IP address of the sender of the message
 	 *  that contained the configuration.
+	 *  
 	 *  @return The IP address of the sender of the configuration. */
 	public String getSender_address() {
 		return this.sender_address;
@@ -35,12 +37,14 @@ public abstract class Configuration implements XMLable {
 	/** Returns the number of the UDP socket connection of
 	 *  the sender of the message that contained the
 	 *  configuration.
+	 *  
 	 *  @return The number of the UDP socket of the sender. */
 	public int getSender_socket() {
 		return this.sender_socket;
 	}
 	
 	/** Returns the type of the configuration.
+	 * 
 	 *  @return The type of the configuration. 
 	 *  @see ConfigurationTypes */
 	protected abstract int getType();

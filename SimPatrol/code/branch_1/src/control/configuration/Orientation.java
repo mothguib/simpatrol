@@ -18,21 +18,77 @@ import model.interfaces.XMLable;
  *  @see Configuration */
 public final class Orientation implements XMLable {
 	/* Attributes. */
-	/** The content of the orientation. */
+	/** The eventual content of the orientation. */
 	private List<SocketNumberAndAgentID> content;
+	
+	/** The eventual message of the orientation. */
+	private String message;
 	
 	/* Methods. */
 	/** Constructor. */
 	public Orientation() {
-		this.content = new LinkedList<SocketNumberAndAgentID>();
+		this.content = null;
+		this.message = null;
+	}
+	
+	/** Constructor.
+	 * 
+	 *  @param message The message of the orientation. */
+	public Orientation(String message) {
+		this.content = null;
+		this.message = message;
 	}
 	
 	/** Adds the given socket number and correspondant
 	 *  agent id to the orientation.
+	 *  
 	 *  @param socket_number The number of the socket to be cited by the orientation.
 	 *  @param agent_id The id of the agent to be cited by the orientation. */
 	public void addItem(int socket_number, String agent_id) {
+		if(this.content == null) this.content = new LinkedList<SocketNumberAndAgentID>();
 		this.content.add(new SocketNumberAndAgentID(socket_number, agent_id));
+	}
+	
+	public String toXML(int identation) {
+		// holds the answer for the method
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		
+		// opens the "orientation" tag
+		if(this.message == null) {
+			if(this.content == null) buffer.append("<orientation/>\n");
+			else buffer.append("<orientation>\n");
+		}
+		else {
+			if(this.content == null) buffer.append("<orientation message=\"" + this.message + "\"/>\n");
+			else buffer.append("<orientation message=\"" + this.message + "\">\n");
+		}
+		
+		// for each eventual item of the content of the orientation
+		if(this.content != null)
+			for(int i = 0; i < this.content.size(); i++) {
+				// obtains the item
+				SocketNumberAndAgentID item = this.content.get(i);
+				
+				// applies the identation
+				for(int j = 0; j < identation + 1; j++) buffer.append("\t");
+				
+				// puts the item
+				buffer.append("<ort_item agent_id=\"" + item.agent_id +
+					          "\" socket=\"" + item.socket_number +
+					          "\"/>\n");
+			}
+		
+		// closes the main tag, if needed
+		if(this.content != null) {
+			for(int i = 0; i < identation; i++) buffer.append("\t");
+			buffer.append("</orientation>\n");			
+		}
+		
+		// return the answer
+		return buffer.toString();
 	}
 	
 	public String getObjectId() {
@@ -43,41 +99,6 @@ public final class Orientation implements XMLable {
 	public void setObjectId(String object_id) {
 		// an orientation doesn't need an id
 		// so, do nothing
-	}
-
-	public String toXML(int identation) {
-		// holds the answer for the method
-		StringBuffer buffer = new StringBuffer();
-		
-		// applies the identation
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		
-		// opens the "orientation" tag 
-		if(this.content.size() > 0) buffer.append("<orientation>\n");
-		else buffer.append("<orientation/>\n");
-		
-		// for each item of the content of the orientation		
-		for(int i = 0; i < this.content.size(); i++) {
-			// obtains the item
-			SocketNumberAndAgentID item = this.content.get(i);
-			
-			// applies the identation
-			for(int j = 0; j < identation + 1; j++) buffer.append("\t");
-			
-			// puts the item
-			buffer.append("<ort_item agent_id=\"" + item.agent_id +
-					      "\" socket=\"" + item.socket_number +
-					      "\"/>\n");
-		}
-		
-		// closes the main tag, if needed
-		if(this.content.size() > 0) {
-			for(int i = 0; i < identation; i++) buffer.append("\t");
-			buffer.append("</orientation>\n");			
-		}
-		
-		// return the answer
-		return buffer.toString();
 	}
 }
 

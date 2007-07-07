@@ -8,6 +8,7 @@ import model.agent.Agent;
 
 /** Implements objects that express configurations to add
  *  an agent to a simulation.
+ *  
  *  @see Agent */
 public final class AgentCreationConfiguration extends Configuration {
 	/* Attributes. */
@@ -19,6 +20,7 @@ public final class AgentCreationConfiguration extends Configuration {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param sender_address The The IP address of the sender of the configuration.
 	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param agent The agent to be added.
@@ -30,17 +32,20 @@ public final class AgentCreationConfiguration extends Configuration {
 	}
 	
 	/** Returns the agent of the configuration.
-	 *  @return The agent to be added to the simulation. */
+	 * 
+	 *  @return The agent pf the configuration. */
 	public Agent getAgent() {
 		return this.agent;
 	}
 	
-	/** Returns the id of the soiety where the new agent shall be added.
-	 *  @return The id of the society. */
+	/** Returns the id of the society where the new agent must be added.
+	 * 
+	 *  @return The id of the society where the new agent must be added.*/
 	public String getSociety_id() {
 		return this.society_id;
 	}
 	
+	@Override
 	protected int getType() {
 		return ConfigurationTypes.AGENT_CREATION; 
 	}
@@ -51,7 +56,7 @@ public final class AgentCreationConfiguration extends Configuration {
 		
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("<configuration type=\"" + this.getType() +
+		buffer.append("<configuration type=\"" + ConfigurationTypes.AGENT_CREATION +
 				      "\" sender_adress=\"" + this.sender_address +
 				      "\" sender_socket=\"" + this.sender_socket +
 				      "\" parameter=\"" + this.society_id +
@@ -62,7 +67,7 @@ public final class AgentCreationConfiguration extends Configuration {
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("</configuration>\n");		
+		buffer.append("</configuration>\n");
 		
 		// return the answer to the method
 		return buffer.toString();

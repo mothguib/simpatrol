@@ -1,37 +1,41 @@
-/* EnvironmentCreationConfiguration.java */
+/* GraphCreationConfiguration.java */
 
 /* The package of this class. */
 package control.configuration;
 
 /* Imported classes and/or interfaces. */
-import model.Environment;
+import model.graph.Graph;
 
 /** Implements objects that express configurations to create
- *  the environment of the simulation.
- *  @see Environment */
-public final class EnvironmentCreationConfiguration extends Configuration {
+ *  the graph of the simulation.
+ *  
+ *  @see Graph */
+public final class GraphCreationConfiguration extends Configuration {
 	/* Attributes. */
-	/** The environment being created. */
-	private Environment environment;
+	/** The graph being created. */
+	private Graph graph;
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param sender_address The IP address of the sender of the configuration.
 	 *  @param sender_socket The number of the UDP socket of the sender.
-	 *  @param environment The environment being created. */
-	public EnvironmentCreationConfiguration(String sender_address, int sender_socket, Environment environment) {
+	 *  @param graph The graph being created by the configuration. */
+	public GraphCreationConfiguration(String sender_address, int sender_socket, Graph graph) {
 		super(sender_address, sender_socket);
-		this.environment = environment;
+		this.graph = graph;
 	}
 	
-	/** Returns the environment of the configuration.
-	 *  @return The environment breing created. */
-	public Environment getEnvironment() {
-		return this.environment;
+	/** Returns the graph of the configuration.
+	 * 
+	 *  @return The graph of the configuration. */
+	public Graph getGraph() {
+		return this.graph;
 	}
 	
+	@Override
 	protected int getType() {
-		return ConfigurationTypes.ENVIRONMENT_CREATION; 
+		return ConfigurationTypes.GRAPH_CREATION;
 	}
 	
 	public String toXML(int identation) {
@@ -40,17 +44,17 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 		
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("<configuration type=\"" + this.getType() +
+		buffer.append("<configuration type=\"" + ConfigurationTypes.GRAPH_CREATION +
 				      "\" sender_adress=\"" + this.sender_address +
 				      "\" sender_socket=\"" + this.sender_socket +
 				      "\">\n");
 		
-		// puts the environment
-		buffer.append(this.environment.toXML(identation + 1));
+		// puts the graph
+		buffer.append(this.graph.toXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("</configuration>\n");		
+		buffer.append("</configuration>\n");
 		
 		// return the answer to the method
 		return buffer.toString();

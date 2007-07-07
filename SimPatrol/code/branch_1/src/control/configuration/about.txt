@@ -1,0 +1,2 @@
+This package contains the classes related to the implementation of configurations
+to a simulation of the patrolling task performed by SimPatrol.
