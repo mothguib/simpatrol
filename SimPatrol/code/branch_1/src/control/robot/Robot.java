@@ -15,14 +15,14 @@ public abstract class Robot implements Clockable {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot. */
 	public Robot(String clock_thread_name) {
 		this.clock = new Clock(clock_thread_name, this);
 	}
 	
-	/** Starts the clock's work, and so the robot's.
-	 *  @param name The name of the thread of the clock of this robot. */
-	public void startWorking() {
+	/** Starts the clock's work, and so the robot's. */
+	public void start() {
 		this.clock.start();
 	}
 	

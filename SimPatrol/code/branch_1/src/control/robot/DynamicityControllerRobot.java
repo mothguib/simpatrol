@@ -9,7 +9,9 @@ import model.interfaces.Dynamic;
 
 /** Implements the robots that assure dynamic behaviour
  *  to the dynamic objects of the simulation.
+ *  
  *  Used by real time simulators.
+ *  
  *  @see RealTimeSimulator */
 public final class DynamicityControllerRobot extends Robot {
 	/* Attributes. */
@@ -18,6 +20,7 @@ public final class DynamicityControllerRobot extends Robot {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot.
 	 *  @param object The dynamic object to be controlled. */
 	public DynamicityControllerRobot(String clock_thread_name, Dynamic object) {

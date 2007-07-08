@@ -10,7 +10,9 @@ import model.interfaces.Mortal;
 
 /** Implements the robots that assure the death of the mortal objects
  *  of a simulation.
- *  Used by real time simulators. 
+ *  
+ *  Used by real time simulators.
+ *   
  *  @see RealTimeSimulator */
 public final class MortalityControllerRobot extends Robot {
 	/* Attributes. */
@@ -22,6 +24,7 @@ public final class MortalityControllerRobot extends Robot {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot.
 	 *  @param object The mortal object to be controlled.
 	 *  @param simulator The real time simulator to have its mortal objects dead. */
