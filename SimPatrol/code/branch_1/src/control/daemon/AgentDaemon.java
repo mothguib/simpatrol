@@ -9,10 +9,11 @@ import view.connection.AgentConnection;
 import model.agent.Agent;
 
 /** Implements the daemons of SimPatrol that attend
- *  an agent's intentions of actions or requisitions for perceptions. */
+ *  an agent's feelings of perceptions, or intentions of actions. */
 public abstract class AgentDaemon extends Daemon {
 	/* Attributes. */
-	/** The agent whose intentions are attended. */
+	/** The agent whose perceptions are produced and
+	 *  whose intentions are attended. */
 	protected Agent agent;
 	
 	/* Methods. */	
@@ -24,10 +25,10 @@ public abstract class AgentDaemon extends Daemon {
 	 *  @see PerceptionDaemon
 	 *  @see ActionDaemon
 	 * 
-	 *  @param name The name of the thread of the daemon.
-	 *  @param agent The agent whose intentions are attended. */
-	public AgentDaemon(String name, Agent agent) {
-		super(name);
+	 *  @param thread_name The name of the thread of the daemon.
+	 *  @param agent The agent whose perceptions are produced and intentions are attended. */
+	public AgentDaemon(String thread_name, Agent agent) {
+		super(thread_name);
 		this.buffer = new Queue<String>();
 		this.agent = agent;
 	}

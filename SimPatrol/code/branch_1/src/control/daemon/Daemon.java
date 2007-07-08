@@ -11,34 +11,22 @@ import view.connection.Connection;
 /** Implements the daemons of SimPatrol. */
 public abstract class Daemon extends Thread {
 	/* Attributes. */
-	/** The connection used by the daemon to listen to
-	 *  new messages, as well as attend them. */
-	protected Connection connection;
-	
 	/** The buffer shared by the daemon with the connection, for the
 	 *  exchange of messages. */
 	protected Queue<String> buffer;
 	
+	/** The connection used by the daemon to listen to
+	 *  new messages, as well as attend them. */
+	protected Connection connection;
+	
 	/* Methods. */
 	/** Constructor.
-	 *  @param name The name of the thread of the daemon. */
-	public Daemon(String name) {
-		super(name);
+	 * 
+	 *  @param thread_name The name of the thread of the daemon. */
+	public Daemon(String thread_name) {
+		super(thread_name);
 		this.buffer = new Queue<String>();
-		this.connection = new Connection(name + "'s connection", this.buffer);		
-	}
-	
-	/** Returns the number of the local UDP socket
-	 *  of the connection of the Daemon.
-	 *  @return the number of the local UDP socket. */
-	public int getUDPSocketNumber() {
-		return this.connection.getUDPSocketNumber();
-	}
-	
-	/** Returns the buffer listened by the daemon.
-	 *  @return The buffer shared by the daemon with the connection, for the exchange of messages. */
-	public Queue<String> getBuffer() {
-		return this.buffer;
+		this.connection = new Connection(thread_name + "'s connection", this.buffer);		
 	}
 	
 	/** Starts the work of the daemon.
@@ -49,8 +37,14 @@ public abstract class Daemon extends Thread {
 		super.start();
 	}
 	
+	/** Returns the number of the UDP socket connection. */
+	public int getUDPSocketNumber() {
+		return this.connection.getUDPSocketNumber();
+	}
+	
 	/** Give preference to use this.start(int local_socket_number)
-	 * @deprecated */
+	 * 
+	 *  @deprecated */
 	public void start() {
 		super.start();
 	}

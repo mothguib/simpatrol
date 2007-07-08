@@ -21,10 +21,10 @@ public final class ActionDaemon extends AgentDaemon {
 	 *  setConenction() method.
 	 *  @see PerceptionDaemon
 	 *
-	 *  @name The name of the thread of the daemon.
+	 *  @param thread_name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
-	public ActionDaemon(String name, Agent agent) {
-		super(name, agent);
+	public ActionDaemon(String thread_name, Agent agent) {
+		super(thread_name, agent);
 		this.stop_working = false;
 	}
 	
@@ -41,7 +41,7 @@ public final class ActionDaemon extends AgentDaemon {
 	
 	public void run() {
 		// screen message
-		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Listening to some intention...");
+		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Listening to an intention...");
 		
 		while(!this.stop_working);
 		// TODO implementar!!!
