@@ -18,21 +18,4 @@ public abstract class ConfigurationTypes {
 	public static final int AGENT_CREATION = 2;
 	
 	/** Configurations to start the simulation. */
-	public static final int SIMULATION_START = 3;
-	
-	/* Methods. */
-	/** Returns a string containing the types of configurations.
-	 * 
-	 *  @developer New configurations must change this method. */
-	public static final String getResume() {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("Configuration types:\n");
-		buffer.append("value   description          body                    and/or   parameter\n");
-		buffer.append("  0     GRAPH CREATION       Graph object            OR       string path\n");
-		buffer.append("  1     SOCIETIES CREATION   Society objects (1..n)  OR       string path\n");
-		buffer.append("  2     AGENT CREATION       Agent object            AND      ignored\n");
-		buffer.append("  3     SIMULATION START     ignored                 AND      simulation time\n");
-		
-		return buffer.toString();
-	}
-}
+	public static final int SIMULATION_START = 3;}
