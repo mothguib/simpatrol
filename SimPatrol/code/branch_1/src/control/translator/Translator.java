@@ -19,6 +19,7 @@ import com.sun.org.apache.xerces.internal.impl.xs.dom.DOMParser;
 public abstract class Translator {	
 	/* Methods. */
 	/** Parses a given XML file.
+	 * 
 	 *  @param xml_file_path The path of the XML file to be translated. 
 	 *  @throws ParserConfigurationException 
 	 *  @throws IOException
@@ -32,6 +33,7 @@ public abstract class Translator {
 	}
 	
 	/** Parses a given XML string.
+	 * 
 	 *  @param xml_string The string of the XML source to be translated. 
 	 *  @throws ParserConfigurationException 
 	 *  @throws IOException 
@@ -44,5 +46,5 @@ public abstract class Translator {
 		
 		Document doc = parser.getDocument();
 		return doc.getDocumentElement();
-	}	
+	}
 }

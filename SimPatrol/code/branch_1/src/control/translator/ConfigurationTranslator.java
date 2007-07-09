@@ -5,11 +5,9 @@ package control.translator;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
-import model.Environment;
 import model.agent.Agent;
+import model.agent.Society;
 import model.graph.Graph;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,161 +15,186 @@ import org.xml.sax.SAXException;
 import control.configuration.AgentCreationConfiguration;
 import control.configuration.Configuration;
 import control.configuration.ConfigurationTypes;
-import control.configuration.EnvironmentCreationConfiguration;
+import control.configuration.GraphCreationConfiguration;
 import control.configuration.Orientation;
-import control.configuration.SimulationConfiguration;
+import control.configuration.SimulationStartConfiguration;
+import control.configuration.SocietiesCreationConfiguration;
 
 /** Implements a translator that obtains configurations and orientations
  *  from a given XML source.
+ *  
  *  @see Configuration
- *  @see Orientation */
+ *  @see Orientation
+ *  @developer New configurations must change this class. */
 public abstract class ConfigurationTranslator extends Translator {
 	/* Methods. */
-	/** Obtains the configurations from the given XML element, except
-	 *  for the "agent creation" configurations.
+	/** Obtains the configuration from the XML string, except
+	 *  for the "societies creation" and "agent creation" configuration.
 	 *  
-	 *  To obtain "agent creation" configurations, use
-	 *  getAgentCreationConfigurations(Element xml_element, Graph graph).
+	 *  To obtain a "societies creation" configuration, use
+	 *  getSocietiesCreationConfiguration(String xml_string, Graph graph).
+	 *  @see SocietiesCreationConfiguration
+	 *  
+	 *  To obtain an "agent creation" configuration, use
+	 *  getAgentCreationConfiguration(String xml_string, Graph graph).
 	 *  @see AgentCreationConfiguration
 	 *  
-	 *  @param xml_element The XML source containing the configurations.
-	 *  @return The configurations from the XML source. 
+	 *  @param xml_string The XML source containing the configuration.
+	 *  @return The configuration from the XML source. 
+	 *  @throws IOException 
+	 *  @throws SAXException 
+	 *  @throws ParserConfigurationException 
+	 *  @developer New configurations must change this method. */
+	public static Configuration getConfiguration(String xml_string) throws ParserConfigurationException, SAXException, IOException {
+		// parses the string in order to obtain the "configuration" element
+		Element configuration_element = parseString(xml_string);
+		
+		// obtains its data
+		String sender_address = configuration_element.getAttribute("sender_address");
+		int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
+		int type = Integer.parseInt(configuration_element.getAttribute("type"));
+		
+		// creates the new configuration
+		// developer: new configuration must change this code 
+		switch(type) {
+			case(ConfigurationTypes.GRAPH_CREATION): {
+				// the graph to be read
+				Graph graph = null;
+				
+				// tries to obtain the graph from the tag content
+				Graph[] read_graph = GraphTranslator.getGraphs(configuration_element);
+				
+				// if there's a graph, it's ok
+				if(read_graph.length > 0) graph = read_graph[0];
+				// if not, obtains it from the eventual path held at the "parameter" attribute
+				else {
+					String path = configuration_element.getAttribute("parameter");
+					graph = GraphTranslator.getGraph(path);
+				}
+				
+				// return the new configuration as the answer of the method
+				return new GraphCreationConfiguration(sender_address, sender_socket, graph);
+			}
+			case(ConfigurationTypes.SIMULATION_START): {
+				// obtains the "parameter" attribute
+				// (actually the time of simulation)
+				int simulation_time = Integer.parseInt(configuration_element.getAttribute("parameter"));
+				
+				// returns the new configuration as the answer of the method
+				return new SimulationStartConfiguration(sender_address, sender_socket, simulation_time);
+			}
+		}
+		
+		// default answer
+		return null;		
+	}
+	
+	/** Obtains the configuration to add new societies from the given XML string.
+	 * 
+	 *  @param xml_string The XML source containing the configuration.
+	 *  @param graph The graph obtained from a previous "graph creation" configuration.
+	 *  @return The configuration from the XML source. 
 	 *  @throws IOException 
 	 *  @throws SAXException 
 	 *  @throws ParserConfigurationException */
-	public static Configuration[] getConfigurations(Element xml_element) throws ParserConfigurationException, SAXException, IOException {
-		// obtains the nodes with the "configuration" tag
-		NodeList configuration_node = xml_element.getElementsByTagName("configuration");
+	public static SocietiesCreationConfiguration getSocietiesCreationConfiguration(String xml_string, Graph graph) throws ParserConfigurationException, SAXException, IOException {
+		// parses the string in order to obtain the "configuration" element
+		Element configuration_element = parseString(xml_string);
 		
-		// Holds the answer for the method
-		List<Configuration> configurations = new LinkedList<Configuration>();
+		// obtains the data
+		String sender_address = configuration_element.getAttribute("sender_address");
+		int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
+		int type = Integer.parseInt(configuration_element.getAttribute("type"));
 		
-		// for each configuration_node
-		for(int i = 0; i < configuration_node.getLength(); i++) {
-			// obtains the current configuration element
-			Element configuration_element = (Element) configuration_node.item(i);
+		// creates the new configuration
+		if(type == ConfigurationTypes.SOCIETIES_CREATION) {
+			// the societies to be read
+			Society[] societies = null;
 			
-			// obtains its data
-			String sender_address = configuration_element.getAttribute("sender_address");
-			int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
-			int type = Integer.parseInt(configuration_element.getAttribute("type"));
+			// tries to obtain the societies from the tag content
+			societies = SocietyTranslator.getSocieties(configuration_element, graph);
 			
-			// creates the new configuration
-			switch(type) {
-				case(ConfigurationTypes.ENVIRONMENT_CREATION): {
-					// the environment to be read
-					Environment environment = null;
-					
-					// tries to obtain the environment from the tag content
-					Environment[] read_environment = EnvironmentTranslator.getEnvironments(configuration_element);
-					
-					// if there's an environment, it's ok
-					if(read_environment.length > 0) environment = read_environment[0];
-				    // if not, obtains it from the eventual path held in the parameter attribute
-					else {
-						String path = configuration_element.getAttribute("parameter");
-						environment = EnvironmentTranslator.getEnvironment(path);						
-					}
-					
-					// new environment creation configuration
-					configurations.add(new EnvironmentCreationConfiguration(sender_address, sender_socket, environment));
-					
-					break;
-				}
-				case(ConfigurationTypes.SIMULATION_CONFIGURATION): {
-					// obtains the parameter (actually the time of simulation)
-					int simulation_time = Integer.parseInt(configuration_element.getAttribute("parameter"));
-					
-					// new simulation configuration
-					configurations.add(new SimulationConfiguration(sender_address, sender_socket, simulation_time));
-					
-					break;
-				}
+			// if there are no societies, obtains it from the eventual path held at the "parameter" attribute
+			if(societies.length == 0) {
+				String path = configuration_element.getAttribute("parameter");
+				societies = SocietyTranslator.getSocieties(path, graph);
 			}
+			
+			// returns the new configuration as the answer of the method
+			return new SocietiesCreationConfiguration(sender_address, sender_socket, societies);
 		}
 		
-		// mounts and returns the answer
-		Configuration[] answer = new Configuration[configurations.size()];
-		for(int i = 0; i < answer.length; i++)
-			answer[i] = configurations.get(i);
-		return answer;		
+		// default answer
+		return null;
 	}
 	
-	/** Obtains the configurations to add new agents from the given XML element.
-	 *  @param xml_element The XML source containing the configurations.
-	 *  @param graph The graph obtained from a previous environment configuration.
-	 *  @return The configurations from the XML source. */
-	public static AgentCreationConfiguration[] getAgentCreationConfigurations(Element xml_element, Graph graph) {
-		// obtains the nodes with the "configuration" tag
-		NodeList configuration_node = xml_element.getElementsByTagName("configuration");
+	/** Obtains the configuration to add a new agent from the given XML string.
+	 * 
+	 *  @param xml_string The XML source containing the configuration.
+	 *  @param graph The graph obtained from a previous "graph creation" configuration.
+	 *  @return The configuration from the XML source. 
+	 *  @throws IOException 
+	 *  @throws SAXException 
+	 *  @throws ParserConfigurationException */
+	public static AgentCreationConfiguration getAgentCreationConfiguration(String xml_string, Graph graph) throws ParserConfigurationException, SAXException, IOException {
+		// parses the string in order to obtain the "configuration" element
+		Element configuration_element = parseString(xml_string);
 		
-		// Holds the answer for the method
-		List<AgentCreationConfiguration> configurations = new LinkedList<AgentCreationConfiguration>();
-				
-		// for each configuration_node
-		for(int i = 0; i < configuration_node.getLength(); i++) {
-			// obtains the current configuration element
-			Element configuration_element = (Element) configuration_node.item(i);
+		// obtains the data
+		String sender_address = configuration_element.getAttribute("sender_address");
+		int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
+		int type = Integer.parseInt(configuration_element.getAttribute("type"));
+		
+		// creates the new configuration
+		if(type == ConfigurationTypes.AGENT_CREATION) {
+			// obtains the current "parameter" attribute
+			// (actually a society id)
+			String society_id = configuration_element.getAttribute("parameter");
 			
-			// obtains its data
-			String sender_address = configuration_element.getAttribute("sender_address");
-			int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
-			int type = Integer.parseInt(configuration_element.getAttribute("type"));
+			// obtains the agent from the tag
+			// (always obtains it as a seasonal agent) 
+			Agent agent = SocietyTranslator.getAgents(configuration_element, false, graph)[0];
 			
-			// creates the new configuration
-			if(type == ConfigurationTypes.AGENT_CREATION) {
-				// obtains the current parameter (actually a society id)
-				String society_id = configuration_element.getAttribute("parameter");
-				
-				// obtains the agent from the tag
-				Agent agent = EnvironmentTranslator.getAgents(configuration_element, false, graph)[0];
-				
-				// new agent creation configuration
-				configurations.add(new AgentCreationConfiguration(sender_address, sender_socket, agent, society_id));
-			}
+			// return the new agent creation configuration
+			return new AgentCreationConfiguration(sender_address, sender_socket, agent, society_id);
 		}
 		
-		// mounts and returns the answer
-		AgentCreationConfiguration[] answer = new AgentCreationConfiguration[configurations.size()];
-		for(int i = 0; i < answer.length; i++)
-			answer[i] = configurations.get(i);
-		return answer;
+		// defautl answer
+		return null;
 	}
 	
-	/** Obtains the orientations from the given XML element.
-	 *  @param xml_element The XML source containing the orientations.
-	 *  @return The orientations from the XML source. */
-	public static Orientation[] getOrientations(Element xml_element) {
-		// obtains the nodes with the "orientation" tag
-		NodeList orientation_node = xml_element.getElementsByTagName("orientation");
+	/** Obtains the orientation from the given XML string.
+	 * 
+	 *  @param xml_string The XML source containing the orientation.
+	 *  @return The orientation from the XML source. 
+	 *  @throws IOException 
+	 *  @throws SAXException 
+	 *  @throws ParserConfigurationException */
+	public static Orientation getOrientation(String xml_string) throws ParserConfigurationException, SAXException, IOException {
+		// parses the given string, in order to obtain the orientation element
+		Element orientation_element = parseString(xml_string);
 		
-		// the answer to the method
-		Orientation[] answer = new Orientation[orientation_node.getLength()];
+		// obtains its message
+		String message = orientation_element.getAttribute("message");
 		
-		// for each orientation_node
-		for(int i = 0; i < answer.length; i++) {
-			// obtains the current orientation element
-			Element orientation_element = (Element) orientation_node.item(i);
-			
-			// obtains its items
-			IntAndString[] items = getOrientationItems(orientation_element);			
-			
-			// creates the new orientation
-			Orientation orientation = new Orientation();
-			
-			// adds its items
-			for(int j = 0; j < items.length; i++)
-				orientation.addItem(items[i].int_value, items[j].string);
-			
-			// adds the orientation to the answer
-			answer[i] = orientation;
-		}
+		// obtains its items
+		IntAndString[] items = getOrientationItems(orientation_element);			
 		
-		// returns the answer
-		return answer;
+		// creates the new orientation
+		Orientation orientation = null;
+		if(message.length() > 0) orientation = new Orientation(message);
+		else orientation = new Orientation();
+		
+		// adds its items
+		for(int j = 0; j < items.length; j++)
+			orientation.addItem(items[j].int_value, items[j].string);
+		
+		// returns the new orientation
+		return orientation;
 	}
 	
 	/** Obtains the items of a specific orientation, given its XML source.
+	 * 
 	 *  @param orientation_element The XML source containing the orientation whose items are to be read.
 	 *  @return The items of the orientation. */
 	private static IntAndString[] getOrientationItems(Element orientation_element) {		
@@ -186,7 +209,7 @@ public abstract class ConfigurationTranslator extends Translator {
 			// obtains the current orientation item
 			Element ort_item_element = (Element) ort_item_nodes.item(i);
 
-			// obtains the data
+			// obtains its data
 			String agent_id = ort_item_element.getAttribute("agent_id");
 			int socket = Integer.parseInt(ort_item_element.getAttribute("socket"));
 

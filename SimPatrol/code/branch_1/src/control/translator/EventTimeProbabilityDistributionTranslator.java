@@ -15,13 +15,17 @@ import util.etpd.UniformEventTimeProbabilityDistribution;
 
 /** Implements a translator that obtains event time probability distributions
  *  from a given XML source.
- *  @see EventTimeProbabilityDistribution */
+ *  
+ *  @see EventTimeProbabilityDistribution
+ *  @developer New EventTimeProbabilityDistribution subclasses must change this class. */
 public abstract class EventTimeProbabilityDistributionTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the event time probability distributions from the
 	 *  given xml element.
+	 *  
 	 *  @param xml_element The XML source containing the etpds to be translated.
-	 *  @return The event time probability distributions. */
+	 *  @return The event time probability distributions.
+	 *  @developer New EventTimeProbabilityDistribution subclasses must change this method. */
 	public static EventTimeProbabilityDistribution[] getEventTimeProbabilityDistribution(Element xml_element) {		
 		// obtains the nodes with the "etpd" tag
 		NodeList etpd_nodes = xml_element.getElementsByTagName("etpd");
@@ -59,6 +63,8 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 					answer[i] = new SpecificEventTimeProbabilityDistribution(seed, parameters[0], (int) parameters[1]);
 					break;
 				}
+				
+				// developer: new event time probability distributions must add code here
 			}
 			
 			// configures the new etpd, if necessary
@@ -72,6 +78,7 @@ public abstract class EventTimeProbabilityDistributionTranslator extends Transla
 	
 	/** Obtains the probability distribution parameters from a
 	 *  given etpd element.
+	 *  
 	 *  @param etpd_element The XML source containing the etpd's parameters.
 	 *  @return The etpd's parameters. */
 	private static double[] getETPDParameters(Element etpd_element) {		

@@ -4,8 +4,9 @@
 package control.translator;
 
 /* Imported classes and/or interfaces. */
+import java.util.LinkedList;
+import java.util.List;
 import model.graph.Graph;
-import model.perception.EmptyPerception;
 import model.perception.GraphPerception;
 import model.perception.Perception;
 import org.w3c.dom.Element;
@@ -13,43 +14,49 @@ import org.w3c.dom.NodeList;
 
 /** Implements a translator that obtains Perception objects
  *  from XML source elements.
- *  @see Perception */
+ *  
+ *  @see Perception
+ *  @developer New Perception subclasses must change this class. */
 public abstract class PerceptionTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the perceptions from the given XML element.
+	 * 
 	 *  @param xml_element The XML source containing the perceptions.
-	 *  @return The perceptions from the XML source. */
+	 *  @return The perceptions from the XML source.
+	 *  @developer New Perception subclasses must change this method. */
 	public static Perception[] getPerceptions(Element xml_element) {
 		// obtains the nodes with the "perception" tag
 		NodeList perception_node = xml_element.getElementsByTagName("perception");
 		
-		// the answer to the method
-		Perception[] answer = new Perception[perception_node.getLength()];
+		// holds all the obtained perceptions
+		List<Perception> perceptions = new LinkedList<Perception>();
 		
 		// for each perception_node
-		for(int i = 0; i < answer.length; i++) {
+		for(int i = 0; i < perception_node.getLength(); i++) {
 			// obtains the current perception element
-			// TODO descomentar...
 			Element perception_element = (Element) perception_node.item(i);
 			
-			// the current perception
+			// the current perception to be obtained
 			Perception perception = null;
 			
 			// 1st. tries to obtain a graph from the perception element
 			if(perception == null) {
-				Graph[] read_graph = EnvironmentTranslator.getGraphs(perception_element);
+				Graph[] read_graph = GraphTranslator.getGraphs(perception_element);
 				if(read_graph.length > 0) perception = new GraphPerception(read_graph[0]);
 			}
 			
 			// 2nd.
-			// TODO prosseguir a obtencao dos varios tipos de percepcoes			
+			// developer: new perceptions must add code here
 			
-			// if perception is still null, so it's an empty perception
-			if(perception == null)
-			answer[i] = new EmptyPerception();
+			// adds the current perception to the list of perceptions, if it's valid
+			if(perception != null)
+				perceptions.add(perception);			
 		}
 		
-		// returns the answer
+		// mounts and returns the answer
+		Perception[] answer = new Perception[perceptions.size()];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = perceptions.get(i);
 		return answer;
 	}
 }
