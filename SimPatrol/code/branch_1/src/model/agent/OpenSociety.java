@@ -7,6 +7,7 @@ package model.agent;
 public final class OpenSociety extends Society {	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the closed society.
 	 *  @param seasonal_agents The seasonal agents that compound the open society. */
 	public OpenSociety(String label, SeasonalAgent[] seasonal_agents) {
@@ -17,16 +18,17 @@ public final class OpenSociety extends Society {
 			seasonal_agents[i].setSociety(this);			
 	}
 	
-	/** Adds a given agent to the society.
-	 *  @param agent The agent to be added. */
-	public void addAgent(SeasonalAgent agent) {
-		this.agents.add(agent);
-	}
-	
 	/** Removes a given agent from the society. 
 	 *  @param agent The agent to be removed. */
 	public void removeAgent(SeasonalAgent agent) {
 		this.agents.remove(agent);
+	}
+	
+	public void addAgent(Agent agent) {
+		if(agent instanceof SeasonalAgent) {
+			this.agents.add(agent);
+			((SeasonalAgent) agent).setSociety(this);
+		}
 	}
 	
 	public String toXML(int identation) {

@@ -20,14 +20,15 @@ public abstract class Agent implements XMLable {
 	private String id;
 	
 	/** The label of the agent. */
-	private String label;
+	protected String label;
 	
 	/** The state of the agent.
+	 * 
 	 *  @see AgentStates */
 	private int state;
 	
 	/** The vertex that the agent comes from. */
-	private Vertex vertex;
+	protected Vertex vertex;
 
 	/** The edge where the agent is. */
 	private Edge edge;
@@ -49,6 +50,7 @@ public abstract class Agent implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the agent.
 	 *  @param vertex The vertex that the agent comes from.
 	 *  @param allowed_perceptions The allowed perceptions to the agent.
@@ -77,6 +79,7 @@ public abstract class Agent implements XMLable {
 	}
 	
 	/** Returns the state of the agent.
+	 * 
 	 *  @return The state of the agent.
 	 *  @see AgentStates */
 	public int getAgentState() {
@@ -84,6 +87,7 @@ public abstract class Agent implements XMLable {
 	}
 	
 	/** Configures the state of the agent.
+	 * 
 	 *  @param state The state of the agent.
 	 *  @see AgentStates */
 	public void setState(int state) {
@@ -91,6 +95,7 @@ public abstract class Agent implements XMLable {
 	}
 	
 	/** Configures the edge of the agent, as well as its position on it.
+	 * 
 	 *  @param edge The edge of the agent.
 	 *  @param elapsed_length Where the agent is on the edge. */	
 	public void setEdge(Edge edge, int elapsed_length) {
@@ -99,30 +104,35 @@ public abstract class Agent implements XMLable {
 	}
 	
 	/** Configures the stamina of the agent.
+	 * 
 	 *  @param stamina The stamina of the agent. */	
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
 	}
 	
 	/** Returns the stamina of the agent.
+	 * 
 	 *  @return The stamina of the agent. */
 	public double getStamina() {
 		return this.stamina;
 	}
 	
 	/** Decrements the stamina of the agent by the given factor.
+	 * 
 	 *  @param factor The factor to be decremented from the value of stamina. */
 	public void decStamina(double factor) {
 		this.stamina = this.stamina - factor;
 	}
 	
 	/** Returns the vertex that the agent comes from.
+	 * 
 	 *  @return The vertex that agent comes from. */
 	public Vertex getVertex() {
 		return this.vertex;
 	}
 	
 	/** Returns the allowes perceptions for the agent.
+	 * 
 	 *  @return The permissions of perceptions. */
 	public PerceptionPermission[] getAllowedPerceptions() {
 		PerceptionPermission[] answer = new PerceptionPermission[0];
@@ -200,5 +210,5 @@ public abstract class Agent implements XMLable {
 
 	public void setObjectId(String object_id) {
 		this.id = object_id;
-	}	
+	}
 }

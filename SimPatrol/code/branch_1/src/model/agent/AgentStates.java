@@ -4,6 +4,7 @@
 package model.agent;
 
 /** Contains the possible states of an agent.
+ * 
  *  @see Agent */
 public abstract class AgentStates {
 	public static final int JUST_PERCEIVED = 0;

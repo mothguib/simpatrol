@@ -22,6 +22,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the agent. 
 	 *  @param vertex The vertex that the agent comes from.
 	 *  @param death_tpd The probability distribution for the death time of the agent.
@@ -36,6 +37,23 @@ public final class SeasonalAgent extends Agent implements Mortal {
 	 *  @param society The society of the agent. */
 	public void setSociety(OpenSociety society) {
 		this.society = society;		
+	}
+	
+	/** Obtains a perpetual version of this agent.
+	 * 
+	 *  @return The perpetual agent correspondent to this one. */
+	public PerpetualAgent getPerpetualVersion() {
+		Object[] allowed_perceptions_array = this.allowed_perceptions.toArray();
+		PerceptionPermission[] allowed_perceptions = new PerceptionPermission[allowed_perceptions_array.length];
+		for(int i = 0; i < allowed_perceptions.length; i++)
+			allowed_perceptions[i] = (PerceptionPermission) allowed_perceptions_array[i];
+		
+		Object[] allowed_actions_array = this.allowed_actions.toArray();
+		ActionPermission[] allowed_actions = new ActionPermission[allowed_actions_array.length];
+		for(int i = 0; i < allowed_actions.length; i++)
+			allowed_actions[i] = (ActionPermission) allowed_actions_array[i];
+		
+		return new PerpetualAgent(this.label, this.vertex, allowed_perceptions, allowed_actions);
 	}
 	
 	public String toXML(int identation) {

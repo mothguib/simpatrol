@@ -13,6 +13,7 @@ import model.permission.PerceptionPermission;
 public final class PerpetualAgent extends Agent {
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param vertex The vertex that the agent comes from.
 	 *  @param label The label of the agent.
 	 *  @param allowed_perceptions The allowed perceptions to the agent.

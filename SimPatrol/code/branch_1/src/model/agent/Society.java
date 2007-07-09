@@ -23,6 +23,7 @@ public abstract class Society implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the society.
 	 *  @param agents The agents that compound the society. */
 	public Society(String label, Agent[] agents) {
@@ -33,13 +34,8 @@ public abstract class Society implements XMLable {
 			this.agents.add(agents[i]);
 	}
 	
-	/** Returns the label of the society.
-	 *  @return The label of the society. */
-	public String getLabel() {
-		return this.label;
-	}
-	
 	/** Returns the agents of the society.
+	 * 
 	 *  @return The set of agents of the society. */
 	public Agent[] getAgents() {
 		Object[] agents_array = this.agents.toArray();
@@ -50,6 +46,11 @@ public abstract class Society implements XMLable {
 		
 		return answer;
 	}
+	
+	/** Adds a given agent to the society. 
+	 * 
+	 *  @param agent The agent to be added. */
+	public abstract void addAgent(Agent agent);
 	
 	public String toXML(int identation) {
 		// holds the answer being constructed
