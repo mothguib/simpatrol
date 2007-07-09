@@ -4,12 +4,10 @@
 package control.simulator;
 
 /* Imported classes and/or interfaces. */
-import java.io.IOException;
-import java.util.GregorianCalendar;
+import java.net.SocketException;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import model.graph.Vertex;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
@@ -18,7 +16,9 @@ import control.robot.MortalityControllerRobot;
 import util.timemeter.Chronometer;
 import util.timemeter.Chronometerable;
 
-/** Implements a real time simulator of the patrolling task. */
+/** Implements a real time simulator of the patrolling task.
+ * 
+ *  @developer This class must have its behaviour modelled. */
 public final class RealTimeSimulator extends Simulator implements Chronometerable {
 	/* Attributes. */
 	/** The chronometer of the real time simulation. */
@@ -34,12 +34,13 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	
 	/* Methods. */
 	/** Constructor.
-	 *  @param local_socket_number The number of the UDP socket of the main connection. 
-	 *  @throws IOException 
-	 *  @throws SAXException 
-	 *  @throws ParserConfigurationException */	
-	public RealTimeSimulator(int local_socket_number) throws ParserConfigurationException, SAXException, IOException {
-		super(local_socket_number);
+	 * 
+	 *  @param local_socket_number The number of the UDP socket of the main connection.
+	 *  @param cycle_duration The duration, in milliseconds, of a cycle of perceptions. 
+	 *  @throws SocketException */	
+	public RealTimeSimulator(int local_socket_number, int cycle_duration) throws SocketException {
+		super(local_socket_number, cycle_duration);
+		this.chronometer = null;
 	}
 	
 	/** Obtains the dynamic objects and creates the
@@ -83,7 +84,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		if(this.dynamic_robots != null) {
 			Object[] dynamic_robots_array = this.dynamic_robots.toArray();
 			for(int i = 0; i < dynamic_robots_array.length; i++)
-				((DynamicityControllerRobot) dynamic_robots_array[i]).startWorking();
+				((DynamicityControllerRobot) dynamic_robots_array[i]).start();
 		}
 	}
 	
@@ -92,7 +93,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		if(this.mortal_robots != null) {
 			Object[] mortal_robots_array = this.mortal_robots.toArray();
 			for(int i = 0; i < mortal_robots_array.length; i++)
-				((MortalityControllerRobot) mortal_robots_array[i]).startWorking();
+				((MortalityControllerRobot) mortal_robots_array[i]).start();
 		}
 	}
 	
@@ -116,11 +117,13 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	
 	/** Removes a given mortality controller robot from
 	 *  the set of mortality controller robots.
+	 *  
 	 *  @param mortal_robot The mortality controller robot to be removed. */
 	public void removeMortalityControllerRobot(MortalityControllerRobot mortal_robot) {
 		this.mortal_robots.remove(mortal_robot);
 	}
 	
+	/** @modeller This method must be modelled. */
 	public void startSimulation(int simulation_time) {
 		// 0th. super code execution
 		super.startSimulation(simulation_time);
@@ -161,12 +164,12 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	
 	public void startWorking() { 		
 		// screen message
-		System.out.println("[SimPatrol.Simulator] simulation started at " + new GregorianCalendar().getTime().toString());
+		System.out.println("[SimPatrol.Simulator] simulation started at " + Calendar.getInstance().toString());
 	}
 	
 	public void stopWorking() {
 		// screen message
-		System.out.println("[SimPatrol.Simulator] simulation stopped at " + new GregorianCalendar().getTime().toString());
+		System.out.println("[SimPatrol.Simulator] simulation stopped at " + Calendar.getInstance().toString());
 		
 		// stops the simulator
 		this.stopSimulation();
