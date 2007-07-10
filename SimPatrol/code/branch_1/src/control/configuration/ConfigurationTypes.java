@@ -18,4 +18,5 @@ public abstract class ConfigurationTypes {
 	public static final int AGENT_CREATION = 2;
 	
 	/** Configurations to start the simulation. */
-	public static final int SIMULATION_START = 3;}
+	public static final int SIMULATION_START = 3;
+}
