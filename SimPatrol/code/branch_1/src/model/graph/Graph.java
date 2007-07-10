@@ -12,7 +12,9 @@ import model.interfaces.Dynamic;
 import model.interfaces.XMLable;
 
 /** Implements graphs that represent the territories to be
- *  patrolled. */
+ *  patrolled.
+ *  
+ *  @developer New dynamic objects that eventually are part of a graph, must change this class. */
 public final class Graph implements XMLable {
 	/* Attributes. */
 	/** The set of vertexes of the graph. */
@@ -26,6 +28,7 @@ public final class Graph implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the graph.
 	 *  @param vertexes The vertexes of the graph. */
 	public Graph(String label, Vertex[] vertexes) {
@@ -38,10 +41,14 @@ public final class Graph implements XMLable {
 		this.edges = new HashSet<Edge>();
 		
 		// for each vertex, adds its edges to the set of edges
-		for(int i = 0; i < vertexes.length; i++) {
-			Edge[] current_edges = vertexes[i].getEdges();
+		Object[] vertexes_array = this.vertexes.toArray();
+		for(int i = 0; i < vertexes_array.length; i++) {
+			Vertex current_vertex = (Vertex) vertexes_array[i];
+			
+			Edge[] current_edges = current_vertex.getEdges();
 			for(int j = 0; j < current_edges.length; j++)
-				this.edges.add(current_edges[j]);
+				if(this.vertexes.contains(current_edges[j].getOtherVertex(current_vertex)))
+					this.edges.add(current_edges[j]);
 		}
 		
 		if(this.edges.size() == 0)
@@ -49,6 +56,7 @@ public final class Graph implements XMLable {
 	}
 	
 	/** Obtains the vertexes of the graph.
+	 * 
 	 *  @return The vertexes of the graph. */
 	public Vertex[] getVertexes() {
 		Object[] vertexes_array = this.vertexes.toArray();
@@ -61,6 +69,7 @@ public final class Graph implements XMLable {
 	}
 	
 	/** Obtains the edges of the graph.
+	 * 
 	 *  @return The edges of the graph. */
 	public Edge[] getEdges() {
 		Object[] edges_array = this.edges.toArray();
@@ -73,7 +82,9 @@ public final class Graph implements XMLable {
 	}	
 	
 	/** Obtains the dynamic objects of the graph.
-	 *  @return The dynamic vertexes and edges. */
+	 * 
+	 *  @return The dynamic vertexes and edges.
+	 *  @developer New dynamic objects that eventually are part of a graph, must change this method. */
 	public Dynamic[] getDynamicObjects() {
 		// the set of dynamic objects
 		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
@@ -91,6 +102,8 @@ public final class Graph implements XMLable {
 				if(edges_array[i] instanceof Dynamic)
 					dynamic_objects.add((Dynamic) edges_array[i]);
 		}
+		
+		// developer: new dynamic objects must be searched here
 		
 		// returns the answer
 		Object[] dynamic_objects_array = dynamic_objects.toArray();
@@ -114,15 +127,15 @@ public final class Graph implements XMLable {
 	 *  @param depth The depth to reach when walking in depth-first mode.
 	 *  @return A subgraph starting from the given vertex and with the given depth. */
 	public synchronized Graph getVisibleSubgraph(Vertex vertex, int depth) {
+		// if the given depth is -1, returns the entire visible graph
+		if(depth == -1)
+			return this.getVisibleGraph(vertex);
+		
 		// if the given starting vertex is not visibile or appearing, returns null
 		if(!vertex.visibility ||
 		  (vertex instanceof DynamicVertex
 				  &&
 		  !((DynamicVertex) vertex).isAppearing())) return null;
-		
-		// if the given depth is -1, return the entire visible graph
-		if(depth == -1)
-			return this.getVisibleGraph(vertex);
 		
 		// the answer for the method
 		Vertex[] starting_vertex = {vertex.getCopy()};
@@ -141,9 +154,16 @@ public final class Graph implements XMLable {
 	
 	/** Obtains the visible and appearing elements connected with the given
 	 *  starting vertex.
+	 *  
 	 *  @param starting_vertex The vertex to start walking into the graph in a breadth-first manner.
 	 *  @return The obtained graph. */
 	private synchronized Graph getVisibleGraph(Vertex starting_vertex) {
+		// if the starting vertex is not visible or is not appearing, returns null
+		if(!starting_vertex.visibility ||
+		  (starting_vertex instanceof DynamicVertex
+				  &&
+		  !((DynamicVertex) starting_vertex).isAppearing())) return null;
+		
 		// holds the vertexes to be treated
 		List<Vertex> pending_vertexes = new LinkedList<Vertex>();
 		
@@ -181,7 +201,7 @@ public final class Graph implements XMLable {
 					  (!(neighbourhood[i] instanceof DynamicVertex)
 							  ||
 					  ((DynamicVertex) neighbourhood[i]).isAppearing())) {
-						// if it not in the already treated ones
+						// if it is not in the already treated ones
 						if(!treated_vertexes.contains(neighbourhood[i])) {
 							// creates a copy of it
 							Vertex current_neighbour_copy = neighbourhood[i].getCopy();
@@ -236,10 +256,22 @@ public final class Graph implements XMLable {
 	 *  @param depth The depth limit for the expansion.
 	 *  @param already_expanded_vertexes The vertexes not to be expanded. */
 	private synchronized void addVisibleDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
+		// if the starting vertex is not visible or is not appearing, quits the method
+		if(!starting_vertex.visibility ||
+		  (starting_vertex instanceof DynamicVertex
+				  &&
+		  !((DynamicVertex) starting_vertex).isAppearing())) return;
+		
 		// if the depth is valid
 		if(depth > -1) {
-			// obtains the copy of the starting vertex from the given subgraph
+			// tries to obtain a copy of the starting vertex from the given subgraph
 			Vertex starting_vertex_copy = subgraph.getVertex(starting_vertex.getObjectId());
+			
+			// if the copy is null, creates it and adds to the subgraph
+			if(starting_vertex_copy == null) {
+				starting_vertex_copy = starting_vertex.getCopy();
+				subgraph.vertexes.add(starting_vertex_copy);
+			}
 			
 			// adds the starting vertex to the vertexes already expanded
 			already_expanded_vertexes.add(starting_vertex);
@@ -301,6 +333,7 @@ public final class Graph implements XMLable {
 	}
 	
 	/** Returns the vertex of the graph that has the given id.
+	 * 
 	 *  @param id The id of the wanted vertex.
 	 *  @return The vertex with the given id, or NULL if there's no vertex with such id. */	 
 	private Vertex getVertex(String id) {
@@ -315,6 +348,7 @@ public final class Graph implements XMLable {
 	}
 	
 	/** Returns the edge of the graph that has the given id.
+	 * 
 	 *  @param id The id of the wanted edge.
 	 *  @return The edge with the given id, or NULL if there's no edge with such id. */
 	private Edge getEdge(String id) {

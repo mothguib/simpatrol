@@ -6,14 +6,13 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import util.timemeter.Timemeterable;
-
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import model.interfaces.XMLable;
 
 /** Implements the vertexes of a Graph object.
+ * 
  *  @see Graph */
 public class Vertex implements XMLable {
 	/* Atributes. */
@@ -21,18 +20,15 @@ public class Vertex implements XMLable {
 	 *  Not part of the patrol problem modelling. */
 	protected String id;
 	
+	/** The label of the vertex. */
+	protected String label;
+	
 	/** The set of edges whose emitter is this vertex. */
 	protected Set<Edge> in_edges;
 
 	/** The set of edges whose collector is this vertex. */
 	protected Set<Edge> out_edges;
-
-	/** The set of stigmas eventually deposited by a patroller. */
-	protected Set<Stigma> stigmas;
-
-	/** The label of the vertex. */
-	protected String label;
-
+	
 	/** The priority to visit this vertex.
 	 *  Its default value is ZERO. */
 	protected int priority = 0;
@@ -50,26 +46,28 @@ public class Vertex implements XMLable {
 	 *  was visited by an agent. Measured in cycles,
 	 *  if the simulator is a cycled one, or in seconds,
 	 *  if it's a real time one.
+	 *  
 	 *  @see CycledSimulator
 	 *  @see RealTimeSimulator */
 	protected int last_visit_time;
 	
 	/** Counts the time.
 	 *  Shared by all the vertexes. */
-	private static Timemeterable time_counter; 
+	protected static Timemeterable time_counter; 
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param label The label of the vertex. */
 	public Vertex(String label) {
 		this.label = label;
 		this.in_edges = null;
 		this.out_edges = null;
-		this.stigmas = null;
 		this.last_visit_time = 0;
 	}
 	
 	/** Adds the passed edge to the vertex.
+	 * 
 	 *  @param edge The edge added to the vertex. It cannot be an arc. */
 	public void addEdge(Edge edge) {
 		// as the edge is not an arc, it must be added to both
@@ -82,6 +80,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Adds the passed edge as a way out arc to the vertex.
+	 * 
 	 *  @param out_arc The edge whose emitter is this vertex. */
 	public void addOutEdge(Edge out_arc) {
 		if(this.out_edges == null) this.out_edges = new HashSet<Edge>();
@@ -89,6 +88,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Adds the passed edge as a way in arc to the vertex.
+	 * 
 	 *  @param in_arc The edge whose collector is this vertex. */
 	public void addInEdge(Edge in_arc) {
 		if(this.in_edges == null) this.in_edges = new HashSet<Edge>();			
@@ -96,6 +96,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Returns the set of edges of the vertex.
+	 * 
 	 *  @return The edges associated with the vertex.*/
 	public Edge[] getEdges() {
 		int in_edges_size = 0;
@@ -123,77 +124,57 @@ public class Vertex implements XMLable {
 		return answer;		
 	}
 	
-	/** Configures the set of stigmas of the vertex.
-	 *  @param stigmas The set of stigmas. */
-	public void setStigmas(Stigma[] stigmas) {
-		if(stigmas.length > 0) {
-			this.stigmas = new HashSet<Stigma>();
-			
-			for(int i = 0; i < stigmas.length; i++)
-				this.stigmas.add(stigmas[i]);
-		}
-		else this.stigmas = null;
-	}
-	
-	/** Obtains the set of stigmas of the vertex.
-	 *  @return The set of stigmas of the vertex.*/
-	public Stigma[] getStigmas() {
-		Stigma[] answer = new Stigma[0];
-		
-		if(this.stigmas != null) {
-			answer = new Stigma[this.stigmas.size()];
-			
-			Object[] stigmas_array = this.stigmas.toArray();			
-			for(int i = 0; i < stigmas_array.length; i++)
-				answer[i] = (Stigma) stigmas_array[i];
-		}
-		
-		return answer;
-	}
-	
 	/** Configures the priority of the vertex.
+	 * 
 	 *  @param priority The priority. */
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 	
 	/** Configures the visibility of the vertex.
+	 * 
 	 *  @param visibility The visibility. */
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
 	}
 	
 	/** Verifies the visibility of the vertex.
+	 * 
 	 *  @return TRUE if the vertex is visible, FALSE if not. */
 	public boolean isVisible() {
 		return this.visibility;
-	}	
+	}
 	
 	/** Configures if the vertex is a fuel recharging point.
+	 * 
 	 *  @param fuel TRUE, if the vertex is a fuel recharging point, FALSE if not. */
 	public void setFuel(boolean fuel) {
 		this.fuel = fuel;
 	}
 	
 	/** Configures the last time this vertex was visited.
+	 * 
 	 *  @param time The time of the last visit, measured in cycles or in seconds. */
 	public void setLast_visit_time(int time) {
 		this.last_visit_time = time;
 	}
 	
 	/** Configures the time counter of the vertexes.
+	 * 
 	 *  @param counter The time counter. */
 	public static void setTime_counter(Timemeterable counter) {
 		time_counter = counter;
 	}
 	
 	/** Configures the idleness of the vertex.
+	 * 
 	 *  @param idleness The idleness of the vertex, measured in cycles, or in seconds. */
 	public void setIdleness(int idleness) {
 		this.last_visit_time = this.last_visit_time - idleness;
 	}
 	
 	/** Calculates the idleness of the vertex at the current moment.
+	 * 
 	 *  @return The idleness of the vertex. */
 	public int getIdleness() {
 		if(time_counter != null)
@@ -202,6 +183,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Verifies if the vertex is the collector of a given edge.
+	 * 
 	 *  @param edge The edge whose collector is supposed to be the vertex.
 	 *  @return TRUE if the vertex is the collector of the edge, FALSE if not. */
 	public boolean isCollectorOf(Edge edge) {
@@ -209,6 +191,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Verifies if the vertex is the emitter of a given edge.
+	 * 
 	 *  @param edge The edge whose emitter is supposed to be the vertex.
 	 *  @return TRUE if the vertex is the emitter of the edge, FALSE if not. */
 	public boolean isEmitterOf(Edge edge) {
@@ -216,11 +199,11 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Returns a copy of the vertex, with no edges.
+	 * 
 	 *  @return The copy of the vertex, without the edges. */
 	public Vertex getCopy() {
 		Vertex answer = new Vertex(this.label);
 		answer.id = this.id;
-		answer.stigmas = this.stigmas;
 		answer.priority = this.priority;
 		answer.visibility = this.visibility;
 		answer.fuel = this.fuel;
@@ -230,6 +213,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Returns all the vertexes in the neighbourhood.
+	 * 
 	 *  @return The set of vertexes in the neighbourhood. */
 	public Vertex[] getNeighbourhood() {
 		// holds the set of neighbour vertexes
@@ -268,6 +252,7 @@ public class Vertex implements XMLable {
 	}
 	
 	/** Returns all the edges between this vertex and the given one.
+	 * 
 	 *  @param vertex The adjacent vertex whose edges shared with this vertex are to be returned.
 	 *  @return The edges in common between this vertex and the given one. */
 	public Edge[] getConnectingEdges(Vertex vertex) {
@@ -324,21 +309,8 @@ public class Vertex implements XMLable {
 				      "\" visibility=\"" + this.visibility +
 				      "\" idleness=\"" + this.getIdleness() +
 				      "\" fuel=\"" + this.fuel +
-					  "\" is_appearing=\"true");
-		
-		// treats the ocurrency of stigmas
-		if(this.stigmas != null) {
-			buffer.append("\">\n");
-			
-			Object[] stigmas_array = this.stigmas.toArray();			
-			for(int i = 0; i < stigmas_array.length; i++)
-				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
-			
-			// applies the identation and closes the tag
-			for(int i = 0; i < identation; i++) buffer.append("\t");
-			buffer.append("</vertex>\n");
-		}
-		else buffer.append("\"/>\n");
+					  "\" is_appearing=\"true" +
+					  "\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();

@@ -4,8 +4,6 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
-import java.util.HashSet;
-import java.util.Set;
 import model.interfaces.XMLable;
 
 /** Implements the edges of a Graph object.
@@ -22,9 +20,6 @@ public class Edge implements XMLable {
 	/** The collector of this edge, if it is an arc. */
 	protected Vertex collector;
 	
-	/** The set of stigmas eventually deposited by a patroller. */
-	protected Set<Stigma> stigmas;
-
 	/** The lenght of the edge. */
 	protected double length;
 
@@ -39,6 +34,7 @@ public class Edge implements XMLable {
 	
 	/* Methods. */
 	/** Contructor for non-oriented edges (non-arcs).
+	 * 
 	 *  @param vertex_1 One of the vertexes of the edge.
 	 *  @param vertex_2 Another vertex of the edge.
 	 *  @param length The length of the edge. */
@@ -47,6 +43,7 @@ public class Edge implements XMLable {
 	}
 	
 	/** Contructor for eventually oriented edges (arcs).
+	 * 
 	 *  @param emitter The emitter vertex, if the edge is an arc.
 	 *  @param collector The collector vertex, if the edge is an arc.
 	 *  @param oriented TRUE if the edge is an arc.
@@ -54,7 +51,6 @@ public class Edge implements XMLable {
 	public Edge(Vertex emitter, Vertex collector, boolean oriented, double length) {
 		this.emitter = emitter;
 		this.collector = collector;
-		this.stigmas = null;
 		
 		// if the edge is an arc...
 		if(oriented) {
@@ -72,7 +68,7 @@ public class Edge implements XMLable {
 		
 		this.length = length;
 		
-		// configures the is_appearing attribute, based on
+		// configures the is_appearing attribute, based on the
 		// emitter and collector vertexes
 		this.is_appearing = true;
 		
@@ -85,41 +81,15 @@ public class Edge implements XMLable {
 				this.is_appearing = false;
 	}
 	
-	/** Configures the set of stigmas of the edge.
-	 *  @param stigmas The stigmas to be added. */
-	public void setStigmas(Stigma[] stigmas) {
-		if(stigmas.length > 0) {
-			this.stigmas = new HashSet<Stigma>();
-			
-			for(int i = 0; i < stigmas.length; i++)
-				this.stigmas.add(stigmas[i]);
-		}
-		else this.stigmas = null;
-	}
-	
-	/** Obtains the set of stigmas of the edge.
-	 *  @return The set of stigmas of the edge.*/
-	public Stigma[] getStigmas() {
-		Stigma[] answer = new Stigma[0];
-		
-		if(this.stigmas != null) {
-			answer = new Stigma[this.stigmas.size()];
-			
-			Object[] stigmas_array = this.stigmas.toArray();			
-			for(int i = 0; i < stigmas_array.length; i++)
-				answer[i] = (Stigma) stigmas_array[i];
-		}
-		
-		return answer;
-	}
-	
 	/** Configures the visibility of the edge.
-	 * @param visibility The visibility. */
+	 * 
+	 *  @param visibility The visibility. */
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
 	}
 	
 	/** Verifies the visibility of the edge.
+	 * 
 	 *  @return TRUE if the edge is visible, FALSE if not. */
 	public boolean isVisible() {
 		return this.visibility;
@@ -164,6 +134,7 @@ public class Edge implements XMLable {
 	
 	/** Returns the vertex of the edge that is not the
 	 *  one passed as a parameter.
+	 *  
 	 *  @param vertex The vertex whose pair is wanted.
 	 *  @return The other vertex of the edge. */
 	public Vertex getOtherVertex(Vertex vertex) {
@@ -172,6 +143,7 @@ public class Edge implements XMLable {
 	}
 	
 	/** Obtains a copy of the edge with the given copies of vertexes.
+	 * 
 	 *  @param copy_emitter The copy of the emitter.
 	 *  @param copy_collector The copy of the collector.
 	 *  @return The copy of the edge.*/
@@ -182,7 +154,6 @@ public class Edge implements XMLable {
 		// the copy		
 		Edge copy_edge = new Edge(copy_emitter, copy_collector, oriented, this.length);
 		copy_edge.id = this.id;
-		copy_edge.stigmas = this.stigmas;
 		copy_edge.visibility = this.visibility;
 		copy_edge.is_appearing = this.is_appearing;
 		
@@ -225,21 +196,8 @@ public class Edge implements XMLable {
 				      "\" visibility=\"" + this.visibility +
 				      "\" is_appearing=\"" + this.is_appearing +
 				      "\" is_in_dynamic_emitter_memory=\"" + is_in_dynamic_emitter_memory +
-				      "\" is_in_dynamic_collector_memory=\"" + is_in_dynamic_collector_memory);
-		
-		// treats the ocurrency of stigmas
-		if(this.stigmas != null) {
-			buffer.append("\">\n");
-			
-			Object[] stigmas_array = this.stigmas.toArray();			
-			for(int i = 0; i < stigmas_array.length; i++)
-				buffer.append(((Stigma) stigmas_array[i]).toXML(identation + 1));
-			
-			// applies the identation and closes the tag
-			for(int i = 0; i < identation; i++) buffer.append("\t");			
-			buffer.append("</edge>\n");
-		}
-		else buffer.append("\"/>\n");
+				      "\" is_in_dynamic_collector_memory=\"" + is_in_dynamic_collector_memory +
+					  "\"/>\n");
 		
 		// returns the buffer content
 		return buffer.toString();

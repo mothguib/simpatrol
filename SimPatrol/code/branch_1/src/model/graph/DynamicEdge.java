@@ -20,6 +20,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	
 	/* Methods. */
 	/** Contructor for non-oriented dynamic edges (dynamic non-arcs).
+	 * 
 	 *  @param vertex_1 One of the vertexes of the edge.
 	 *  @param vertex_2 Another vertex of the edge.
 	 *  @param length The length of the edge
@@ -31,6 +32,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	}
 	
 	/** Contructor for eventually oriented dynamic edges (dynamic arcs).
+	 * 
 	 *  @param emitter The emitter vertex, if the edge is an arc.
 	 *  @param collector The collector vertex, if the edge is an arc.
 	 *  @param oriented TRUE if the edge is an arc.
@@ -57,6 +59,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	}
 	
 	/** Obtains a copy of the edge with the given copies of vertexes.
+	 * 
 	 *  @param copy_emitter The copy of the emitter.
 	 *  @param copy_collector The copy of the collector.
 	 *  @return The copy of the edge.*/
@@ -67,7 +70,6 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		// the copy		
 		DynamicEdge answer = new DynamicEdge(copy_emitter, copy_collector, oriented, this.length, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
 		answer.id = this.id;
-		answer.stigmas = this.stigmas;
 		answer.visibility = this.visibility;
 		answer.is_appearing = this.is_appearing;
 		
@@ -80,16 +82,11 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		StringBuffer buffer = new StringBuffer(super.toXML(identation));
 		
 		// removes the closing of the xml tag
-		int last_valid_index = 0;
-		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else {
-			StringBuffer closing_tag = new StringBuffer();			
-			for(int i = 0; i < identation; i++) closing_tag.append("\t");
-			closing_tag.append("</edge>");
-			
-			last_valid_index = buffer.indexOf(closing_tag.toString());
-		}
+		StringBuffer closing_tag = new StringBuffer();			
+		for(int i = 0; i < identation; i++) closing_tag.append("\t");
+		closing_tag.append("</edge>");
 		
+		int last_valid_index = buffer.indexOf(closing_tag.toString());
 		buffer.delete(last_valid_index, buffer.length());
 		
 		// adds the time probability distributions

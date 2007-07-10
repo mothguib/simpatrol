@@ -28,6 +28,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 * @param label The label of the vertex.
 	 * @param appearing_tpd The time probability distribution for the vertex appearing.
 	 * @param diappearing_tpd The time probability distribution for the vertex disappearing.
@@ -40,8 +41,21 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		this.appearing_edges = new HashSet<Edge>();
 	}
 	
-	/** Returns if the vertex is appearing.
-	 *  @return TRUE, if the vertex is appearing, FALSE if not. */
+	/** Verifies if a given edge is in the memory of appearing edges.
+	 * 
+	 *  @param edge The edge to be verified.
+	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
+	public boolean isInAppearingEdges(Edge edge) {
+		return this.appearing_edges.contains(edge);
+	}
+	
+	/** Adds a given edge to the memory of appearing edges of the vertex.
+	 * 
+	 *  @param edge The edge to be added to the memory. */
+	public void addAppearingEdge(Edge edge) {
+		this.appearing_edges.add(edge);
+	}
+	
 	public boolean isAppearing() {
 		return this.is_appearing;
 	}
@@ -52,8 +66,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		// screen message
 		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
 		
-		// if is_appering is FALSE, memorizes the edges that are appearing
-		// and resets its idleness
+		// if is_appering is FALSE
 		if(!is_appearing) {
 			this.appearing_edges = new HashSet<Edge>();
 			
@@ -77,7 +90,7 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 					}
 			}
 		}
-		// if is_appearing is TRUE...
+		// if is_appearing is TRUE
 		else {
 			// makes appear the memorized appearing edges
 			Object[] edges_array = this.appearing_edges.toArray();
@@ -86,28 +99,18 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 			
 			// clears the memorized appearing edges
 			this.appearing_edges.clear();
+			
+			// resets its idleness
+			this.last_visit_time = time_counter.getElapsedTime();
 		}
 	}
 	
-	/** Verifies if a given edge is in the memory of appearing edges.
-	 *  @param edge The edge to be verified.
-	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
-	public boolean isInAppearingEdges(Edge edge) {
-		return this.appearing_edges.contains(edge);
-	}
-	
-	/** Adds a given edge to the memory of appearing edges of the vertex.
-	 *  @param edge The edge to be added to the memory. */
-	public void addAppearingEdge(Edge edge) {
-		this.appearing_edges.add(edge);
-	}
-	
 	/** Returns a copy of the vertex, with no edges.
+	 * 
 	 *  @return The copy of the vertex, without the edges. */
 	public DynamicVertex getCopy() {
 		DynamicVertex answer = new DynamicVertex(this.label, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
 		answer.id = this.id;
-		answer.stigmas = this.stigmas;
 		answer.priority = this.priority;
 		answer.visibility = this.visibility;
 		answer.fuel = this.fuel;
@@ -131,16 +134,11 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		}
 		
 		// removes the closing of the xml tag
-		int last_valid_index = 0;
-		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else {
-			StringBuffer closing_tag = new StringBuffer();			
-			for(int i = 0; i < identation; i++) closing_tag.append("\t");
-			closing_tag.append("</vertex>");
-			
-			last_valid_index = buffer.indexOf(closing_tag.toString());
-		}
+		StringBuffer closing_tag = new StringBuffer();
+		for(int i = 0; i < identation; i++) closing_tag.append("\t");
+		closing_tag.append("</vertex>");
 		
+		int last_valid_index = buffer.indexOf(closing_tag.toString());		
 		buffer.delete(last_valid_index, buffer.length());
 
 		// adds the time probability distributions
