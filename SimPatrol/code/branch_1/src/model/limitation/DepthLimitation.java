@@ -12,6 +12,7 @@ public final class DepthLimitation extends Limitation {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param depth The depth limit. */
 	public DepthLimitation(int depth) {
 		super();
@@ -19,6 +20,7 @@ public final class DepthLimitation extends Limitation {
 	}
 	
 	/** Returns the deth of this limitation.
+	 * 
 	 *  @return The depth of this limitation. */
 	public int getDepth() {
 		return this.depth;

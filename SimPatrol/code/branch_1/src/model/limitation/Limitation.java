@@ -4,7 +4,7 @@
 package model.limitation;
 
 /* Imported classes and/or interfaces. */
-import model.interfaces.XMLable;
+import view.XMLable;
 
 /** Implements the limitations imposed to the permissions
  *  that control the existence of the agents of SimPatrol. */

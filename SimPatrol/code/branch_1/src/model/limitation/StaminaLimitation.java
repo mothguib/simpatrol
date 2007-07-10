@@ -11,6 +11,7 @@ public final class StaminaLimitation extends Limitation {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param cost The cost of stamina associated with the parmission. */
 	public StaminaLimitation(double cost) {
 		super();
@@ -18,6 +19,7 @@ public final class StaminaLimitation extends Limitation {
 	}
 	
 	/** Returns the cost of the limitation.
+	 * 
 	 *  @return The cost of the limitation. */
 	public double getCost() {
 		return this.cost;
