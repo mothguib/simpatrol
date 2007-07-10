@@ -26,7 +26,7 @@ public final class DepthLimitation extends Limitation {
 		return this.depth;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		

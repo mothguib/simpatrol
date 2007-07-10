@@ -25,7 +25,7 @@ public final class StaminaLimitation extends Limitation {
 		return this.cost;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		
