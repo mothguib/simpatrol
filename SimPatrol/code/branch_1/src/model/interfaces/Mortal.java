@@ -10,6 +10,7 @@ import util.etpd.EventTimeProbabilityDistribution;
 public interface Mortal {
 	/** Returns the probability distribution for the death time
 	 *  of the mortal object.
+	 *  
 	 *  @return The event time probability distribution for the death of the object.*/
 	public EventTimeProbabilityDistribution getDeathTPD();
 	
