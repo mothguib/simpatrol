@@ -364,7 +364,7 @@ public final class Graph implements XMLable {
 		return null;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -377,13 +377,43 @@ public final class Graph implements XMLable {
 		// inserts the vertexes
 		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++)
-			buffer.append(((Vertex) vertexes_array[i]).toXML(identation + 1));
+			buffer.append(((Vertex) vertexes_array[i]).fullToXML(identation + 1));
 		
 		// inserts the edges
 		if(this.edges != null) {
 			Object[] edges_array = this.edges.toArray();
 			for (int i = 0; i < edges_array.length; i++)
-				buffer.append(((Edge) edges_array[i]).toXML(identation + 1));
+				buffer.append(((Edge) edges_array[i]).fullToXML(identation + 1));
+		}
+		
+		// finishes the buffer content
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		buffer.append("</graph>\n");		
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		
+		// fills the buffer 
+		buffer.append("<graph label=\"" + this.label + "\">\n");
+		
+		// inserts the lighter version of the vertexes
+		Object[] vertexes_array = this.vertexes.toArray();
+		for(int i = 0; i < vertexes_array.length; i++)
+			buffer.append(((Vertex) vertexes_array[i]).reducedToXML(identation + 1));
+		
+		// inserts the lighter version of the edges
+		if(this.edges != null) {
+			Object[] edges_array = this.edges.toArray();
+			for (int i = 0; i < edges_array.length; i++)
+				buffer.append(((Edge) edges_array[i]).reducedToXML(identation + 1));
 		}
 		
 		// finishes the buffer content

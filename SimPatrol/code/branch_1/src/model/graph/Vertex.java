@@ -295,7 +295,7 @@ public class Vertex implements XMLable {
 		return answer;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -310,6 +310,25 @@ public class Vertex implements XMLable {
 				      "\" idleness=\"" + this.getIdleness() +
 				      "\" fuel=\"" + this.fuel +
 					  "\" is_appearing=\"true" +
+					  "\"/>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		
+		// fills the buffer 
+		buffer.append("<vertex id=\"" + this.id + 
+				      "\" label=\"" + this.label +
+				      "\" priority=\"" + this.priority +
+				      "\" idleness=\"" + this.getIdleness() +
+				      "\" fuel=\"" + this.fuel +
 					  "\"/>\n");
 		
 		// returns the buffer content

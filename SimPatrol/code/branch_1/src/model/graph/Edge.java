@@ -161,7 +161,7 @@ public class Edge implements XMLable {
 		return copy_edge;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -197,6 +197,28 @@ public class Edge implements XMLable {
 				      "\" is_appearing=\"" + this.is_appearing +
 				      "\" is_in_dynamic_emitter_memory=\"" + is_in_dynamic_emitter_memory +
 				      "\" is_in_dynamic_collector_memory=\"" + is_in_dynamic_collector_memory +
+					  "\"/>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		
+		// registers if the edge is oriented
+		boolean oriented = !this.emitter.isCollectorOf(this);
+		
+		// fills the buffer 
+		buffer.append("<edge id=\"" + this.id + 
+				      "\" emitter_id=\"" + this.emitter.getObjectId() +
+				      "\" collector_id=\"" + this.collector.getObjectId() +
+				      "\" oriented=\"" + oriented +
+				      "\" length=\"" + this.length +
 					  "\"/>\n");
 		
 		// returns the buffer content

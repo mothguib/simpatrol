@@ -77,9 +77,9 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		return answer;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation));
+		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
 		
 		// removes the closing of the xml tag
 		StringBuffer closing_tag = new StringBuffer();			
@@ -90,8 +90,8 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		buffer.delete(last_valid_index, buffer.length());
 		
 		// adds the time probability distributions
-		buffer.append(this.appearing_tpd.toXML(identation + 1));
-		buffer.append(this.disappearing_tpd.toXML(identation + 1));
+		buffer.append(this.appearing_tpd.fullToXML(identation + 1));
+		buffer.append(this.disappearing_tpd.fullToXML(identation + 1));
 		
 		// applies the identation
 		for(int i = 0; i < identation; i++) buffer.append("\t");
