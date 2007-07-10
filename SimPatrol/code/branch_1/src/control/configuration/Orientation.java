@@ -6,7 +6,6 @@ package control.configuration;
 /* Imported classes and/or interfaces. */
 import java.util.LinkedList;
 import java.util.List;
-
 import view.XMLable;
 
 /** Implements objects that represent the orientations
