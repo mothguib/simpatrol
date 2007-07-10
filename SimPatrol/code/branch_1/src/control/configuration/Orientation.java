@@ -6,7 +6,8 @@ package control.configuration;
 /* Imported classes and/or interfaces. */
 import java.util.LinkedList;
 import java.util.List;
-import model.interfaces.XMLable;
+
+import view.XMLable;
 
 /** Implements objects that represent the orientations
  *  given by SimPatrol in order to satisfy a configuration.

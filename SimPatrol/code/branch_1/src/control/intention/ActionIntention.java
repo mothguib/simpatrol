@@ -1,6 +1,6 @@
 package control.intention;
 
-import model.interfaces.XMLable;
+import view.XMLable;
 import model.action.ActionTypes;
 
 /**

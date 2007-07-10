@@ -4,7 +4,7 @@
 package control.configuration;
 
 /* Imported classes and/or interfaces. */
-import model.interfaces.XMLable;
+import view.XMLable;
 
 /** Implements objects that express configurations of
  *  a simulation of the patrolling task performed by SimPatrol. */
