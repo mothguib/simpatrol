@@ -4,7 +4,7 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
-import model.interfaces.XMLable;
+import view.XMLable;
 
 /** Implements the edges of a Graph object.
  *  @see Graph */

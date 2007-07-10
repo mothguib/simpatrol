@@ -7,9 +7,9 @@ package model.graph;
 import java.util.HashSet;
 import java.util.Set;
 import util.timemeter.Timemeterable;
+import view.XMLable;
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
-import model.interfaces.XMLable;
 
 /** Implements the vertexes of a Graph object.
  * 

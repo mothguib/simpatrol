@@ -8,8 +8,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import view.XMLable;
 import model.interfaces.Dynamic;
-import model.interfaces.XMLable;
 
 /** Implements graphs that represent the territories to be
  *  patrolled.
