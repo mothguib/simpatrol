@@ -6,7 +6,8 @@ package model.agent;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-import model.interfaces.XMLable;
+
+import view.XMLable;
 import model.graph.Vertex;
 import model.graph.Edge;
 import model.permission.ActionPermission;
