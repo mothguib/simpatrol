@@ -6,7 +6,6 @@ package model.agent;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import view.XMLable;
 
 /** Implements the societies of agents of SimPatrol. */
