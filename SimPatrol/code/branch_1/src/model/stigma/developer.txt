@@ -1,0 +1,2 @@
+* New stigmas must add new classes in this package;
+* New stigmas must change the "control.translator.StigmaTranslator" class.
