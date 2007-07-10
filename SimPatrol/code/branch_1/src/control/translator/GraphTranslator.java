@@ -14,7 +14,6 @@ import model.graph.DynamicEdge;
 import model.graph.DynamicVertex;
 import model.graph.Edge;
 import model.graph.Graph;
-import model.graph.Stigma;
 import model.graph.Vertex;
 
 /** Implements a translator that obtains Graph objects
@@ -106,9 +105,6 @@ public abstract class GraphTranslator extends Translator {
 			String str_fuel = vertex_element.getAttribute("fuel");
 			String str_is_appearing = vertex_element.getAttribute("is_appearing");
 			
-			// obtains the eventual stigmas
-			Stigma[] stigmas = getStigmas(vertex_element);
-			
 			// obtains the eventual time probability distributions
 			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(vertex_element);
 			
@@ -151,9 +147,6 @@ public abstract class GraphTranslator extends Translator {
 			if(str_fuel.length() > 0) fuel = Boolean.parseBoolean(str_fuel);
 			current_vertex.setFuel(fuel);
 			
-			// stigma configuration
-			current_vertex.setStigmas(stigmas);
-			
 			// adds the new vertex to the answer
 			answer[i] = current_vertex;
 		}
@@ -189,9 +182,6 @@ public abstract class GraphTranslator extends Translator {
 			String str_is_appearing = edge_element.getAttribute("is_appearing");
 			String str_is_in_dynamic_emitter_memory = edge_element.getAttribute("is_in_dynamic_emitter_memory");
 			String str_is_in_dynamic_collector_memory = edge_element.getAttribute("is_in_dynamic_collector_memory");
-			
-			// obtains the eventual stigmas
-			Stigma[] stigmas = getStigmas(edge_element);						
 			
 			// obtains the eventual time probability distributions
 			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator.getEventTimeProbabilityDistribution(edge_element);
@@ -242,9 +232,6 @@ public abstract class GraphTranslator extends Translator {
 			if(str_visibility.length() > 0) visibility = Boolean.parseBoolean(str_visibility);
 			current_edge.setVisibility(visibility);
 			
-			// stigmas configuration
-			current_edge.setStigmas(stigmas);
-			
 			// decides if the edge is in the emitter and collector appearing memories
 			boolean is_in_dynamic_emitter_memory = false;
 			boolean is_in_dynamic_collector_memory = false;
@@ -263,30 +250,6 @@ public abstract class GraphTranslator extends Translator {
 			
 			// adds the new edge to the answer
 			answer[i] = current_edge;
-		}
-		
-		// returns the answer
-		return answer;
-	}
-	
-	/** Obtains the stigmas from the given vertex/edge element.
-	 * 
-	 *  @param vertex_edge_element The XML source containing the stigmas.
-	 *  @return The stigmas from the XML source.
-	 *  @developer New Stigma subclasses must change this method. */
-	private static Stigma[] getStigmas(Element vertex_edge_element) {
-		// obtains the nodes with the "stigma" tag
-		NodeList stigma_nodes = vertex_edge_element.getElementsByTagName("stigma");
-		
-		// the answer to the method
-		Stigma[] answer = new Stigma[stigma_nodes.getLength()];
-		
-		// for each ocurrence
-		for(int i = 0; i < answer.length; i++) {
-			// developer: new stigma implementations must reflect changes here
-			
-			// adds the new stigma to the answer
-			answer[i] = new Stigma();
 		}
 		
 		// returns the answer
