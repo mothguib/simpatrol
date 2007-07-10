@@ -42,7 +42,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 	/** Obtains a perpetual version of this agent.
 	 * 
 	 *  @return The perpetual agent correspondent to this one. */
-	public PerpetualAgent getPerpetualVersion() {
+	public PerpetualAgent toPerpetualVersion() {
 		Object[] allowed_perceptions_array = this.allowed_perceptions.toArray();
 		PerceptionPermission[] allowed_perceptions = new PerceptionPermission[allowed_perceptions_array.length];
 		for(int i = 0; i < allowed_perceptions.length; i++)
@@ -56,9 +56,9 @@ public final class SeasonalAgent extends Agent implements Mortal {
 		return new PerpetualAgent(this.label, this.vertex, allowed_perceptions, allowed_actions);
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation));
+		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
 		
 		// atualizes the answer, if necessary
 		if(this.death_tpd != null) {
@@ -78,7 +78,7 @@ public final class SeasonalAgent extends Agent implements Mortal {
 			}
 			
 			// writes the death tpd
-			buffer.append(this.death_tpd.toXML(identation + 1));
+			buffer.append(this.death_tpd.fullToXML(identation + 1));
 			
 			// closes the main tag
 			for(int i = 0; i < identation; i++) buffer.append("\t");

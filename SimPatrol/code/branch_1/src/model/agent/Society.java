@@ -52,7 +52,7 @@ public abstract class Society implements XMLable {
 	 *  @param agent The agent to be added. */
 	public abstract void addAgent(Agent agent);
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -70,7 +70,36 @@ public abstract class Society implements XMLable {
 			buffer.append("\">\n");
 			
 			for(int i = 0; i < agents_array.length; i++)
-				buffer.append(((Agent) agents_array[i]).toXML(identation + 1));
+				buffer.append(((Agent) agents_array[i]).fullToXML(identation + 1));
+			
+			// finishes the buffer content
+			for(int i = 0; i < identation; i++) buffer.append("\t");		
+			buffer.append("</society>\n");
+		}		
+		else buffer.append("\"/>\n");
+		
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++) buffer.append("\t");
+		
+		// fills the buffer 
+		buffer.append("<society id=\"" + this.id +
+				      "\" label=\"" + this.label);
+		
+		// inserts the agents, if there are some, and closes the main tag
+		Object[] agents_array = this.agents.toArray();
+		if(agents_array.length > 0) {
+			buffer.append("\">\n");
+			
+			for(int i = 0; i < agents_array.length; i++)
+				buffer.append(((Agent) agents_array[i]).reducedToXML(identation + 1));
 			
 			// finishes the buffer content
 			for(int i = 0; i < identation; i++) buffer.append("\t");		

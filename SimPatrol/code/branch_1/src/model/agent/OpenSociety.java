@@ -31,9 +31,9 @@ public final class OpenSociety extends Society {
 		}
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation));
+		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
 		
 		// changes the society type
 		int index_type = buffer.lastIndexOf("is_closed=\"true\"");

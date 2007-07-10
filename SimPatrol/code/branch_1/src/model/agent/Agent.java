@@ -147,7 +147,7 @@ public abstract class Agent implements XMLable {
 		return answer;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
 		StringBuffer buffer = new StringBuffer();
 		
@@ -196,6 +196,30 @@ public abstract class Agent implements XMLable {
 		
 		// returns the buffer content
 		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+		
+		// applies the identation
+		for(int i = 0; i < identation; i++)
+			buffer.append("\t");
+		
+		// fills the buffer 
+		buffer.append("<agent id=\"" + this.id +
+					  "\" label=\"" + this.label +
+				      "\" vertex_id=\"" + this.vertex.getObjectId());
+		
+		if(this.edge != null) {
+			buffer.append("\" edge_id=\"" + this.edge.getObjectId() +
+					      "\" elapsed_length=\"" + this.elapsed_length);
+		}
+		
+		buffer.append("\"/>\n");
+		
+		// returns the buffer content
+		return buffer.toString();		
 	}
 	
 	public boolean equals(Object object) {
