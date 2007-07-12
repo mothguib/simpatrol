@@ -12,7 +12,7 @@ import util.udp.UDPSocket;
 /** Implements the active connections of SimPatrol. */
 public class Connection extends Thread {
 	/* Attributes. */
-	/** Registers if the agent shall stop working. */
+	/** Registers if the connection shall stop working. */
 	protected boolean stop_working;
 	
 	/** The UDP socket of the connection. */
@@ -24,6 +24,7 @@ public class Connection extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param name The name of the thread of the connection.
 	 *  @param buffer The buffer where the connection writes the received messages. */
 	public Connection(String name, Queue<String> buffer) {
@@ -39,6 +40,7 @@ public class Connection extends Thread {
 	}
 	
 	/** Sends a given string message to the last remote contact.
+	 * 
 	 *  @param message The string message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
@@ -47,6 +49,7 @@ public class Connection extends Thread {
 	}
 	
 	/** Sends a given string message.
+	 * 
 	 *  @param message The string message to be sent.
 	 *  @param remote_socket_address The remote IP address of the receiver.
 	 *  @param remote_socket_number The number of the UDP socket of the receiver. 
@@ -57,6 +60,7 @@ public class Connection extends Thread {
 	}
 	
 	/** Return the number of UDP socket connection.
+	 * 
 	 *  @return The number of the UDP socket, if previously created; -1 if not. */
 	public int getUDPSocketNumber() {
 		if(this.socket != null)
@@ -65,6 +69,7 @@ public class Connection extends Thread {
 	}
 	
 	/** Starts the work of the connection.
+	 * 
 	 *  @param The number of the UDP socket.
 	 *  @throws SocketException */
 	public void start(int local_socket_number) throws SocketException {
@@ -73,6 +78,7 @@ public class Connection extends Thread {
 	}
 	
 	/** Give preference to use this.start(int local_socket_number).
+	 * 
 	 *  @deprecated */
 	public void start() {
 		super.start();

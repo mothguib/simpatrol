@@ -20,6 +20,7 @@ public final class AgentConnection extends Connection {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param name The name of the thread of the connection. 
 	 *  @param perception_buffer The buffer where the connection writes the received perception messages.
 	 *  @param action_buffer The buffer where the connection writes the received action messages. */
