@@ -94,6 +94,13 @@ public abstract class Agent implements XMLable {
 		this.state = state;
 	}
 	
+	/** Returns the vertex that the agent comes from.
+	 * 
+	 *  @return The vertex that agent comes from. */
+	public Vertex getVertex() {
+		return this.vertex;
+	}	
+	
 	/** Configures the edge of the agent, as well as its position on it.
 	 * 
 	 *  @param edge The edge of the agent.
@@ -101,6 +108,13 @@ public abstract class Agent implements XMLable {
 	public void setEdge(Edge edge, int elapsed_length) {
 		this.edge = edge;
 		this.elapsed_length = elapsed_length;
+	}
+	
+	/** Returns the edge where the agent is.
+	 * 
+	 *  @return The edge where the agent is. */
+	public Edge getEdge() {
+		return this.edge;
 	}
 	
 	/** Configures the stamina of the agent.
@@ -122,13 +136,6 @@ public abstract class Agent implements XMLable {
 	 *  @param factor The factor to be decremented from the value of stamina. */
 	public void decStamina(double factor) {
 		this.stamina = this.stamina - factor;
-	}
-	
-	/** Returns the vertex that the agent comes from.
-	 * 
-	 *  @return The vertex that agent comes from. */
-	public Vertex getVertex() {
-		return this.vertex;
 	}
 	
 	/** Returns the allowes perceptions for the agent.
