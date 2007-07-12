@@ -13,8 +13,8 @@ import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
 import control.robot.DynamicityControllerRobot;
 import control.robot.MortalityControllerRobot;
-import util.timemeter.Chronometer;
-import util.timemeter.Chronometerable;
+import util.timer.Chronometer;
+import util.timer.Chronometerable;
 
 /** Implements a real time simulator of the patrolling task.
  * 
