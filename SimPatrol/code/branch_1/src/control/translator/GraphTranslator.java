@@ -9,7 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import util.etpd.EventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistribution;
 import model.graph.DynamicEdge;
 import model.graph.DynamicVertex;
 import model.graph.Edge;

@@ -4,14 +4,14 @@
 package control.translator;
 
 /* Imported classes and/or interfaces. */
+import model.etpd.EmpiricalEventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistributionTypes;
+import model.etpd.NormalEventTimeProbabilityDistribution;
+import model.etpd.SpecificEventTimeProbabilityDistribution;
+import model.etpd.UniformEventTimeProbabilityDistribution;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import util.etpd.EmpiricalEventTimeProbabilityDistribution;
-import util.etpd.NormalEventTimeProbabilityDistribution;
-import util.etpd.SpecificEventTimeProbabilityDistribution;
-import util.etpd.EventTimeProbabilityDistribution;
-import util.etpd.EventTimeProbabilityDistributionTypes;
-import util.etpd.UniformEventTimeProbabilityDistribution;
 
 /** Implements a translator that obtains event time probability distributions
  *  from a given XML source.
