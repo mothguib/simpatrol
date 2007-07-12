@@ -4,7 +4,7 @@
 package model.interfaces;
 
 /* Imported classes and/or interfaces. */
-import util.etpd.EventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistribution;
 
 /** Lets the objects that implement it die (i.e. disappear forever). */
 public interface Mortal {
