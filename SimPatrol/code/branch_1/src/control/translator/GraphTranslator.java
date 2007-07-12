@@ -15,12 +15,12 @@ import model.graph.DynamicVertex;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
+import model.stigma.Stigma;
 
 /** Implements a translator that obtains Graph objects
  *  from XML source elements.
  *  
- *  @see Graph
- *  @developer New Stigma subclasses must change this class. */
+ *  @see Graph */
 public abstract class GraphTranslator extends Translator {
 	/* Methods. */
 	/** Obtains a graph from the pointed XML file.
@@ -43,13 +43,23 @@ public abstract class GraphTranslator extends Translator {
 		// obtains the edges of the graph
 		getEdges(graph_element, vertexes);
 		
-		// returns the new graph
-		return new Graph(label, vertexes);
+		// mounts the new graph
+		Graph answer = new Graph(label, vertexes);
+		
+		// obtains the stigmas of the graph
+		Stigma[] stigmas = StigmaTranslator.getStigmas(graph_element, answer);
+		
+		// adds the obtained stigmas to the graph
+		for(int i = 0; i < stigmas.length; i++)
+			answer.addStigma(stigmas[i]);
+		
+		// returns the answer
+		return answer;
 	}
 	
 	/** Obtains the graphs from the given XML element.
-	 *  @param xml_element The XML source containing the graphs.
-	 *  
+	 * 
+	 *  @param xml_element The XML source containing the graphs. 
 	 *  @return The graphs from the XML source. */
 	public static Graph[] getGraphs(Element xml_element) {
 		// obtains the nodes with the "graph" tag
@@ -63,7 +73,7 @@ public abstract class GraphTranslator extends Translator {
 			// obtains the current graph element
 			Element graph_element = (Element) graph_node.item(i);
 			
-			// obtains the its data
+			// obtains the data
 			String label = graph_element.getAttribute("label");		
 			
 			// obtains the vertexes
@@ -72,8 +82,18 @@ public abstract class GraphTranslator extends Translator {
 			// obtains the edges
 			getEdges(graph_element, vertexes);
 			
-			// creates the new graph and adds to the answer
-			answer[i] = new Graph(label, vertexes);
+			// obtains the new graph
+			Graph graph = new Graph(label, vertexes);
+			
+			// obtains the stigmas
+			Stigma[] stigmas = StigmaTranslator.getStigmas(graph_element, graph);
+			
+			// adds the obtained stigmas to the graph
+			for(int j = 0; j < stigmas.length; j++)
+				graph.addStigma(stigmas[j]);
+			
+			// adds the new graph to the answer
+			answer[i] = graph;
 		}
 		
 		// returns the answer
@@ -156,8 +176,8 @@ public abstract class GraphTranslator extends Translator {
 	}
 	
 	/** Obtains the edges from the given XML element.
-	 *  @param xml_element The XML source containing the edges.
-	 *  
+	 * 
+	 *  @param xml_element The XML source containing the edges. 
 	 *  @param vertexes The set of vertexes read from the XML source.
 	 *  @return The edges from the XML source. */
 	private static Edge[] getEdges(Element xml_element, Vertex[] vertexes) {
