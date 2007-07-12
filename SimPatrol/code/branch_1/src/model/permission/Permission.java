@@ -6,7 +6,7 @@ package model.permission;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-import model.interfaces.XMLable;
+import view.XMLable;
 import model.limitation.Limitation;
 
 /** Implements the permissions that control the existence of an agent
@@ -18,6 +18,7 @@ public abstract class Permission implements XMLable {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param limitations The limitations imposed to the agent. */
 	public Permission(Limitation[] limitations) {
 		if(limitations != null && limitations.length > 0) {
@@ -30,6 +31,7 @@ public abstract class Permission implements XMLable {
 	}
 	
 	/** Returns the limitations of the permission.
+	 * 
 	 *  @return The limitations of the permission. */
 	public Limitation[] getLimitations() {
 		Limitation[] answer = new Limitation[0];
@@ -44,11 +46,16 @@ public abstract class Permission implements XMLable {
 		return answer;
 	}
 	
+	public String reducedToXML(int identation) {
+		// a permission doesn't have a lighter version
+		return this.fullToXML(identation);
+	}
+	
 	public String getObjectId() {
 		// a permission doesn't need an id
 		return null;
 	}
-
+	
 	public void setObjectId(String object_id) {
 		// a permission doesn't need an id
 		// so, do nothing

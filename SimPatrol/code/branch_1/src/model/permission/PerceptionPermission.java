@@ -12,11 +12,13 @@ import model.perception.PerceptionTypes;
 public final class PerceptionPermission extends Permission {
 	/* Attributes */
 	/** The type of the allowed perceptions.
+	 * 
 	 *  @see PerceptionTypes */
 	private int perception_type;
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param limitations The limitations imposed to the agent.
 	 *  @param perception_type The type of the allowed perceptions.
 	 *  @see PerceptionTypes */
@@ -26,13 +28,14 @@ public final class PerceptionPermission extends Permission {
 	}
 	
 	/** Returns the type of the allowed perception.
+	 * 
 	 *  @return The type of the allowed perception.
 	 *  @see PerceptionTypes */
 	public int getPerception_type() {
 		return this.perception_type;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -48,7 +51,7 @@ public final class PerceptionPermission extends Permission {
 			
 			Object[] limitations_array = this.limitations.toArray();				
 			for(int i = 0; i < limitations_array.length; i++)
-				buffer.append(((Limitation) limitations_array[i]).toXML(identation + 1));
+				buffer.append(((Limitation) limitations_array[i]).fullToXML(identation + 1));
 			
 			// closes the buffer tag
 			for(int i = 0; i < identation; i++) buffer.append("\t");

@@ -12,11 +12,13 @@ import model.limitation.Limitation;
 public final class ActionPermission extends Permission {
 	/* Attributes */
 	/** The type of the allowed actions.
+	 * 
 	 *  @see ActionTypes */
 	private int action_type;
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param limitations The limitations imposed to the agent.
 	 *  @param action_type The type of the allowed actions.
 	 *  @see ActionTypes */
@@ -25,7 +27,7 @@ public final class ActionPermission extends Permission {
 		this.action_type = action_type;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -41,7 +43,7 @@ public final class ActionPermission extends Permission {
 			
 			Object[] limitations_array = this.limitations.toArray();				
 			for(int i = 0; i < limitations_array.length; i++)
-				buffer.append(((Limitation) limitations_array[i]).toXML(identation + 1));
+				buffer.append(((Limitation) limitations_array[i]).fullToXML(identation + 1));
 			
 			// closes the buffer tag
 			for(int i = 0; i < identation; i++) buffer.append("\t");
