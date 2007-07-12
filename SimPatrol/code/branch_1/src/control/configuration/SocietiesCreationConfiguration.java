@@ -48,7 +48,7 @@ public final class SocietiesCreationConfiguration extends Configuration {
 		return ConfigurationTypes.SOCIETIES_CREATION;
 	}
 
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -62,7 +62,7 @@ public final class SocietiesCreationConfiguration extends Configuration {
 		// puts the societies
 		Object[] societies_array = this.societies.toArray();
 		for(int i = 0; i < societies_array.length; i++)
-			buffer.append(((Society) societies_array[i]).toXML(identation + 1));
+			buffer.append(((Society) societies_array[i]).fullToXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");

@@ -49,7 +49,7 @@ public final class Orientation implements XMLable {
 		this.content.add(new SocketNumberAndAgentID(socket_number, agent_id));
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -89,6 +89,11 @@ public final class Orientation implements XMLable {
 		
 		// return the answer
 		return buffer.toString();
+	}
+	
+	public String reducedToXML(int identation) {
+		// an orientation doesn't have a lighter XML version
+		return this.fullToXML(identation);
 	}
 	
 	public String getObjectId() {

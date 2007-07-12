@@ -38,7 +38,7 @@ public final class GraphCreationConfiguration extends Configuration {
 		return ConfigurationTypes.GRAPH_CREATION;
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -50,7 +50,7 @@ public final class GraphCreationConfiguration extends Configuration {
 				      "\">\n");
 		
 		// puts the graph
-		buffer.append(this.graph.toXML(identation + 1));
+		buffer.append(this.graph.fullToXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");

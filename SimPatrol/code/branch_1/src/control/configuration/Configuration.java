@@ -49,6 +49,11 @@ public abstract class Configuration implements XMLable {
 	 *  @see ConfigurationTypes */
 	protected abstract int getType();
 	
+	public String reducedToXML(int identation) {
+		// a configuration doesn't have a lighter XML version
+		return this.fullToXML(identation);
+	}
+	
 	public String getObjectId() {
 		// a configuration doesn't need an id
 		return null;

@@ -33,7 +33,7 @@ public final class SimulationStartConfiguration extends Configuration {
 		return ConfigurationTypes.SIMULATION_START; 
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
 		

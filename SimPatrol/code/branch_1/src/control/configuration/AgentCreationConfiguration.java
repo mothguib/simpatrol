@@ -50,7 +50,7 @@ public final class AgentCreationConfiguration extends Configuration {
 		return ConfigurationTypes.AGENT_CREATION; 
 	}
 	
-	public String toXML(int identation) {
+	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
 		
@@ -63,7 +63,7 @@ public final class AgentCreationConfiguration extends Configuration {
 				      "\">\n");
 		
 		// puts the agent
-		buffer.append(this.agent.toXML(identation + 1));
+		buffer.append(this.agent.fullToXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
