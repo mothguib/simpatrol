@@ -39,21 +39,16 @@ public final class MainDaemon extends Daemon {
 	/** Registers if the daemon must stop working. */
 	private boolean stop_working;
 	
-	/** The simulator of SimPatrol. */
-	private Simulator simulator;
-	
 	/** A generator of numbers for socket connections. */
 	private SocketNumberGenerator socket_number_generator;
 	
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  @param thread_name The name of the thread of the daemon.
-	 *  @param simulator The simulator of SimPatrol. */
+	 *  @param thread_name The name of the thread of the daemon. */
 	public MainDaemon(String thread_name, Simulator simulator) {
 		super(thread_name);
 		this.stop_working = false;
-		this.simulator = simulator;
 		this.socket_number_generator = null;
 	}
 	
@@ -78,14 +73,14 @@ public final class MainDaemon extends Daemon {
 		Graph graph = configuration.getGraph();
 		
 		// sets the graph to the simulator
-		this.simulator.setGraph(graph);
+		simulator.setGraph(graph);
 		
 		// sends an empty orientation to the remote sender of the configuration
-		this.connection.send(new Orientation().toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 		
 		// screen message
 		System.out.println("[SimPatrol.MainDaemon] Graph obtained:");
-		System.out.print(graph.toXML(0));
+		System.out.print(graph.fullToXML(0));
 	}
 	
 	/** Attends a given "societies creation" configuration, sending the
@@ -105,7 +100,7 @@ public final class MainDaemon extends Daemon {
 			// for each society
 			for(int i = 0; i < societies.length; i++) {
 				// adds it to the simulator
-				this.simulator.addSociety(societies[i]);
+				simulator.addSociety(societies[i]);
 				
 				// obtains its agents
 				Agent[] agents = societies[i].getAgents();
@@ -121,14 +116,14 @@ public final class MainDaemon extends Daemon {
 			}
 			
 			// sends the created orientation to the remote contact
-			this.connection.send(orientation.toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			this.connection.send(orientation.fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 			
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Societies obtained:");
-			for(int i = 0; i < societies.length; i++) System.out.print(societies[i].toXML(0));
+			for(int i = 0; i < societies.length; i++) System.out.print(societies[i].fullToXML(0));
 		}
 		// if not, sends an orientation reporting the error
-		else this.connection.send(new Orientation("Duplicated society id, or agent id.").toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		else this.connection.send(new Orientation("Duplicated society id, or agent id.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
 	/** Attends a given "agent creation" configuration, sending the
@@ -149,7 +144,7 @@ public final class MainDaemon extends Daemon {
 			String society_id = configuration.getSociety_id();
 			
 			// obtains the societies of the simulator
-			Society[] simulator_societies = this.simulator.getSocieties();
+			Society[] simulator_societies = simulator.getSocieties();
 			
 			// finds the society with the given id
 			Society society = null;
@@ -162,10 +157,10 @@ public final class MainDaemon extends Daemon {
 			// if the society was found
 			if(society != null) {
 				// if the simulator is in the CONFIGURING state
-				if(this.simulator.getState() == SimulatorStates.CONFIGURING) {
+				if(simulator.getState() == SimulatorStates.CONFIGURING) {
 					// if the society is a closed one, casts the agent to a perpetual one
 					if(society instanceof ClosedSociety)
-						agent = ((SeasonalAgent) agent).getPerpetualVersion();
+						agent = ((SeasonalAgent) agent).toPerpetualVersion();
 					
 					// adds the agent to the society
 					society.addAgent(agent);
@@ -176,11 +171,11 @@ public final class MainDaemon extends Daemon {
 					// sends an orientation to the sender of the configuration
 					Orientation orientation = new Orientation();
 					orientation.addItem(socket_number, agent.getObjectId());
-					this.connection.send(orientation.toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					this.connection.send(orientation.fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 					
 					// screen message
 					System.out.println("[SimPatrol.MainDaemon] Agent obtained:");
-					System.out.print(agent.toXML(0));
+					System.out.print(agent.fullToXML(0));
 				}
 				// if not, if the society is an open one
 				else if(society instanceof OpenSociety) {
@@ -193,20 +188,20 @@ public final class MainDaemon extends Daemon {
 					// sends an orientation to the sender of the configuration
 					Orientation orientation = new Orientation();
 					orientation.addItem(socket_number, agent.getObjectId());
-					this.connection.send(orientation.toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					this.connection.send(orientation.fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 					
 					// screen message
 					System.out.println("[SimPatrol.MainDaemon] Agent obtained:");
-					System.out.print(agent.toXML(0));
+					System.out.print(agent.fullToXML(0));
 				}
 				// if not, sends an orientation reporting error
-				else this.connection.send(new Orientation("Closed society.").toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+				else this.connection.send(new Orientation("Closed society.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 			}
 			// if not, sends an orientation reporting the error
-			else this.connection.send(new Orientation("Society not found.").toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			else this.connection.send(new Orientation("Society not found.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 		}
 		// if not, sends an orientation reporting the error
-		else this.connection.send(new Orientation("Duplicated agent.").toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		else this.connection.send(new Orientation("Duplicated agent.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
 	/** Attends a given "simultion start" configuration, sending the
@@ -219,19 +214,19 @@ public final class MainDaemon extends Daemon {
 		int simulation_time = configuration.getSimulation_time();
 		
 		// if the simulator is in the CONFIGURING state
-		if(this.simulator.getState() == SimulatorStates.CONFIGURING) {
+		if(simulator.getState() == SimulatorStates.CONFIGURING) {
 			// starts the simulation
-			this.simulator.startSimulation(simulation_time);
+			simulator.startSimulation(simulation_time);
 			
 			// sends an empty orientation to the sender of configuration
-			this.connection.send(new Orientation().toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 			
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Simulation started:");
 			System.out.println("Planned simulation time: " + configuration.getSimulation_time());			
 		}
 		// if not, sends an orientation reporting error
-		else this.connection.send(new Orientation("Simulator already simulating.").toXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		else this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
 	/** Verifies if one of the given societies already exists in
@@ -252,7 +247,7 @@ public final class MainDaemon extends Daemon {
 		Set<Agent> agents_set = new HashSet<Agent>();
 		
 		// obtains the societies from the simulator
-		Society[] simulator_societies = this.simulator.getSocieties();
+		Society[] simulator_societies = simulator.getSocieties();
 		
 		// for each society of the simulator
 		for(int i = 0; i < societies.length; i++) {
@@ -298,7 +293,7 @@ public final class MainDaemon extends Daemon {
 	 *  @return The number of the UDP socket created for the agent daemons. */
 	private int createAndStartAgentDaemons(Agent agent) {
 		// creates a perception daemon
-		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent, this.simulator.getGraph(), this.simulator.getCycle_duration());
+		PerceptionDaemon perception_daemon = new PerceptionDaemon(agent.getObjectId() + "'s perception daemon", agent, simulator.getCycle_duration());
 		
 		// creates an action daemon
 		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s action daemon", agent);
@@ -325,8 +320,8 @@ public final class MainDaemon extends Daemon {
 		} while(socket_exception_happened);
 		
 		// adds the daemons to the simulator
-		this.simulator.addPerceptionDaemon(perception_daemon);
-		this.simulator.addActionDaemon(action_daemon);
+		simulator.addPerceptionDaemon(perception_daemon);
+		simulator.addActionDaemon(action_daemon);
 		
 		// returns the obtained number for the sockets of the daemons
 		return perception_daemon.getUDPSocketNumber();
@@ -344,7 +339,7 @@ public final class MainDaemon extends Daemon {
 	 *  @modeller This method must me modelled. */
 	public void run() {
 		// 1st. listens to a configuration of "graph creation"
-		while(this.simulator.getGraph() == null) {
+		while(simulator.getGraph() == null) {
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Listening to a graph creation configuration...");
 			
@@ -365,7 +360,7 @@ public final class MainDaemon extends Daemon {
 				try { this.attendGraphCreationConfiguration((GraphCreationConfiguration) configuration); }
 				catch (IOException e) { e.printStackTrace(); }
 			else
-				try { this.connection.send(new Orientation("Waiting for a graph creation configuration.").toXML(0), configuration.getSender_address(), configuration.getSender_socket()); }
+				try { this.connection.send(new Orientation("Waiting for a graph creation configuration.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket()); }
 				catch (IOException e) { e.printStackTrace(); }
 		}
 		
@@ -394,7 +389,7 @@ public final class MainDaemon extends Daemon {
 				catch (IOException e) { e.printStackTrace(); }
 			else {
 				SocietiesCreationConfiguration societies_creation_configuration = null;
-				try { societies_creation_configuration = ConfigurationTranslator.getSocietiesCreationConfiguration(message, this.simulator.getGraph()); }
+				try { societies_creation_configuration = ConfigurationTranslator.getSocietiesCreationConfiguration(message, simulator.getGraph()); }
 				catch (ParserConfigurationException e) { e.printStackTrace(); }
 				catch (SAXException e) { e.printStackTrace(); }
 				catch (IOException e) { e.printStackTrace(); }
@@ -405,7 +400,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				else {
 					AgentCreationConfiguration agent_creation_configuration = null;
-					try { agent_creation_configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, this.simulator.getGraph()); }
+					try { agent_creation_configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, simulator.getGraph()); }
 					catch (ParserConfigurationException e) { e.printStackTrace(); }
 					catch (SAXException e) { e.printStackTrace(); }
 					catch (IOException e) { e.printStackTrace(); }
@@ -415,7 +410,7 @@ public final class MainDaemon extends Daemon {
 						try { this.attendAgentCreationConfiguration(agent_creation_configuration); }
 						catch (IOException e) { e.printStackTrace(); }
 					else
-						try { this.connection.send(new Orientation("Waiting for a valid configuration.").toXML(0), configuration.getSender_address(), configuration.getSender_socket()); }
+						try { this.connection.send(new Orientation("Waiting for a valid configuration.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket()); }
 						catch (IOException e) { e.printStackTrace(); }					
 				}
 			}

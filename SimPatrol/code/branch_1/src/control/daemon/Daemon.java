@@ -5,6 +5,8 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.net.SocketException;
+
+import control.simulator.Simulator;
 import util.Queue;
 import view.connection.Connection;
 
@@ -19,6 +21,10 @@ public abstract class Daemon extends Thread {
 	 *  new messages, as well as attend them. */
 	protected Connection connection;
 	
+	/** The simulator of the patrolling task, performed by SimPatrol.
+	 *  Shared by all the daemons. */
+	protected static Simulator simulator;
+	
 	/* Methods. */
 	/** Constructor.
 	 * 
@@ -26,7 +32,12 @@ public abstract class Daemon extends Thread {
 	public Daemon(String thread_name) {
 		super(thread_name);
 		this.buffer = new Queue<String>();
-		this.connection = new Connection(thread_name + "'s connection", this.buffer);		
+		this.connection = new Connection(thread_name + "'s connection", this.buffer);
+	}
+	
+	/** Set the simulator of the daemon. */
+	public static void setSimulator(Simulator simpatrol_simulator) {
+		simulator = simpatrol_simulator;
 	}
 	
 	/** Starts the work of the daemon.
