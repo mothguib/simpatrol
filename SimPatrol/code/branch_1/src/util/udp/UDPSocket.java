@@ -36,6 +36,8 @@ public final class UDPSocket {
 	public UDPSocket(int socket_number) throws SocketException {
 		this.local_socket_number = socket_number;
 		this.socket = new DatagramSocket(this.local_socket_number);
+		this.remote_socket_number = -1;
+		this.remote_socket_address = null;
 	}
 	
 	/** Implements the receiving of a message.
@@ -54,12 +56,15 @@ public final class UDPSocket {
 	}
 	
 	/** Implements the sending of a message to the last remote contact.
+	 *  If no last remote contact exists, do nothing.
 	 * 
 	 *  @param message The message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
-		DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.remote_socket_address, this.remote_socket_number);
-		this.socket.send(packet);
+		if(this.remote_socket_address != null && this.remote_socket_number > -1) {
+			DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.remote_socket_address, this.remote_socket_number);
+			this.socket.send(packet);
+		}
 	}
 	
 	/** Implements the sending of a message.
