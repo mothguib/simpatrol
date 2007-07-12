@@ -5,7 +5,7 @@ package control.robot;
 
 /* Imported classes and/or interfaces. */
 import control.simulator.RealTimeSimulator;
-import util.etpd.EventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Mortal;
 
 /** Implements the robots that assure the death of the mortal objects
