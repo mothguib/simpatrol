@@ -6,10 +6,8 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import util.timer.Timemeterable;
 import view.XMLable;
-import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 
 /** Implements the vertexes of a Graph object.
