@@ -6,8 +6,9 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+
+import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Dynamic;
-import util.etpd.EventTimeProbabilityDistribution;
 
 /** Implements dynamic vertexes of a Graph object,
  *  that can appear and disappear with a specific event time

@@ -4,8 +4,8 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
+import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Dynamic;
-import util.etpd.EventTimeProbabilityDistribution;
 
 /** Implements dynamic edges of a Graph object,
  *  that can appear and disappear with a specific event time
