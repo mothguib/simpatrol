@@ -6,7 +6,10 @@ package util.clock;
 /* Imported classes and/or interfaces. */
 import java.util.Calendar;
 
-/** Implements a real time clock. */
+/** Implements a real time clock, that with a specific periodicity,
+ *  sends signal to a Clockable object in order to make it act.
+ *  
+ *  @see Clockable */
 public final class Clock extends Thread {
 	/* Attributes. */
 	/** Registers if the clock shall stop working. */
@@ -25,6 +28,7 @@ public final class Clock extends Thread {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param name The name of the thread of the clock.
 	 *  @param object The object to be clocked. */
 	public Clock(String name, Clockable object) {
@@ -34,12 +38,14 @@ public final class Clock extends Thread {
 	}
 	
 	/** Changes the clock's counting step.
+	 * 
 	 *  @param step The counting step. */
 	public void setStep(int step) {
 		this.step = step;
 	}
 	
 	/** Changes the clock's counting unity.
+	 * 
 	 *  @param unity The java.util.Calendar's time unity. */
 	public void setUnity(int unity) {
 		this.unity = unity;
