@@ -4,7 +4,7 @@
 package model.action;
 
 /* Imported classes and/or interfaces. */
-import model.interfaces.XMLable;
+import view.XMLable;
 
 /** Implements the actions of the agents of SimPatrol. */
 public abstract class Action implements XMLable {

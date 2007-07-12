@@ -6,7 +6,8 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-import util.timemeter.Timemeterable;
+
+import util.timer.Timemeterable;
 import view.XMLable;
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
