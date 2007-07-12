@@ -30,6 +30,7 @@ public final class UDPSocket {
 
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param socket_number The number of the UDP socket. 
 	 *  @throws SocketException */
 	public UDPSocket(int socket_number) throws SocketException {
@@ -38,6 +39,7 @@ public final class UDPSocket {
 	}
 	
 	/** Implements the receiving of a message.
+	 * 
 	 *  @return The message read from the UDP socket.
 	 *  @throws IOException */
 	public String receive() throws IOException {
@@ -52,6 +54,7 @@ public final class UDPSocket {
 	}
 	
 	/** Implements the sending of a message to the last remote contact.
+	 * 
 	 *  @param message The message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
@@ -60,6 +63,7 @@ public final class UDPSocket {
 	}
 	
 	/** Implements the sending of a message.
+	 * 
 	 *  @param message The message to be sent.
 	 *  @param remote_socket_address The remote address of the receiver (in IP format).
 	 *  @param remote_socket_number The number of the remote socket of the receiver. 
@@ -71,6 +75,7 @@ public final class UDPSocket {
 	}
 	
 	/** Returns the number of the UDP socket.
+	 * 
 	 *  @return The number of the UDP socket. */
 	public int getSocketNumber() {
 		return this.local_socket_number;

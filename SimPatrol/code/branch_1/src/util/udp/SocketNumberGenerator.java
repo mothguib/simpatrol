@@ -21,6 +21,7 @@ public final class SocketNumberGenerator {
 	
 	/* Methods. */
 	/** Constructor.
+	 * 
 	 *  @param basis The value taken as basis for the socket number generation. */
 	public SocketNumberGenerator(int basis) {
 		this.rn_generator = new MersenneTwister((int) System.currentTimeMillis());
@@ -28,6 +29,7 @@ public final class SocketNumberGenerator {
 	}
 	
 	/** Generates a number for the socket of a connection.
+	 * 
 	 *  @return The number for the socket. */
 	public int generateSocketNumber() {
 		return Math.abs(this.rn_distribuitor.nextInt());
