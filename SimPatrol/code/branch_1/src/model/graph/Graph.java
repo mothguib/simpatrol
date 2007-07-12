@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import view.XMLable;
 import model.interfaces.Dynamic;
+import model.stigma.Stigma;
 
 /** Implements graphs that represent the territories to be
  *  patrolled.
@@ -17,14 +18,17 @@ import model.interfaces.Dynamic;
  *  @developer New dynamic objects that eventually are part of a graph, must change this class. */
 public final class Graph implements XMLable {
 	/* Attributes. */
+	/** The label of the graph. */
+	private String label;
+	
 	/** The set of vertexes of the graph. */
 	private Set<Vertex> vertexes;
 	
 	/** The set of edges of the graph. */
 	private Set<Edge> edges;
-
-	/** The label of the graph. */
-	private String label;
+	
+	/** The set of stigmas deposited on the graph. */
+	private Set<Stigma> stigmas;
 	
 	/* Methods. */
 	/** Constructor.
@@ -38,9 +42,8 @@ public final class Graph implements XMLable {
 		for(int i = 0; i < vertexes.length; i++)
 			this.vertexes.add(vertexes[i]);
 		
-		this.edges = new HashSet<Edge>();
-		
 		// for each vertex, adds its edges to the set of edges
+		this.edges = new HashSet<Edge>();
 		Object[] vertexes_array = this.vertexes.toArray();
 		for(int i = 0; i < vertexes_array.length; i++) {
 			Vertex current_vertex = (Vertex) vertexes_array[i];
@@ -53,6 +56,8 @@ public final class Graph implements XMLable {
 		
 		if(this.edges.size() == 0)
 			this.edges = null;
+		
+		this.stigmas = null;
 	}
 	
 	/** Obtains the vertexes of the graph.
@@ -72,14 +77,43 @@ public final class Graph implements XMLable {
 	 * 
 	 *  @return The edges of the graph. */
 	public Edge[] getEdges() {
-		Object[] edges_array = this.edges.toArray();
-		Edge[] answer = new Edge[edges_array.length];
+		Edge[] answer = new Edge[0];
 		
-		for(int i = 0; i < answer.length; i++)
-			answer[i] = (Edge) edges_array[i];
+		if(this.edges != null) {
+			Object[] edges_array = this.edges.toArray();
+			answer = new Edge[edges_array.length];
+			
+			for(int i = 0; i < answer.length; i++)
+				answer[i] = (Edge) edges_array[i];
+		}
 		
 		return answer;
-	}	
+	}
+	
+	/** Returns the stigmas of the graph.
+	 * 
+	 *  @return The stigmas deposited on the graph. */	
+	public Stigma[] getStigmas() {
+		Stigma[] answer = new Stigma[0];
+		
+		if(this.stigmas != null) {
+			Object[] stigmas_array = this.stigmas.toArray();
+			answer = new Stigma[stigmas_array.length];
+			
+			for(int i = 0; i < answer.length; i++)
+				answer[i] = (Stigma) stigmas_array[i];
+		}
+		
+		return answer;
+	}
+	
+	/** Adds the given stigma to the graph.
+	 * 
+	 *  @param stigma The stigma to be added to the graph. */
+	public void addStigma(Stigma stigma) {
+		if(this.stigmas == null) this.stigmas = new HashSet<Stigma>();
+		this.stigmas.add(stigma);
+	}
 	
 	/** Obtains the dynamic objects of the graph.
 	 * 
@@ -111,6 +145,22 @@ public final class Graph implements XMLable {
 		for(int i = 0; i <answer.length; i++)
 			answer[i] = (Dynamic) dynamic_objects_array[i];		
 		return answer;
+	}
+	
+	/** Verifies if the given vertex is part of the graph.
+	 * 
+	 *  @param vertex The vertex to be verified. 
+	 *  @return TRUE if the vertex is part of the graph, FALSE if not. */
+	public boolean hasVertex(Vertex vertex) {
+		return this.vertexes.contains(vertex);
+	}
+
+	/** Verifies if the given edge is part of the graph.
+	 * 
+	 *  @param edge The edge to be verified. 
+	 *  @return TRUE if the edge is part of the graph, FALSE if not. */
+	public boolean hasEdge(Edge edge) {
+		return this.edges.contains(edge);
 	}
 	
 	/** Obtains a subgraph from the graph, starting from the given
@@ -147,6 +197,42 @@ public final class Graph implements XMLable {
 		
 		// if there are no edges in the answer, nullifies its set of edges
 		if(answer.edges.size() == 0) answer.edges = null;
+		
+		// adds the stigmas to the answer (only the correct ones)
+		if(this.stigmas != null) {
+			// for each stigma
+			Object[] stigmas_array = this.stigmas.toArray();
+			for(int i = 0; i < stigmas_array.length; i++) {
+				Stigma stigma = (Stigma) stigmas_array[i];
+				
+				// tries to obtain its vertex
+				Vertex stigma_vertex = stigma.getVertex();
+				
+				// if the vertex is valid (not null)
+				if(stigma_vertex != null) {
+					// tries to obtain a copy of it from the answer
+					Vertex stigma_vertex_copy = answer.getVertex(stigma_vertex.getObjectId());
+					
+					// if the copy is valid, adds a copy of the stigma to the answer
+					if(stigma_vertex_copy != null)
+						answer.addStigma(stigma.getCopy(stigma_vertex_copy));
+				}
+				// if not, tries to obtain its edge				
+				else {
+					Edge stigma_edge = stigma.getEdge();
+					
+					// if the edge is valid (not null)
+					if(stigma_edge != null) {
+						// tries to obtain a copy of it from the answer
+						Edge stigma_edge_copy = answer.getEdge(stigma_edge.getObjectId());
+						
+						// if the copy is valid, adds a copy of the stigma to the answer
+						if(stigma_edge_copy != null)
+							answer.addStigma(new Stigma(stigma_edge_copy));
+					}
+				}
+			}
+		}
 		
 		// returns the answer
 		return answer;
@@ -239,6 +325,42 @@ public final class Graph implements XMLable {
 		
 		// if there are no egdes in the answer, nullifies it
 		if(answer.edges.size() == 0) answer.edges = null;
+		
+		//	adds the stigmas to the answer (only the correct ones)
+		if(this.stigmas != null) {
+			// for each stigma
+			Object[] stigmas_array = this.stigmas.toArray();
+			for(int i = 0; i < stigmas_array.length; i++) {
+				Stigma stigma = (Stigma) stigmas_array[i];
+				
+				// tries to obtain its vertex
+				Vertex stigma_vertex = stigma.getVertex();
+				
+				// if the vertex is valid (not null)
+				if(stigma_vertex != null) {
+					// tries to obtain a copy of it from the answer
+					Vertex stigma_vertex_copy = answer.getVertex(stigma_vertex.getObjectId());
+					
+					// if the copy is valid, adds a copy of the stigma to the answer
+					if(stigma_vertex_copy != null)
+						answer.addStigma(stigma.getCopy(stigma_vertex_copy));
+				}
+				// if not, tries to obtain its edge				
+				else {
+					Edge stigma_edge = stigma.getEdge();
+					
+					// if the edge is valid (not null)
+					if(stigma_edge != null) {
+						// tries to obtain a copy of it from the answer
+						Edge stigma_edge_copy = answer.getEdge(stigma_edge.getObjectId());
+						
+						// if the copy is valid, adds a copy of the stigma to the answer
+						if(stigma_edge_copy != null)
+							answer.addStigma(new Stigma(stigma_edge_copy));
+					}
+				}
+			}
+		}
 		
 		// returns the answer for the method
 		return answer;
@@ -384,6 +506,13 @@ public final class Graph implements XMLable {
 			Object[] edges_array = this.edges.toArray();
 			for (int i = 0; i < edges_array.length; i++)
 				buffer.append(((Edge) edges_array[i]).fullToXML(identation + 1));
+		}
+		
+		// inserts the stigmas
+		if(this.stigmas != null) {
+			Object[] stigmas_array = this.stigmas.toArray();
+			for(int i = 0; i < stigmas_array.length; i++)
+				buffer.append(((Stigma) stigmas_array[i]).fullToXML(identation + 1));
 		}
 		
 		// finishes the buffer content
