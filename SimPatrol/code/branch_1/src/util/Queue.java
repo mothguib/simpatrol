@@ -20,12 +20,14 @@ public final class Queue<E> {
 	}
 	
 	/** Inserts an element on the queue.
+	 * 
 	 *  @param object The element to be inserted. */
 	public synchronized void insert(E object) {
 		this.queue.addLast(object);
 	}
 	
 	/** Removes the first element from the queue.
+	 * 
 	 *  @return The first element of the queue. */
 	public synchronized E remove() {
 		if(this.queue.size() > 0) return this.queue.remove(0);
