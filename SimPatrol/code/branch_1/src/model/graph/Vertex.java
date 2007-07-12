@@ -6,7 +6,7 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-import util.timer.Timemeterable;
+import util.timer.TimedObject;
 import view.XMLable;
 import control.simulator.RealTimeSimulator;
 
@@ -52,7 +52,7 @@ public class Vertex implements XMLable {
 	
 	/** Counts the time.
 	 *  Shared by all the vertexes. */
-	protected static Timemeterable time_counter; 
+	protected static TimedObject time_counter; 
 	
 	/* Methods. */
 	/** Constructor.
@@ -161,7 +161,7 @@ public class Vertex implements XMLable {
 	/** Configures the time counter of the vertexes.
 	 * 
 	 *  @param counter The time counter. */
-	public static void setTime_counter(Timemeterable counter) {
+	public static void setTime_counter(TimedObject counter) {
 		time_counter = counter;
 	}
 	
