@@ -4,7 +4,7 @@
 package model.agent;
 
 /* Imported classes and/or interfaces. */
-import util.etpd.EventTimeProbabilityDistribution;
+import model.etpd.EventTimeProbabilityDistribution;
 import model.graph.Vertex;
 import model.interfaces.Mortal;
 import model.permission.ActionPermission;
