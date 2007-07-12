@@ -181,7 +181,7 @@ public abstract class Agent implements XMLable {
 			
 			Object[] allowed_perceptions_array = this.allowed_perceptions.toArray();
 			for(int i = 0; i < allowed_perceptions_array.length; i++)
-				buffer.append(((PerceptionPermission) allowed_perceptions_array[i]).toXML(identation + 1));
+				buffer.append(((PerceptionPermission) allowed_perceptions_array[i]).fullToXML(identation + 1));
 		}
 		
 		// puts the eventual allowed actions
@@ -190,7 +190,7 @@ public abstract class Agent implements XMLable {
 			
 			Object[] allowed_actions_array = this.allowed_actions.toArray();
 			for(int i = 0; i < allowed_actions_array.length; i++)
-				buffer.append(((ActionPermission) allowed_actions_array[i]).toXML(identation + 1));
+				buffer.append(((ActionPermission) allowed_actions_array[i]).fullToXML(identation + 1));
 		}
 		
 		// closes the main tag
