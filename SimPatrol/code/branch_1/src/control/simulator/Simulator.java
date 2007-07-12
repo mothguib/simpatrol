@@ -53,9 +53,10 @@ public abstract class Simulator {
 	 *  @param cycle_duration The duration, in milliseconds, of a cycle of perceptions. 
 	 *  @throws SocketException */
 	public Simulator(int local_socket_number, int cycle_duration) throws SocketException {
-		// creates and starts the main daemon
+		// creates, starts and configures the main daemon
 		this.main_daemon = new MainDaemon("main daemon", this);
 		this.main_daemon.start(local_socket_number);
+		MainDaemon.setSimulator(this);
 		
 		// initiates the sets of agent_daemons
 		this.perception_daemons = new HashSet<PerceptionDaemon>();
