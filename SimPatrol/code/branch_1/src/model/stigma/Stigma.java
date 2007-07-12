@@ -8,7 +8,9 @@ import model.graph.Edge;
 import model.graph.Vertex;
 import view.XMLable;
 
-/** Implements an eventual stigma deposited by a patroller on the graph. */
+/** Implements an eventual stigma deposited by a patroller on the graph.
+ * 
+ *  @developer New Stigma subclasses should override some methods of this class. */
 public class Stigma implements XMLable {
 	/* Attributes. */
 	/** The eventual vertex where the stigma was deposited. */
@@ -32,6 +34,38 @@ public class Stigma implements XMLable {
 	public Stigma(Edge edge) {
 		this.vertex = null;
 		this.edge = edge;
+	}
+	
+	/** Returns the eventual vertex of the stigma.
+	 *  
+	 *  @return The eventual vertex where the stigma is deposited. */
+	public Vertex getVertex() {
+		return this.vertex;
+	}
+	
+	/** Returns the eventual edge of the stigma.
+	 *  
+	 *  @return The eventual edge where the stigma is deposited. */
+	public Edge getEdge() {
+		return this.edge;
+	}
+	
+	/** Obtains a copy of the stigma, given the copy of its vertex.
+	 * 
+	 *  @param vertex_copy The copy of the vertex of the stigma.
+	 *  @return The copy of the stigma. 
+	 *  @developer New Stigma subclasses should override this method. */
+	public Stigma getCopy(Vertex vertex_copy) {
+		return new Stigma(vertex_copy);
+	}
+	
+	/** Obtains a copy of the stigma, given the copy of its edge.
+	 * 
+	 *  @param edge_copy The copy of the edge of the stigma.
+	 *  @return The copy of the stigma. 
+	 *  @developer New Stigma subclasses should override this method. */
+	public Stigma getCopy(Edge edge_copy) {
+		return new Stigma(edge_copy);
 	}
 	
 	public String fullToXML(int identation) {
