@@ -58,6 +58,33 @@ public final class DynamicEdge extends Edge implements Dynamic {
 				this.is_appearing = false;		
 	}
 	
+	/** Contructor for eventually oriented dynamic edges (dynamic arcs).
+	 * 
+	 *  @param emitter The emitter vertex, if the edge is an arc.
+	 *  @param collector The collector vertex, if the edge is an arc.
+	 *  @param oriented TRUE if the edge is an arc.
+	 *  @param length The length of the edge.
+	 *  @param appearing_tpd The time probability distribution for the edge appearing.
+	 *  @param diappearing_tpd The time probability distribution for the edge disappearing.
+	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */	
+	protected DynamicEdge(Vertex emitter, Vertex collector, boolean oriented, double length, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing, String id) {		
+		super(emitter, collector, oriented, length, id);
+		this.appearing_tpd = appearing_tpd;
+		this.disappearing_tpd = disappearing_tpd;
+		
+		// configures the is_appearing attribute, based on
+		// emitter and collector vertexes
+		this.is_appearing = is_appearing;
+		
+		if(emitter instanceof DynamicVertex)
+			if(!((DynamicVertex) emitter).isAppearing())
+				this.is_appearing = false;
+		
+		if(collector instanceof DynamicVertex) 
+			if(!((DynamicVertex) collector).isAppearing())
+				this.is_appearing = false;		
+	}	
+	
 	/** Obtains a copy of the edge with the given copies of vertexes.
 	 * 
 	 *  @param copy_emitter The copy of the emitter.
@@ -68,8 +95,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		boolean oriented = !this.emitter.isCollectorOf(this);
 		
 		// the copy		
-		DynamicEdge answer = new DynamicEdge(copy_emitter, copy_collector, oriented, this.length, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
-		answer.id = this.id;
+		DynamicEdge answer = new DynamicEdge(copy_emitter, copy_collector, oriented, this.length, this.appearing_tpd, this.disappearing_tpd, this.is_appearing, id);
 		answer.visibility = this.visibility;
 		answer.is_appearing = this.is_appearing;
 		
@@ -82,12 +108,8 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
 		
 		// removes the closing of the xml tag
-		StringBuffer closing_tag = new StringBuffer();			
-		for(int i = 0; i < identation; i++) closing_tag.append("\t");
-		closing_tag.append("</edge>");
-		
-		int last_valid_index = buffer.indexOf(closing_tag.toString());
-		buffer.delete(last_valid_index, buffer.length());
+		int last_valid_index = buffer.indexOf("/>");
+		buffer.replace(last_valid_index, last_valid_index + 2, ">");
 		
 		// adds the time probability distributions
 		buffer.append(this.appearing_tpd.fullToXML(identation + 1));

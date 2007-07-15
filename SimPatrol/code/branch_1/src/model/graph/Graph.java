@@ -152,7 +152,12 @@ public final class Graph implements XMLable {
 	 *  @param vertex The vertex to be verified. 
 	 *  @return TRUE if the vertex is part of the graph, FALSE if not. */
 	public boolean hasVertex(Vertex vertex) {
-		return this.vertexes.contains(vertex);
+		Object[] vertexes_array = this.vertexes.toArray();
+		for(int i = 0; i < vertexes_array.length; i++)
+			if(((Vertex) vertexes_array[i]).equals(vertex))
+				return true;
+		
+		return false;
 	}
 
 	/** Verifies if the given edge is part of the graph.
@@ -160,7 +165,14 @@ public final class Graph implements XMLable {
 	 *  @param edge The edge to be verified. 
 	 *  @return TRUE if the edge is part of the graph, FALSE if not. */
 	public boolean hasEdge(Edge edge) {
-		return this.edges.contains(edge);
+		if(this.edges != null) {
+			Object[] edges_array = this.edges.toArray();
+			for(int i = 0; i < edges_array.length; i++)
+				if(((Edge) edges_array[i]).equals(edge))
+					return true;
+		}
+		
+		return false;
 	}
 	
 	/** Obtains a subgraph from the graph, starting from the given
@@ -254,10 +266,10 @@ public final class Graph implements XMLable {
 		List<Vertex> pending_vertexes = new LinkedList<Vertex>();
 		
 		// holds the vertexes already treated
-		List<Vertex> treated_vertexes = new LinkedList<Vertex>();
+		List<Vertex> expanded_vertexes = new LinkedList<Vertex>();
 		
 		// the answer for the method
-		Vertex[] initial_vertexes = {starting_vertex};
+		Vertex[] initial_vertexes = {starting_vertex.getCopy()};
 		Graph answer = new Graph(this.label, initial_vertexes);
 		answer.edges = new HashSet<Edge>();
 		
@@ -269,10 +281,10 @@ public final class Graph implements XMLable {
 			// removes the current vertex from the ones to be treated
 			Vertex current_vertex = pending_vertexes.remove(0);
 			
-			// if it was not treated yet
-			if(!treated_vertexes.contains(current_vertex)) {
-				// adds it to the treated ones
-				treated_vertexes.add(current_vertex);
+			// if it was not expanded yet
+			if(!expanded_vertexes.contains(current_vertex)) {
+				// adds it to the expanded ones
+				expanded_vertexes.add(current_vertex);
 				
 				// obtains its copy from the answer
 				Vertex current_vertex_copy = answer.getVertex(current_vertex.getObjectId());
@@ -287,22 +299,35 @@ public final class Graph implements XMLable {
 					  (!(neighbourhood[i] instanceof DynamicVertex)
 							  ||
 					  ((DynamicVertex) neighbourhood[i]).isAppearing())) {
-						// if it is not in the already treated ones
-						if(!treated_vertexes.contains(neighbourhood[i])) {
-							// creates a copy of it
-							Vertex current_neighbour_copy = neighbourhood[i].getCopy();
+						// if it is not in the already expanded ones
+						if(!expanded_vertexes.contains(neighbourhood[i])) {
+							// tries to obtain a copy of it from the answer
+							Vertex current_neighbour_copy = answer.getVertex(neighbourhood[i].getObjectId());
 							
-							// adds the copy of it to the answer of the method
-							answer.vertexes.add(current_neighbour_copy);
+							// registers if there's already a copy of the current neighbour in
+							// the answer
+							boolean neighbour_copy_exists = true;
+							
+							// if the copy is not valid, creates a new one
+							if(current_neighbour_copy == null) {
+								current_neighbour_copy = neighbourhood[i].getCopy();
+								neighbour_copy_exists = false;
+							}
 							
 							// obtains all the edges between the current
-							// treated vertex and its current neighbour
+							// vertex and its current neighbour
 							Edge[] edges = current_vertex.getConnectingEdges(neighbourhood[i]);
+							
+							// registers if there's some visivible and appearing edge between
+							// the current vertex and its current neighbour
+							boolean visible_edge_exists = false;
 							
 							// for each edge
 							for(int j = 0; j < edges.length; j++) {
 								// if the current edge is visible and is appearing
 								if(edges[j].isVisible() && edges[j].isAppearing()) {
+									visible_edge_exists = true;
+									
 									// obtains a copy of it
 									Edge edge_copy = null;
 									if(current_vertex.isEmitterOf(edges[j]))
@@ -315,8 +340,15 @@ public final class Graph implements XMLable {
 								}
 							}
 							
-							// adds the current neighbour to the vertexes to be treated
-							pending_vertexes.add(neighbourhood[i]);								
+							// if there's some visible and appearing edge
+							if(visible_edge_exists) {
+								// if the current copy is not in the answer yet, adds it
+								if(!neighbour_copy_exists)
+									answer.vertexes.add(current_neighbour_copy);
+								
+								// adds the current copy to the pending ones
+								pending_vertexes.add(neighbourhood[i]);
+							}
 						}
 					}
 				}
@@ -415,20 +447,29 @@ public final class Graph implements XMLable {
 							// tries to obtain a copy of it from the given subgraph
 							Vertex neighbour_copy = subgraph.getVertex(neighbourhood[i].getObjectId());
 							
-							// if the copy is null, creates it and adds to the subgraph
+							// registers if there's already a copy of the current neighbour in
+							// the given subgraph
+							boolean neighbour_copy_exists = true;
+							
+							// if the copy is null, creates it
 							if(neighbour_copy == null) {
 								neighbour_copy = neighbourhood[i].getCopy();
-								subgraph.vertexes.add(neighbour_copy);
+								neighbour_copy_exists = false;
 							}
 							
-							// obtains the edge between the starting vertex and its
+							// obtains the edges between the starting vertex and its
 							// current neighbour
 							Edge[] edges = starting_vertex.getConnectingEdges(neighbourhood[i]);
+							
+							// registers if some of the connecting edges is visible and appearing
+							boolean visible_edge_exists = false;
 							
 							// for each edge
 							for(int j = 0; j < edges.length; j++) {
 								// if the current edge is visible and appearing
 								if(edges[j].isVisible() && edges[j].isAppearing()) {
+									visible_edge_exists = true;
+									
 									// if there isn't a copy of it in the given
 									// subgraph
 									if(subgraph.getEdge(edges[j].getObjectId()) == null) {
@@ -440,13 +481,21 @@ public final class Graph implements XMLable {
 											current_edge_copy = edges[j].getCopy(neighbour_copy, starting_vertex_copy);
 										
 										subgraph.edges.add(current_edge_copy);
-									}								
+									}	
 								}
 							}
 							
-							// calls this method recursively, starting from the
-							// current neighbour
-							this.addVisibleDepth(subgraph, neighbourhood[i], depth - 1, already_expanded_vertexes);
+							// if there's some visible edge
+							if(visible_edge_exists) {
+								// if the copy of the current neighbour is not in the subgraph,
+								// adds it
+								if(!neighbour_copy_exists)
+									subgraph.vertexes.add(neighbour_copy);
+								
+								// calls this method recurvely, starting from the current
+								// neighbour
+								this.addVisibleDepth(subgraph, neighbourhood[i], depth - 1, already_expanded_vertexes);
+							}
 						}
 					}
 				}

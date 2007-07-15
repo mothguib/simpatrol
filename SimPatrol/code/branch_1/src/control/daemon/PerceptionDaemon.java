@@ -208,7 +208,7 @@ public final class PerceptionDaemon extends AgentDaemon implements Clockable {
 						Edge edge = agents[j].getEdge();
 						
 						// if the obtained vertex and edge are part of the subgraph
-						if(subgraph.hasVertex(vertex) && subgraph.hasEdge(edge))
+						if(subgraph.hasVertex(vertex) && (edge == null || subgraph.hasEdge(edge)))
 							// adds the current agent to the perceived ones
 							perceived_agents.add(agents[j]);
 					}

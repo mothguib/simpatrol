@@ -127,21 +127,13 @@ public final class DynamicVertex extends Vertex implements Dynamic {
 		// finds the appearing attribute, atualizing it if necessary
 		if(!this.is_appearing) {
 			int index_appearing_value = buffer.lastIndexOf("is_appearing=\"true\"");
-			if(index_appearing_value > -1) buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
-			else {
-				int index_bigger = buffer.indexOf(">");
-				buffer.insert(index_bigger, " is_appearing=\"false\"");
-			}
+			buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
 		}
 		
 		// removes the closing of the xml tag
-		StringBuffer closing_tag = new StringBuffer();
-		for(int i = 0; i < identation; i++) closing_tag.append("\t");
-		closing_tag.append("</vertex>");
+		int last_valid_index = buffer.indexOf("/>");
+		buffer.replace(last_valid_index, last_valid_index + 2, ">");
 		
-		int last_valid_index = buffer.indexOf(closing_tag.toString());		
-		buffer.delete(last_valid_index, buffer.length());
-
 		// adds the time probability distributions
 		buffer.append(this.appearing_tpd.fullToXML(identation + 1));
 		buffer.append(this.disappearing_tpd.fullToXML(identation + 1));

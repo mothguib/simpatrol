@@ -81,6 +81,48 @@ public class Edge implements XMLable {
 				this.is_appearing = false;
 	}
 	
+	/** Contructor for eventually oriented edges (arcs).
+	 *  The id of the edge is needed.
+	 * 
+	 *  @param emitter The emitter vertex, if the edge is an arc.
+	 *  @param collector The collector vertex, if the edge is an arc.
+	 *  @param oriented TRUE if the edge is an arc.
+	 *  @param length The length of the edge.
+	 *  @param id The object id of the edge. */
+	protected Edge(Vertex emitter, Vertex collector, boolean oriented, double length, String id) {
+		this.id = id;
+		this.emitter = emitter;
+		this.collector = collector;
+		
+		// if the edge is an arc...
+		if(oriented) {
+			// adds the edge as a way out arc in the emitter 
+			this.emitter.addOutEdge(this);
+
+			// adds the edge as a way in arc in the collector
+			this.collector.addInEdge(this);
+		}
+		else {
+			// adds the edge in both emitter and collector vertexes
+			this.emitter.addEdge(this);
+			this.collector.addEdge(this);
+		}
+		
+		this.length = length;
+		
+		// configures the is_appearing attribute, based on the
+		// emitter and collector vertexes
+		this.is_appearing = true;
+		
+		if(emitter instanceof DynamicVertex)
+			if(!((DynamicVertex) emitter).isAppearing())
+				this.is_appearing = false;
+		
+		if(collector instanceof DynamicVertex) 
+			if(!((DynamicVertex) collector).isAppearing())
+				this.is_appearing = false;
+	}
+	
 	/** Configures the visibility of the edge.
 	 * 
 	 *  @param visibility The visibility. */
@@ -152,8 +194,7 @@ public class Edge implements XMLable {
 		boolean oriented = !this.emitter.isCollectorOf(this);
 		
 		// the copy		
-		Edge copy_edge = new Edge(copy_emitter, copy_collector, oriented, this.length);
-		copy_edge.id = this.id;
+		Edge copy_edge = new Edge(copy_emitter, copy_collector, oriented, this.length, this.id);
 		copy_edge.visibility = this.visibility;
 		copy_edge.is_appearing = this.is_appearing;
 		

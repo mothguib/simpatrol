@@ -9,9 +9,10 @@ public class RemoteAgent {
 		int socket_number = Integer.parseInt(teclado.readLine());
 		
 		UDPSocket socket = new UDPSocket(8000);
+		socket.send("", "127.0.0.1", socket_number);
 		
-		String msg = "<message><requisition perception_type=\"1\"/></message>";
-		socket.send(msg, "127.0.0.1", socket_number);
-		System.out.println(socket.receive());		
+		while(true) {
+			System.out.print(socket.receive());
+		}
 	}
 }

@@ -164,12 +164,12 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	
 	public void startWorking() { 		
 		// screen message
-		System.out.println("[SimPatrol.Simulator] simulation started at " + Calendar.getInstance().toString());
+		System.out.println("[SimPatrol.Simulator] simulation started at " + Calendar.getInstance().getTime().toString());
 	}
 	
 	public void stopWorking() {
 		// screen message
-		System.out.println("[SimPatrol.Simulator] simulation stopped at " + Calendar.getInstance().toString());
+		System.out.println("[SimPatrol.Simulator] simulation stopped at " + Calendar.getInstance().getTime().toString());
 		
 		// stops the simulator
 		this.stopSimulation();

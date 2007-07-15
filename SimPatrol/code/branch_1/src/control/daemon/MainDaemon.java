@@ -250,7 +250,7 @@ public final class MainDaemon extends Daemon {
 		Society[] simulator_societies = simulator.getSocieties();
 		
 		// for each society of the simulator
-		for(int i = 0; i < societies.length; i++) {
+		for(int i = 0; i < simulator_societies.length; i++) {
 			// adds it to the set of societies
 			societies_set.add(simulator_societies[i]);
 			
