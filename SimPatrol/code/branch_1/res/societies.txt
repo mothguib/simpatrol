@@ -1,0 +1,19 @@
+<societies>
+	<society id="s1" label="viajantes" is_closed="false">
+		<agent id="a1" label="Daniel" vertex_id="v1">
+			<etpd seed="100" type="2">
+				<pd_parameter value="30"/>
+				<pd_parameter value="1"/>
+			</etpd>
+		</agent>
+
+		<agent id="a2" label="Josue" vertex_id="v4">
+			<etpd seed="100" type="0">
+				<pd_parameter value="0.35"/>
+			</etpd>
+		</agent>
+
+
+		<agent id="a3" label="Geber" vertex_id="v3"/>
+	</society>
+</societies>

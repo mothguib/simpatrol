@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- ENVIRONMENT -->
-<!ELEMENT environment (graph, society+)>
-
-<!-- GRAPH -->
-<!ELEMENT graph (vertex+, edge*)>
-<!ATTLIST graph label CDATA #REQUIRED>
-
-<!-- VERTEX -->
-<!ELEMENT vertex (stigma*, (etpd, etpd)?)>
-<!ATTLIST vertex id ID #REQUIRED>
-<!ATTLIST vertex label CDATA #REQUIRED>
-<!ATTLIST vertex priority CDATA "0">
-<!ATTLIST vertex visibility CDATA "true">
-<!ATTLIST vertex idleness CDATA "0">
-<!ATTLIST vertex fuel CDATA "false">
-<!ATTLIST vertex is_appearing CDATA "true">
-
-<!-- EDGE -->
-<!ELEMENT edge (stigma*, (etpd, etpd)?)>
-<!ATTLIST edge id ID #REQUIRED>
-<!ATTLIST edge emitter_id IDREF #REQUIRED>
-<!ATTLIST edge collector_id IDREF #REQUIRED>
-<!ATTLIST edge oriented CDATA "false">
-<!ATTLIST edge length CDATA #REQUIRED>
-<!ATTLIST edge visibility CDATA "true">
-<!ATTLIST edge is_appearing CDATA "true">
-<!ATTLIST edge is_in_dynamic_emitter_memory CDATA "false">
-<!ATTLIST edge is_in_dynamic_collector_memory CDATA "false">
-
-<!-- STIGMA -->
-<!ELEMENT stigma EMPTY>
+<!-- SOCIETIES -->
+<!ELEMENT societies (society+)>
 
 <!-- SOCIETY  -->
 <!ELEMENT society (agent*)>
