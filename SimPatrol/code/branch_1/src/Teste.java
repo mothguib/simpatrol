@@ -3,6 +3,6 @@ import control.simulator.RealTimeSimulator;
 
 public class Teste {
 	public static void main(String[] args) throws SocketException {		
-		new RealTimeSimulator(5000, 100);
+		new RealTimeSimulator(5000, 500);
 	}
 }
