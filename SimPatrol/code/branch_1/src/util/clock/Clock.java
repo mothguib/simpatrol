@@ -19,12 +19,18 @@ public final class Clock extends Thread {
 	private Clockable object;
 	
 	/** The clock count step.
-	 *  The default value is one second.*/
+	 *  The default value is one second. */
 	private int step = 1;
 	
 	/** The clock count unity, as in Calendar field.
-	 *  The default value is java.util.Calendar.SECOND. */
-	private int unity = Calendar.SECOND;	
+	 *  The default value is Calendar.SECOND.
+	 *  
+	 *  @see Calendar */
+	private int unity = Calendar.SECOND;
+	
+	/** The time interval used by the clock to let the clockable
+	 *  object act. Its default value is 1000 milliseconds. */
+	private long time_interval = 1000;	
 	
 	/* Methods. */
 	/** Constructor.
@@ -40,8 +46,10 @@ public final class Clock extends Thread {
 	/** Changes the clock's counting step.
 	 * 
 	 *  @param step The counting step. */
-	public void setStep(int step) {
+	public void setStep(int step) {		
+		this.time_interval = (long) (this.time_interval * Math.pow(this.step, -1));
 		this.step = step;
+		this.time_interval = this.time_interval * this.step;
 	}
 	
 	/** Changes the clock's counting unity.
@@ -49,6 +57,14 @@ public final class Clock extends Thread {
 	 *  @param unity The java.util.Calendar's time unity. */
 	public void setUnity(int unity) {
 		this.unity = unity;
+		
+		if(this.unity == Calendar.HOUR)
+			this.time_interval = this.step * 360000;
+		else if(this.unity == Calendar.MINUTE)
+			this.time_interval = this.step * 6000;
+		else if(this.unity == Calendar.SECOND)
+			this.time_interval = this.step * 1000;
+		else this.time_interval = this.step;
 	}
 
 	/** Indicates that the clock must stop working. */
@@ -57,15 +73,17 @@ public final class Clock extends Thread {
 	}
 			
 	public void run() {
-		// calls the object's act method, when it is time
-		int prev_ref = Calendar.getInstance().get(this.unity);
 		while(!this.stop_working) {
-			int next_ref = Calendar.getInstance().get(this.unity);
-			
-			if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
-			if(next_ref - prev_ref > this.step - 1) {
-				this.object.act(next_ref - prev_ref);
-				prev_ref = Calendar.getInstance().get(this.unity); 				
+			try {
+				int prev_ref = Calendar.getInstance().get(this.unity);
+				sleep(this.time_interval);
+				int next_ref = Calendar.getInstance().get(this.unity);
+				
+				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
+				this.object.act(next_ref - prev_ref);				
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
