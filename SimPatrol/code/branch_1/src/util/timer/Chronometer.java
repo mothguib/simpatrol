@@ -24,7 +24,11 @@ public final class Chronometer extends Thread implements TimedObject {
 	
 	/** The chronometer count unity, as in Calendar field.
 	 *  The default value is java.util.Calendar.SECOND. */
-	private int unity = Calendar.SECOND;	
+	private int unity = Calendar.SECOND;
+	
+	/** The time interval used by the chronometer to count the time.
+	 * Its default value is 1000 milliseconds. */
+	private long time_interval = 1000;
 	
 	/* Methods. */
 	/** Constructor.
@@ -43,7 +47,9 @@ public final class Chronometer extends Thread implements TimedObject {
 	 * 
 	 *  @param step The counting step. */
 	public void setStep(int step) {
+		this.time_interval = (long) (this.time_interval * Math.pow(this.step, -1));
 		this.step = step;
+		this.time_interval = this.time_interval * this.step;
 	}
 	
 	/** Changes the chronometer's counting unity.
@@ -52,6 +58,14 @@ public final class Chronometer extends Thread implements TimedObject {
 	 *  @see Calendar */
 	public void setUnity(int unity) {
 		this.unity = unity;
+		
+		if(this.unity == Calendar.HOUR)
+			this.time_interval = this.step * 360000;
+		else if(this.unity == Calendar.MINUTE)
+			this.time_interval = this.step * 6000;
+		else if(this.unity == Calendar.SECOND)
+			this.time_interval = this.step * 1000;
+		else this.time_interval = this.step;
 	}
 	
 	public int getElapsedTime() {
@@ -63,14 +77,17 @@ public final class Chronometer extends Thread implements TimedObject {
 		this.object.startWorking();
 		
 		// counts the elapsed time, oriented by the count unity
-		int prev_ref = Calendar.getInstance().get(this.unity);		
-		while(true) {						
-			int next_ref = Calendar.getInstance().get(this.unity);
-			
-			if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;			
-			if(next_ref - prev_ref > this.step - 1) {
-				this.elapsed_time = this.elapsed_time + (next_ref - prev_ref);
-				prev_ref = Calendar.getInstance().get(this.unity);				
+		while(true) {
+			try {
+				int prev_ref = Calendar.getInstance().get(this.unity);
+				sleep(this.time_interval);
+				int next_ref = Calendar.getInstance().get(this.unity);
+				
+				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
+				this.elapsed_time = this.elapsed_time + (next_ref - prev_ref);				
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			
 			// checks if the elapsed time hit the deadline
