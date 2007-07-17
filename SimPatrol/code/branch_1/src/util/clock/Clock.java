@@ -30,7 +30,7 @@ public final class Clock extends Thread {
 	
 	/** The time interval used by the clock to let the clockable
 	 *  object act. Its default value is 1000 milliseconds. */
-	private long time_interval = 1000;	
+	private long time_interval = 1000;
 	
 	/* Methods. */
 	/** Constructor.
