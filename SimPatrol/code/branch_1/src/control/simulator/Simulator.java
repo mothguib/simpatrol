@@ -137,6 +137,40 @@ public abstract class Simulator {
 		return this.cycle_duration;
 	}
 	
+	/** Stops and removes the perception and action daemons of a given agent,
+	 *  probably because it has died.
+	 *  
+	 *  @param agent The agent who has died. */
+	public void stopAgentDaemons(Agent agent) {
+		// finds the perception daemon
+		PerceptionDaemon perception_daemon = null;
+		
+		Object[] perception_daemons_array = this.perception_daemons.toArray();
+		for(int i = 0; i < perception_daemons_array.length; i++)
+			if(((PerceptionDaemon) perception_daemons_array[i]).getAgent().equals(agent)) {
+				perception_daemon = (PerceptionDaemon) perception_daemons_array[i];
+				break;
+			}
+		
+		// finds the action daemon
+		ActionDaemon action_daemon = null;
+		
+		Object[] action_daemons_array = this.action_daemons.toArray();
+		for(int i = 0; i < action_daemons_array.length; i++)
+			if(((ActionDaemon) action_daemons_array[i]).getAgent().equals(agent)) {
+				action_daemon = (ActionDaemon) action_daemons_array[i];
+				break;
+			}
+		
+		// stops the daemons
+		perception_daemon.stopWorking();
+		action_daemon.stopWorking();
+		
+		// removes the daemons
+		this.perception_daemons.remove(perception_daemon);
+		this.action_daemons.remove(action_daemon);
+	}
+	
 	/** Obtains the dynamic objects of the simulation.
 	 * 
 	 *  @return The dynamic objects of the simulation.

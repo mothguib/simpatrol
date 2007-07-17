@@ -269,10 +269,7 @@ public final class PerceptionDaemon extends AgentDaemon implements Clockable {
 	
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
-		// stops its connection
-		this.connection.stopWorking();
-		
-		// stops its clock
+		super.stopWorking();		
 		this.clock.stopWorking();
 		
 		// screen message

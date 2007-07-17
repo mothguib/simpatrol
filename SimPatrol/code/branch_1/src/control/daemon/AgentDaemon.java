@@ -33,7 +33,16 @@ public abstract class AgentDaemon extends Daemon {
 		this.agent = agent;
 	}
 	
-	/** Configures the connection of the daemon. */
+	/** Returns the agent of the daemon
+	 * 
+	 *  @return The agent served by the daemon. */
+	public Agent getAgent() {
+		return this.agent;
+	}
+	
+	/** Configures the connection of the daemon.
+	 * 
+	 *  @param connection The connection of the daemon. */
 	public void setConnection(AgentConnection connection) {
 		this.connection = connection;
 	}

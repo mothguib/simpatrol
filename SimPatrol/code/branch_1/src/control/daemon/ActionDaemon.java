@@ -10,9 +10,6 @@ import model.agent.Agent;
  *  an agent's intentions of actions. */
 public final class ActionDaemon extends AgentDaemon {
 	/* Attributes. */
-	/** Registers if the daemon shall stop working. */
-	private boolean stop_working;
-	
 	/* Methods. */
 	/** Constructor.
 	 * 
@@ -25,15 +22,11 @@ public final class ActionDaemon extends AgentDaemon {
 	 *  @param agent The agent whose intentions are attended. */
 	public ActionDaemon(String thread_name, Agent agent) {
 		super(thread_name, agent);
-		this.stop_working = false;
 	}
 	
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
-		this.stop_working = true;
-		
-		// stops its connection
-		this.connection.stopWorking();
+		super.stopWorking();
 		
 		// screen message
 		System.out.println("[SimPatrol.ActionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");		

@@ -5,6 +5,7 @@ package control.robot;
 
 /* Imported classes and/or interfaces. */
 import control.simulator.RealTimeSimulator;
+import model.agent.Agent;
 import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Mortal;
 
@@ -20,7 +21,7 @@ public final class MortalityControllerRobot extends Robot {
 	private Mortal object;
 
 	/** The real time simulator of the patrolling task. */
-	private RealTimeSimulator simulator;
+	private static RealTimeSimulator simulator;
 	
 	/* Methods. */
 	/** Constructor.
@@ -28,10 +29,10 @@ public final class MortalityControllerRobot extends Robot {
 	 *  @param clock_thread_name The name of the thread of the clock of this robot.
 	 *  @param object The mortal object to be controlled.
 	 *  @param simulator The real time simulator to have its mortal objects dead. */
-	public MortalityControllerRobot(String clock_thread_name, Mortal object, RealTimeSimulator simulator) {
+	public MortalityControllerRobot(String clock_thread_name, Mortal object, RealTimeSimulator rt_simulator) {
 		super(clock_thread_name);
 		this.object = object;
-		this.simulator = simulator;
+		simulator = rt_simulator;
 	}
 
 	public void act(int time_gap) {
@@ -44,11 +45,18 @@ public final class MortalityControllerRobot extends Robot {
 				// kills the object
 				this.object.die();
 				
+				// if the object is an agent, stops its agent_daemons
+				if(this.object instanceof Agent)
+					simulator.stopAgentDaemons((Agent) this.object);
+				
 				// stops this robot
 				this.stopWorking();
 				
 				// removes this robot from the rt simulator
-				this.simulator.removeMortalityControllerRobot(this);
+				simulator.removeMortalityControllerRobot(this);
+				
+				// quits the method
+				return;
 			}
 		}
 	}

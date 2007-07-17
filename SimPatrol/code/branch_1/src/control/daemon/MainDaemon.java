@@ -36,9 +36,6 @@ import control.translator.ConfigurationTranslator;
  *  @modelled This class must have its behaviour modelled. */
 public final class MainDaemon extends Daemon {
 	/* Attributes. */
-	/** Registers if the daemon must stop working. */
-	private boolean stop_working;
-	
 	/** A generator of numbers for socket connections. */
 	private SocketNumberGenerator socket_number_generator;
 	
@@ -48,19 +45,7 @@ public final class MainDaemon extends Daemon {
 	 *  @param thread_name The name of the thread of the daemon. */
 	public MainDaemon(String thread_name, Simulator simulator) {
 		super(thread_name);
-		this.stop_working = false;
 		this.socket_number_generator = null;
-	}
-	
-	/** Indicates that the daemon must stop working. */
-	public void stopWorking() {
-		this.stop_working = true;
-		
-		// stops its connection
-		this.connection.stopWorking();
-		
-		// screen message
-		System.out.println("[SimPatrol.MainDaemon] Stopped working.");
 	}
 	
 	/** Attends a given "graph creation" configuration, sending the
@@ -333,6 +318,13 @@ public final class MainDaemon extends Daemon {
 		
 		// calls the super method
 		super.start(local_socket_number);
+	}
+	
+	public void stopWorking() {
+		super.stopWorking();
+		
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon] Stopped working.");
 	}
 	
 	/** @developer New configuration must change this method.
