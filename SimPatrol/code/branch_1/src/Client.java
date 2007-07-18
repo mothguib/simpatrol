@@ -22,6 +22,11 @@ public class Client {
 		"</agent>" +
 	    "</configuration>";
 		
+		String new_metric =
+			"<configuration type=\"4\" sender_address=\"127.0.0.1\" sender_socket=\"7005\" parameter=\"10\">" +
+			"<metric type=\"3\" value=\"0\"/>" +
+			"</configuration>";
+		
 		String start = "<configuration type=\"3\" sender_address=\"127.0.0.1\" sender_socket=\"7005\" parameter=\"120\"/>";
 		
 		UDPSocket socket = new UDPSocket(7005);
@@ -29,6 +34,9 @@ public class Client {
 		System.out.println(socket.receive());
 		
 		socket.send(new_societies, "127.0.0.1", 5000);
+		System.out.println(socket.receive());
+		
+		socket.send(new_metric, "127.0.0.1", 5000);
 		System.out.println(socket.receive());
 		
 		socket.send(start, "127.0.0.1", 5000);
