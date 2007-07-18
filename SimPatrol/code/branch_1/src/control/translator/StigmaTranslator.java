@@ -19,7 +19,7 @@ import model.stigma.Stigma;
  *  from XML source elements.
  *  
  *  @see Stigma
- *  @develper New Stigma classes must change this class. */
+ *  @developer New Stigma subclasses must change this class. */
 public abstract class StigmaTranslator extends Translator {
 	/* Methods. */
 	/** Obtains the stigmas from the given XML element.
@@ -27,7 +27,7 @@ public abstract class StigmaTranslator extends Translator {
 	 *  @param xml_element The XML source containing the stigmas.
 	 *  @param graph The graph of the simulation performed by SimPatrol.
 	 *  @return The stigmas from the XML source.
-	 *  @developer New Stigma classes must change this method. */
+	 *  @developer New Stigma subclasses must change this method. */
 	public static Stigma[] getStigmas(Element xml_element, Graph graph) {
 		// obtains the nodes with the "stigma" tag
 		NodeList stigma_node = xml_element.getElementsByTagName("stigma");

@@ -9,6 +9,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import model.agent.Agent;
 import model.agent.Society;
 import model.graph.Graph;
+import model.metric.Metric;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -16,6 +18,7 @@ import control.configuration.AgentCreationConfiguration;
 import control.configuration.Configuration;
 import control.configuration.ConfigurationTypes;
 import control.configuration.GraphCreationConfiguration;
+import control.configuration.MetricCreationConfiguration;
 import control.configuration.Orientation;
 import control.configuration.SimulationStartConfiguration;
 import control.configuration.SocietiesCreationConfiguration;
@@ -82,6 +85,17 @@ public abstract class ConfigurationTranslator extends Translator {
 				
 				// returns the new configuration as the answer of the method
 				return new SimulationStartConfiguration(sender_address, sender_socket, simulation_time);
+			}
+			case(ConfigurationTypes.METRIC_CREATION): {
+				// obtains the "parameter" attribute
+				// (actually the duration of a cycle of measurement of the metric)
+				int cycle_duration = Integer.parseInt(configuration_element.getAttribute("parameter"));
+				
+				// obtains a metric from the tag content
+				Metric[] read_metric = MetricTranslator.getMetrics(configuration_element);
+				
+				// returns the new configuration as the answer of the method
+				return new MetricCreationConfiguration(sender_address, sender_socket, read_metric[0], cycle_duration);
 			}
 		}
 		
