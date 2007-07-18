@@ -5,8 +5,11 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import java.net.SocketException;
+
 import util.clock.Clock;
 import util.clock.Clockable;
+import model.metric.IntegralMetric;
 import model.metric.Metric;
 
 /** Implements the daemons of SimPatrol that gather
@@ -36,17 +39,26 @@ public final class MetricDaemon extends Daemon implements Clockable {
 		this.metric = metric;
 	}
 	
-	/** Indicates that the daemon must stop working. */
+	/** Starts the metric counting, if the metric is an integral one. */
+	public void startMetric() {
+		if(this.metric instanceof IntegralMetric)
+			((IntegralMetric) this.metric).start();
+	}
+	
+	public void start(int local_socket_number) throws SocketException {
+		super.start(local_socket_number);
+		this.clock.start();
+	}	
+	
 	public void stopWorking() {
 		super.stopWorking();		
 		this.clock.stopWorking();
 		
+		if(this.metric instanceof IntegralMetric)
+			((IntegralMetric) this.metric).stopWorking();
+		
 		// screen message
 		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getType() + ")]: Stopped working.");
-	}
-	
-	public void startClock() {
-		this.clock.start();
 	}
 	
 	/** @modeller This method must be modelled. */

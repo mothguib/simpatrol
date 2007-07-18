@@ -366,7 +366,7 @@ public final class MainDaemon extends Daemon {
 		
 		// if the simulator is already simulating, starts the metric daemon's clock
 		if(simulator.getState() == SimulatorStates.SIMULATING)
-			metric_daemon.startClock();
+			metric_daemon.startMetric();
 		
 		// returns the obtained number for the sockets of the daemons
 		return metric_daemon.getUDPSocketNumber();

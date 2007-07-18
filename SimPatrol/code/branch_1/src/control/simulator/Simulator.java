@@ -273,10 +273,10 @@ public abstract class Simulator {
 		// changes the state of the simulator
 		this.state = SimulatorStates.SIMULATING;
 		
-		// initiates the clocks of the metric daemons
+		// initiates the metrics controlled by the metric daemons
 		Object[] metric_daemons_array = this.metric_daemons.toArray();
 		for(int i = 0; i < metric_daemons_array.length; i++)
-			((MetricDaemon) metric_daemons_array[i]).startClock();
+			((MetricDaemon) metric_daemons_array[i]).startMetric();
 	}
 	
 	/** Stops the simulation. */
