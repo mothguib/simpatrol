@@ -13,8 +13,10 @@ import model.agent.Society;
 import model.graph.Graph;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
+import model.metric.Metric;
 import control.daemon.ActionDaemon;
 import control.daemon.MainDaemon;
+import control.daemon.MetricDaemon;
 import control.daemon.PerceptionDaemon;
 
 /** Implements the simulator of SimPatrol.
@@ -31,6 +33,9 @@ public abstract class Simulator {
 	
 	/** The set of action daemons of SimPatrol. */
 	private Set<ActionDaemon> action_daemons;
+	
+	/** The set of metric daemons of Simpatrol. */
+	private Set<MetricDaemon> metric_daemons;
 	
 	/** The graph of the simulation. */
 	private Graph graph;
@@ -62,6 +67,10 @@ public abstract class Simulator {
 		this.perception_daemons = new HashSet<PerceptionDaemon>();
 		this.action_daemons = new HashSet<ActionDaemon>();
 		
+		// initiates the sets of metric_daemons
+		this.metric_daemons = new HashSet<MetricDaemon>();
+		Metric.setSimulator(this);
+		
 		// nullifies the graph of the simulation
 		this.graph = null;
 		
@@ -87,6 +96,13 @@ public abstract class Simulator {
 	 *  @param action_daemon The action daemon to be added. */
 	public void addActionDaemon(ActionDaemon action_daemon) {
 		this.action_daemons.add(action_daemon);
+	}
+	
+	/** Adds a given metric daemon to the set of metric daemons.
+	 * 
+	 *  @param metric_daemon The metric daemon to be added. */
+	public void addMetricDaemon(MetricDaemon metric_daemon) {
+		this.metric_daemons.add(metric_daemon);
 	}
 	
 	/** Configures the graph os the simulation.
@@ -242,12 +258,25 @@ public abstract class Simulator {
 			((ActionDaemon) action_daemons_array[i]).stopWorking();
 	}
 	
+	/** Stops the metric daemons of the simulator. */
+	private void stopMetricDaemons() {
+		// for each metric daemon, stops it
+		Object[] metric_daemons_array = this.metric_daemons.toArray();
+		for(int i = 0; i < metric_daemons_array.length; i++)
+			((MetricDaemon) metric_daemons_array[i]).stopWorking();
+	}
+	
 	/** Starts the simulation.
 	 * 
 	 *  @param simulation_time The time of simulation. */
 	public void startSimulation(int simulation_time) {
 		// changes the state of the simulator
 		this.state = SimulatorStates.SIMULATING;
+		
+		// initiates the clocks of the metric daemons
+		Object[] metric_daemons_array = this.metric_daemons.toArray();
+		for(int i = 0; i < metric_daemons_array.length; i++)
+			((MetricDaemon) metric_daemons_array[i]).startClock();
 	}
 	
 	/** Stops the simulation. */
@@ -260,5 +289,8 @@ public abstract class Simulator {
 		
 		// stops the action daemons
 		this.stopActionDaemons();
+		
+		// stops the metric daemons
+		this.stopMetricDaemons();
 	}
 }

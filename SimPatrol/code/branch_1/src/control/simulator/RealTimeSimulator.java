@@ -74,9 +74,12 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			
 			// for each one, creates a mortality controller robot
 			for(int i = 0; i < mortal_objects.length; i++)
-				this.mortal_robots.add(new MortalityControllerRobot("mortal robot " + String.valueOf(i), mortal_objects[i], this));
+				this.mortal_robots.add(new MortalityControllerRobot("mortal robot " + String.valueOf(i), mortal_objects[i]));
 		}
 		else this.mortal_robots = null;
+		
+		// configures the simulator to the robots
+		MortalityControllerRobot.setSimulator(this);
 	}
 	
 	/** Starts each one of the current dynamicity controller robots. */
