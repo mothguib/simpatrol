@@ -27,11 +27,16 @@ public final class MortalityControllerRobot extends Robot {
 	/** Constructor.
 	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot.
-	 *  @param object The mortal object to be controlled.
-	 *  @param simulator The real time simulator to have its mortal objects dead. */
-	public MortalityControllerRobot(String clock_thread_name, Mortal object, RealTimeSimulator rt_simulator) {
+	 *  @param object The mortal object to be controlled. */
+	public MortalityControllerRobot(String clock_thread_name, Mortal object) {
 		super(clock_thread_name);
 		this.object = object;
+	}
+	
+	/** Configures the simulator of the patrolling task.
+	 * 
+	 *  @param rt_simulator The simulator of the patrolling task. */
+	public static void setSimulator(RealTimeSimulator rt_simulator) {
 		simulator = rt_simulator;
 	}
 
