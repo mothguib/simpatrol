@@ -32,7 +32,7 @@ import model.stigma.Stigma;
  *  
  *  @developer New Perception classes must change this class.
  *  @developer New Limitation classes must change this class.
- *  @modelled This class must have its behaviour modelled. */
+ *  @modeller This class must have its behaviour modelled. */
 public final class PerceptionDaemon extends AgentDaemon implements Clockable {
 	/* Attributes. */
 	/** The clock that controls the daemon's work. */

@@ -18,9 +18,11 @@ import model.agent.OpenSociety;
 import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.graph.Graph;
+import model.metric.Metric;
 import control.configuration.AgentCreationConfiguration;
 import control.configuration.Configuration;
 import control.configuration.GraphCreationConfiguration;
+import control.configuration.MetricCreationConfiguration;
 import control.configuration.Orientation;
 import control.configuration.SimulationStartConfiguration;
 import control.configuration.SocietiesCreationConfiguration;
@@ -214,6 +216,29 @@ public final class MainDaemon extends Daemon {
 		else this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
+	/** Attends a given "metric creation" configuration, sending the
+	 *  correspondent orientation to the remote contact.
+	 * 
+	 *  @param configuration The configuration to be attended. 
+	 *  @throws IOException */
+	private void attendMetricCreationConfiguration(MetricCreationConfiguration configuration) throws IOException {
+		// obtains the metric of the configuration
+		Metric metric = configuration.getMetric();
+		
+		// obtains the duration of a cycle of measurement of the metric
+		int cycle_duration = configuration.getCycle_duration();
+		
+		// creates and starts a metric daemon for the metric
+		int socket_number = this.createAndStartMetricDaemon(metric, cycle_duration);
+		
+		// sends an orientation with the number of the UDP socket
+		// used to externalize the metric
+		this.connection.send(new Orientation(String.valueOf(socket_number)).fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		
+		// screen message
+		System.out.println("[SimPatrol.MetricDaemon(" + metric.getType() + ")] Working.");
+	}
+	
 	/** Verifies if one of the given societies already exists in
 	 *  the simulator, or there's some repeated society among
 	 *  the given ones.
@@ -312,6 +337,41 @@ public final class MainDaemon extends Daemon {
 		return perception_daemon.getUDPSocketNumber();
 	}
 	
+	/** Creates the metric daemon for the given metric,
+	 *  starts this daemon and adds it to the simulator.
+	 *  
+	 *  @param metric The metric whose daemon is to be created.
+	 *  @param cycle_duration The duration of cycle of measurement of the given metric.
+	 *  @return The number of the UDP socket created for the metric daemon. */
+	private int createAndStartMetricDaemon(Metric metric, int cycle_duration) {
+		// creates the metric daemon
+		StringBuffer thread_name_buffer = new StringBuffer();
+		thread_name_buffer.append("metric " + metric.getType() + "'s daemon");
+		MetricDaemon metric_daemon = new MetricDaemon(thread_name_buffer.toString(), metric, cycle_duration);
+		
+		// starts the daemon
+		boolean socket_exception_happened = true;
+		do {
+			try {
+				metric_daemon.start(this.socket_number_generator.generateSocketNumber());
+				socket_exception_happened = false;
+			} catch (SocketException e) {
+				socket_exception_happened = true;
+			}
+						
+		} while(socket_exception_happened);
+		
+		// adds the daemon to the simulator
+		simulator.addMetricDaemon(metric_daemon);
+		
+		// if the simulator is already simulating, starts the metric daemon's clock
+		if(simulator.getState() == SimulatorStates.SIMULATING)
+			metric_daemon.startClock();
+		
+		// returns the obtained number for the sockets of the daemons
+		return metric_daemon.getUDPSocketNumber();
+	}
+	
 	public void start(int local_socket_number) throws SocketException {
 		// starts the socket number generator
 		this.socket_number_generator = new SocketNumberGenerator(local_socket_number);
@@ -358,7 +418,7 @@ public final class MainDaemon extends Daemon {
 		
 		// 2nd.
 		// forever, listens a message of "simulation start" or
-		// "societies creation", or "agent creation"
+		// "societies creation", or "agent creation", or "metric creation"
 		while(!this.stop_working) {
 			// screen message
 			System.out.println("[SimPatrol.MainDaemon] Listening to a configuration...");
@@ -379,6 +439,11 @@ public final class MainDaemon extends Daemon {
 			if(configuration instanceof SimulationStartConfiguration)
 				try { this.attendSimulationStartConfiguration((SimulationStartConfiguration) configuration); }
 				catch (IOException e) { e.printStackTrace(); }
+			// if not, if the configuration is a "metric creation" configuration, attends it	
+			else if(configuration instanceof MetricCreationConfiguration)
+				try { this.attendMetricCreationConfiguration((MetricCreationConfiguration) configuration); }
+				catch (IOException e1) { e1.printStackTrace(); }
+			// if not, tries to read it as a "societies creation configuration
 			else {
 				SocietiesCreationConfiguration societies_creation_configuration = null;
 				try { societies_creation_configuration = ConfigurationTranslator.getSocietiesCreationConfiguration(message, simulator.getGraph()); }
@@ -390,6 +455,7 @@ public final class MainDaemon extends Daemon {
 				if(societies_creation_configuration != null)
 					try { this.attendSocietiesCreationConfiguration(societies_creation_configuration); }
 					catch (IOException e) { e.printStackTrace(); }
+				// if not, tries to read it as an "agent creation" configuration
 				else {
 					AgentCreationConfiguration agent_creation_configuration = null;
 					try { agent_creation_configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, simulator.getGraph()); }
