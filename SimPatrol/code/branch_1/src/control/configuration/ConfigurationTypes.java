@@ -19,4 +19,7 @@ public abstract class ConfigurationTypes {
 	
 	/** Configurations to start the simulation. */
 	public static final int SIMULATION_START = 3;
+	
+	/** Configurations to create metrics of the simulation. */
+	public static final int METRIC_CREATION = 4;
 }
