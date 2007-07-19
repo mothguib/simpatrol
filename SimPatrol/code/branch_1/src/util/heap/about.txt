@@ -1,0 +1,2 @@
+This package contains the implementation of a minimum heap data strucuture, as well as
+auxiliary classes and/or interfaces.
