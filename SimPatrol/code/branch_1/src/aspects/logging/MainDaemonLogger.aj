@@ -14,7 +14,8 @@ import control.simulator.SimulatorStates;
 
 /**
  * This aspect is responsible for logging some data about the execution of the
- * class MainDaemon.
+ * class MainDaemon. The aspect has to be privileged because it access data
+ * hidden in MainDaemon.
  */
 privileged aspect MainDaemonLogger {
 
