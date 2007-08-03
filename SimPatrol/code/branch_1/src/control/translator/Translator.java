@@ -6,14 +6,17 @@ package control.translator;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.io.StringReader;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import com.sun.org.apache.xerces.internal.impl.xs.dom.DOMParser;
+
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 /** Implements translators that obtain objects from XML files. */
 public abstract class Translator {	
