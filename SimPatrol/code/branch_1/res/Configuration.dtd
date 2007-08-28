@@ -3,44 +3,29 @@
 <!--
   CONFIGURATION
   
-  type = 0: graph's creation
+  type = 0: environment's creation
     * parameter attribute ignored;
-    * the body is a graph;
+    * the body is an environment;
     
     or
     
-    * the parameter is the path of a file containing the graph;
+    * the parameter is the path of a file containing the environment;
     * body ignored.
     
-  type = 1: societies' creation
-    * parameter attribute ignored;
-    * the body is some societies;    
-    
-    or
-    
-    * the parameter is the path of a file containing the societies;
-    * body ignored.
-    
-    or
-    
-  type = 2: agent's creation
+  type = 1: agent's creation
     * the parameter attribute is the id of the society where the agent must be added;
     * the body is an agent
     
-    or
-    
-  type = 3: simulation's start
-    * parameter attribute is the time of simulation
-    * body ignored
-    
-    or
-    
-  type = 4: metric'screation
+  type = 2: metric'screation
     * parameter attribute is the duration, in seconds, of a cycle of measurement of the metric;
     * the body is a metric.
+    
+ type = 3: simulation's start
+    * parameter attribute is the time of simulation
+    * body ignored
 -->
-<!ELEMENT configuration (graph | society+ | agent | metric | EMPTY)>
-<!ATTLIST configuration type (0 | 1 | 2 | 3 | 4) #REQUIRED>
+<!ELEMENT configuration (environment | agent | metric | EMPTY)>
+<!ATTLIST configuration type (0 | 1 | 2 | 3) #REQUIRED>
 <!ATTLIST configuration parameter CDATA #IMPLIED>
 <!ATTLIST configuration sender_address CDATA #REQUIRED>
 <!ATTLIST configuration sender_socket CDATA #REQUIRED>
