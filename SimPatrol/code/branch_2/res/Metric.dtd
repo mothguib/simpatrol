@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- METRIC -->
+<!ELEMENT metric (EMPTY)>
+<!ATTLIST metric type CDATA #REQUIRED>
+<!ATTLIST metric value CDATA #IMPLIED>

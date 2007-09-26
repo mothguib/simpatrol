@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ETPD - Event Time Probability Distribution -->
+<!ELEMENT etpd (pd_parameter+)>
+<!ATTLIST etpd seed CDATA #REQUIRED>
+<!ATTLIST etpd next_bool_count CDATA "-1">
+<!ATTLIST etpd type (0 | 1 | 2 | 3) #REQUIRED>
+
+<!-- PD PARAMETER -->
+<!ELEMENT pd_parameter EMPTY>
+<!ATTLIST pd_parameter value CDATA #REQUIRED>
