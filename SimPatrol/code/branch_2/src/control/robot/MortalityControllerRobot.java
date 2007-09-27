@@ -31,7 +31,7 @@ public final class MortalityControllerRobot extends Robot {
 	public MortalityControllerRobot(String clock_thread_name, Mortal object) {
 		super(clock_thread_name);
 		this.object = object;
-	}
+	}		
 	
 	/** Configures the simulator of the patrolling task.
 	 * 
@@ -39,7 +39,14 @@ public final class MortalityControllerRobot extends Robot {
 	public static void setSimulator(RealTimeSimulator rt_simulator) {
 		simulator = rt_simulator;
 	}
-
+	
+	/** Returns the mortal object controlled by the robot.
+	 * 
+	 *  @return The mortal object controlled by the robot. */
+	public Mortal getObject() {
+		return this.object;
+	}
+	
 	public void act(int time_gap) {
 		for(int i = 0; i < time_gap; i++) {
 			// obtains the probability distribution for the death of the mortal object

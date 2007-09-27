@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import control.configuration.AgentCreationConfiguration;
+import control.configuration.AgentDeathConfiguration;
 import control.configuration.Configuration;
 import control.configuration.ConfigurationTypes;
 import control.configuration.EnvironmentCreationConfiguration;
@@ -90,7 +91,15 @@ public abstract class ConfigurationTranslator extends Translator {
 				
 				// returns the new configuration as the answer of the method
 				return new SimulationStartConfiguration(sender_address, sender_socket, simulation_time);
-			}			
+			}
+			case(ConfigurationTypes.AGENT_DEATH): {
+				// obtains the "parameter" attribute
+				// (actually the id of the agent to be killed)
+				String agent_id = configuration_element.getAttribute("parameter");
+				
+				// returns the new configuration as the answer of the method
+				return new AgentDeathConfiguration(sender_address, sender_socket, agent_id);
+			}
 		}
 		
 		// default answer

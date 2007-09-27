@@ -13,10 +13,12 @@ import view.connection.AgentConnection;
 import model.Environment;
 import model.agent.Agent;
 import model.agent.OpenSociety;
+import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.interfaces.Mortal;
 import model.metric.Metric;
 import control.configuration.AgentCreationConfiguration;
+import control.configuration.AgentDeathConfiguration;
 import control.configuration.Configuration;
 import control.configuration.EnvironmentCreationConfiguration;
 import control.configuration.MetricCreationConfiguration;
@@ -134,6 +136,56 @@ public final class MainDaemon extends Daemon {
 		}
 		// if not, sends an orientation reporting error
 		else this.connection.send(new Orientation("Society not found.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+	}
+	
+	/** Attends a given "agent death" configuration, sending the correspondent
+	 *  orientation to the remote contact.
+	 * 
+	 *  @param configuration The configuration to be attended.
+	 *  @throws IOException */
+	private void attendAgentDeathConfiguration(AgentDeathConfiguration configuration) throws IOException {
+		// obtains the agent's id from the configuration
+		String agent_id = configuration.getObjectId();
+		
+		// obtains the agent with such id, from the environment
+		Agent agent = null;
+		Society[] societies = simulator.getEnvironment().getSocieties();
+		for(int i = 0; i < societies.length; i++) {
+			if(agent != null) break;
+			
+			if(societies[i] instanceof OpenSociety) {
+				Agent[] agents = societies[i].getAgents();
+				
+				for(int j = 0; j < agents.length; j++)
+					if(agents[j].getObjectId().equals(agent_id)) {
+						agent = agents[j];
+						break;
+					}
+			}
+		}
+		
+		// if an agent was found
+		if(agent != null) {
+			// FINISH HIM!
+			((Mortal) agent).die();
+			
+			// stops the agent's action and perception daemons
+			simulator.stopAgentDaemons(agent);
+			
+			// if the simulator is a realtime one
+			if(simulator instanceof RealTimeSimulator) {
+				// removes and stops its eventual stamina controller robot 
+				((RealTimeSimulator) simulator).removeAndStopStaminaControllerRobot(agent);
+				
+				// removes and stops its mortality controller robot
+				((RealTimeSimulator) simulator).removeAndStopMortalityControllerRobot((SeasonalAgent) agent);
+			}
+			
+			// sends an empty orientation to the sender of configuration
+			this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		}
+		// if not, sends an orientation reporting error
+		else this.connection.send(new Orientation("Seasonal agent not found.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
 	/** Attends a given "metric creation" configuration, sending the
@@ -340,6 +392,20 @@ public final class MainDaemon extends Daemon {
 					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 					} catch (IOException e) { e.printStackTrace(); }
 				}
+			}
+			
+			// else if the configuration is an "agent death"
+			else if(configuration instanceof AgentDeathConfiguration) {
+				// if the environment of the simulator is valid
+				if(simulator.getEnvironment() != null) {
+					try { this.attendAgentDeathConfiguration((AgentDeathConfiguration) configuration); }
+					catch (IOException e) { e.printStackTrace(); }
+				}
+				else {
+					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					} catch (IOException e) { e.printStackTrace(); }
+				}
+				
 			}
 			
 			// developer: new configurations must add code here

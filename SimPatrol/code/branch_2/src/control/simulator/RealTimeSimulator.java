@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import model.agent.Agent;
+import model.agent.SeasonalAgent;
 import model.graph.Vertex;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
@@ -203,6 +204,26 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		this.mortal_robots.remove(mortal_robot);
 	}
 	
+	/** Removes and stops the mortality controller robot that
+	 *  controls the given agent.
+	 * 
+	 *  @param agent The seasonal agent controlled by the robot to be removed. */
+	public void removeAndStopMortalityControllerRobot(SeasonalAgent agent) {
+		// finds the mortality robot of the given agent
+		if(this.mortal_robots != null) {
+			Object[] mortal_robots_array = this.mortal_robots.toArray();
+			for(int i = 0; i < mortal_robots_array.length; i++) {
+				MortalityControllerRobot robot = (MortalityControllerRobot) mortal_robots_array[i];
+				
+				if(robot.getObject().equals(agent)) {
+					robot.stopWorking();
+					this.mortal_robots.remove(robot);
+					return;
+				}
+			}				
+		}
+	}
+	
 	/** Removes and stops the stamina controller robot that controls the given agent.
 	 * 
 	 *  @param agent The agent controlled by the robot to be removed. */
@@ -214,6 +235,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				StaminaControllerRobot robot = (StaminaControllerRobot) stamina_robots_array[i];
 				
 				if(robot.getAgent().equals(agent)) {
+					robot.stopWorking();
 					this.stamina_robots.remove(robot);
 					return;
 				}
