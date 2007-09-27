@@ -102,7 +102,7 @@ public class AgentGUI extends JDialog {
         getContentPane().add(south_panel, java.awt.BorderLayout.SOUTH);
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-580)/2, (screenSize.height-500)/2, 580, 500);
+        setBounds((screenSize.width-580)/2, (screenSize.height-540)/2, 580, 540);
     }//GEN-END:initComponents
     
     /** Complements the initiation of the components of the GUI.

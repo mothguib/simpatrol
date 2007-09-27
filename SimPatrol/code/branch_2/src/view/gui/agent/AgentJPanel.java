@@ -65,16 +65,22 @@ public class AgentJPanel extends javax.swing.JPanel {
         edge_combo = new javax.swing.JComboBox();
         elapsed_length_panel = new javax.swing.JPanel();
         elapsed_length_label = new javax.swing.JLabel();
-        elapsed_length_field = new javax.swing.JTextField();
-        stamina_panel = new javax.swing.JPanel();
+        elapsed_length_field = new javax.swing.JTextField();        
+        agent_stamina_panel = new javax.swing.JPanel();        
         stamina_internal_panel = new javax.swing.JPanel();
         stamina_label = new javax.swing.JLabel();
-        stamina_field = new javax.swing.JTextField();
+        stamina_field = new javax.swing.JTextField();        
+        max_stamina_internal_panel = new javax.swing.JPanel();
+        max_stamina_label = new javax.swing.JLabel();
+        max_stamina_field = new javax.swing.JTextField();        
         allowance_panel = new javax.swing.JPanel();
         perception_allowance_panel = new javax.swing.JPanel();
         agent_perception_panel = new javax.swing.JPanel();
         agent_check = new javax.swing.JCheckBox();
-        agent_button = new javax.swing.JButton();
+        agent_button = new javax.swing.JButton();        
+        broadcast_perception_panel = new javax.swing.JPanel();
+        broadcast_perception_check = new javax.swing.JCheckBox();
+        broadcast_perception_button = new javax.swing.JButton();        
         graph_perception_panel = new javax.swing.JPanel();
         graph_check = new javax.swing.JCheckBox();
         graph_button = new javax.swing.JButton();
@@ -82,12 +88,21 @@ public class AgentJPanel extends javax.swing.JPanel {
         stigma_check = new javax.swing.JCheckBox();
         stigma_button = new javax.swing.JButton();
         action_allowance_panel = new javax.swing.JPanel();
-        teleport_panel = new javax.swing.JPanel();
-        teleport_check = new javax.swing.JCheckBox();
-        teleport_button = new javax.swing.JButton();
+        broadcast_action_panel = new javax.swing.JPanel();
+        broadcast_action_check = new javax.swing.JCheckBox();
+        broadcast_action_button = new javax.swing.JButton();
         goto_panel = new javax.swing.JPanel();
         goto_check = new javax.swing.JCheckBox();
-        goto_button = new javax.swing.JButton();
+        goto_button = new javax.swing.JButton();        
+        recharge_panel = new javax.swing.JPanel();
+        recharge_check = new javax.swing.JCheckBox();
+        recharge_button = new javax.swing.JButton();        
+        stigmatize_panel = new javax.swing.JPanel();
+        stigmatize_check = new javax.swing.JCheckBox();
+        stigmatize_button = new javax.swing.JButton();        
+        visit_panel = new javax.swing.JPanel();
+        visit_check = new javax.swing.JCheckBox();
+        visit_button = new javax.swing.JButton();
         death_panel = new javax.swing.JPanel();
         death_button = new javax.swing.JButton();
         death_combo = new javax.swing.JComboBox();
@@ -181,9 +196,10 @@ public class AgentJPanel extends javax.swing.JPanel {
 
         position_stamina_allowance_panel.add(position_panel, java.awt.BorderLayout.NORTH);
 
-        stamina_panel.setLayout(new java.awt.GridLayout(1, 0));
+        agent_stamina_panel.setLayout(new java.awt.GridLayout(2, 0));
 
-        stamina_panel.setBorder(new javax.swing.border.TitledBorder("Stamina"));
+        agent_stamina_panel.setBorder(new javax.swing.border.TitledBorder("Stamina"));
+        
         stamina_internal_panel.setLayout(new java.awt.BorderLayout());
 
         stamina_label.setText("Value ");
@@ -199,18 +215,35 @@ public class AgentJPanel extends javax.swing.JPanel {
 
         stamina_internal_panel.add(stamina_field, java.awt.BorderLayout.CENTER);
 
-        stamina_panel.add(stamina_internal_panel);
+        agent_stamina_panel.add(stamina_internal_panel);
+        
+        max_stamina_internal_panel.setLayout(new java.awt.BorderLayout());
 
-        position_stamina_allowance_panel.add(stamina_panel, java.awt.BorderLayout.CENTER);
+        max_stamina_label.setText("Max value ");
+        max_stamina_internal_panel.add(max_stamina_label, java.awt.BorderLayout.WEST);
+
+        max_stamina_field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        max_stamina_field.setText("1");        
+        max_stamina_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                max_stamina_fieldKeyReleased(evt);
+            }
+        });
+        
+        max_stamina_internal_panel.add(max_stamina_field, java.awt.BorderLayout.CENTER);
+
+        agent_stamina_panel.add(max_stamina_internal_panel);
+        
+        position_stamina_allowance_panel.add(agent_stamina_panel, java.awt.BorderLayout.CENTER);
 
         allowance_panel.setLayout(new java.awt.GridLayout(1, 2));
 
-        perception_allowance_panel.setLayout(new java.awt.GridLayout(3, 0));
+        perception_allowance_panel.setLayout(new java.awt.GridLayout(5, 0));
 
         perception_allowance_panel.setBorder(new javax.swing.border.TitledBorder("Allowed perceptions"));
         agent_perception_panel.setLayout(new java.awt.BorderLayout());
 
-        agent_check.setText("Agent");
+        agent_check.setText("Agents");
         agent_check.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agent_checkActionPerformed(evt);
@@ -230,10 +263,35 @@ public class AgentJPanel extends javax.swing.JPanel {
         agent_perception_panel.add(agent_button, java.awt.BorderLayout.EAST);
 
         perception_allowance_panel.add(agent_perception_panel);
+        
+        
+        
+        broadcast_perception_panel.setLayout(new java.awt.BorderLayout());
 
+        broadcast_perception_check.setText("Broadcasted messages");
+        broadcast_perception_check.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	broadcast_perception_checkActionPerformed(evt);
+            }
+        });
+
+        broadcast_perception_panel.add(broadcast_perception_check, java.awt.BorderLayout.CENTER);
+
+        broadcast_perception_button.setText("Edit");
+        broadcast_perception_button.setEnabled(false);
+        broadcast_perception_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	broadcast_perception_buttonActionPerformed(evt);
+            }
+        });
+
+        broadcast_perception_panel.add(broadcast_perception_button, java.awt.BorderLayout.EAST);
+
+        perception_allowance_panel.add(broadcast_perception_panel);
+        
         graph_perception_panel.setLayout(new java.awt.BorderLayout());
 
-        graph_check.setText("Graph");
+        graph_check.setText("Graphs");
         graph_check.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 graph_checkActionPerformed(evt);
@@ -256,7 +314,7 @@ public class AgentJPanel extends javax.swing.JPanel {
 
         stigma_perception_panel.setLayout(new java.awt.BorderLayout());
 
-        stigma_check.setText("Stigma");
+        stigma_check.setText("Stigmas");
         stigma_check.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stigma_checkActionPerformed(evt);
@@ -279,32 +337,101 @@ public class AgentJPanel extends javax.swing.JPanel {
 
         allowance_panel.add(perception_allowance_panel);
 
-        action_allowance_panel.setLayout(new java.awt.GridLayout(3, 0));
+        action_allowance_panel.setLayout(new java.awt.GridLayout(5, 0));
 
         action_allowance_panel.setBorder(new javax.swing.border.TitledBorder("Allowed actions"));
-        teleport_panel.setLayout(new java.awt.BorderLayout());
+        broadcast_action_panel.setLayout(new java.awt.BorderLayout());
 
-        teleport_check.setText("Teleport");
-        teleport_check.addActionListener(new java.awt.event.ActionListener() {
+        broadcast_action_check.setText("Broadcast message");
+        broadcast_action_check.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                teleport_checkActionPerformed(evt);
+            	broadcast_action_checkActionPerformed(evt);
             }
         });
 
-        teleport_panel.add(teleport_check, java.awt.BorderLayout.CENTER);
+        broadcast_action_panel.add(broadcast_action_check, java.awt.BorderLayout.CENTER);
 
-        teleport_button.setText("Edit");
-        teleport_button.setEnabled(false);
-        teleport_button.addActionListener(new java.awt.event.ActionListener() {
+        broadcast_action_button.setText("Edit");
+        broadcast_action_button.setEnabled(false);
+        broadcast_action_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                teleport_buttonActionPerformed(evt);
+            	broadcast_action_buttonActionPerformed(evt);
             }
         });
 
-        teleport_panel.add(teleport_button, java.awt.BorderLayout.EAST);
+        broadcast_action_panel.add(broadcast_action_button, java.awt.BorderLayout.EAST);
 
-        action_allowance_panel.add(teleport_panel);
+        action_allowance_panel.add(broadcast_action_panel);
+        
+        recharge_panel.setLayout(new java.awt.BorderLayout());
 
+        recharge_check.setText("Recharge stamina");
+        recharge_check.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	recharge_checkActionPerformed(evt);
+            }
+        });
+
+        recharge_panel.add(recharge_check, java.awt.BorderLayout.CENTER);
+
+        recharge_button.setText("Edit");
+        recharge_button.setEnabled(false);
+        recharge_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	recharge_buttonActionPerformed(evt);
+            }
+        });
+
+        recharge_panel.add(recharge_button, java.awt.BorderLayout.EAST);
+
+        action_allowance_panel.add(recharge_panel);
+        
+        stigmatize_panel.setLayout(new java.awt.BorderLayout());
+
+        stigmatize_check.setText("Stigmatize");
+        stigmatize_check.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	stigmatize_checkActionPerformed(evt);
+            }
+        });
+
+        stigmatize_panel.add(stigmatize_check, java.awt.BorderLayout.CENTER);
+
+        stigmatize_button.setText("Edit");
+        stigmatize_button.setEnabled(false);
+        stigmatize_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	stigmatize_buttonActionPerformed(evt);
+            }
+        });
+
+        stigmatize_panel.add(stigmatize_button, java.awt.BorderLayout.EAST);
+
+        action_allowance_panel.add(stigmatize_panel);
+        
+        visit_panel.setLayout(new java.awt.BorderLayout());
+
+        visit_check.setText("Visit vertexes");
+        visit_check.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	visit_checkActionPerformed(evt);
+            }
+        });
+
+        visit_panel.add(visit_check, java.awt.BorderLayout.CENTER);
+
+        visit_button.setText("Edit");
+        visit_button.setEnabled(false);
+        visit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	visit_buttonActionPerformed(evt);
+            }
+        });
+
+        visit_panel.add(visit_button, java.awt.BorderLayout.EAST);
+
+        action_allowance_panel.add(visit_panel);
+        
         goto_panel.setLayout(new java.awt.BorderLayout());
 
         goto_check.setText("Go to");
@@ -391,6 +518,7 @@ public class AgentJPanel extends javax.swing.JPanel {
     	this.edge_combo.setSelectedIndex(agent_edge_index);
     	
     	this.stamina_field.setText(String.valueOf(this.agent.getStamina()));
+    	this.max_stamina_field.setText(String.valueOf(this.agent.getMax_stamina()));
     	
     	PerceptionPermission[] allowed_permissions = this.agent.getAllowedPerceptions();
     	for(int i = 0; i < allowed_permissions.length; i++)
@@ -399,6 +527,12 @@ public class AgentJPanel extends javax.swing.JPanel {
     				this.agent_check.setSelected(true);
     				this.agent_button.setEnabled(true);
     				this.agent_perception_permission = allowed_permissions[i];
+    				break;
+    			}
+    			case PerceptionTypes.BROADCAST_PERCEPTION: {
+    				this.broadcast_perception_check.setSelected(true);
+    				this.broadcast_perception_button.setEnabled(true);
+    				this.broadcast_perception_permission = allowed_permissions[i];
     				break;
     			}
     			case PerceptionTypes.GRAPH_PERCEPTION: {
@@ -418,16 +552,34 @@ public class AgentJPanel extends javax.swing.JPanel {
     	ActionPermission[] allowed_actions = this.agent.getAllowedActions();
     	for(int i = 0; i < allowed_actions.length; i++)
     		switch(allowed_actions[i].getAction_type()) {
-    			case ActionTypes.TELEPORT_ACTION: {
-    				this.teleport_check.setSelected(true);
-    				this.teleport_button.setEnabled(true);
-    				this.teleport_action_permission = allowed_actions[i];
+    			case ActionTypes.BROADCAST_ACTION: {
+    				this.broadcast_action_check.setSelected(true);
+    				this.broadcast_action_button.setEnabled(true);
+    				this.broadcast_action_permission = allowed_actions[i];
     				break;
     			}
     			case ActionTypes.GOTO_ACTION: {
     				this.goto_check.setSelected(true);
     				this.goto_button.setEnabled(true);
     				this.goto_action_permission = allowed_actions[i];
+    				break;
+    			}
+    			case ActionTypes.RECHARGE_ACTION: {
+    				this.recharge_check.setSelected(true);
+    				this.recharge_button.setEnabled(true);
+    				this.recharge_action_permission = allowed_actions[i];
+    				break;
+    			}
+    			case ActionTypes.STIGMATIZE_ACTION: {
+    				this.stigmatize_check.setSelected(true);
+    				this.stigmatize_button.setEnabled(true);
+    				this.stigmatize_action_permission = allowed_actions[i];
+    				break;
+    			}
+    			case ActionTypes.VISIT_ACTION: {
+    				this.visit_check.setSelected(true);
+    				this.visit_button.setEnabled(true);
+    				this.visit_action_permission = allowed_actions[i];
     				break;
     			}
     		}
@@ -539,6 +691,39 @@ public class AgentJPanel extends javax.swing.JPanel {
 		}
 		else this.death_tpd = chosen_death_tpd;
     }//GEN-LAST:event_death_buttonActionPerformed
+
+    /** Executed when the visit_button is pressed.
+     *  Generated by NetBeans IDE 3.6. */
+    private void visit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visit_buttonActionPerformed
+    	this.permission_gui = new PermissionGUI(this.owner, this.visit_action_permission);
+        this.permission_gui.setVisible(true);
+        
+        Permission permission = this.permission_gui.getPermission();
+        if(permission != null)
+        	this.visit_action_permission = (ActionPermission) permission;
+    }//GEN-LAST:event_visit_buttonActionPerformed
+    
+    /** Executed when the stigmatize_button is pressed.
+     *  Generated by NetBeans IDE 3.6. */
+    private void stigmatize_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stigmatize_buttonActionPerformed
+    	this.permission_gui = new PermissionGUI(this.owner, this.stigmatize_action_permission);
+        this.permission_gui.setVisible(true);
+        
+        Permission permission = this.permission_gui.getPermission();
+        if(permission != null)
+        	this.stigmatize_action_permission = (ActionPermission) permission;
+    }//GEN-LAST:event_stigmatize_buttonActionPerformed
+    
+    /** Executed when the recharge_button is pressed.
+     *  Generated by NetBeans IDE 3.6. */
+    private void recharge_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recharge_buttonActionPerformed
+    	this.permission_gui = new PermissionGUI(this.owner, this.recharge_action_permission);
+        this.permission_gui.setVisible(true);
+        
+        Permission permission = this.permission_gui.getPermission();
+        if(permission != null)
+        	this.recharge_action_permission = (ActionPermission) permission;
+    }//GEN-LAST:event_recharge_buttonActionPerformed
     
     /** Executed when the goto_button is pressed.
      *  Generated by NetBeans IDE 3.6. */
@@ -551,16 +736,27 @@ public class AgentJPanel extends javax.swing.JPanel {
         	this.goto_action_permission = (ActionPermission) permission;
     }//GEN-LAST:event_goto_buttonActionPerformed
     
-    /** Executed when the teleport_button is pressed.
+    /** Executed when the broadcast_action_button is pressed.
      *  Generated by NetBeans IDE 3.6. */    
-    private void teleport_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_teleport_buttonActionPerformed
-    	this.permission_gui = new PermissionGUI(this.owner, this.teleport_action_permission);
+    private void broadcast_action_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcast_action_buttonActionPerformed
+    	this.permission_gui = new PermissionGUI(this.owner, this.broadcast_action_permission);
         this.permission_gui.setVisible(true);
         
         Permission permission = this.permission_gui.getPermission();
         if(permission != null)
-        	this.teleport_action_permission = (ActionPermission) permission;
-    }//GEN-LAST:event_teleport_buttonActionPerformed
+        	this.broadcast_action_permission = (ActionPermission) permission;
+    }//GEN-LAST:event_broadcast_action_buttonActionPerformed
+    
+    /** Executed when the broadcast_perception_button is pressed.
+     *  Generated by NetBeans IDE 3.6. */
+    private void broadcast_perception_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcast_perception_buttonActionPerformed
+    	this.permission_gui = new PermissionGUI(this.owner, this.broadcast_perception_permission);
+        this.permission_gui.setVisible(true);
+        
+        Permission permission = this.permission_gui.getPermission();
+        if(permission != null)
+        	this.broadcast_perception_permission = (PerceptionPermission) permission;
+    }//GEN-LAST:event_broadcast_perception_buttonActionPerformed
     
     /** Executed when the stigma_button is pressed.
      *  Generated by NetBeans IDE 3.6. */
@@ -618,28 +814,97 @@ public class AgentJPanel extends javax.swing.JPanel {
         else this.goto_button.setEnabled(false);
     }//GEN-LAST:event_goto_checkActionPerformed
     
-    /** Executed when the teleport_check object changes.
+    /** Executed when the broadcast_action_check object changes.
      *  Generated by NetBeans IDE 3.6. */
-    private void teleport_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_teleport_checkActionPerformed
-    	if(this.teleport_check.isSelected()) {
-    		if(this.teleport_action_permission == null)
-    			this.teleport_action_permission = new ActionPermission(null, ActionTypes.TELEPORT_ACTION);
+    private void broadcast_action_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcast_action_checkActionPerformed
+    	if(this.broadcast_action_check.isSelected()) {
+    		if(this.broadcast_action_permission == null)
+    			this.broadcast_action_permission = new ActionPermission(null, ActionTypes.BROADCAST_ACTION);
     		
-        	this.permission_gui = new PermissionGUI(this.owner, this.teleport_action_permission);
+        	this.permission_gui = new PermissionGUI(this.owner, this.broadcast_action_permission);
             this.permission_gui.setVisible(true);
             
             Permission permission = this.permission_gui.getPermission();
             if(permission != null) {
-            	this.teleport_action_permission = (ActionPermission) permission;
-            	this.teleport_button.setEnabled(true);
+            	this.broadcast_action_permission = (ActionPermission) permission;
+            	this.broadcast_action_button.setEnabled(true);
             }
             else {
-            	this.teleport_check.setSelected(false);
-            	this.teleport_button.setEnabled(false);
+            	this.broadcast_action_check.setSelected(false);
+            	this.broadcast_action_button.setEnabled(false);
             }
         }
-        else this.teleport_button.setEnabled(false);
-    }//GEN-LAST:event_teleport_checkActionPerformed
+        else this.broadcast_action_button.setEnabled(false);
+    }//GEN-LAST:event_broadcast_action_checkActionPerformed
+    
+    /** Executed when the recharge_check object changes.
+     *  Generated by NetBeans IDE 3.6. */
+    private void recharge_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recharge_checkActionPerformed
+    	if(this.recharge_check.isSelected()) {
+    		if(this.recharge_action_permission == null)
+    			this.recharge_action_permission = new ActionPermission(null, ActionTypes.RECHARGE_ACTION);
+    		
+        	this.permission_gui = new PermissionGUI(this.owner, this.recharge_action_permission);
+            this.permission_gui.setVisible(true);
+            
+            Permission permission = this.permission_gui.getPermission();
+            if(permission != null) {
+            	this.recharge_action_permission = (ActionPermission) permission;
+            	this.recharge_button.setEnabled(true);
+            }
+            else {
+            	this.recharge_check.setSelected(false);
+            	this.recharge_button.setEnabled(false);
+            }
+        }
+        else this.recharge_button.setEnabled(false);
+    }//GEN-LAST:event_recharge_checkActionPerformed
+    
+    /** Executed when the stigmatize_check object changes.
+     *  Generated by NetBeans IDE 3.6. */
+    private void stigmatize_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stigmatize_checkActionPerformed
+    	if(this.stigmatize_check.isSelected()) {
+    		if(this.stigmatize_action_permission == null)
+    			this.stigmatize_action_permission = new ActionPermission(null, ActionTypes.STIGMATIZE_ACTION);
+    		
+        	this.permission_gui = new PermissionGUI(this.owner, this.stigmatize_action_permission);
+            this.permission_gui.setVisible(true);
+            
+            Permission permission = this.permission_gui.getPermission();
+            if(permission != null) {
+            	this.stigmatize_action_permission = (ActionPermission) permission;
+            	this.stigmatize_button.setEnabled(true);
+            }
+            else {
+            	this.stigmatize_check.setSelected(false);
+            	this.stigmatize_button.setEnabled(false);
+            }
+        }
+        else this.stigmatize_button.setEnabled(false);
+    }//GEN-LAST:event_stigmatize_checkActionPerformed
+    
+    /** Executed when the visit_check object changes.
+     *  Generated by NetBeans IDE 3.6. */
+    private void visit_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visit_checkActionPerformed
+    	if(this.visit_check.isSelected()) {
+    		if(this.visit_action_permission == null)
+    			this.visit_action_permission = new ActionPermission(null, ActionTypes.VISIT_ACTION);
+    		
+        	this.permission_gui = new PermissionGUI(this.owner, this.visit_action_permission);
+            this.permission_gui.setVisible(true);
+            
+            Permission permission = this.permission_gui.getPermission();
+            if(permission != null) {
+            	this.visit_action_permission = (ActionPermission) permission;
+            	this.visit_button.setEnabled(true);
+            }
+            else {
+            	this.visit_check.setSelected(false);
+            	this.visit_button.setEnabled(false);
+            }
+        }
+        else this.visit_button.setEnabled(false);
+    }//GEN-LAST:event_visit_checkActionPerformed    
     
     /** Executed when the stigma_check object changes.
      *  Generated by NetBeans IDE 3.6. */
@@ -709,6 +974,47 @@ public class AgentJPanel extends javax.swing.JPanel {
         }
         else this.agent_button.setEnabled(false);
     }//GEN-LAST:event_agent_checkActionPerformed
+    
+    /** Executed when the broadcast_perception_check object changes.
+     *  Generated by NetBeans IDE 3.6. */
+    private void broadcast_perception_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcast_perception_checkActionPerformed
+    	if(this.broadcast_perception_check.isSelected()) {
+    		if(this.broadcast_perception_permission == null)
+    			this.broadcast_perception_permission = new PerceptionPermission(null, PerceptionTypes.BROADCAST_PERCEPTION);
+    		
+        	this.permission_gui = new PermissionGUI(this.owner, this.broadcast_perception_permission);
+            this.permission_gui.setVisible(true);
+            
+            Permission permission = this.permission_gui.getPermission();
+            if(permission != null) {
+            	this.broadcast_perception_permission = (PerceptionPermission) permission;
+            	this.broadcast_perception_button.setEnabled(true);
+            }
+            else {
+            	this.broadcast_perception_check.setSelected(false);
+            	this.broadcast_perception_button.setEnabled(false);
+            }
+        }
+        else this.broadcast_perception_button.setEnabled(false);
+    }//GEN-LAST:event_broadcast_perception_checkActionPerformed
+
+    /** Executed when the max_stamina_field object changes.
+     *  Generated by NetBeans IDE 3.6. */
+    private void max_stamina_fieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_max_stamina_fieldKeyReleased
+    	String str_max_stamina = this.max_stamina_field.getText().trim();      
+        if(str_max_stamina.length() > 0)
+            try {
+                double max_stamina = Double.parseDouble(str_max_stamina);
+                if(max_stamina < 0)
+                    throw new NumberFormatException();                
+            }
+            catch(NumberFormatException e) {
+                if(str_max_stamina.charAt(str_max_stamina.length() - 1) != '.') {
+                    JOptionPane.showMessageDialog(this, "The maximum stamina value must be a real non-negative number.", "Stamina value error.", JOptionPane.ERROR_MESSAGE);
+                    this.max_stamina_field.setText("1");
+                }
+            }
+    }//GEN-LAST:event_max_stamina_fieldKeyReleased
     
     /** Executed when the stamina_field object changes.
      *  Generated by NetBeans IDE 3.6. */
@@ -880,9 +1186,27 @@ public class AgentJPanel extends javax.swing.JPanel {
 			stamina = Double.parseDouble(str_value);
 		}
 		
+		double max_stamina = 0;
+		try {
+			max_stamina = Double.parseDouble(this.max_stamina_field.getText().trim());
+		}
+		catch(NumberFormatException e) {
+			String str_value = this.max_stamina_field.getText().trim();
+			str_value.substring(0, str_value.length() - 1);
+			max_stamina = Double.parseDouble(str_value);
+		}
+		
+		if(max_stamina < stamina) {
+			JOptionPane.showMessageDialog(this, "The stamina value cannot be bigger than the maximum possible stamina value. Its value will be reset.", "Stamina value error", JOptionPane.ERROR_MESSAGE);
+			stamina = max_stamina;
+			this.stamina_field.setText(String.valueOf(stamina));
+		}
+		
 		LinkedList<PerceptionPermission> allowed_perceptions_list = new LinkedList<PerceptionPermission>();
 		if(this.agent_check.isSelected())
 			allowed_perceptions_list.add(this.agent_perception_permission);
+		if(this.broadcast_perception_check.isSelected())
+			allowed_perceptions_list.add(this.broadcast_perception_permission);
 		if(this.graph_check.isSelected())
 			allowed_perceptions_list.add(this.graph_perception_permission);
 		if(this.stigma_check.isSelected())
@@ -892,10 +1216,16 @@ public class AgentJPanel extends javax.swing.JPanel {
 			allowed_perceptions[i] = allowed_perceptions_list.get(i);
 		
 		LinkedList<ActionPermission> allowed_actions_list = new LinkedList<ActionPermission>();
-		if(this.teleport_check.isSelected())
-			allowed_actions_list.add(this.teleport_action_permission);
+		if(this.broadcast_action_check.isSelected())
+			allowed_actions_list.add(this.broadcast_action_permission);
 		if(this.goto_check.isSelected())
 			allowed_actions_list.add(this.goto_action_permission);
+		if(this.recharge_check.isSelected())
+			allowed_actions_list.add(this.recharge_action_permission);		
+		if(this.stigmatize_check.isSelected())
+			allowed_actions_list.add(this.stigmatize_action_permission);
+		if(this.visit_check.isSelected())
+			allowed_actions_list.add(this.visit_action_permission);
 		ActionPermission[] allowed_actions = new ActionPermission[allowed_actions_list.size()];
 		for(int i = 0; i < allowed_actions.length; i++)
 			allowed_actions[i] = allowed_actions_list.get(i);
@@ -916,6 +1246,7 @@ public class AgentJPanel extends javax.swing.JPanel {
 			answer.setEdge(edge, elapsed_length);
 		
 		answer.setStamina(stamina);
+		answer.setMax_stamina(max_stamina);
 		
     	return answer;
     }
@@ -925,10 +1256,14 @@ public class AgentJPanel extends javax.swing.JPanel {
     private Agent agent;
     private Graph graph;
     private PerceptionPermission agent_perception_permission;
+    private PerceptionPermission broadcast_perception_permission;
     private PerceptionPermission graph_perception_permission;
     private PerceptionPermission stigma_perception_permission;
-    private ActionPermission teleport_action_permission;
+    private ActionPermission broadcast_action_permission;
     private ActionPermission goto_action_permission;
+    private ActionPermission recharge_action_permission;
+    private ActionPermission stigmatize_action_permission;
+    private ActionPermission visit_action_permission;
     private EventTimeProbabilityDistribution death_tpd;
     private EventTimeProbabilityDistributionGUI death_gui;
     private PermissionGUI permission_gui;
@@ -937,15 +1272,22 @@ public class AgentJPanel extends javax.swing.JPanel {
     private int last_death_combo_index;
     
     // added by Eclipse
-	private static final long serialVersionUID = 8629432005051578016L;
+    private static final long serialVersionUID = -3351365950030332742L;
     
     // added by NetBeans IDE 3.6
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel action_allowance_panel;
     private javax.swing.JButton agent_button;
     private javax.swing.JCheckBox agent_check;
-    private javax.swing.JPanel agent_perception_panel;
+    private javax.swing.JPanel agent_perception_panel;    
+    private javax.swing.JPanel agent_stamina_panel;        
     private javax.swing.JPanel allowance_panel;
+    private javax.swing.JButton broadcast_perception_button;
+    private javax.swing.JCheckBox broadcast_perception_check;
+    private javax.swing.JPanel broadcast_perception_panel;    
+    private javax.swing.JButton broadcast_action_button;
+    private javax.swing.JCheckBox broadcast_action_check;
+    private javax.swing.JPanel broadcast_action_panel;    
     private javax.swing.JButton death_button;
     private javax.swing.JComboBox death_combo;
     private javax.swing.JPanel death_panel;
@@ -965,25 +1307,33 @@ public class AgentJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField label_field;
     private javax.swing.JLabel label_label;
     private javax.swing.JPanel label_panel;
-    private javax.swing.JPanel main_panel;
+    private javax.swing.JPanel main_panel;    
+    private javax.swing.JTextField max_stamina_field;
+    private javax.swing.JPanel max_stamina_internal_panel;
+    private javax.swing.JLabel max_stamina_label;    
     private javax.swing.JTextField object_id_field;
     private javax.swing.JLabel object_id_label;
     private javax.swing.JPanel object_id_panel;
     private javax.swing.JPanel perception_allowance_panel;
     private javax.swing.JPanel position_panel;
-    private javax.swing.JPanel position_stamina_allowance_panel;
+    private javax.swing.JPanel position_stamina_allowance_panel;    
+    private javax.swing.JButton recharge_button;
+    private javax.swing.JCheckBox recharge_check;
+    private javax.swing.JPanel recharge_panel;    
     private javax.swing.JTextField stamina_field;
     private javax.swing.JPanel stamina_internal_panel;
-    private javax.swing.JLabel stamina_label;
-    private javax.swing.JPanel stamina_panel;
+    private javax.swing.JLabel stamina_label;    
     private javax.swing.JButton stigma_button;
     private javax.swing.JCheckBox stigma_check;
     private javax.swing.JPanel stigma_perception_panel;
-    private javax.swing.JButton teleport_button;
-    private javax.swing.JCheckBox teleport_check;
-    private javax.swing.JPanel teleport_panel;
+    private javax.swing.JButton stigmatize_button;
+    private javax.swing.JCheckBox stigmatize_check;
+    private javax.swing.JPanel stigmatize_panel;
     private javax.swing.JComboBox vertex_combo;
     private javax.swing.JLabel vertex_label;
     private javax.swing.JPanel vertex_panel;
+    private javax.swing.JButton visit_button;
+    private javax.swing.JCheckBox visit_check;
+    private javax.swing.JPanel visit_panel;
     // End of variables declaration//GEN-END:variables   
 }

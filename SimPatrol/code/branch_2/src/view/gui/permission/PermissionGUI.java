@@ -96,35 +96,59 @@ public class PermissionGUI extends JDialog {
      *  @param perception The Perception object to be configured. */
     private void initComponents2(Permission permission) {
     	this.permission = permission;
-    	this.permission_panel = new PermissionJPanel(this, permission);
-    	this.editor_panel.setComponentAt(0, this.permission_panel);
     	
     	if(permission instanceof PerceptionPermission)
     		switch(((PerceptionPermission) permission).getPerception_type()) {
     			case PerceptionTypes.AGENTS_PERCEPTION: {
     				this.type_label.setText("Agents perception permission");
+    				this.permission_panel = new PermissionJPanel(this, permission, true, true, false, false);
+    				break;
+    			}
+    			case PerceptionTypes.BROADCAST_PERCEPTION: {
+    				this.type_label.setText("Broadcast perception permission");
+    				this.permission_panel = new PermissionJPanel(this, permission, false, true, false, false);
     				break;
     			}
     			case PerceptionTypes.GRAPH_PERCEPTION: {
     				this.type_label.setText("Graph perception permission");
+    				this.permission_panel = new PermissionJPanel(this, permission, true, true, false, false);
     				break;
     			}
     			case PerceptionTypes.STIGMAS_PERCEPTION: {
     				this.type_label.setText("Stigmas perception permission");
+    				this.permission_panel = new PermissionJPanel(this, permission, true, true, false, false);
     				break;
     			}
     		}
-    	else
-    		switch(((ActionPermission) permission).getAction_type()) {
-    			case ActionTypes.TELEPORT_ACTION: {
-    				this.type_label.setText("Teleport action permission");
-    				break;
-    			}
-    			case ActionTypes.GOTO_ACTION: {
-    				this.type_label.setText("Goto action permission");
-    				break;
-    			}
-    		}    	
+    	else switch(((ActionPermission) permission).getAction_type()) {
+    		case ActionTypes.BROADCAST_ACTION: {
+    			this.type_label.setText("Broadcast action permission");
+    			this.permission_panel = new PermissionJPanel(this, permission, true, true, false, false);
+    			break;
+    		}
+    		case ActionTypes.GOTO_ACTION: {
+    			this.type_label.setText("Goto action permission");
+    			this.permission_panel = new PermissionJPanel(this, permission, true, true, true, true);
+    			break;
+    		}
+    		case ActionTypes.RECHARGE_ACTION: {
+    			this.type_label.setText("Recharge action permission");
+    			this.permission_panel = new PermissionJPanel(this, permission, false, true, true, false);
+    			break;
+    		}
+    		case ActionTypes.STIGMATIZE_ACTION: {
+    			this.type_label.setText("Stigmatize action permission");
+    			this.permission_panel = new PermissionJPanel(this, permission, false, true, false, false);
+    			break;
+    		}
+    		case ActionTypes.VISIT_ACTION: {
+    			this.type_label.setText("Visit action permission");
+    			this.permission_panel = new PermissionJPanel(this, permission, false, true, false, false);
+    			break;
+    		}
+    	}
+    	
+    	this.editor_panel.setComponentAt(0, this.permission_panel);
     }
     
     /** Executed when the ok button is pressed.
@@ -163,7 +187,7 @@ public class PermissionGUI extends JDialog {
     private PermissionJPanel permission_panel;
     
     // added by Eclipse
-	private static final long serialVersionUID = 8075796576490031185L;
+    private static final long serialVersionUID = 9222045718104814343L;
 	
 	// added by NetBeans IDE 3.6    
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -176,6 +200,5 @@ public class PermissionGUI extends JDialog {
     private javax.swing.JPanel type_panel;
     private javax.swing.JTextArea xml_area;
     private javax.swing.JScrollPane xml_scroll;
-    // End of variables declaration//GEN-END:variables
-    
+    // End of variables declaration//GEN-END:variables    
 }

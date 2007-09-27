@@ -196,6 +196,13 @@ public abstract class Agent implements XMLable {
 			this.stamina = this.max_stamina;
 	}
 	
+	/** Returns the maximum possible value for the stamina of the agent.
+	 * 
+	 *  @return The maximum possible value for the stamina of the agent. */
+	public double getMax_stamina() {
+		return this.max_stamina;
+	}
+	
 	/** Returns the allowed perceptions for the agent.
 	 * 
 	 *  @return The permissions of perceptions. */

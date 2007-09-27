@@ -5,8 +5,11 @@ package view.gui.limitation;
 
 /* Imported classes and/or interfaces. */
 import javax.swing.JDialog;
+
+import model.limitation.AccelerationLimitation;
 import model.limitation.DepthLimitation;
 import model.limitation.Limitation;
+import model.limitation.SpeedLimitation;
 import model.limitation.StaminaLimitation;
 
 /** Implements a GUI to configure Limitation objects.
@@ -99,9 +102,17 @@ public class LimitationGUI extends javax.swing.JDialog {
     		this.type_label.setText("Depth limitation");
     		this.limitation_panel = new DepthLimitationJPanel((DepthLimitation) limitation);
     	}
-    	else {
+    	else if(limitation instanceof StaminaLimitation) {
     		this.type_label.setText("Stamina limitation");    		
     		this.limitation_panel = new StaminaLimitationJPanel((StaminaLimitation) limitation);
+    	}
+    	else if(limitation instanceof SpeedLimitation) {
+    		this.type_label.setText("Speed limitation");
+    		this.limitation_panel = new SpeedLimitationJPanel((SpeedLimitation) limitation);
+    	}
+    	else {
+    		this.type_label.setText("Acceleration limitation");
+    		this.limitation_panel = new AccelerationLimitationJPanel((AccelerationLimitation) limitation);
     	}
     	
     	this.editing_panel.setComponentAt(0, this.limitation_panel);
