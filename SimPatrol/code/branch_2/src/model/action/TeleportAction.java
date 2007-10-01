@@ -16,7 +16,7 @@ import model.limitation.DepthLimitation;
  *  Its effect can be controlled by depth and stamina limitations. 
  *  @see DepthLimitation
  *  @see StaminaLimitation */
-public class TeleportAction extends AtomicAction {
+public final class TeleportAction extends AtomicAction {
 	/* Attributes. */
 	/** The new vertex the agent is coming from, after the teleport. */
 	private Vertex vertex;

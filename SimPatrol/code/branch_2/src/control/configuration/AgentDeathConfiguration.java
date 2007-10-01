@@ -9,7 +9,7 @@ import model.agent.Agent;
 /** Implements objects that express configurations to kill seasonal agents.
  * 
  *  @see Agent */
-public class AgentDeathConfiguration extends Configuration {
+public final class AgentDeathConfiguration extends Configuration {
 	/* Attributes. */
 	/** The id of the seasonal agent that must be killed. */
 	private String agent_id;

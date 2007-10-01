@@ -13,7 +13,7 @@ import model.limitation.StaminaLimitation;
  *  determined only by stamina limitations.
  *  
  *  @see StaminaLimitation */
-public class BroadcastPerception extends Perception {
+public final class BroadcastPerception extends Perception {
 	/* Attributes. */
 	/** The broadcasted message. */
 	private String message;

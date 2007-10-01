@@ -10,7 +10,7 @@ import model.Environment;
  *  (graph + societies) of a simulation.
  *  
  *  @see Environment */
-public class EnvironmentCreationConfiguration extends Configuration {
+public final class EnvironmentCreationConfiguration extends Configuration {
 	/* Attributes. */
 	/** The environment to be set to the simulation. */
 	private Environment environment;

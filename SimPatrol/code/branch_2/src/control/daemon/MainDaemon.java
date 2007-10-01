@@ -13,7 +13,6 @@ import view.connection.AgentConnection;
 import model.Environment;
 import model.agent.Agent;
 import model.agent.OpenSociety;
-import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.interfaces.Mortal;
 import model.metric.Metric;
@@ -74,7 +73,7 @@ public final class MainDaemon extends Daemon {
 			for(int j = 0; j < agents.length; j++) {
 				// creates and starts its perception and action daemons
 				int socket_number = this.createAndStartAgentDaemons(agents[j]);
-
+				
 				// fills the orientation
 				orientation.addItem(socket_number, agents[j].getObjectId());
 			}
@@ -166,19 +165,19 @@ public final class MainDaemon extends Daemon {
 		
 		// if an agent was found
 		if(agent != null) {
-			// FINISH HIM!
+			// FINISH HIM! =D
 			((Mortal) agent).die();
 			
 			// stops the agent's action and perception daemons
-			simulator.stopAgentDaemons(agent);
+			simulator.stopAndRemoveAgentDaemons(agent);
 			
 			// if the simulator is a realtime one
 			if(simulator instanceof RealTimeSimulator) {
 				// removes and stops its eventual stamina controller robot 
-				((RealTimeSimulator) simulator).removeAndStopStaminaControllerRobot(agent);
+				((RealTimeSimulator) simulator).stopAndRemoveStaminaControllerRobot(agent);
 				
 				// removes and stops its mortality controller robot
-				((RealTimeSimulator) simulator).removeAndStopMortalityControllerRobot((SeasonalAgent) agent);
+				((RealTimeSimulator) simulator).stopAndRemoveMortalityControllerRobot((Mortal) agent);
 			}
 			
 			// sends an empty orientation to the sender of configuration
@@ -208,7 +207,7 @@ public final class MainDaemon extends Daemon {
 		this.connection.send(new Orientation(String.valueOf(socket_number)).fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
 	}
 	
-	/** Attends a given "simultion start" configuration, sending the
+	/** Attends a given "simulation start" configuration, sending the
 	 *  correspondent orientation to the remote contact.
 	 *
 	 *  @param configuration The configuration to be attended.
@@ -247,6 +246,12 @@ public final class MainDaemon extends Daemon {
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);
 		action_daemon.setConnection(connection);
+		
+		// if the simulator is a real time one, lets both action daemons work
+		if(simulator instanceof RealTimeSimulator) {
+			perception_daemon.setCan_work(true);
+			action_daemon.setCan_work(true);
+		}
 		
 		// starts the daemons
 		boolean socket_exception_happened = true;

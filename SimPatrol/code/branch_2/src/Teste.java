@@ -1,30 +1,9 @@
-import java.io.IOException;
 import java.net.SocketException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import model.Environment;
-import model.agent.Agent;
-import model.agent.PerpetualAgent;
-import model.agent.SeasonalAgent;
-import model.graph.Graph;
-import model.limitation.DepthLimitation;
-import model.limitation.Limitation;
-import model.limitation.StaminaLimitation;
-import model.permission.ActionPermission;
-
-import view.gui.agent.AgentGUI;
-import view.gui.etpd.EventTimeProbabilityDistributionGUI;
-import view.gui.limitation.LimitationGUI;
-import view.gui.permission.PermissionGUI;
-import control.simulator.RealTimeSimulator;
-import control.translator.EnvironmentTranslator;
+import control.simulator.*;
 
 public class Teste {
 	public static void main(String[] args) throws SocketException {		
-		//new RealTimeSimulator(5000, 0.5);
+		new CycledSimulator(5000, 0.25);
 		/*EventTimeProbabilityDistributionGUI
 		gui = new EventTimeProbabilityDistributionGUI();
 		gui.setVisible(true);*/
@@ -41,7 +20,7 @@ public class Teste {
 		//PermissionGUI gui = new PermissionGUI(null, permission);
 		//gui.setVisible(true);
 		
-		try {
+		/*try {
 			Environment env = EnvironmentTranslator.getEnvironment("c:/env.txt");
 			Graph graph = env.getGraph();
 			
@@ -59,6 +38,6 @@ public class Teste {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}	
+		}*/
+	}
 }

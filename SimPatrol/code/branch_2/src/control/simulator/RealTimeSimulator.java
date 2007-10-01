@@ -9,10 +9,11 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import model.agent.Agent;
-import model.agent.SeasonalAgent;
 import model.graph.Vertex;
 import model.interfaces.Dynamic;
 import model.interfaces.Mortal;
+import control.daemon.ActionDaemon;
+import control.daemon.PerceptionDaemon;
 import control.robot.DynamicityControllerRobot;
 import control.robot.MortalityControllerRobot;
 import control.robot.StaminaControllerRobot;
@@ -21,7 +22,7 @@ import util.timer.Chronometerable;
 
 /** Implements a real time simulator of the patrolling task.
  * 
- *  @developer This class must have its behaviour modelled. */
+ *  @modeller This class must have its behaviour modelled. */
 public final class RealTimeSimulator extends Simulator implements Chronometerable {
 	/* Attributes. */
 	/** The chronometer of the real time simulation. */
@@ -44,7 +45,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 * 
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
 	 *  @param actualization_time_rate The time rate, in seconds, to actualize the internal model of the simulation. 
-	 *  @throws SocketException */	
+	 *  @throws SocketException */
 	public RealTimeSimulator(int local_socket_number, double actualization_time_rate) throws SocketException {
 		super(local_socket_number, actualization_time_rate);
 		this.chronometer = null;
@@ -93,19 +94,43 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 *  and creates their respective stamina controller robots. */
 	private void createStaminaControllerDaemons() {
 		// obtains the agents to be controlled
-		Agent[] agents = this.getStaminaControlledAgents();
+		Agent[] agents = this.getStaminedObjects();
 		
-		// if there are any agents to be controlled
+		// if there are any objects to be controlled
 		if(agents.length > 0) {
 			// initiates the stamina robots set
 			this.stamina_robots = new HashSet<StaminaControllerRobot>();
 			
 			// for each one, creates a stamina controller robot
-			for(int i = 0; i < agents.length; i++)
-				this.stamina_robots.add(new StaminaControllerRobot("stamina robot", agents[i], this.getActionDaemon(agents[i])));
+			for(int i = 0; i < agents.length; i++) {
+				StaminaControllerRobot stamina_robot = new StaminaControllerRobot("stamina robot", agents[i]);
+				this.stamina_robots.add(stamina_robot);
+				
+				// sets the robot to the perception daemon
+				Object[] perception_daemons_array = this.perception_daemons.toArray();
+				for(int j = 0; j < perception_daemons_array.length; j++) {
+					PerceptionDaemon perception_daemon = (PerceptionDaemon) perception_daemons_array[j];
+					
+					if(perception_daemon.getAgent().equals(agents[i])) {
+						perception_daemon.setStamina_robot(stamina_robot);
+						break;
+					}
+				}
+				
+				// sets the robot to the action daemon
+				Object[] action_daemons_array = this.action_daemons.toArray();
+				for(int j = 0; j < action_daemons_array.length; j++) {
+					ActionDaemon action_daemon = (ActionDaemon) action_daemons_array[j];
+					
+					if(action_daemon.getAgent().equals(agents[i])) {
+						action_daemon.setStamina_robot(stamina_robot);
+						break;
+					}
+				}
+			}
 		}
 		else this.stamina_robots = null;
-	}	
+	}
 	
 	/** Starts each one of the current dynamicity controller robots. */
 	private void startDynamicityControllerRobots() {
@@ -152,12 +177,34 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 *  @param agent The agent to be controlled by the robot. */
 	public void createAndStartStaminaControlerRobot(Agent agent) {
 		// obtains the agents to be controlled
-		Agent[] agents = this.getStaminaControlledAgents();
+		Agent[] agents = this.getStaminedObjects();
 		
 		// if one of these agents is the given one
 		for(int i = 0; i < agents.length; i++)
-			if(agents[i].equals(agent)) {
-				StaminaControllerRobot robot = new StaminaControllerRobot("stamina robot", agent, this.getActionDaemon(agent));
+			if(agents[i].equals(agents)) {
+				StaminaControllerRobot robot = new StaminaControllerRobot("stamina robot", agent);
+				
+				// sets the robot to the perception daemon
+				Object[] perception_daemons_array = this.perception_daemons.toArray();
+				for(int j = 0; j < perception_daemons_array.length; j++) {
+					PerceptionDaemon perception_daemon = (PerceptionDaemon) perception_daemons_array[j];
+					
+					if(perception_daemon.getAgent().equals(agents[i])) {
+						perception_daemon.setStamina_robot(robot);
+						break;
+					}
+				}
+				
+				// sets the robot to the action daemon
+				Object[] action_daemons_array = this.action_daemons.toArray();
+				for(int j = 0; j < action_daemons_array.length; j++) {
+					ActionDaemon action_daemon = (ActionDaemon) action_daemons_array[j];
+					
+					if(action_daemon.getAgent().equals(agents[i])) {
+						action_daemon.setStamina_robot(robot);
+						break;
+					}
+				}
 				
 				if(this.stamina_robots == null)
 					this.stamina_robots = new HashSet<StaminaControllerRobot>();
@@ -205,17 +252,17 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	}
 	
 	/** Removes and stops the mortality controller robot that
-	 *  controls the given agent.
+	 *  controls the given object.
 	 * 
-	 *  @param agent The seasonal agent controlled by the robot to be removed. */
-	public void removeAndStopMortalityControllerRobot(SeasonalAgent agent) {
-		// finds the mortality robot of the given agent
+	 *  @param object The object controlled by the robot to be removed. */
+	public void stopAndRemoveMortalityControllerRobot(Mortal object) {
+		// finds the mortality robot of the given object
 		if(this.mortal_robots != null) {
 			Object[] mortal_robots_array = this.mortal_robots.toArray();
 			for(int i = 0; i < mortal_robots_array.length; i++) {
 				MortalityControllerRobot robot = (MortalityControllerRobot) mortal_robots_array[i];
 				
-				if(robot.getObject().equals(agent)) {
+				if(robot.getObject().equals(object)) {
 					robot.stopWorking();
 					this.mortal_robots.remove(robot);
 					return;
@@ -227,7 +274,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	/** Removes and stops the stamina controller robot that controls the given agent.
 	 * 
 	 *  @param agent The agent controlled by the robot to be removed. */
-	public void removeAndStopStaminaControllerRobot(Agent agent) {
+	public void stopAndRemoveStaminaControllerRobot(Agent agent) {
 		// finds the stamina robot of the given agent
 		if(this.stamina_robots != null) {
 			Object[] stamina_robots_array = this.stamina_robots.toArray();

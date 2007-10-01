@@ -59,10 +59,10 @@ public final class MortalityControllerRobot extends Robot {
 				
 				// if the object is an agent, stops its agent_daemons
 				if(this.object instanceof Agent) {
-					simulator.stopAgentDaemons((Agent) this.object);
+					simulator.stopAndRemoveAgentDaemons((Agent) this.object);
 					
 					// stops and removes its eventual stamina controller robot
-					simulator.removeAndStopStaminaControllerRobot((Agent) this.object);
+					simulator.stopAndRemoveStaminaControllerRobot((Agent) this.object);
 				}
 				
 				// stops this robot

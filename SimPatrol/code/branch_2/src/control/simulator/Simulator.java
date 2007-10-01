@@ -33,10 +33,10 @@ public abstract class Simulator {
 	private MainDaemon main_daemon;
 	
 	/** The set of perception daemons of SimPatrol. */
-	private Set<PerceptionDaemon> perception_daemons;
+	protected Set<PerceptionDaemon> perception_daemons;
 	
 	/** The set of action daemons of SimPatrol. */
-	private Set<ActionDaemon> action_daemons;
+	protected Set<ActionDaemon> action_daemons;
 	
 	/** The set of metric daemons of Simpatrol. */
 	private Set<MetricDaemon> metric_daemons;
@@ -112,6 +112,31 @@ public abstract class Simulator {
 		this.action_daemons.add(action_daemon);
 	}
 	
+	/** Returns the action daemon of a given agent.
+	 * 
+	 *  @return The action daemon of the given agent. */
+	public ActionDaemon getActionDaemon(Agent agent) {
+		Object[] action_daemons_array = this.action_daemons.toArray();
+		for(int i = 0; i < action_daemons_array.length; i++)
+			if(((ActionDaemon) action_daemons_array[i]).getAgent().equals(agent))
+				return (ActionDaemon) action_daemons_array[i];
+		
+		return null;
+	}
+	
+	/** Returns the action daemons of the simulator.
+	 * 
+	 *  @return The action daemons of the simulator.*/
+	public ActionDaemon[] getActionDaemons() {
+		Object[] action_daemons_array = this.action_daemons.toArray();
+		ActionDaemon[] answer = new ActionDaemon[action_daemons_array.length];
+		
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = (ActionDaemon) action_daemons_array[i];
+		
+		return answer;
+	}
+	
 	/** Adds a given metric daemon to the set of metric daemons.
 	 * 
 	 *  @param metric_daemon The metric daemon to be added. */
@@ -137,7 +162,7 @@ public abstract class Simulator {
 		return this.state;
 	}	
 	
-	/** Returns the time rate, in seconds, to actualize the
+	/** Returns the time rate, in seconds, to atualize the
 	 *  internal model of the simulation.
 	 *  
 	 *  @return The time rate to actualize the internal model. */
@@ -149,7 +174,7 @@ public abstract class Simulator {
 	 *  probably because it has died.
 	 *  
 	 *  @param agent The agent who has died. */
-	public void stopAgentDaemons(Agent agent) {
+	public void stopAndRemoveAgentDaemons(Agent agent) {
 		// finds the perception daemon
 		PerceptionDaemon perception_daemon = null;
 		
@@ -183,7 +208,7 @@ public abstract class Simulator {
 	 * 
 	 *  @return The dynamic objects of the simulation.
 	 *  @developer New dynamic classes must change this method. */
-	protected Dynamic[] getDynamicObjects() {
+	public Dynamic[] getDynamicObjects() {
 		// holds the dynamic objects
 		Set<Dynamic> dynamic_objects = new HashSet<Dynamic>();
 		
@@ -206,7 +231,7 @@ public abstract class Simulator {
 	 * 
 	 *  @return The mortal objects of the simulation.
 	 *  @developer New mortal classes must change this method. */
-	protected Mortal[] getMortalObjects() {
+	public Mortal[] getMortalObjects() {
 		// holds the mortal objects
 		Set<Mortal> mortal_objects = new HashSet<Mortal>();
 		
@@ -237,10 +262,11 @@ public abstract class Simulator {
 	/** Returns the agents that must have their stamina values controlled.
 	 * 
 	 *  @return The agents that must have their stamina feature controlled. */
-	protected Agent[] getStaminaControlledAgents() {
-		// holds the wanted agents
-		HashSet<Agent> wanted_agents = new HashSet<Agent>();
+	public Agent[] getStaminedObjects() {
+		// holds the wanted object
+		HashSet<Agent> stamined_objects = new HashSet<Agent>();
 		
+		// obtains all the stamined agents
 		// for each society
 		Society[] societies = this.environment.getSocieties();
 		for(int i = 0; i < societies.length; i++) {
@@ -254,16 +280,16 @@ public abstract class Simulator {
 					Limitation[] limitations = allowed_perceptions[k].getLimitations();
 					for(int l = 0; l < limitations.length; l++) {
 						if(limitations[l] instanceof StaminaLimitation) {
-							wanted_agents.add(agents[j]);
+							stamined_objects.add(agents[j]);
 							break;
 						}
 					}
 					
-					if(wanted_agents.contains(agents[j]))
+					if(stamined_objects.contains(agents[j]))
 						break;
 				}
 				
-				if(wanted_agents.contains(agents[j]))
+				if(stamined_objects.contains(agents[j]))
 					break;
 				
 				// for each allowed action
@@ -273,37 +299,27 @@ public abstract class Simulator {
 					Limitation[] limitations = allowed_actions[k].getLimitations();
 					for(int l = 0; l < limitations.length; l++) {
 						if(limitations[l] instanceof StaminaLimitation) {
-							wanted_agents.add(agents[j]);
+							stamined_objects.add(agents[j]);
 							break;
 						}
 					}
 					
-					if(wanted_agents.contains(agents[j]))
+					if(stamined_objects.contains(agents[j]))
 						break;
 				}
 			}
 		}
 		
+		// developer: new stamined classes can change the code here
+		
 		// mounts the answer to method
-		Object[] agents_array = wanted_agents.toArray();
+		Object[] agents_array = stamined_objects.toArray();
 		Agent[] answer = new Agent[agents_array.length];
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = (Agent) agents_array[i];
 		
-		// return the answer
+		// returns the answer
 		return answer;
-	}
-	
-	/** Returns the action daemon of a given agent.
-	 * 
-	 *  @return The action daemon of the given agent. */
-	protected ActionDaemon getActionDaemon(Agent agent) {
-		Object[] action_daemons_array = this.action_daemons.toArray();
-		for(int i = 0; i < action_daemons_array.length; i++)
-			if(((ActionDaemon) action_daemons_array[i]).getAgent().equals(agent))
-				return (ActionDaemon) action_daemons_array[i];
-		
-		return null;
 	}
 	
 	/** Stops the perception daemons of the simulator. */

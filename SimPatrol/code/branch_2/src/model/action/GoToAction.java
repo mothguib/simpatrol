@@ -22,7 +22,7 @@ import model.limitation.StaminaLimitation;
  *  @see StaminaLimitation
  *  @see SpeedLimitation
  *  @see AccelerationLimitation */
-public class GoToAction extends CompoundAction {
+public final class GoToAction extends CompoundAction {
 	/* Attributes */
 	/** The initial speed of the movement.
 	 * 

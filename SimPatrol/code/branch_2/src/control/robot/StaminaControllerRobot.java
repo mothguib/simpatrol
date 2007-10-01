@@ -4,53 +4,40 @@
 package control.robot;
 
 /* Imported classes and/or interfaces. */
-import control.daemon.ActionDaemon;
 import control.simulator.RealTimeSimulator;
+import model.action.CompoundAction;
 import model.agent.Agent;
-import model.limitation.Limitation;
-import model.limitation.StaminaLimitation;
-import model.permission.PerceptionPermission;
 
 /** Implements the robots that assure the stamina correct value to the agents.
  *  
  *  Used by real time simulators.
  *   
  *  @see RealTimeSimulator */
-public class StaminaControllerRobot extends Robot {
+public final class StaminaControllerRobot extends Robot {
 	/* Attributes. */
 	/** The agent whose stamina is to be controlled. */
 	private Agent agent;
 	
-	/** The stamina value to be decremented related to the perceptions
-	 *  of the agent. */
-	private double perceptions_stamina_cost;
+	/** Registers how much stamina must be decremented from the agent,
+	 *  due to the execution of compound actions.
+	 *  
+	 *  @see CompoundAction */
+	private double actions_spent_stamina;
 	
-	/** The action daemon that attends the agent's intentions of actions. */
-	private ActionDaemon action_daemon;
+	/** Registers how much stamina must be decremented from the agent,
+	 *  due to the production of perceptions. */
+	private double perceptions_spent_stamina;
 	
 	/* Methods. */
 	/** Constructor.
 	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot.
-	 *  @param agent The agent whose stamina is to be controlled.
-	 *  @param action_daemon The action daemon that controls the agent. */
-	public StaminaControllerRobot(String clock_thread_name, Agent agent, ActionDaemon action_daemon) {
+	 *  @param agent The agent whose stamina is to be controlled. */
+	public StaminaControllerRobot(String clock_thread_name, Agent agent) {
 		super(clock_thread_name);
 		this.agent = agent;
-		this.action_daemon = action_daemon;
-		
-		// obtains the stamina value to be decremented
-		// related to the perceptions
-		this.perceptions_stamina_cost = 0;		
-		PerceptionPermission[] allowed_perceptions = this.agent.getAllowedPerceptions();
-		for(int i = 0; i < allowed_perceptions.length; i++) {
-			Limitation[] limitations = allowed_perceptions[i].getLimitations();
-			for(int j = 0; j < limitations.length; j++)
-				if(limitations[j] instanceof StaminaLimitation) {
-					this.perceptions_stamina_cost = this.perceptions_stamina_cost + ((StaminaLimitation) limitations[j]).getCost();
-					break;
-				}
-		}
+		this.actions_spent_stamina = 0;
+		this.perceptions_spent_stamina = 0;
 	}
 	
 	/** Returns the agent controlled by the robot.
@@ -59,15 +46,37 @@ public class StaminaControllerRobot extends Robot {
 	public Agent getAgent() {
 		return this.agent;
 	}
-
+	
+	/** Configures how much stamina must be spent due to
+	 *  the execution of compound actions.
+	 *  
+	 *  @param spent_stamina The amount of stamina to be spent due to the execution of compound actions.*/
+	public void setActions_spent_stamina(double spent_stamina) {
+		this.actions_spent_stamina = spent_stamina;
+	}
+	
+	/** Returns how much stamina must be spent due to
+	 *  the execution of compound actions.
+	 *  
+	 *  @return The amount of stamina to be spent due to the execution of compound actions.*/
+	public double getActions_spent_stamina() {
+		return this.actions_spent_stamina;
+	}
+	
+	/** Configures how much stamina must be spent due to
+	 *  the production of perceptions.
+	 *  
+	 *  @param spent_stamina The amount of stamina to be spent due to the production of perceptions.*/
+	public void setPerceptions_spent_stamina(double spent_stamina) {
+		this.perceptions_spent_stamina = spent_stamina;
+	}
+	
 	public void act(int time_gap) {
-		for(int i = 0; i < time_gap; i++) {			
-			this.agent.decStamina(this.perceptions_stamina_cost + this.action_daemon.getPlanning_stamina_cost());
-			
-			// screen message
-			if(this.perceptions_stamina_cost + this.action_daemon.getPlanning_stamina_cost() > 0)
-				System.out.println("[SimPatrol.Event] agent " + this.agent.getObjectId() + " spent stamina.");
-		}
+		double spent_stamina = this.actions_spent_stamina + this.perceptions_spent_stamina;
+		
+		if(spent_stamina > 0)
+			for(int i = 0; i < time_gap; i++)
+				this.agent.decStamina(spent_stamina);
 	}
 	
 	public void start() {
@@ -82,5 +91,5 @@ public class StaminaControllerRobot extends Robot {
 		
 		// screen message
 		System.out.println("[SimPatrol.StaminaRobot(" + this.agent.getObjectId() + ")]: Stopped working.");
-	}	
+	}
 }

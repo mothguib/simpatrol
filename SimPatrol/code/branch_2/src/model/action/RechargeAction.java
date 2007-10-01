@@ -12,7 +12,7 @@ import model.limitation.StaminaLimitation;
  *  Its effect can be controlled by stamina and speed limitations.
  *  @see StaminaLimitation
  *  @see SpeedLimitation */
-public class RechargeAction extends CompoundAction {
+public final class RechargeAction extends CompoundAction {
 	/* Attributes. */
 	/** The value to be added to the agent's stamina. */
 	private double stamina;

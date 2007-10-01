@@ -76,8 +76,8 @@ public final class Orientation implements XMLable {
 				for(int j = 0; j < identation + 1; j++) buffer.append("\t");
 				
 				// puts the item
-				buffer.append("<ort_item agent_id=\"" + item.agent_id +
-					          "\" socket=\"" + item.socket_number +
+				buffer.append("<ort_item agent_id=\"" + item.AGENT_ID +
+					          "\" socket=\"" + item.SOCKET_NUMBER +
 					          "\"/>\n");
 			}
 		
@@ -112,17 +112,17 @@ public final class Orientation implements XMLable {
  *  through it.  */
 final class SocketNumberAndAgentID {
 	/** The number of the socket. */
-	public final int socket_number;
+	public final int SOCKET_NUMBER;
 	
 	/** The id of agent. */
-	public final String agent_id;
+	public final String AGENT_ID;
 	
 	/** Constructor.
 	 * 
 	 *  @param socket_number The number of the socket.
 	 *  @param agent_id The id of agent. */
 	public SocketNumberAndAgentID(int socket_number, String agent_id) {
-		this.socket_number = socket_number;
-		this.agent_id = agent_id;
+		this.SOCKET_NUMBER = socket_number;
+		this.AGENT_ID = agent_id;
 	}	
 }

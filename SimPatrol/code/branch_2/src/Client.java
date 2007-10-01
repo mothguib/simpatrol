@@ -8,16 +8,16 @@ public class Client {
 
 		String new_ag =
 		"<configuration type=\"1\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"s1\">" +
-		"<agent id=\"a4\" label=\"Priscila\" vertex_id=\"v1\" stamina=\"20\">" +
+		"<agent id=\"a4\" label=\"Priscila\" vertex_id=\"v1\" max_stamina=\"100\" stamina=\"20\">" +
 		"<allowed_perception type=\"1\">" +
-		"<limitation type=\"0\">" +
+		"<limitation type=\"1\">" +
 		"<lmt_parameter value=\"1\"/>" +
 		"</limitation>" +
 		"</allowed_perception>" +
 		"<allowed_action type=\"1\">" +
-		"<limitation type=\"1\">" +
-		"<lmt_parameter value=\"1\"/>" +
-		"</limitation>" +
+		//"<limitation type=\"1\">" +
+		//"<lmt_parameter value=\"1\"/>" +
+		//"</limitation>" +
 		"</allowed_action>" +
 		"</agent>" +
 	    "</configuration>";

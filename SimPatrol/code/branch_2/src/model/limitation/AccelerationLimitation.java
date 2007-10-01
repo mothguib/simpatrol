@@ -10,7 +10,7 @@ import model.action.GoToAction;
  *  in a permission that lets an agent move through the graph to be patrolled.
  *  
  *  @see GoToAction*/
-public class AccelerationLimitation extends Limitation {
+public final class AccelerationLimitation extends Limitation {
 	/* Attributes. */
 	/** The acceleration limit, measured in depth/sec^2 or depth/cycle^2. */
 	private double acceleration;

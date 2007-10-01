@@ -19,7 +19,7 @@ import model.action.RechargeAction;
  *  @see GoToAction
  *  @see AtomicRechargeAction
  *  @see RechargeAction */
-public class SpeedLimitation extends Limitation {
+public final class SpeedLimitation extends Limitation {
 	/* Attributes. */
 	/** The speed limit of the movement, measured in depth per second or
 	 *  in depth per cycle.

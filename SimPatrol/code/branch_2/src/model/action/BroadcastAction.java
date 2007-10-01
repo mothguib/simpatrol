@@ -13,7 +13,7 @@ import model.limitation.StaminaLimitation;
  *  Its effect can be controlled by depth and stamina limitations.
  *  @see DepthLimitation
  *  @see StaminaLimitation */
-public class BroadcastAction extends AtomicAction {
+public final class BroadcastAction extends AtomicAction {
 	/* Attributes. */
 	/** The message to be broadcasted. */
 	private String message;

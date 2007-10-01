@@ -9,11 +9,11 @@ import java.net.SocketException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.Queue;
 import control.parser.CompoundActionsParser;
+import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import control.translator.ActionTranslator;
 import model.action.Action;
@@ -27,6 +27,7 @@ import model.action.StigmatizeAction;
 import model.action.TeleportAction;
 import model.action.VisitAction;
 import model.agent.Agent;
+import model.agent.AgentStates;
 import model.agent.Society;
 import model.graph.DynamicVertex;
 import model.graph.Edge;
@@ -47,19 +48,11 @@ import model.stigma.Stigma;
  *  @developer New Action classes must change this class.
  *  @modeller This class must have its behaviour modelled. */
 public final class ActionDaemon extends AgentDaemon {
-	/* Attributes. */
-	/** Registers if the daemon can attend intentions of actions
-	 *  at the moment. */
-	private boolean can_attend_actions;
-	
+	/* Attributes. */	
 	/** Queue that holds the planning of atomic actions that the daemon
 	 *  must regularly attend, in order to satisfy an eventual
 	 *  compound action. */
 	private Queue<AtomicAction> planning;
-	
-	/** Registers the amount of stamina that must be spent by the agent
-	 *  whenever the planning is being executed. */
-	private double planning_stamina_cost;
 	
 	/* Methods. */
 	/** Constructor.
@@ -72,25 +65,14 @@ public final class ActionDaemon extends AgentDaemon {
 	 *  @param thread_name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
 	public ActionDaemon(String thread_name, Agent agent) {
-		super(thread_name, agent);
-		
-		this.can_attend_actions = true;
+		super(thread_name, agent);		
 		this.planning = new Queue<AtomicAction>();
-		this.planning_stamina_cost = 0;
 		
 		if(simulator instanceof RealTimeSimulator) {
 			this.clock.setUnity(Calendar.MILLISECOND);
 			this.clock.setStep((int) (simulator.getActualization_time_rate() * 1000));
 		}
 		else this.clock = null;
-	}
-	
-	/** Returns the amount of stamina that must be spent by the agent
-	 *  whenever the planning is being executed.
-	 *  
-	 *  @return The amount of stamina that must be spent by the agent whenever the planning is executed.*/
-	public double getPlanning_stamina_cost() {
-		return this.planning_stamina_cost;
 	}
 	
 	/** Attends an intention of visiting the vertex where the agent is.
@@ -120,10 +102,13 @@ public final class ActionDaemon extends AgentDaemon {
 			// resets the idleness of the vertex where the agent is
 			this.agent.getVertex().setIdleness(0);
 			
+			// changes the agent's state to JUST_ACTED
+			this.agent.setState(AgentStates.JUST_ACTED);
+			
 			// screen message
 			System.out.print("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " visited vertex " + this.agent.getVertex().reducedToXML(0));
 		}
-	}
+	}	
 	
 	/** Attends an intention of immediately recharge
 	 *  the stamina of the agent.
@@ -165,11 +150,14 @@ public final class ActionDaemon extends AgentDaemon {
 			
 			// increments the agent's stamina by the obtained value
 			this.agent.incStamina(value);
+			
+			// changes the agent's state to JUST_ACTED
+			this.agent.setState(AgentStates.JUST_ACTED);
 						
 			// screen message
 			System.out.print("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " recharged.");
 		}
-	}
+	}	
 	
 	/** Attends an intention of depositing stigmas on the graph
 	 *  of the simulation.
@@ -197,6 +185,9 @@ public final class ActionDaemon extends AgentDaemon {
 			if(this.agent.getEdge() == null || this.agent.getElapsed_length() == 0) {
 				simulator.getEnvironment().getGraph().addStigma(new Stigma(this.agent.getVertex()));
 				
+				// changes the agent's state to JUST_ACTED
+				this.agent.setState(AgentStates.JUST_ACTED);
+				
 				// screen message
 				System.out.print("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " stigmatized vertex " + this.agent.getVertex().reducedToXML(0));
 			}
@@ -209,7 +200,7 @@ public final class ActionDaemon extends AgentDaemon {
 				System.out.print("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " stigmatized edge " + this.agent.getEdge().reducedToXML(0));
 			}
 		}
-	}
+	}	
 	
 	/** Attends an intention of broadcasting a message.
 	 *  
@@ -281,12 +272,15 @@ public final class ActionDaemon extends AgentDaemon {
 			// for each reachable agent, obtains its perception daemon
 			// and sends the message
 			for(int i = 0; i < reachable_agents.size(); i++)
-				simulator.getPerceptionDaemon(reachable_agents.get(i)).produceAndSendBroadcastPerception(action.getMessage());
-						
+				simulator.getPerceptionDaemon(reachable_agents.get(i)).sendMessage(action.getMessage());
+			
+			// changes the agent's state to JUST_ACTED
+			this.agent.setState(AgentStates.JUST_ACTED);
+			
 			// screen message
 			System.out.print("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " broadcasted a message.");
 		}
-	}
+	}	
 	
 	/** Attends an intention of teleport action.
 	 * 
@@ -337,6 +331,9 @@ public final class ActionDaemon extends AgentDaemon {
 					// are visible
 					action.assureTeleportVisibilityEffect();
 					
+					// changes the agent's state to JUST_ACTED
+					this.agent.setState(AgentStates.JUST_ACTED);
+					
 					// screen message
 					System.out.println("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " teleported.");
 				}
@@ -371,10 +368,17 @@ public final class ActionDaemon extends AgentDaemon {
 		if(this.agent.getElapsed_length() == 0 && this.agent.getVertex().isFuel() && this.agent.getStamina() > stamina) {
 			// sets the amount of stamina to be spent by the agent
 			// as the planning is being executed
-			this.planning_stamina_cost = stamina;
+			if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(stamina);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, stamina);
 			
 			// parses the recharge action and adds the result to the local planning
-			AtomicAction[] parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, simulator.getActualization_time_rate());
+			AtomicAction[] parsed_actions = null;
+			if(simulator instanceof RealTimeSimulator)
+				parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, simulator.getActualization_time_rate());
+			else
+				parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, 1);
 			
 			for(int i = 0; i < parsed_actions.length; i++)
 				this.planning.insert(parsed_actions[i]);
@@ -417,21 +421,28 @@ public final class ActionDaemon extends AgentDaemon {
 			else if(limitations[i] instanceof AccelerationLimitation)
 				acceleration = ((AccelerationLimitation) limitations[i]).getAcceleration();
 			// developer: new limitations must add code here
-		}		
+		}
 		
 		// if there's enough stamina to act
-		if(this.agent.getStamina() > stamina) {
-			// sets the amount of stamina to be spent by the agent
-			// as the planning is being executed
-			this.planning_stamina_cost = stamina;
-			
+		if(this.agent.getStamina() > stamina) {			
 			// obtains the path that the agent shall take during the movement
-			Graph path = simulator.getEnvironment().getGraph().getEnabledDijkstraPath(this.agent.getVertex(), goal_vertex);
+			Graph path = simulator.getEnvironment().getGraph().getEnabledDijkstraPath(this.agent.getVertex(), goal_vertex);			
 			
 			// if the path is valid
 			if(path != null) {
+				// sets the amount of stamina to be spent by the agent
+				// as the planning is being executed
+				if(this.stamina_robot != null)
+					this.stamina_robot.setActions_spent_stamina(stamina);
+				else if(stamina_coordinator != null)
+					stamina_coordinator.setActionsSpentStamina(this.agent, stamina);
+				
 				// parses the goto action and adds the result to the local planning
-				AtomicAction[] parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, simulator.getActualization_time_rate());
+				AtomicAction[] parsed_actions = null;
+				if(simulator instanceof RealTimeSimulator)
+					parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, simulator.getActualization_time_rate());
+				else
+					parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, 1);
 				
 				for(int i = 0; i < parsed_actions.length; i++)
 					this.planning.insert(parsed_actions[i]);
@@ -446,9 +457,20 @@ public final class ActionDaemon extends AgentDaemon {
 	private void attendPlannedAtomicRechargeAction(AtomicRechargeAction action) {
 		// if there isn't enough stamina to act, or the agent is not on a "fueled"
 		// vertex, clears the planning and quits the method
-		if(this.agent.getStamina() < this.planning_stamina_cost || this.agent.getElapsed_length() > 0 || !this.agent.getVertex().isFuel()) {
+		double remained_stamina = 0;
+		
+		if(this.stamina_robot != null)
+			remained_stamina = this.stamina_robot.getActions_spent_stamina();
+		else if(stamina_coordinator != null)
+			remained_stamina = stamina_coordinator.getActionsSpentStamina(this.agent);
+		
+		if(this.agent.getStamina() < remained_stamina || this.agent.getElapsed_length() > 0 || !this.agent.getVertex().isFuel()) {
 			this.planning.clear();
-			this.planning_stamina_cost = 0;
+			if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(0);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, 0);
+			
 			return;
 		}
 		
@@ -457,6 +479,9 @@ public final class ActionDaemon extends AgentDaemon {
 		
 		// increments the agent's stamina by the obtained value
 		this.agent.incStamina(stamina);
+		
+		// changes the agent's state to JUST_ACTED
+		this.agent.setState(AgentStates.JUST_ACTED);
 		
 		// screen message
 		System.out.println("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " recharged.");
@@ -469,9 +494,20 @@ public final class ActionDaemon extends AgentDaemon {
 	private void attendPlannedTeleportAction(TeleportAction action) {
 		// if there isn't enough stamina to act, clears the planning
 		// and quits the method
-		if(this.agent.getStamina() < this.planning_stamina_cost) {
+		double remained_stamina = 0;
+		
+		if(this.stamina_robot != null)
+			remained_stamina = this.stamina_robot.getActions_spent_stamina();
+		else if(stamina_coordinator != null)			
+			remained_stamina = stamina_coordinator.getActionsSpentStamina(this.agent);
+		
+		if(this.agent.getStamina() < remained_stamina) {
 			this.planning.clear();
-			this.planning_stamina_cost = 0;
+			if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(0);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, 0);
+			
 			return;
 		}
 		
@@ -484,7 +520,11 @@ public final class ActionDaemon extends AgentDaemon {
 		// planning and quits the method
 		if(goal_vertex instanceof DynamicVertex && !((DynamicVertex) goal_vertex).isEnabled()) {
 			this.planning.clear();
-			this.planning_stamina_cost = 0;
+			if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(0);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, 0);
+			
 			return;
 		}
 		
@@ -492,7 +532,11 @@ public final class ActionDaemon extends AgentDaemon {
 		// the planning and quits the method
 		if(goal_edge != null && !goal_edge.isEnabled()) {
 			this.planning.clear();
-			this.planning_stamina_cost = 0;
+			if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(0);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, 0);
+			
 			return;
 		}
 		
@@ -504,6 +548,9 @@ public final class ActionDaemon extends AgentDaemon {
 		// as well as other eventual objects, are all visible
 		action.assureTeleportVisibilityEffect();
 		
+		// changes the agent's state to JUST_ACTED
+		this.agent.setState(AgentStates.JUST_ACTED);
+		
 		// screen message
 		System.out.println("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " teleported.");
 	}
@@ -511,17 +558,17 @@ public final class ActionDaemon extends AgentDaemon {
 	/** @developer New action must change this method.
 	 *  @modeller This method must be modelled. */
 	public void run() {
-		while (!this.stop_working)
+		while (!this.stop_working) {
+			// tries to obtains the next message from the buffer
+			String message = null;
+		
+			// while there's not a message, tries to obtain it
+			while(message == null) {
+				message = this.buffer.remove();
+			}
+			
 			// if the agent can act
-			if(this.can_attend_actions) {
-				// string message obtained from the buffer
-				String message = null;
-				
-				// while there's not a message and the agent can act,
-				// tries to obtain a message
-				while(message == null && this.can_attend_actions)
-					message = this.buffer.remove();
-				
+			if(this.can_work) {
 				// the action to be obtained from the message
 				Action action = null;
 				
@@ -535,7 +582,10 @@ public final class ActionDaemon extends AgentDaemon {
 				if(action instanceof VisitAction) {
 					// destroys the eventual current planning of actions
 					this.planning.clear();
-					this.planning_stamina_cost = 0;
+					if(this.stamina_robot != null)
+						this.stamina_robot.setActions_spent_stamina(0);
+					else if(stamina_coordinator != null)
+						stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 					
 					// verifies if the agent has permission to visit vertexes
 					ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -551,7 +601,10 @@ public final class ActionDaemon extends AgentDaemon {
 				else if(action instanceof BroadcastAction) {
 					// destroys the eventual current planning of actions
 					this.planning.clear();
-					this.planning_stamina_cost = 0;
+					if(this.stamina_robot != null)
+						this.stamina_robot.setActions_spent_stamina(0);
+					else if(stamina_coordinator != null)
+						stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 					
 					// verifies if the agent has permission to broadcast messages
 					ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -568,7 +621,10 @@ public final class ActionDaemon extends AgentDaemon {
 				else if(action instanceof StigmatizeAction) {
 					// destroys the eventual current planning of actions
 					this.planning.clear();
-					this.planning_stamina_cost = 0;
+					if(this.stamina_robot != null)
+						this.stamina_robot.setActions_spent_stamina(0);
+					else if(stamina_coordinator != null)
+						stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 					
 					// verifies if the agent has permission to deposit stigmas
 					ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -584,7 +640,10 @@ public final class ActionDaemon extends AgentDaemon {
 				else if(action instanceof AtomicRechargeAction) {
 					// destroys the eventual current planning of actions
 					this.planning.clear();
-					this.planning_stamina_cost = 0;
+					if(this.stamina_robot != null)
+						this.stamina_robot.setActions_spent_stamina(0);
+					else if(stamina_coordinator != null)
+						stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 					
 					// verifies if the agent has permission to immediately recharge
 					ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -592,6 +651,11 @@ public final class ActionDaemon extends AgentDaemon {
 						if(permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE_ACTION) {
 							// attends the action
 							this.attendAtomicRechargeAction((AtomicRechargeAction) action, permissions[i].getLimitations());
+														
+							// if the simulator is a cycled one,
+							// calls this.act(1)
+							if(simulator instanceof CycledSimulator)
+								this.act(1);
 							
 							// quits the loop
 							break;
@@ -600,7 +664,10 @@ public final class ActionDaemon extends AgentDaemon {
 				else if(action instanceof RechargeAction) {
 					// destroys the eventual current planning of actions
 					this.planning.clear();
-					this.planning_stamina_cost = 0;
+					if(this.stamina_robot != null)
+						this.stamina_robot.setActions_spent_stamina(0);
+					else if(stamina_coordinator != null)
+						stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 					
 					// verifies if the agent has permission to recharge
 					ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -626,7 +693,10 @@ public final class ActionDaemon extends AgentDaemon {
 					if(action instanceof TeleportAction) {
 						// destroys the eventual current planning of actions
 						this.planning.clear();
-						this.planning_stamina_cost = 0;
+						if(this.stamina_robot != null)
+							this.stamina_robot.setActions_spent_stamina(0);
+						else if(stamina_coordinator != null)
+							stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 						
 						// verifies if the agent has permission to teleport
 						ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -652,7 +722,10 @@ public final class ActionDaemon extends AgentDaemon {
 					if(action instanceof GoToAction) {
 						// destroys the eventual current planning of actions
 						this.planning.clear();
-						this.planning_stamina_cost = 0;
+						if(this.stamina_robot != null)
+							this.stamina_robot.setActions_spent_stamina(0);
+						else if(stamina_coordinator != null)
+							stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 						
 						// verifies if the agent has permission to move
 						ActionPermission[] permissions = this.agent.getAllowedActions();
@@ -661,32 +734,29 @@ public final class ActionDaemon extends AgentDaemon {
 								// attends the intention of action
 								this.attendGoToAction((GoToAction) action, permissions[i].getLimitations());
 								
+								// if the simulator is a cycled one,
+								// calls this.act(1)
+								if(simulator instanceof CycledSimulator)
+									this.act(1);
+								
 								// quits the loop
 								break;
 							}
 					}
 				}
-				
 			}
+		}
 	}
 	
 	/** @developer New AtomicAction classes must change this method.
 	 *  @modeller This method must be modelled. */
 	public void act(int time_gap) {
 		// if the agent can act
-		if(this.can_attend_actions) {
+		if(this.can_work) {
 			// if the planning is not empty
 			if(this.planning.getSize() > 0) {
-				// holds the duration of a cycle of compound actions attendance
-				double cycle_duration = simulator.getActualization_time_rate() * 1000;
-				
-				// calculates the time gap that really harms the planning execution
-				int bad_time_gap = 1;
-				if(time_gap >= 2 * cycle_duration)
-					bad_time_gap = (int) (time_gap / cycle_duration);
-				
-				// executes the planning, based on the eventual harming time gap
-				for(int i = 0; i < bad_time_gap; i++) {
+				// executes the planning, based on the eventual time gap
+				for(int i = 0; i < time_gap; i++) {
 					// executes the current atomic action
 					AtomicAction action = this.planning.remove();
 					
@@ -704,7 +774,10 @@ public final class ActionDaemon extends AgentDaemon {
 				}
 			}
 			// else, sets the stamina to be spend as 0
-			else this.planning_stamina_cost = 0;
+			else if(this.stamina_robot != null)
+				this.stamina_robot.setActions_spent_stamina(0);
+			else if(stamina_coordinator != null)
+				stamina_coordinator.setActionsSpentStamina(this.agent, 0);
 		}
 	}
 	

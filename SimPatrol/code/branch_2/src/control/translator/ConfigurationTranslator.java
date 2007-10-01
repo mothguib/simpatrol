@@ -165,7 +165,7 @@ public abstract class ConfigurationTranslator extends Translator {
 		
 		// adds its items
 		for(int j = 0; j < items.length; j++)
-			orientation.addItem(items[j].int_value, items[j].string);
+			orientation.addItem(items[j].INT_VALUE, items[j].STRING);
 		
 		// returns the new orientation
 		return orientation;
@@ -204,16 +204,16 @@ public abstract class ConfigurationTranslator extends Translator {
  *  and a string.  */
 final class IntAndString {
 	/** The integer value. */
-	public final int int_value;
+	public final int INT_VALUE;
 	
 	/** The string. */
-	public final String string;
+	public final String STRING;
 	
 	/** Constructor.
 	 *  @param int_value The integer value.
 	 *  @param string The string. */
 	public IntAndString(int int_value, String string) {
-		this.int_value = int_value;
-		this.string = string;
+		this.INT_VALUE = int_value;
+		this.STRING = string;
 	}
 }

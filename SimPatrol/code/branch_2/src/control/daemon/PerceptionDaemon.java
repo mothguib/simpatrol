@@ -9,7 +9,9 @@ import java.net.SocketException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import util.Queue;
 import model.agent.Agent;
+import model.agent.AgentStates;
 import model.agent.Society;
 import model.graph.Edge;
 import model.graph.Graph;
@@ -34,9 +36,11 @@ import model.stigma.Stigma;
  *  @modeller This class must have its behaviour modelled. */
 public final class PerceptionDaemon extends AgentDaemon {
 	/* Attributes. */
-	/** Registers if the daemon can produce perceptions
-	 *  at the moment. */
-	private boolean can_produce_perceptions;
+	/** Queue of received messages sent by other agents. */
+	private Queue<String> received_messages;
+	
+	/** The amount of stamina to be spent due to the perceptions. */
+	private double spent_stamina;
 	
 	/* Methods. */
 	/** Constructor.
@@ -50,11 +54,33 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 *  @param agent The agent whose perceptions are produced. */
 	public PerceptionDaemon(String thread_name, Agent agent) {
 		super(thread_name, agent);
-		this.can_produce_perceptions = true;
+		this.received_messages = null;
+		this.spent_stamina = 0;
 		
 		// configures the clock of the daemon
 		this.clock.setUnity(Calendar.MILLISECOND);
 		this.clock.setStep((int) (simulator.getActualization_time_rate() * 1000));
+	}
+	
+	/** Lets the agent of this daemon receive a message, if it has permission
+	 *  to do it.
+	 *  
+	 *  @param message The message to be received by the agent of this daemon. */
+	public void sendMessage(String message) {
+		// verifies if the agent has permission to receive broadcasted messages
+		PerceptionPermission[] permissions = this.agent.getAllowedPerceptions();
+		for(int i = 0; i < permissions.length; i++)
+			if(permissions[i].getPerception_type() == PerceptionTypes.BROADCAST_PERCEPTION) {
+				if(this.received_messages == null)
+					this.received_messages = new Queue<String>();
+				
+				// adds the message to the received ones
+				this.received_messages.insert(message);
+				return;
+			}
+		
+		// nullifies the received messages
+		this.received_messages = null;					
 	}
 	
 	/** Produces all the perceptions an agent is allowed to have at the moment.
@@ -64,6 +90,9 @@ public final class PerceptionDaemon extends AgentDaemon {
 	private Perception[] producePerceptions() {
 		// holds the eventually produced perceptions
 		List<Perception> perceptions = new LinkedList<Perception>();
+		
+		// resets the spent stamina with perceptions
+		this.spent_stamina = 0;
 		
 		//  obtains the allowed perceptions for the agent
 		PerceptionPermission[] allowed_perceptions = this.agent.getAllowedPerceptions();
@@ -99,54 +128,39 @@ public final class PerceptionDaemon extends AgentDaemon {
 					// obtains the perceptions of the stigmas
 					StigmasPerception perception = this.produceStigmasPerception(allowed_perceptions[i].getLimitations());
 					
-					// if the perception is valid, adds itto the produced perceptions
+					// if the perception is valid, adds it to the produced perceptions
 					if(perception != null) perceptions.add(perception);
+					
+					break;
+				}
+				
+				// if it's a permission for "broadcasted messages perceptions"
+				case(PerceptionTypes.BROADCAST_PERCEPTION): {
+					// obtains the perceptions of the messages
+					BroadcastPerception[] broadcast_perceptions = this.produceBroadcastPerceptions(allowed_perceptions[i].getLimitations());
+					
+					// adds each one to the produced perceptions
+					for(int j = 0; j < broadcast_perceptions.length; j++)
+						perceptions.add(broadcast_perceptions[j]);
+						
+					break;					
 				}
 				
 				// developer: new perceptions must add code here
-			}
+			}			
 		}
+		
+		// configures the amount of stamina to be spent with perceptions
+		if(this.stamina_robot != null)
+			this.stamina_robot.setPerceptions_spent_stamina(this.spent_stamina);
+		else if(stamina_coordinator != null)
+			stamina_coordinator.setPerceptionsSpentStamina(this.agent, this.spent_stamina);
 		
 		// mounts and returns the answer
 		Perception[] answer = new Perception[perceptions.size()];
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = perceptions.get(i);
 		return answer;
-	}
-	
-	/** Produces and sends a broadcast perception, if the agent is able
-	 *  (i.e. has the permission) to perceive it.
-	 *  
-	 *   @param message The string message to be broadcasted to the agent.
-	 *   @throws IOException 
-	 *   @developer New Limitation classes can change this method. */
-	public void produceAndSendBroadcastPerception(String message) throws IOException {
-		// verifies if the agent can perceive broadcasted messages
-		PerceptionPermission[] permissions = this.agent.getAllowedPerceptions();
-		for(int i = 0; i < permissions.length; i++)
-			if(permissions[i].getPerception_type() == PerceptionTypes.BROADCAST_PERCEPTION) {
-				// holds an eventual stamina limitation
-				double stamina = 0;
-				
-				// obtains the limitations of the permission
-				Limitation[] limitations = permissions[i].getLimitations();
-				for(int j = 0; j < limitations.length; j++)
-					if(limitations[j] instanceof StaminaLimitation)
-						stamina = ((StaminaLimitation) limitations[j]).getCost();
-				// developer: new limitations can change the code here
-				
-				// if the agent has enough stamina to perceive
-				if(this.agent.getStamina() > stamina) {
-					// decrements the agent's stamina
-					this.agent.decStamina(stamina);
-					
-					// produces the new perception
-					BroadcastPerception perception = new BroadcastPerception(message);
-					
-					// sends it
-					this.connection.send(perception.fullToXML(0));
-				}					
-			}
 	}
 	
 	/** Obtains the graph perception for the agent, given the eventual limitations.
@@ -171,9 +185,13 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > stamina)
+		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+			// atualizes the spent stamina
+			this.spent_stamina = this.spent_stamina + stamina;
+			
 			// return the perceived subgraph
 			return new GraphPerception(simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth));
+		}
 		
 		// default answer
 		return null;		
@@ -202,7 +220,10 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > stamina) {
+		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+			// atualizes the spent stamina
+			this.spent_stamina = this.spent_stamina + stamina;
+			
 			// holds the perceived agents
 			List<Agent> perceived_agents = new LinkedList<Agent>();
 			
@@ -269,7 +290,10 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > stamina) {
+		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+			// atualizes the spent stamina
+			this.spent_stamina = this.spent_stamina + stamina;
+			
 			// obtains the visible subgraph
 			// with the given depth
 			Graph subgraph = simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth);
@@ -285,11 +309,55 @@ public final class PerceptionDaemon extends AgentDaemon {
 		return null;		
 	}
 	
+	/** Obtains the perception of broadcasted messages,
+	 *  given the eventual limitations.
+	 * 
+	 *  @param limitations The limitations to the perception of broadcasted messages.
+	 *  @return The perception of broadcasted messages.
+	 *  @developer New Limitation classes must change this method. */
+	private BroadcastPerception[] produceBroadcastPerceptions(Limitation[] limitations) {
+		// holds the produced broadcast perceptions
+		LinkedList<BroadcastPerception> broadcast_perceptions = new LinkedList<BroadcastPerception>();
+		
+		// holds an eventual stamina limitation
+		double stamina = 0;
+		
+		// for each limitation, tries to set the stamina limitation
+		for(int j = 0; j < limitations.length; j++)
+			if(limitations[j] instanceof StaminaLimitation)
+				stamina = ((StaminaLimitation) limitations[j]).getCost();
+			// developer: new limitations can change the code here
+		
+		// for each received message
+		if(this.received_messages != null)
+			while(this.received_messages.getSize() > 0) {
+				// obtains the current message
+				String message = this.received_messages.remove();
+				
+				// if the agent has enough stamina to perceive
+				if(this.agent.getStamina() > this.spent_stamina + stamina) {
+					// decrements the agent's stamina
+					this.agent.decStamina(stamina);
+					
+					// adds a new broadcast perception to the produced ones
+					broadcast_perceptions.add(new BroadcastPerception(message));
+				}
+			}
+		
+		// mounts the answer of the method
+		BroadcastPerception[] answer = new BroadcastPerception[broadcast_perceptions.size()];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = broadcast_perceptions.get(i);
+		
+		// returns the answer
+		return answer;
+	}
+	
 	public void start(int local_socket_number) throws SocketException {
 		super.start(local_socket_number);
 		
 		// screen message
-		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");
+		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Started working.");
 	}
 	
 	public void stopWorking() {
@@ -302,14 +370,17 @@ public final class PerceptionDaemon extends AgentDaemon {
 	/** @modeller This method must be modelled. */		
 	public void act(int time_gap) {
 		// if the daemon can produce perceptions at the moment
-		if(this.can_produce_perceptions) {
+		if(this.can_work) {
 			// obtains all the perceptions the agent is supposed to have at the moment
 			Perception[] perceptions = this.producePerceptions();
 			
 			// for each perception, sends it to the remote agent
 			for(int i = 0; i < perceptions.length; i++)
 				try { this.connection.send(perceptions[i].fullToXML(0)); }
-				catch (IOException e) { e.printStackTrace(); }			
+				catch (IOException e) { e.printStackTrace(); }
+				
+			// changes the agent's state to JUST_PERCEIVED
+			this.agent.setState(AgentStates.JUST_PERCEIVED);
 		}
 	}
 }

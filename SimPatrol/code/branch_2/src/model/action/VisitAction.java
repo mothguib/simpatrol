@@ -10,7 +10,7 @@ import model.limitation.StaminaLimitation;
  * 
  *  Its effect can be controlled by stamina limitations.
  *  @see StaminaLimitation */
-public class VisitAction extends AtomicAction {
+public final class VisitAction extends AtomicAction {
 	/* Methods. */
 	public String fullToXML(int identation) {
 		// holds the answer for the method

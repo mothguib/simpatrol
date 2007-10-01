@@ -190,7 +190,7 @@ public final class Graph implements XMLable {
 	 *  @param vertex The starting point to obtain the subgraph.
 	 *  @param depth The depth to reach when walking in depth-first mode.
 	 *  @return A subgraph starting from the given vertex and with the given depth. */
-	public synchronized Graph getVisibleEnabledSubgraph(Vertex vertex, int depth) {
+	public Graph getVisibleEnabledSubgraph(Vertex vertex, int depth) {
 		// if the given depth is -1, returns the entire visible graph
 		if(depth == -1)
 			return this.getVisibleEnabledGraph(vertex);
@@ -265,7 +265,7 @@ public final class Graph implements XMLable {
 	 *  @param vertex The starting point to obtain the subgraph.
 	 *  @param depth The depth to reach when walking in depth-first mode.
 	 *  @return A subgraph starting from the given vertex and with the given depth. */
-	public synchronized Graph getEnabledSubgraph(Vertex vertex, int depth) {
+	public Graph getEnabledSubgraph(Vertex vertex, int depth) {
 		// if the given depth is -1, returns the entire enabled graph
 		if(depth == -1)
 			return this.getEnabledGraph(vertex);
@@ -334,7 +334,7 @@ public final class Graph implements XMLable {
 	 *  @param begin_vertex The first vertex of the desired path.
 	 *  @param end_vertex The last vertex of the desired path.
 	 *  @return The minimum path between two given vertexes. */
-	public synchronized Graph getEnabledDijkstraPath(Vertex begin_vertex, Vertex end_vertex) {
+	public Graph getEnabledDijkstraPath(Vertex begin_vertex, Vertex end_vertex) {
 		// if one of the given vertexes is not enabled, returns null
 		if((begin_vertex instanceof DynamicVertex && !((DynamicVertex) begin_vertex).isEnabled())
 				|| (end_vertex instanceof DynamicVertex && !((DynamicVertex) end_vertex).isEnabled()))
@@ -374,11 +374,11 @@ public final class Graph implements XMLable {
 				return null;
 			
 			// if the minimum element has the end_vertex, quits the loop
-			if(minimum.vertex.equals(end_vertex))
+			if(minimum.VERTEX.equals(end_vertex))
 				break;
 			
 			// obtains the current vertex to be expanded
-			Vertex current_vertex = minimum.vertex;
+			Vertex current_vertex = minimum.VERTEX;
 			
 			// obtains the neighbourhood where the current vertex is an emitter
 			Vertex[] neighbourhood = current_vertex.getCollectorNeighbourhood();
@@ -407,7 +407,7 @@ public final class Graph implements XMLable {
 						VertexDistanceEdge neighbour_with_distance = null;
 						
 						for(int j = 0; j < vertexes_with_distance.length; j++)
-							if(vertexes_with_distance[j].vertex.equals(neighbourhood[i])) {
+							if(vertexes_with_distance[j].VERTEX.equals(neighbourhood[i])) {
 								neighbour_with_distance = vertexes_with_distance[j];
 								break;
 							}
@@ -442,7 +442,7 @@ public final class Graph implements XMLable {
 			// finds the vertex-distance-edge trio of the current vertex
 			VertexDistanceEdge current_vertex_with_distance = null;
 			for(int i = 0; i < vertexes_with_distance.length; i++)
-				if(vertexes_with_distance[i].vertex.equals(current_vertex)) {
+				if(vertexes_with_distance[i].VERTEX.equals(current_vertex)) {
 					current_vertex_with_distance = vertexes_with_distance[i];
 					break;
 				}
@@ -481,7 +481,7 @@ public final class Graph implements XMLable {
 	 *  
 	 *  @param starting_vertex The vertex to start walking into the graph in a breadth-first manner.
 	 *  @return The obtained graph. */
-	private synchronized Graph getVisibleEnabledGraph(Vertex starting_vertex) {
+	private Graph getVisibleEnabledGraph(Vertex starting_vertex) {
 		// if the starting vertex is not visible or is not enabled, returns null
 		if(!starting_vertex.visibility ||
 		  (starting_vertex instanceof DynamicVertex
@@ -629,7 +629,7 @@ public final class Graph implements XMLable {
 	 *  
 	 *  @param starting_vertex The vertex to start walking into the graph in a breadth-first manner.
 	 *  @return The obtained graph. */
-	private synchronized Graph getEnabledGraph(Vertex starting_vertex) {
+	private Graph getEnabledGraph(Vertex starting_vertex) {
 		// if the starting vertex is not enabled, returns null
 		if(starting_vertex instanceof DynamicVertex && !((DynamicVertex) starting_vertex).isEnabled())
 			return null;
@@ -780,7 +780,7 @@ public final class Graph implements XMLable {
 	 *  @param starting_vertex The vertex where the expansion is started.
 	 *  @param depth The depth limit for the expansion.
 	 *  @param already_expanded_vertexes The vertexes not to be expanded. */
-	private synchronized void addVisibleEnabledDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
+	private void addVisibleEnabledDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
 		// if the starting vertex is not visible or is not enabled, quits the method
 		if(!starting_vertex.visibility ||
 		  (starting_vertex instanceof DynamicVertex
@@ -885,7 +885,7 @@ public final class Graph implements XMLable {
 	 *  @param starting_vertex The vertex where the expansion is started.
 	 *  @param depth The depth limit for the expansion.
 	 *  @param already_expanded_vertexes The vertexes not to be expanded. */
-	private synchronized void addEnabledDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
+	private void addEnabledDepth(Graph subgraph, Vertex starting_vertex, int depth, Set<Vertex> already_expanded_vertexes) {
 		// if the starting vertex is not enabled, quits the method
 		if(starting_vertex instanceof DynamicVertex && !((DynamicVertex) starting_vertex).isEnabled())
 			return;
@@ -1091,7 +1091,7 @@ public final class Graph implements XMLable {
  *  considered vertex, and the last edge of such path. */
 final class VertexDistanceEdge implements Comparable {
 	/** The vertex. */
-	public final Vertex vertex;
+	public final Vertex VERTEX;
 	
 	/** The distance to the vertex. */
 	public double distance;
@@ -1105,7 +1105,7 @@ final class VertexDistanceEdge implements Comparable {
 	 *  @param distance The distance to reach the vertex.
 	 *  @param edge The last edge to reach the vertex. */
 	public VertexDistanceEdge(Vertex vertex, double distance, Edge edge) {
-		this.vertex = vertex;
+		this.VERTEX = vertex;
 		this.distance = distance;
 		this.edge = edge;
 	}

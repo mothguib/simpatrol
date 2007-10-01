@@ -102,6 +102,10 @@ public abstract class Agent implements XMLable {
 	 *  @param state The state of the agent.
 	 *  @see AgentStates */
 	public void setState(int state) {
+		// screen message
+		if(state != this.state)
+			System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " changed state.");
+		
 		this.state = state;
 	}
 	
@@ -169,6 +173,9 @@ public abstract class Agent implements XMLable {
 		
 		if(this.stamina < 0)
 			this.stamina = 0;
+		
+		// screen message
+		System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " spent stamina.");
 	}
 	
 	/** Increments the stamina of the agent by the given factor.

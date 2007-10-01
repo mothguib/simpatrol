@@ -11,16 +11,18 @@ public class RemoteAgent {
 		UDPSocket socket = new UDPSocket(8000);
 		socket.send("", "127.0.0.1", socket_number);
 		
-		boolean flag = false;
+		//boolean flag = false;
 		
-		while(true) {
-			System.out.print(socket.receive());
+		//while(true) {
 			
-			if(!flag) {
+			
+			//if(!flag) {
 				//socket.send("<action type=\"0\" vertex_id=\"v3\"/>");
 				socket.send("<action type=\"1\" initial_speed=\"1\" vertex_id=\"v3\"/>");
-				flag = true;
-			}			
-		}
+				//flag = true;
+			//}		
+			
+			//System.out.print(socket.receive());
+		//}
 	}
 }
