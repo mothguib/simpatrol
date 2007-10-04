@@ -59,12 +59,16 @@ public final class UDPSocket {
 	 *  If no last remote contact exists, do nothing.
 	 * 
 	 *  @param message The message to be sent. 
+	 *  @return TRUE if the message was successfully sent, FALSE if not.
 	 *  @throws IOException */
-	public void send(String message) throws IOException {
+	public boolean send(String message) throws IOException {
 		if(this.remote_socket_address != null && this.remote_socket_number > -1) {
 			DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.remote_socket_address, this.remote_socket_number);
 			this.socket.send(packet);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	/** Implements the sending of a message.

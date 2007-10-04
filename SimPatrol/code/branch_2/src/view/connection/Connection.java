@@ -41,11 +41,14 @@ public class Connection extends Thread {
 	
 	/** Sends a given string message to the last remote contact.
 	 * 
-	 *  @param message The string message to be sent. 
+	 *  @param message The string message to be sent.
+	 *  @return TRUE if the message was successfully sent, FALSE if not. 
 	 *  @throws IOException */
-	public void send(String message) throws IOException {
+	public boolean send(String message) throws IOException {
 		if(this.socket != null)
-			this.socket.send(message);
+			return this.socket.send(message);
+		
+		return false;
 	}
 	
 	/** Sends a given string message.
