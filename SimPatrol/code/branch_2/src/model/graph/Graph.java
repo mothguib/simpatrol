@@ -4,6 +4,7 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -113,7 +114,7 @@ public final class Graph implements XMLable {
 	 * 
 	 *  @param stigma The stigma to be added to the graph. */
 	public void addStigma(Stigma stigma) {
-		if(this.stigmas == null) this.stigmas = new HashSet<Stigma>();
+		if(this.stigmas == null) this.stigmas = Collections.synchronizedSet(new HashSet<Stigma>());
 		this.stigmas.add(stigma);
 	}
 	

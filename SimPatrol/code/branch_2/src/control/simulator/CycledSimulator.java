@@ -89,6 +89,16 @@ public final class CycledSimulator extends Simulator {
 			((ActionDaemon) action_daemons_array[i]).setCan_work(!lock);
 	}
 	
+	/** Removes the eventual "agent - action spent stamina - perception spent stamina"
+	 *  trio memorized in the coordinator of the simulation.
+	 *  
+	 *  Util when the given agent dies.
+	 *  
+	 *  @param agent The agent of which trio must be removed. */
+	public void removeAgentSpentStaminas(Agent agent) {
+		this.coordinator.removeAgentSpentStaminas(agent);
+	}
+	
 	/** @modeller This method must be modelled. */
 	public void startSimulation(int simulation_time) {
 		// super code execution

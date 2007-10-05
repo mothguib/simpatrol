@@ -189,12 +189,12 @@ public final class PerceptionDaemon extends AgentDaemon {
 			// atualizes the spent stamina
 			this.spent_stamina = this.spent_stamina + stamina;
 			
-			// return the perceived subgraph
+			// returns the perceived subgraph
 			return new GraphPerception(simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth));
 		}
 		
 		// default answer
-		return null;		
+		return null;	
 	}
 	
 	/** Obtains the perception of other agents for the agent,
@@ -336,8 +336,8 @@ public final class PerceptionDaemon extends AgentDaemon {
 				
 				// if the agent has enough stamina to perceive
 				if(this.agent.getStamina() > this.spent_stamina + stamina) {
-					// decrements the agent's stamina
-					this.agent.decStamina(stamina);
+					// atualizes the spent stamina
+					this.spent_stamina = this.spent_stamina + stamina;
 					
 					// adds a new broadcast perception to the produced ones
 					broadcast_perceptions.add(new BroadcastPerception(message));

@@ -57,7 +57,7 @@ public final class MortalityControllerRobot extends Robot {
 				// kills the object
 				this.object.die();
 				
-				// if the object is an agent, stops its agent_daemons
+				// if the object is an agent, stops its daemons
 				if(this.object instanceof Agent) {
 					simulator.stopAndRemoveAgentDaemons((Agent) this.object);
 					

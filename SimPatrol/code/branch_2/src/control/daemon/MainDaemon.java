@@ -23,6 +23,7 @@ import control.configuration.EnvironmentCreationConfiguration;
 import control.configuration.MetricCreationConfiguration;
 import control.configuration.Orientation;
 import control.configuration.SimulationStartConfiguration;
+import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import control.simulator.Simulator;
 import control.simulator.SimulatorStates;
@@ -179,6 +180,10 @@ public final class MainDaemon extends Daemon {
 				// removes and stops its mortality controller robot
 				((RealTimeSimulator) simulator).stopAndRemoveMortalityControllerRobot((Mortal) agent);
 			}
+			// else, removes the eventual
+			// "agent - action spent stamina - perception spent stamina" trio
+			// memorized in the cycled simulator
+			else ((CycledSimulator) simulator).removeAgentSpentStaminas(agent);
 			
 			// sends an empty orientation to the sender of configuration
 			this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
@@ -339,7 +344,7 @@ public final class MainDaemon extends Daemon {
 			catch (SAXException e) { e.printStackTrace(); }
 			catch (IOException e) { e.printStackTrace(); }
 			
-			// if configuration is still not valid, tries to obtains it
+			// if configuration is still not valid, tries to obtain it
 			// as an "agent creation" configuration
 			if(configuration == null)
 				try { configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, simulator.getEnvironment().getGraph()); }

@@ -4,6 +4,7 @@
 package control.coordinator;
 
 /* Imported classes and/or interfaces. */
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import model.agent.Agent;
@@ -54,7 +55,7 @@ public final class Coordinator extends Thread implements TimedObject {
 	 *  @param spent_stamina The amount of stamina to be spent due to the actions of the given agent. */
 	public void setActionsSpentStamina(Agent agent, double spent_stamina) {
 		if(this.staminas == null)
-			this.staminas = new HashSet<AgentAndSpentStaminas>();
+			this.staminas = Collections.synchronizedSet(new HashSet<AgentAndSpentStaminas>());
 		
 		// tries to find the trio that has the given agent
 		// and to configure it
@@ -104,7 +105,7 @@ public final class Coordinator extends Thread implements TimedObject {
 	 *  @param spent_stamina The amount of stamina to be spent due to the perceptions of the given agent. */
 	public void setPerceptionsSpentStamina(Agent agent, double spent_stamina) {
 		if(this.staminas == null)
-			this.staminas = new HashSet<AgentAndSpentStaminas>();
+			this.staminas = Collections.synchronizedSet(new HashSet<AgentAndSpentStaminas>());
 		
 		// tries to find the trio that has the given agent
 		// and to configure it
@@ -126,6 +127,25 @@ public final class Coordinator extends Thread implements TimedObject {
 		AgentAndSpentStaminas agent_staminas = new AgentAndSpentStaminas(agent);
 		agent_staminas.perceptions_spent_stamina = spent_stamina;
 		this.staminas.add(agent_staminas);
+	}
+	
+	/** Removes the eventual "agent - action spent stamina - perception spent stamina"
+	 *  trio related to the given agent from the set of such kind of trios.
+	 *  
+	 *  Util when the agent dies.
+	 *  
+	 *  @param agent The agent of which trio must be removed. */
+	public void removeAgentSpentStaminas(Agent agent) {
+		if(this.staminas != null) {
+			Object[] staminas_array = this.staminas.toArray();			
+			for(int i = 0; i < staminas_array.length; i++) {
+				AgentAndSpentStaminas current_trio = (AgentAndSpentStaminas) staminas_array[i];				
+				if(current_trio.AGENT.equals(agent)) {
+					this.staminas.remove(current_trio);
+					return;
+				}
+			}
+		}
 	}
 	
 	/** Assures the dynamic objects the correct behaviour. */
@@ -177,9 +197,17 @@ public final class Coordinator extends Thread implements TimedObject {
 				// kills the object
 				current_object.die();
 				
-				// if the object is an agent, stops its agent_daemons
-				if(current_object instanceof Agent)
-					simulator.stopAndRemoveAgentDaemons((Agent) current_object);
+				// if the object is an agent
+				if(current_object instanceof Agent) {
+					// obtains it as an agent
+					Agent agent = (Agent) current_object;
+					
+					// stops its agent_daemons
+					simulator.stopAndRemoveAgentDaemons(agent);
+					
+					// removes its eventual trio "agent - action spent stamina - perception spent stamina"
+					this.removeAgentSpentStaminas(agent);
+				}
 			}
 		}
 	}

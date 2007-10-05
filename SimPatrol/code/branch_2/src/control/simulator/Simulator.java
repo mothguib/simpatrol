@@ -5,6 +5,7 @@ package control.simulator;
 
 /* Imported classes and/or interfaces. */
 import java.net.SocketException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import model.Environment;
@@ -66,20 +67,20 @@ public abstract class Simulator {
 		MainDaemon.setSimulator(this);
 		
 		// initiates the sets of agent_daemons
-		this.perception_daemons = new HashSet<PerceptionDaemon>();
-		this.action_daemons = new HashSet<ActionDaemon>();
+		this.perception_daemons = Collections.synchronizedSet(new HashSet<PerceptionDaemon>());
+		this.action_daemons = Collections.synchronizedSet(new HashSet<ActionDaemon>());
 		
 		// initiates the sets of metric_daemons
-		this.metric_daemons = new HashSet<MetricDaemon>();
+		this.metric_daemons = Collections.synchronizedSet(new HashSet<MetricDaemon>());
 		Metric.setSimulator(this);
 		
-		// nullifies the environment of simulator
+		// nullifies the environment of the simulator
 		this.environment = null;
 		
 		// sets the current state as CONFIGURING
 		this.state = SimulatorStates.CONFIGURING;
 		
-		// configures the model's actualization time rate
+		// configures the model's atualization time rate
 		this.actualization_time_rate = actualization_time_rate;
 	}
 	

@@ -64,7 +64,8 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 		this.clock = new Clock(thread_name + "'s clock", this);
 		this.can_work = false; // the daemon cannot work in the beginning
 		this.stamina_robot = null;
-		stamina_coordinator = null;
+		
+		this.setDaemon(true);
 	}
 	
 	/** Sets if this daemon can or cannot work.

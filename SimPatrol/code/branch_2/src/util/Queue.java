@@ -22,27 +22,27 @@ public final class Queue<E> {
 	/** Inserts an element on the queue.
 	 * 
 	 *  @param object The element to be inserted. */
-	public void insert(E object) {
+	public synchronized void insert(E object) {
 		this.queue.addLast(object);
 	}
 	
 	/** Removes the first element from the queue.
 	 * 
 	 *  @return The first element of the queue. */
-	public E remove() {
+	public synchronized E remove() {
 		if(this.queue.size() > 0) return this.queue.remove(0);
 		else return null;
 	}
 	
 	/** Removes all the elements from the queue. */
-	public void clear() {
+	public synchronized void clear() {
 		this.queue.clear();
 	}
 	
 	/** Returns the number of objects in the queue.
 	 * 
 	 *  @return The size of the queue. */
-	public int getSize() {
+	public synchronized int getSize() {
 		return this.queue.size();
 	}	
 }

@@ -4,6 +4,7 @@
 package model;
 
 /* Imported classes and/or interfaces. */
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import model.agent.Society;
@@ -28,7 +29,7 @@ public final class Environment implements XMLable {
 	public Environment(Graph graph, Society[] societies) {
 		this.graph = graph;
 		
-		this.societies = new HashSet<Society>();
+		this.societies = Collections.synchronizedSet(new HashSet<Society>());
 		for(int i = 0; i < societies.length; i++)
 			this.societies.add(societies[i]);
 	}

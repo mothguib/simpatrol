@@ -6,6 +6,7 @@ package control.simulator;
 /* Imported classes and/or interfaces. */
 import java.net.SocketException;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import model.agent.Agent;
@@ -78,7 +79,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		// if there are any mortal objects
 		if(mortal_objects.length > 0) {
 			// initiates the mortal robots set
-			this.mortal_robots = new HashSet<MortalityControllerRobot>();
+			this.mortal_robots = Collections.synchronizedSet(new HashSet<MortalityControllerRobot>());
 			
 			// for each one, creates a mortality controller robot
 			for(int i = 0; i < mortal_objects.length; i++)
@@ -99,7 +100,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		// if there are any objects to be controlled
 		if(agents.length > 0) {
 			// initiates the stamina robots set
-			this.stamina_robots = new HashSet<StaminaControllerRobot>();
+			this.stamina_robots = Collections.synchronizedSet(new HashSet<StaminaControllerRobot>());
 			
 			// for each one, creates a stamina controller robot
 			for(int i = 0; i < agents.length; i++) {
@@ -166,7 +167,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		MortalityControllerRobot robot = new MortalityControllerRobot("mortal robot", object);
 		
 		if(this.mortal_robots == null)
-			this.mortal_robots = new HashSet<MortalityControllerRobot>();
+			this.mortal_robots = Collections.synchronizedSet(new HashSet<MortalityControllerRobot>());
 		
 		this.mortal_robots.add(robot);
 		robot.start();
@@ -207,7 +208,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				}
 				
 				if(this.stamina_robots == null)
-					this.stamina_robots = new HashSet<StaminaControllerRobot>();
+					this.stamina_robots = Collections.synchronizedSet(new HashSet<StaminaControllerRobot>());
 				
 				this.stamina_robots.add(robot);
 				robot.start();

@@ -41,15 +41,22 @@ public abstract class CompoundActionsParser {
 		// current initial speed
 		double current_initial_speed = action.getInitial_speed();
 		
-		// if both values were not informed (both are -1),
+		// if such values were not informed (i.e. they are -1),
 		// sets their values as the acceleration and speed limitations
-		acceleration = acceleration_limitation;
-		current_initial_speed = speed_limitation;
+		if(acceleration == -1) acceleration = acceleration_limitation;
+		if(current_initial_speed == -1) current_initial_speed = speed_limitation;
 		
 		// if both values are still -1, sets the acceleration
 		// as zero and speed as 1
-		if(acceleration == -1) acceleration = 0;
-		if(current_initial_speed == -1) current_initial_speed = 1;
+		if(acceleration == -1 && current_initial_speed == -1) {
+			acceleration = 0;
+			current_initial_speed = 1;
+		}
+		// else, each one being equal to -1 must be changed to 0
+		else if(acceleration == -1)
+			acceleration = 0;
+		else if(current_initial_speed == -1)
+			current_initial_speed = 0;
 		
 		// if the acceleration exceeds the acceleration limitation,
 		// sets it as the acceleration limitation

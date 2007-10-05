@@ -4,6 +4,7 @@
 package model.agent;
 
 /* Imported classes and/or interfaces. */
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import view.XMLable;
@@ -29,7 +30,7 @@ public abstract class Society implements XMLable {
 	public Society(String label, Agent[] agents) {
 		this.label  = label;
 		
-		this.agents = new HashSet<Agent>();
+		this.agents = Collections.synchronizedSet(new HashSet<Agent>());
 		for(int i = 0; i < agents.length; i++)
 			this.agents.add(agents[i]);
 	}
