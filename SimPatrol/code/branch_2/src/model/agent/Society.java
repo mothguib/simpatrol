@@ -35,6 +35,13 @@ public abstract class Society implements XMLable {
 			this.agents.add(agents[i]);
 	}
 	
+	/** Returns the label of the society.
+	 * 
+	 *  @return The label of the society. */
+	public String getLabel() {
+		return this.label;
+	}	
+	
 	/** Returns the agents of the society.
 	 * 
 	 *  @return The set of agents of the society. */
