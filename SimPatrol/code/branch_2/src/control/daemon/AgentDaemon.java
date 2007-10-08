@@ -5,12 +5,10 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.net.SocketException;
-
 import control.coordinator.Coordinator;
 import control.robot.StaminaControllerRobot;
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
-import util.Queue;
 import util.clock.Clock;
 import util.clock.Clockable;
 import view.connection.AgentConnection;
@@ -51,21 +49,20 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 	 * 
 	 *  Doesn't initiate its own connection, as its subclasses (PerceptionDaemon
 	 *  and ActionDaemon) will share one. So the connection must be set by the
-	 *  setConenction() method.
-	 *  
+	 *  setConnection() method.
 	 *  @see PerceptionDaemon
+	 *  
 	 *  @see ActionDaemon 
 	 *  @param thread_name The name of the thread of the daemon.
 	 *  @param agent The agent whose perceptions are produced and intentions are attended. */
 	public AgentDaemon(String thread_name, Agent agent) {
 		super(thread_name);
-		this.buffer = new Queue<String>();
 		this.agent = agent;		
 		this.clock = new Clock(thread_name + "'s clock", this);
 		this.can_work = false; // the daemon cannot work in the beginning
 		this.stamina_robot = null;
 		
-		this.setDaemon(true);
+		this.connection = null;
 	}
 	
 	/** Sets if this daemon can or cannot work.

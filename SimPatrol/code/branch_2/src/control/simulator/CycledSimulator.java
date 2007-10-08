@@ -92,7 +92,7 @@ public final class CycledSimulator extends Simulator {
 	/** Removes the eventual "agent - action spent stamina - perception spent stamina"
 	 *  trio memorized in the coordinator of the simulation.
 	 *  
-	 *  Util when the given agent dies.
+	 *  Used when the given agent dies.
 	 *  
 	 *  @param agent The agent of which trio must be removed. */
 	public void removeAgentSpentStaminas(Agent agent) {

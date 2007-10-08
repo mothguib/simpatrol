@@ -73,6 +73,9 @@ public final class Clock extends Thread {
 	}
 			
 	public void run() {
+		// screen message
+		System.out.println("[SimPatrol.Clock(" + this.getName() + ")]: Started working.");
+		
 		while(!this.stop_working) {
 			try {
 				int prev_ref = Calendar.getInstance().get(this.unity);
@@ -81,11 +84,14 @@ public final class Clock extends Thread {
 				
 				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
 				int time_gap = (int) ((next_ref - prev_ref) * Math.pow(this.step, -1));
-				this.object.act(time_gap);				
+				if(!this.stop_working) this.object.act(time_gap);				
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		// screen message
+		System.out.println("[SimPatrol.Clock(" + this.getName() + ")]: Stopped working.");		
 	}
 }

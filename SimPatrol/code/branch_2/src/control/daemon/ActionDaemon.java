@@ -57,11 +57,11 @@ public final class ActionDaemon extends AgentDaemon {
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  Doesn't initiate its own connection, as it will be shared with a
+     *  Doesn't initiate its own connection, as it will be shared with a
 	 *  PerceptionDaemon object. So the connection must be set by the
-	 *  setConection() method.
-	 * 
+	 *  setConection() method. 
 	 *  @see PerceptionDaemon
+	 *  
 	 *  @param thread_name The name of the thread of the daemon.
 	 *  @param agent The agent whose intentions are attended. */
 	public ActionDaemon(String thread_name, Agent agent) {
@@ -70,7 +70,7 @@ public final class ActionDaemon extends AgentDaemon {
 		
 		if(simulator instanceof RealTimeSimulator) {
 			this.clock.setUnity(Calendar.MILLISECOND);
-			this.clock.setStep((int) (simulator.getActualization_time_rate() * 1000));
+			this.clock.setStep((int) (simulator.getAtualization_time_rate() * 1000));
 		}
 		else this.clock = null;
 	}
@@ -272,7 +272,7 @@ public final class ActionDaemon extends AgentDaemon {
 			// for each reachable agent, obtains its perception daemon
 			// and sends the message
 			for(int i = 0; i < reachable_agents.size(); i++)
-				simulator.getPerceptionDaemon(reachable_agents.get(i)).sendMessage(action.getMessage());
+				simulator.getPerceptionDaemon(reachable_agents.get(i)).receiveMessage(action.getMessage());
 			
 			// changes the agent's state to JUST_ACTED
 			this.agent.setState(AgentStates.JUST_ACTED);
@@ -376,7 +376,7 @@ public final class ActionDaemon extends AgentDaemon {
 			// parses the recharge action and adds the result to the local planning
 			AtomicAction[] parsed_actions = null;
 			if(simulator instanceof RealTimeSimulator)
-				parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, simulator.getActualization_time_rate());
+				parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, simulator.getAtualization_time_rate());
 			else
 				parsed_actions = CompoundActionsParser.parseRechargeAction(action, speed, 1);
 			
@@ -440,7 +440,7 @@ public final class ActionDaemon extends AgentDaemon {
 				// parses the goto action and adds the result to the local planning
 				AtomicAction[] parsed_actions = null;
 				if(simulator instanceof RealTimeSimulator)
-					parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, simulator.getActualization_time_rate());
+					parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, simulator.getAtualization_time_rate());
 				else
 					parsed_actions = CompoundActionsParser.parseGoToAction(action, this.agent, path, depth, speed, acceleration, 1);
 				

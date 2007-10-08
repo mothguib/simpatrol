@@ -45,7 +45,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 * 	Doesn't initiate its own connection, as it will be shared with an
+     *  Doesn't initiate its own connection, as it will be shared with an
 	 *  ActionDaemon object. So the connection must be set by the
 	 *  setConenction() method.
 	 *  @see PerceptionDaemon
@@ -59,14 +59,14 @@ public final class PerceptionDaemon extends AgentDaemon {
 		
 		// configures the clock of the daemon
 		this.clock.setUnity(Calendar.MILLISECOND);
-		this.clock.setStep((int) (simulator.getActualization_time_rate() * 1000));
+		this.clock.setStep((int) (simulator.getAtualization_time_rate() * 1000));
 	}
 	
 	/** Lets the agent of this daemon receive a message, if it has permission
 	 *  to do it.
 	 *  
 	 *  @param message The message to be received by the agent of this daemon. */
-	public void sendMessage(String message) {
+	public void receiveMessage(String message) {
 		// verifies if the agent has permission to receive broadcasted messages
 		PerceptionPermission[] permissions = this.agent.getAllowedPerceptions();
 		for(int i = 0; i < permissions.length; i++)

@@ -37,6 +37,9 @@ public class Connection extends Thread {
 	/** Indicates that the connection must stop working. */
 	public void stopWorking() {
 		this.stop_working = true;
+		
+		// screen message
+		System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Stopped listening to messages.");
 	}
 	
 	/** Sends a given string message to the last remote contact.
@@ -45,8 +48,12 @@ public class Connection extends Thread {
 	 *  @return TRUE if the message was successfully sent, FALSE if not. 
 	 *  @throws IOException */
 	public boolean send(String message) throws IOException {
-		if(this.socket != null)
+		if(this.socket != null) {
+			// screen message
+			System.out.println("[SimPatrol.Connection(" + this.getName() + ")]:  Sent message.");
+			
 			return this.socket.send(message);
+		}
 		
 		return false;
 	}
@@ -58,8 +65,12 @@ public class Connection extends Thread {
 	 *  @param remote_socket_number The number of the UDP socket of the receiver. 
 	 *  @throws IOException */
 	public void send(String message, String remote_socket_address, int remote_socket_number) throws IOException {
-		if(this.socket != null)
+		if(this.socket != null) {
 			this.socket.send(message, remote_socket_address, remote_socket_number);
+			
+			// screen message
+			System.out.println("[SimPatrol.Connection(" + this.getName() + ")]:  Sent message.");
+		}
 	}
 	
 	/** Return the number of UDP socket connection.
@@ -78,6 +89,9 @@ public class Connection extends Thread {
 	public void start(int local_socket_number) throws SocketException {
 		this.socket = new UDPSocket(local_socket_number);
 		super.start();
+		
+		// screen message
+		System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Started listening to messages.");
 	}
 	
 	/** Give preference to use this.start(int local_socket_number).
@@ -99,6 +113,9 @@ public class Connection extends Thread {
 			}
 			
 			this.buffer.insert(message);
+			
+			// screen message
+			System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Received message.");
 		}
 	}
 }

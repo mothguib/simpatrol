@@ -76,6 +76,9 @@ public final class Chronometer extends Thread implements TimedObject {
 		// lets the chronometerized object start working
 		this.object.startWorking();
 		
+		// screen message
+		System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Started counting time.");
+		
 		// counts the elapsed time, oriented by the count unity
 		while(true) {
 			try {
@@ -94,6 +97,9 @@ public final class Chronometer extends Thread implements TimedObject {
 			if(this.elapsed_time >= this.deadline) {
 				// lets the chronometrized object stop working
 				this.object.stopWorking();
+				
+				// screen message
+				System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Stopped counting time.");
 				
 				// ends the thread work
 				return;

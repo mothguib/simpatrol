@@ -49,7 +49,7 @@ public final class MetricDaemon extends Daemon implements Clockable {
 		this.clock.start();
 		
 		// screen message
-		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getType() + ")]: Started working.");
+		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getClass().getName() + ")]: Started working.");
 	}	
 	
 	public void stopWorking() {
@@ -60,7 +60,7 @@ public final class MetricDaemon extends Daemon implements Clockable {
 			((IntegralMetric) this.metric).stopWorking();
 		
 		// screen message
-		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getType() + ")]: Stopped working.");
+		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getClass().getName() + ")]: Stopped working.");
 	}
 	
 	/** @modeller This method must be modelled. */

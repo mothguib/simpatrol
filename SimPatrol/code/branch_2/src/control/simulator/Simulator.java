@@ -52,15 +52,18 @@ public abstract class Simulator {
 	/** Defines, in seconds, the time rate to procuce the
 	 *  agents' perceptions and to attend the eventual atomic actions
 	 *  that compound an eventual compound action. */
-	private double actualization_time_rate;
+	private final double ATUALIZATION_TIME_RATE;
 	
 	/* Methods. */
 	/** Constructor.
 	 * 
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
-	 *  @param actualization_time_rate The time rate to actualize the internal model of the simulation.
+	 *  @param atualization_time_rate The time rate to actualize the internal model of the simulation.
 	 *  @throws SocketException */
-	public Simulator(int local_socket_number, double actualization_time_rate) throws SocketException {
+	public Simulator(int local_socket_number, double atualization_time_rate) throws SocketException {
+		// screen message
+		System.out.println("[SimPatrol.Simulator]: Online.");
+		
 		// creates, starts and configures the main daemon
 		this.main_daemon = new MainDaemon("main daemon", this);
 		this.main_daemon.start(local_socket_number);
@@ -81,7 +84,7 @@ public abstract class Simulator {
 		this.state = SimulatorStates.CONFIGURING;
 		
 		// configures the model's atualization time rate
-		this.actualization_time_rate = actualization_time_rate;
+		this.ATUALIZATION_TIME_RATE = atualization_time_rate;		
 	}
 	
 	/** Adds a given perception daemon to the set of perception daemons.
@@ -167,8 +170,8 @@ public abstract class Simulator {
 	 *  internal model of the simulation.
 	 *  
 	 *  @return The time rate to actualize the internal model. */
-	public double getActualization_time_rate() {
-		return this.actualization_time_rate;
+	public double getAtualization_time_rate() {
+		return this.ATUALIZATION_TIME_RATE;
 	}
 	
 	/** Stops and removes the perception and action daemons of a given agent,
@@ -323,28 +326,37 @@ public abstract class Simulator {
 		return answer;
 	}
 	
-	/** Stops the perception daemons of the simulator. */
-	private void stopPerceptionDaemons() {
+	/** Stops and removes the perception daemons of the simulator. */
+	private void stopAndRemovePerceptionDaemons() {
 		// for each perception daemon, stops it
 		Object[] perception_daemons_array = this.perception_daemons.toArray();
 		for(int i = 0; i < perception_daemons_array.length; i++)
 			((PerceptionDaemon) perception_daemons_array[i]).stopWorking();
+		
+		// removes all perceptions daemons
+		this.perception_daemons.clear();
 	}
 	
-	/** Stops the action daemons of the simulator. */
-	private void stopActionDaemons() {
+	/** Stops and removes the action daemons of the simulator. */
+	private void stopAndRemoveActionDaemons() {
 		// for each action daemon, stops it
 		Object[] action_daemons_array = this.action_daemons.toArray();
 		for(int i = 0; i < action_daemons_array.length; i++)
 			((ActionDaemon) action_daemons_array[i]).stopWorking();
+		
+		// removes all action daemons
+		this.action_daemons.clear();
 	}
 	
-	/** Stops the metric daemons of the simulator. */
-	private void stopMetricDaemons() {
+	/** Stops and removes the metric daemons of the simulator. */
+	private void stopAndRemoveMetricDaemons() {
 		// for each metric daemon, stops it
 		Object[] metric_daemons_array = this.metric_daemons.toArray();
 		for(int i = 0; i < metric_daemons_array.length; i++)
 			((MetricDaemon) metric_daemons_array[i]).stopWorking();
+		
+		// removes all the metric daemons
+		this.metric_daemons.clear();
 	}
 	
 	/** Starts the simulation.
@@ -362,16 +374,35 @@ public abstract class Simulator {
 	
 	/** Stops the simulation. */
 	public void stopSimulation() {
+		// stops and removes the perception daemons
+		this.stopAndRemovePerceptionDaemons();
+		
+		// stops and removes the the action daemons
+		this.stopAndRemoveActionDaemons();
+		
+		// stops and removes the metric daemons
+		this.stopAndRemoveMetricDaemons();
+		
+		// changes the state of the simulator
+		this.state = SimulatorStates.CONFIGURING;
+		
+		// nullifies the environment
+		this.environment = null;		
+	}
+	
+	/** Finishes the simulator's work. */
+	public void exit() {
+		// if the simulator is simulating, stops it
+		if(this.state == SimulatorStates.SIMULATING)
+			this.stopSimulation();
+		
 		// stops the main daemon
 		this.main_daemon.stopWorking();
 		
-		// stops the perception daemons
-		this.stopPerceptionDaemons();
+		// screen message
+		System.out.println("[SimPatrol.Simulator]: offline.");
 		
-		// stops the action daemons
-		this.stopActionDaemons();
-		
-		// stops the metric daemons
-		this.stopMetricDaemons();
+		// system exit
+		System.exit(0);
 	}
 }

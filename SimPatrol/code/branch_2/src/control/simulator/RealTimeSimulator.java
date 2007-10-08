@@ -65,7 +65,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			
 			// for each one, creates a dynamicity controller robot
 			for(int i = 0; i < dynamic_objects.length; i++)
-				this.dynamic_robots.add(new DynamicityControllerRobot("dynamic robot " + String.valueOf(i), dynamic_objects[i]));
+				this.dynamic_robots.add(new DynamicityControllerRobot(dynamic_objects[i] + "'s dynamic robot's clock", dynamic_objects[i]));
 		}
 		else this.dynamic_robots = null;
 	}
@@ -83,7 +83,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			
 			// for each one, creates a mortality controller robot
 			for(int i = 0; i < mortal_objects.length; i++)
-				this.mortal_robots.add(new MortalityControllerRobot("mortal robot " + String.valueOf(i), mortal_objects[i]));
+				this.mortal_robots.add(new MortalityControllerRobot(mortal_objects[i] + "'s mortal robot's clock", mortal_objects[i]));
 		}
 		else this.mortal_robots = null;
 		
@@ -104,7 +104,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			
 			// for each one, creates a stamina controller robot
 			for(int i = 0; i < agents.length; i++) {
-				StaminaControllerRobot stamina_robot = new StaminaControllerRobot("stamina robot", agents[i]);
+				StaminaControllerRobot stamina_robot = new StaminaControllerRobot(agents[i].getObjectId() + "'s stamina robot's clock", agents[i]);
 				this.stamina_robots.add(stamina_robot);
 				
 				// sets the robot to the perception daemon
@@ -164,7 +164,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	 * 
 	 *  @param object The mortal object to be controlled by the robot. */
 	public void createAndStartMortalityControlerRobot(Mortal object) {
-		MortalityControllerRobot robot = new MortalityControllerRobot("mortal robot", object);
+		MortalityControllerRobot robot = new MortalityControllerRobot(object + "'s mortal robot's clock", object);
 		
 		if(this.mortal_robots == null)
 			this.mortal_robots = Collections.synchronizedSet(new HashSet<MortalityControllerRobot>());
@@ -183,7 +183,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		// if one of these agents is the given one
 		for(int i = 0; i < agents.length; i++)
 			if(agents[i].equals(agents)) {
-				StaminaControllerRobot robot = new StaminaControllerRobot("stamina robot", agent);
+				StaminaControllerRobot robot = new StaminaControllerRobot(agent.getObjectId() + "'s stamina robot's clock", agent);
 				
 				// sets the robot to the perception daemon
 				Object[] perception_daemons_array = this.perception_daemons.toArray();
@@ -217,30 +217,39 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 			}
 	}
 	
-	/** Stops each one of the current dynamicity controller robots. */
-	private void stopDynamicityControllerRobots() {
+	/** Stops and removes each one of the current dynamicity controller robots. */
+	private void stopAndRemoveDynamicityControllerRobots() {
 		if(this.dynamic_robots != null) {
 			Object[] dynamic_robots_array = this.dynamic_robots.toArray();
 			for(int i = 0; i < dynamic_robots_array.length; i++)
 				((DynamicityControllerRobot) dynamic_robots_array[i]).stopWorking();
+			
+			this.dynamic_robots.clear();
+			this.dynamic_robots = null;
 		}
 	}
 	
 	/** Stops each one of the current mortality controller robots. */
-	private void stopMortalityControllerRobots() {
+	private void stopAndRemoveMortalityControllerRobots() {
 		if(this.mortal_robots != null) {
 			Object[] mortal_robots_array = this.mortal_robots.toArray();
 			for(int i = 0; i < mortal_robots_array.length; i++)
 				((MortalityControllerRobot) mortal_robots_array[i]).stopWorking();
+			
+			this.mortal_robots.clear();
+			this.mortal_robots = null;
 		}
 	}
 	
 	/** Stops each one of the current stamina controller robots. */
-	private void stopStaminaControllerRobots() {
+	private void stopAndRemoveStaminaControllerRobots() {
 		if(this.stamina_robots != null) {
 			Object[] stamina_robots_array = this.stamina_robots.toArray();
 			for(int i = 0; i < stamina_robots_array.length; i++)
 				((StaminaControllerRobot) stamina_robots_array[i]).stopWorking();
+			
+			this.stamina_robots.clear();
+			this.stamina_robots = null;
 		}
 	}
 	
@@ -325,28 +334,27 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	}
 	
 	public void stopSimulation() {
-		// 0th super code execution
+		// super code execution
 		super.stopSimulation();
 		
-		// 1st. stopping things
-		// stops the dynamicity controller robots
-		this.stopDynamicityControllerRobots();
+		// stops and removes the dynamicity controller robots
+		this.stopAndRemoveDynamicityControllerRobots();
 		
-		// stops the mortality controller robots
-		this.stopMortalityControllerRobots();
+		// stops and removes the mortality controller robots		
+		this.stopAndRemoveMortalityControllerRobots();
 		
-		// stops the stamina controller robots
-		this.stopStaminaControllerRobots();
+		// stops and removes the stamina controller robots
+		this.stopAndRemoveStaminaControllerRobots();
 	}
 	
 	public void startWorking() {
 		// screen message
-		System.out.println("[SimPatrol.Simulator]: simulation started at " + Calendar.getInstance().getTime().toString() + ".");
+		System.out.println("[SimPatrol.Simulator]: Simulation started at " + Calendar.getInstance().getTime().toString() + ".");
 	}
 	
 	public void stopWorking() {
 		// screen message
-		System.out.println("[SimPatrol.Simulator]: simulation stopped at " + Calendar.getInstance().getTime().toString() + ".");
+		System.out.println("[SimPatrol.Simulator]: Simulation stopped at " + Calendar.getInstance().getTime().toString() + ".");
 		
 		// stops the simulator
 		this.stopSimulation();

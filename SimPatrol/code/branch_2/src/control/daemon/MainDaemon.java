@@ -56,6 +56,9 @@ public final class MainDaemon extends Daemon {
 	 *  @param configuration The configuration to be attended.
 	 *  @throws IOException */
 	private void attendEnvironmentCreationConfiguration(EnvironmentCreationConfiguration configuration) throws IOException {
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: \"Environment's creation\" configuration received.");
+		
 		// obtains the environment from the configuration
 		Environment environment = configuration.getEnvironment();
 		
@@ -90,6 +93,9 @@ public final class MainDaemon extends Daemon {
 	 *  @param configuration The configuration to be attended.
 	 *  @throws IOException */
 	private void attendAgentCreationConfiguration(AgentCreationConfiguration configuration) throws IOException {
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: \"Agent's creation\" configuration received.");
+		
 		// obtains the agent from the configuration
 		Agent agent = configuration.getAgent();
 		
@@ -144,6 +150,9 @@ public final class MainDaemon extends Daemon {
 	 *  @param configuration The configuration to be attended.
 	 *  @throws IOException */
 	private void attendAgentDeathConfiguration(AgentDeathConfiguration configuration) throws IOException {
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: \"Agent's death\" configuration received."); 
+		
 		// obtains the agent's id from the configuration
 		String agent_id = configuration.getObjectId();
 		
@@ -198,6 +207,9 @@ public final class MainDaemon extends Daemon {
 	 *  @param configuration The configuration to be attended.
 	 *  @throws IOException */
 	private void attendMetricCreationConfiguration(MetricCreationConfiguration configuration) throws IOException {
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: \"Metric creation\" configuration received.");
+				
 		// obtains the metric of the configuration
 		Metric metric = configuration.getMetric();
 		
@@ -218,6 +230,9 @@ public final class MainDaemon extends Daemon {
 	 *  @param configuration The configuration to be attended.
 	 *  @throws IOException */
 	private void attendSimulationStartConfiguration(SimulationStartConfiguration configuration) throws IOException {
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: \"Start simulation\" configuration received.");
+		
 		// obtains the time of simulation
 		int simulation_time = configuration.getSimulation_time();
 
