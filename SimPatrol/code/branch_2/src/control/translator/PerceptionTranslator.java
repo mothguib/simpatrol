@@ -12,6 +12,8 @@ import model.perception.AgentsPerception;
 import model.perception.BroadcastPerception;
 import model.perception.GraphPerception;
 import model.perception.Perception;
+import model.perception.PerceptionTypes;
+import model.perception.SelfPerception;
 import model.perception.StigmasPerception;
 import model.stigma.Stigma;
 import org.w3c.dom.Element;
@@ -54,14 +56,17 @@ public abstract class PerceptionTranslator extends Translator {
 			// the current perception to be obtained
 			Perception perception = null;
 			
-			// 1st. tries to obtain a graph from the perception element
-			if(perception == null) {
+			// obtains the type of the perception
+			int type = Integer.parseInt(perception_element.getAttribute("type"));			
+			
+			// 1st. if the type is of a graph perception
+			if(type == PerceptionTypes.GRAPH_PERCEPTION) {
 				Graph[] read_graph = GraphTranslator.getGraphs(perception_element);
 				if(read_graph.length > 0) perception = new GraphPerception(read_graph[0]);
 			}
 			
-			// 2nd. tries to obtain a message from the perception element
-			if(perception == null) {
+			// 2nd. else, if the perception is a broadcasted message
+			else if(type == PerceptionTypes.BROADCAST_PERCEPTION) {
 				String message = perception_element.getAttribute("message");
 				if(message.length() > 0) perception = new BroadcastPerception(message);
 			}
@@ -101,9 +106,15 @@ public abstract class PerceptionTranslator extends Translator {
 			// the current perception to be obtained
 			AgentsPerception perception = null;
 			
-			// tries to obtain the agents from the perception element
-			Agent[] agents = AgentTranslator.getAgents(perception_element, false, graph);
-			if(agents.length > 0) perception = new AgentsPerception(agents);
+			// the type of the current perception
+			int type = Integer.parseInt(perception_element.getAttribute("type"));
+			
+			// if the type is an agents perception
+			if(type == PerceptionTypes.AGENTS_PERCEPTION) {
+				// tries to obtain the agents from the perception element
+				Agent[] agents = AgentTranslator.getAgents(perception_element, false, graph);
+				if(agents.length > 0) perception = new AgentsPerception(agents);
+			}
 			
 			// adds the current perception to the list of perceptions, if it's valid
 			if(perception != null)
@@ -112,6 +123,49 @@ public abstract class PerceptionTranslator extends Translator {
 		
 		// mounts and returns the answer
 		AgentsPerception[] answer = new AgentsPerception[perceptions.size()];
+		for(int i = 0; i < answer.length; i++)
+			answer[i] = perceptions.get(i);
+		return answer;
+	}
+	
+	/** Obtains the perceptions of itself (SelfPerception objects)
+	 *  from the given XML element.
+	 *  
+	 *  @param xml_element The XML source containing the perceptions.
+	 *  @param graph The previously perceived graph of the simulation.
+	 *  @return The perceptions from the XML source. */
+	public static SelfPerception[] getSelfPerceptions(Element xml_element, Graph graph) {
+		// obtains the nodes with the "perception" tag
+		NodeList perception_node = xml_element.getElementsByTagName("perception");
+		
+		// holds all the obtained perceptions
+		List<SelfPerception> perceptions = new LinkedList<SelfPerception>();
+		
+		// for each perception_node
+		for(int i = 0; i < perception_node.getLength(); i++) {
+			// obtains the current perception element
+			Element perception_element = (Element) perception_node.item(i);
+			
+			// the current perception to be obtained
+			SelfPerception perception = null;
+			
+			// the type of the current perception
+			int type = Integer.parseInt(perception_element.getAttribute("type"));
+			
+			// if the type is a self perception
+			if(type == PerceptionTypes.SELF_PERCEPTION) {
+				// tries to obtain the agent itself from the perception element
+				Agent[] agents = AgentTranslator.getAgents(perception_element, false, graph);
+				if(agents.length > 0) perception = new SelfPerception(agents[0]);
+			}
+			
+			// adds the current perception to the list of perceptions, if it's valid
+			if(perception != null)
+				perceptions.add(perception);
+		}
+		
+		// mounts and returns the answer
+		SelfPerception[] answer = new SelfPerception[perceptions.size()];
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = perceptions.get(i);
 		return answer;
@@ -138,9 +192,15 @@ public abstract class PerceptionTranslator extends Translator {
 			// the current perception to be obtained
 			StigmasPerception perception = null;
 			
-			// tries to obtain the stigmas from the perception element
-			Stigma[] stigmas = StigmaTranslator.getStigmas(perception_element, graph);
-			if(stigmas.length > 0) perception = new StigmasPerception(stigmas);
+			// the type of the current perception
+			int type = Integer.parseInt(perception_element.getAttribute("type"));
+			
+			// if the type is a self perception
+			if(type == PerceptionTypes.STIGMAS_PERCEPTION) {
+				// tries to obtain the stigmas from the perception element
+				Stigma[] stigmas = StigmaTranslator.getStigmas(perception_element, graph);
+				if(stigmas.length > 0) perception = new StigmasPerception(stigmas);
+			}
 			
 			// adds the current perception to the list of perceptions, if it's valid
 			if(perception != null)

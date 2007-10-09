@@ -31,7 +31,8 @@ public final class StigmasPerception extends Perception {
 		
 		// applies the identation and opens the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception>\n");
+		buffer.append("<perception type=\"" + PerceptionTypes.STIGMAS_PERCEPTION +
+				      "\">\n");
 		
 		// puts the stigmas, in a lighter version
 		Object[] stigmas_array = this.stigmas.toArray();

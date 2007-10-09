@@ -43,11 +43,6 @@ public final class AgentCreationConfiguration extends Configuration {
 		return this.society_id;
 	}
 	
-	@Override
-	protected int getType() {
-		return ConfigurationTypes.AGENT_CREATION; 
-	}
-	
 	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();

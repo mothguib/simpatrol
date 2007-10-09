@@ -44,11 +44,6 @@ public final class MetricCreationConfiguration extends Configuration {
 		return this.cycle_duration;
 	}
 	
-	@Override
-	protected int getType() {
-		return ConfigurationTypes.METRIC_CREATION;
-	}
-	
 	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();

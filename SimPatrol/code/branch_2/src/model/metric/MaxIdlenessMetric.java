@@ -17,11 +17,6 @@ public final class MaxIdlenessMetric extends IntegralMetric {
 		return this.previous_value;
 	}
 	
-	@Override
-	public int getType() {
-		return MetricTypes.MAX_IDLENESS;
-	}	
-	
 	public void act(int time_gap) {
 		// obtains the vertexes of the graph of the simulation
 		Vertex[] vertexes = simulator.getEnvironment().getGraph().getVertexes();

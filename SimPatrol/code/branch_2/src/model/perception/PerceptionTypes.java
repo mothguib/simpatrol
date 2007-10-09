@@ -26,4 +26,9 @@ public abstract class PerceptionTypes {
 	 * 
 	 *  @see BroadcastPerception */
 	public static final int BROADCAST_PERCEPTION = 3;
+	
+	/** The perceptions of itself.
+	 * 
+	 *  @see SelfPerception */
+	public static final int SELF_PERCEPTION = 4;
 }

@@ -30,7 +30,8 @@ public final class AgentsPerception extends Perception {
 		
 		// applies the identation and opens the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception>\n");
+		buffer.append("<perception type=\"" + PerceptionTypes.AGENTS_PERCEPTION +
+				      "\">\n");
 		
 		// puts the agents, in a lighter version
 		Object[] agents_array = this.agents.toArray();

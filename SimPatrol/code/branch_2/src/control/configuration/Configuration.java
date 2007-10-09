@@ -16,12 +16,6 @@ public abstract class Configuration implements XMLable {
 	public Configuration() {	
 	}
 	
-	/** Returns the type of the configuration.
-	 * 
-	 *  @return The type of the configuration. 
-	 *  @see ConfigurationTypes */
-	protected abstract int getType();
-	
 	public String reducedToXML(int identation) {
 		// a configuration doesn't have a lighter XML version
 		return this.fullToXML(identation);

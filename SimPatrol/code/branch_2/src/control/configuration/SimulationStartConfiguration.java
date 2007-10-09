@@ -26,11 +26,6 @@ public final class SimulationStartConfiguration extends Configuration {
 		return this.simulation_time;
 	}
 	
-	@Override
-	protected int getType() {
-		return ConfigurationTypes.SIMULATION_START; 
-	}
-	
 	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();

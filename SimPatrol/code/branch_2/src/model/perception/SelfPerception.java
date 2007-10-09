@@ -1,23 +1,23 @@
-/* GraphPerception.java */
+/* SelfPerception.java */
 
 /* The package of this class. */
 package model.perception;
 
 /* Imported classes and/or interfaces. */
-import model.graph.Graph;
+import model.agent.Agent;
 
-/** Implements the perceptions of the graph of the simulation. */
-public final class GraphPerception extends Perception {
+/** Implements the hability of an agent to perceive itself. */
+public class SelfPerception extends Perception {
 	/* Attributes. */
-	/** The perceived graph. */
-	private Graph graph;
+	/** The agent itself. */
+	private Agent itself;
 	
 	/* Methods. */
-	/* Constructor.
+	/** Constructor.
 	 * 
-	 * @param graph The perceived graph. */
-	public GraphPerception(Graph graph) {
-		this.graph = graph;
+	 *  @param itself The agent itself. */
+	public SelfPerception(Agent itelf) {
+		this.itself = itelf;
 	}
 	
 	public String fullToXML(int identation) {
@@ -26,11 +26,11 @@ public final class GraphPerception extends Perception {
 		
 		// applies the identation and opens the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception type=\"" + PerceptionTypes.GRAPH_PERCEPTION +
+		buffer.append("<perception type=\"" + PerceptionTypes.SELF_PERCEPTION +
 				      "\">\n");
 		
-		// puts the graph, in a lighter version
-		buffer.append(this.graph.reducedToXML(identation + 1));
+		// puts the agent
+		buffer.append(this.itself.fullToXML(identation + 1));
 		
 		// applies the identation and closes the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");

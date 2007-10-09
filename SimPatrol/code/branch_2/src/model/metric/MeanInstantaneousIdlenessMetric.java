@@ -33,11 +33,6 @@ public final class MeanInstantaneousIdlenessMetric extends Metric {
 		return idlenesses_sum * Math.pow(vertexes_count, -1);
 	}
 	
-	@Override
-	public int getType() {
-		return MetricTypes.MEAN_INSTANTANEOUS_IDLENESS;
-	}
-	
 	public String fullToXML(int identation) {
 		// holds the answer of the method
 		StringBuffer buffer = new StringBuffer();

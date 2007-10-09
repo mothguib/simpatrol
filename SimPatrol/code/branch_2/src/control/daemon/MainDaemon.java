@@ -307,7 +307,7 @@ public final class MainDaemon extends Daemon {
 	private int createAndStartMetricDaemon(Metric metric, int cycle_duration) {
 		// creates the metric daemon
 		StringBuffer thread_name_buffer = new StringBuffer();
-		thread_name_buffer.append("metric " + metric.getType() + "'s daemon");
+		thread_name_buffer.append("metric " + metric.getClass().getName() + "'s daemon");
 		MetricDaemon metric_daemon = new MetricDaemon(thread_name_buffer.toString(), metric, cycle_duration);
 		
 		// starts the daemon

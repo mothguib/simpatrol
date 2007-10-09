@@ -30,11 +30,6 @@ public final class MaxInstantaneousIdlenessMetric extends Metric {
 		return max_idleness;
 	}
 	
-	@Override
-	public int getType() {
-		return MetricTypes.MAX_INSTANTANEOUS_IDLENESS;
-	}
-
 	public String fullToXML(int identation) {
 		// holds the answer of the method
 		StringBuffer buffer = new StringBuffer();

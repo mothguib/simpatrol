@@ -32,7 +32,8 @@ public final class BroadcastPerception extends Perception {
 		
 		// applies the identation and opens the "perception" tag
 		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception message=\"" + this.message +
+		buffer.append("<perception type=\"" + PerceptionTypes.BROADCAST_PERCEPTION +
+				      "\" message=\"" + this.message +
 				      "\"/>\n");
 		
 		// returns the answer

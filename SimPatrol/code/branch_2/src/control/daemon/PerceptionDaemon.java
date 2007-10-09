@@ -24,6 +24,7 @@ import model.perception.BroadcastPerception;
 import model.perception.GraphPerception;
 import model.perception.Perception;
 import model.perception.PerceptionTypes;
+import model.perception.SelfPerception;
 import model.perception.StigmasPerception;
 import model.permission.PerceptionPermission;
 import model.stigma.Stigma;
@@ -146,6 +147,17 @@ public final class PerceptionDaemon extends AgentDaemon {
 					break;					
 				}
 				
+				// if it's a permission of itself
+				case(PerceptionTypes.SELF_PERCEPTION): {
+					// obtains the perceptions of itself
+					SelfPerception self_perception = this.produceSelfPerception(allowed_perceptions[i].getLimitations());
+					
+					// if the perception is valid, adds it to the produced perceptions
+					if(self_perception != null) perceptions.add(self_perception);
+						
+					break;					
+				}
+				
 				// developer: new perceptions must add code here
 			}			
 		}
@@ -161,6 +173,35 @@ public final class PerceptionDaemon extends AgentDaemon {
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = perceptions.get(i);
 		return answer;
+	}
+	
+	/** Obtains the perception for the agent of itself, given the eventual limitations.
+	 * 
+	 *  @param limitations The limitations to the perception of the agent itself.
+	 *  @return The perception of the agent itself
+	 *  @developer New Limitation classes must change this method. */
+	private SelfPerception produceSelfPerception(Limitation[] limitations) {
+		// holds an eventual stamina limitation
+		double stamina = 0;
+		
+		// for each limitation, tries to set the stamina limitation
+		for(int i = 0; i < limitations.length; i++) {
+			if(limitations[i] instanceof StaminaLimitation)
+				stamina = ((StaminaLimitation) limitations[i]).getCost();
+			// developer: new limitations must add code here
+		}
+		
+		// if there's enough stamina to perceive
+		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+			// atualizes the spent stamina
+			this.spent_stamina = this.spent_stamina + stamina;
+			
+			// returns the agent perceiving itself
+			return new SelfPerception(this.agent);
+		}
+		
+		// default answer
+		return null;
 	}
 	
 	/** Obtains the graph perception for the agent, given the eventual limitations.

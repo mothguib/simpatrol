@@ -28,11 +28,6 @@ public final class MeanIdlenessMetric extends IntegralMetric {
 		return this.previous_value * Math.pow(this.collectings_count, -1);
 	}
 	
-	@Override
-	public int getType() {
-		return MetricTypes.MEAN_IDLENESS;
-	}
-	
 	public void act(int time_gap) {
 		// increases the collecting_count attribute
 		this.collectings_count++;

@@ -29,11 +29,6 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 		return this.environment;
 	}
 	
-	@Override
-	protected int getType() {
-		return ConfigurationTypes.ENVIRONMENT_CREATION;
-	}
-
 	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();

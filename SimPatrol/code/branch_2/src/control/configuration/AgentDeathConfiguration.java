@@ -25,12 +25,7 @@ public final class AgentDeathConfiguration extends Configuration {
 		super();
 		this.agent_id = agent_id;
 	}
-
-	@Override
-	protected int getType() {
-		return ConfigurationTypes.AGENT_DEATH;
-	}
-
+	
 	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();

@@ -25,12 +25,6 @@ public abstract class Metric implements XMLable {
 	 *  @return The current value of the metric. */
 	public abstract double getValue();
 	
-	/** Returns the type of the metric.
-	 * 
-	 *  @return The typeof the metric.
-	 *  @see MetricTypes */
-	public abstract int getType();
-	
 	public String reducedToXML(int identation) {
 		// a metric doesn't have a lighter version
 		return this.fullToXML(identation);

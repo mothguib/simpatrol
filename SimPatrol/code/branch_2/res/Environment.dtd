@@ -56,7 +56,7 @@
 
 <!-- LIMITATION -->
 <!ELEMENT limitation (lmt_parameter+)>
-<!ATTLIST limitation type (0 | 1) #REQUIRED>
+<!ATTLIST limitation type (0 | 1 | 2 | 3) #REQUIRED>
 
 <!-- LMT PARAMETER -->
 <!ELEMENT lmt_parameter EMPTY>
