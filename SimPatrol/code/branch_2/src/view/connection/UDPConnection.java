@@ -1,4 +1,4 @@
-/* Connection.java */
+/* UDPConnection.java */
 
 /* The package of this class. */
 package view.connection;
@@ -7,10 +7,10 @@ package view.connection;
 import java.io.IOException;
 import java.net.SocketException;
 import util.Queue;
-import util.udp.UDPSocket;
+import util.net.UDPSocket;
 
-/** Implements the active connections of SimPatrol. */
-public class Connection extends Thread {
+/** Implements the active UDP connections of SimPatrol. */
+public class UDPConnection extends Thread {
 	/* Attributes. */
 	/** Registers if the connection shall stop working. */
 	protected boolean stop_working;
@@ -27,7 +27,7 @@ public class Connection extends Thread {
 	 * 
 	 *  @param name The name of the thread of the connection.
 	 *  @param buffer The buffer where the connection writes the received messages. */
-	public Connection(String name, Queue<String> buffer) {
+	public UDPConnection(String name, Queue<String> buffer) {
 		super(name);
 		this.stop_working = false;
 		this.socket = null;
@@ -39,7 +39,7 @@ public class Connection extends Thread {
 		this.stop_working = true;
 		
 		// screen message
-		System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Stopped listening to messages.");
+		System.out.println("[SimPatrol.UDPConnection(" + this.getName() + ")]: Stopped listening to messages.");
 	}
 	
 	/** Sends a given string message to the last remote contact.
@@ -91,7 +91,7 @@ public class Connection extends Thread {
 		super.start();
 		
 		// screen message
-		System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Started listening to messages.");
+		System.out.println("[SimPatrol.UDPConnection(" + this.getName() + ")]: Started listening to messages.");
 	}
 	
 	/** Give preference to use this.start(int local_socket_number).
@@ -115,7 +115,7 @@ public class Connection extends Thread {
 			this.buffer.insert(message);
 			
 			// screen message
-			System.out.println("[SimPatrol.Connection(" + this.getName() + ")]: Received message.");
+			System.out.println("[SimPatrol.UDPConnection(" + this.getName() + ")]: Received message.");
 		}
 	}
 }

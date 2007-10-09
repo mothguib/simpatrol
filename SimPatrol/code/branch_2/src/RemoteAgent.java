@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import util.udp.UDPSocket;
+
+import util.net.UDPSocket;
 
 public class RemoteAgent {
 	public static void main(String[] args) throws NumberFormatException, IOException {

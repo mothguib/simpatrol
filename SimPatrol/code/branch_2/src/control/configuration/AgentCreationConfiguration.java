@@ -21,12 +21,10 @@ public final class AgentCreationConfiguration extends Configuration {
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  @param sender_address The IP address of the sender of the configuration.
-	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param agent The agent to be added.
 	 *  @param society_id The id of the society where the agent must be added. */
-	public AgentCreationConfiguration(String sender_address, int sender_socket, Agent agent, String society_id) {
-		super(sender_address, sender_socket);
+	public AgentCreationConfiguration(Agent agent, String society_id) {
+		super();
 		this.agent = agent;
 		this.society_id = society_id;
 	}
@@ -57,8 +55,6 @@ public final class AgentCreationConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.AGENT_CREATION +
-				      "\" sender_adress=\"" + this.sender_address +
-				      "\" sender_socket=\"" + this.sender_socket +
 				      "\" parameter=\"" + this.society_id +
 				      "\">\n");
 		

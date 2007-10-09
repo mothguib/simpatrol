@@ -27,8 +27,6 @@
 <!ELEMENT configuration (environment | agent | metric | EMPTY)>
 <!ATTLIST configuration type (0 | 1 | 2 | 3) #REQUIRED>
 <!ATTLIST configuration parameter CDATA #IMPLIED>
-<!ATTLIST configuration sender_address CDATA #REQUIRED>
-<!ATTLIST configuration sender_socket CDATA #REQUIRED>
 
 <!-- ORIENTATION -->
 <!ELEMENT orientation (ort_item*)>

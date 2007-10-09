@@ -14,8 +14,19 @@ public final class ClosedSociety extends Society {
 		super(label, perpetual_agents);
 	}
 	
-	public void addAgent(Agent agent) {
-		if(agent instanceof PerpetualAgent)
+	public boolean addAgent(Agent agent) {
+		// registers if the agent already exists in the society
+		boolean agent_exists = false;
+		Object[] agents_array = this.agents.toArray();
+		for(int i = 0; i <  agents_array.length; i++)
+			if(agents_array[i].equals(agent))
+				agent_exists = true;
+		
+		if(!agent_exists && agent instanceof PerpetualAgent) {
 			this.agents.add(agent);
+			return true;
+		}
+		
+		return false;
 	}
 }

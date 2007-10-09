@@ -1,4 +1,4 @@
-/* AgentConnection.java */
+/* AgentUDPConnection.java */
 
 /* The package of this class. */
 package view.connection;
@@ -7,8 +7,8 @@ package view.connection;
 import java.io.IOException;
 import util.Queue;
 
-/** Implements the connections with the external agents. */
-public final class AgentConnection extends Connection {
+/** Implements the UDP connections with the external agents. */
+public final class AgentUDPConnection extends UDPConnection {
 	/* Attributes. */
 	/** The buffer where the connection writes the received
 	 *  perception messages. */
@@ -24,7 +24,7 @@ public final class AgentConnection extends Connection {
 	 *  @param name The name of the thread of the connection. 
 	 *  @param perception_buffer The buffer where the connection writes the received perception messages.
 	 *  @param action_buffer The buffer where the connection writes the received action messages. */
-	public AgentConnection(String name, Queue<String> perception_buffer, Queue<String> action_buffer) {
+	public AgentUDPConnection(String name, Queue<String> perception_buffer, Queue<String> action_buffer) {
 		super(name, perception_buffer);
 		this.perception_buffer = this.buffer;
 		this.action_buffer = action_buffer;

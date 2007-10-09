@@ -1,9 +1,14 @@
 import java.io.IOException;
-import util.udp.UDPSocket;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class Client {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		ObjectOutputStream output;
+		ObjectInputStream input;
+		
 		String new_environment = "<configuration type=\"0\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"c:/env.txt\"/>";		
 
 		String new_ag =
@@ -22,24 +27,44 @@ public class Client {
 		"</agent>" +
 	    "</configuration>";
 		
-		/*String new_metric =
+		String new_metric =
 			"<configuration type=\"2\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"10\">" +
 			"<metric type=\"3\" value=\"0\"/>" +
-			"</configuration>";*/
+			"</configuration>";
 		
 		String start = "<configuration type=\"3\" sender_address=\"127.0.0.1\" sender_socket=\"7000\" parameter=\"120\"/>";
 		
-		UDPSocket socket = new UDPSocket(7000);
-		socket.send(new_environment, "127.0.0.1", 5000);
-		System.out.println(socket.receive());
+		Socket socket = new Socket("127.0.0.1", 5000);
+		output = new ObjectOutputStream(socket.getOutputStream());
+		output.flush();
+		input = new ObjectInputStream(socket.getInputStream());
 		
-		/*socket.send(new_metric, "127.0.0.1", 5000);
-		System.out.println(socket.receive());*/
+		output.writeObject(new_environment);
+		output.flush();
 		
-		socket.send(start, "127.0.0.1", 5000);
-		System.out.println(socket.receive());
+		String message = (String) input.readObject();
+		System.out.println(message);
 		
-		socket.send(new_ag, "127.0.0.1", 5000);
-		System.out.println(socket.receive());
+		output.writeObject(start);
+		output.flush();
+
+		message = (String) input.readObject();
+		System.out.println(message);
+		
+		output.writeObject(new_ag);
+		output.flush();
+		
+		message = (String) input.readObject();
+		System.out.println(message);
+		
+		output.writeObject(new_metric);
+		output.flush();
+		
+		message = (String) input.readObject();
+		System.out.println(message);
+		
+		output.close();
+		input.close();
+		socket.close();
 	}
 }

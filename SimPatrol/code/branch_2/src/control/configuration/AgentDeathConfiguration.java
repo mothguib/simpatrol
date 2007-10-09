@@ -21,8 +21,8 @@ public final class AgentDeathConfiguration extends Configuration {
 	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param agent_id The id of the seasonal agent that must be killed. */
 
-	public AgentDeathConfiguration(String sender_address, int sender_socket, String agent_id) {
-		super(sender_address, sender_socket);
+	public AgentDeathConfiguration(String agent_id) {
+		super();
 		this.agent_id = agent_id;
 	}
 
@@ -38,8 +38,6 @@ public final class AgentDeathConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.AGENT_DEATH +
-				      "\" sender_adress=\"" + this.sender_address +
-				      "\" sender_socket=\"" + this.sender_socket +
 				      "\" parameter=\"" + this.agent_id +
 				      "\"/>\n");
 		

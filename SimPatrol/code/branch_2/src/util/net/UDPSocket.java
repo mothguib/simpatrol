@@ -1,7 +1,7 @@
 /* UDPSocket.java */
 
 /* The package of this class. */
-package util.udp;
+package util.net;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.net.SocketException;
 public final class UDPSocket {
 	/* Attributes. */
 	/** The size of the buffer to be read from the UDP socket. */
-	private static final int BUFFER_SIZE = 32768;
+	private static final int BUFFER_SIZE = 1024;
 	
 	/** The java 2 native UDP socket. */
 	private DatagramSocket socket;

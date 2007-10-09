@@ -15,7 +15,7 @@ import model.metric.Metric;
  *  the chosen metrics of the simulation.
  *  
  *  @modeller This class must have its behaviour modelled. */
-public final class MetricDaemon extends Daemon implements Clockable {
+public final class MetricDaemon extends AuxiliaryDaemon implements Clockable {
 	/* Attributes. */
 	/** The clock that controls the daemon's work. */
 	private Clock clock;	

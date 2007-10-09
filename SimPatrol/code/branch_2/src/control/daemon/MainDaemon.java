@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.net.SocketException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import util.udp.SocketNumberGenerator;
-import view.connection.AgentConnection;
+
+import util.net.SocketNumberGenerator;
+import view.connection.AgentUDPConnection;
+import view.connection.ServerSideTCPConnection;
 import model.Environment;
 import model.agent.Agent;
 import model.agent.OpenSociety;
@@ -40,6 +42,9 @@ public final class MainDaemon extends Daemon {
 	/* Attributes. */
 	/** A generator of numbers for socket connections. */
 	private SocketNumberGenerator socket_number_generator;
+	
+	/** The TCP connection of the main daemon. */
+	private ServerSideTCPConnection connection;
 
 	/* Methods. */
 	/** Constructor.
@@ -48,6 +53,7 @@ public final class MainDaemon extends Daemon {
 	public MainDaemon(String thread_name, Simulator simulator) {
 		super(thread_name);
 		this.socket_number_generator = null;
+		this.connection = new ServerSideTCPConnection(thread_name + "'s connection", this.buffer);
 	}
 	
 	/** Attends a given "environment creation" configuration, sending the correspondent
@@ -84,7 +90,7 @@ public final class MainDaemon extends Daemon {
 		}
 		
 		// sends the created orientation to the remote contact
-		this.connection.send(orientation.fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		this.connection.send(orientation.fullToXML(0));
 	}
 	
 	/** Attends a given "agent creation" configuration, sending the correspondent
@@ -117,31 +123,31 @@ public final class MainDaemon extends Daemon {
 		if(society != null) {
 			// if the simulator is in the configuring state or the society is open
 			if(simulator.getState() == SimulatorStates.CONFIGURING || society instanceof OpenSociety) {
-				// adds the agent to the society
-				society.addAgent(agent);
-				
-				// creates and starts its perception and action daemons
-				int socket_number = this.createAndStartAgentDaemons(agent);
-				
-				// if the simulator is a rt one and its state is SIMULATING
-				if(simulator instanceof RealTimeSimulator && simulator.getState() == SimulatorStates.SIMULATING) {
-					// creates and starts its mortal controller robot
-					((RealTimeSimulator) simulator).createAndStartMortalityControlerRobot((Mortal) agent);
+				// if adds the agent to the society successfully
+				if(society.addAgent(agent)) {
+					// creates and starts its perception and action daemons
+					int socket_number = this.createAndStartAgentDaemons(agent);
 					
-					// creates and starts its eventual stamina controller robot
-					((RealTimeSimulator) simulator).createAndStartStaminaControlerRobot(agent);
+					// if the simulator is a rt one and its state is SIMULATING
+					if(simulator instanceof RealTimeSimulator && simulator.getState() == SimulatorStates.SIMULATING) {
+						// creates and starts its mortal controller robot
+						((RealTimeSimulator) simulator).createAndStartMortalityControlerRobot((Mortal) agent);
+						
+						// creates and starts its eventual stamina controller robot
+						((RealTimeSimulator) simulator).createAndStartStaminaControlerRobot(agent);
+					}
+					
+					// sends an orientation to the sender of the configuration
+					this.connection.send(new Orientation(String.valueOf(socket_number)).fullToXML(0));				
 				}
-				
-				// sends an orientation to the sender of the configuration
-				Orientation orientation = new Orientation();
-				orientation.addItem(socket_number, agent.getObjectId());
-				this.connection.send(orientation.fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());				
+				// else, sends an orientation reporting error
+				else this.connection.send(new Orientation("Agent already exists.").fullToXML(0));
 			}
 			// if not, sends an orientation reporting error
-			else this.connection.send(new Orientation("Closed society.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			else this.connection.send(new Orientation("Closed society.").fullToXML(0));
 		}
 		// if not, sends an orientation reporting error
-		else this.connection.send(new Orientation("Society not found.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		else this.connection.send(new Orientation("Society not found.").fullToXML(0));
 	}
 	
 	/** Attends a given "agent death" configuration, sending the correspondent
@@ -195,10 +201,10 @@ public final class MainDaemon extends Daemon {
 			else ((CycledSimulator) simulator).removeAgentSpentStaminas(agent);
 			
 			// sends an empty orientation to the sender of configuration
-			this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			this.connection.send(new Orientation().fullToXML(0));
 		}
 		// if not, sends an orientation reporting error
-		else this.connection.send(new Orientation("Seasonal agent not found.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		else this.connection.send(new Orientation("Seasonal agent not found.").fullToXML(0));
 	}
 	
 	/** Attends a given "metric creation" configuration, sending the
@@ -221,7 +227,7 @@ public final class MainDaemon extends Daemon {
 		
 		// sends an orientation with the number of the UDP socket
 		// used to externalize the metric
-		this.connection.send(new Orientation(String.valueOf(socket_number)).fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+		this.connection.send(new Orientation(String.valueOf(socket_number)).fullToXML(0));
 	}
 	
 	/** Attends a given "simulation start" configuration, sending the
@@ -242,10 +248,10 @@ public final class MainDaemon extends Daemon {
 			simulator.startSimulation(simulation_time);
 
 			// sends an empty orientation to the sender of configuration
-			this.connection.send(new Orientation().fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+			this.connection.send(new Orientation().fullToXML(0));
 		}
 		// if not, sends an orientation reporting error
-		else this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());		
+		else this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0));		
 	}
 	
 	/** Creates the agent daemons (perception and action daemons) for the given
@@ -261,7 +267,7 @@ public final class MainDaemon extends Daemon {
 		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s action daemon", agent);
 		
 		// creates a new agent connection
-		AgentConnection connection = new AgentConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
+		AgentUDPConnection connection = new AgentUDPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
 		
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);
@@ -325,12 +331,13 @@ public final class MainDaemon extends Daemon {
 		return metric_daemon.getUDPSocketNumber();
 	}
 	
-	public void start(int local_socket_number) throws SocketException {
+	@SuppressWarnings("deprecation")
+	public void start(int local_socket_number) throws IOException {
+		if(!this.connection.isAlive()) this.connection.start(local_socket_number);
+		this.start();
+		
 		// starts the socket number generator
 		this.socket_number_generator = new SocketNumberGenerator(local_socket_number);
-		
-		// calls the super method
-		super.start(local_socket_number);
 		
 		// screen message
 		System.out.println("[SimPatrol.MainDaemon]: Started working.");
@@ -338,6 +345,7 @@ public final class MainDaemon extends Daemon {
 	
 	public void stopWorking() {
 		super.stopWorking();
+		this.connection.stopWorking();
 		
 		// screen message
 		System.out.println("[SimPatrol.MainDaemon]: Stopped working.");
@@ -375,7 +383,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				}
 				else {
-					try { this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					try { this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0));
 					} catch (IOException e) { e.printStackTrace(); }
 				}
 			}
@@ -388,7 +396,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				}
 				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
 					} catch (IOException e) { e.printStackTrace(); }
 				}
 			}
@@ -401,7 +409,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				}
 				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
 					} catch (IOException e) { e.printStackTrace(); }
 				}
 			}
@@ -414,7 +422,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				}
 				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
 					} catch (IOException e) { e.printStackTrace(); }
 				}
 			}
@@ -427,7 +435,7 @@ public final class MainDaemon extends Daemon {
 					catch (IOException e) { e.printStackTrace(); }
 				}
 				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0), configuration.getSender_address(), configuration.getSender_socket());
+					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
 					} catch (IOException e) { e.printStackTrace(); }
 				}
 				

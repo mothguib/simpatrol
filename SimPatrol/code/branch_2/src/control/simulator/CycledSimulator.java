@@ -4,7 +4,7 @@
 package control.simulator;
 
 /* Imported classes and/or interfaces. */
-import java.net.SocketException;
+import java.io.IOException;
 import model.agent.Agent;
 import model.agent.AgentStates;
 import model.agent.Society;
@@ -29,8 +29,8 @@ public final class CycledSimulator extends Simulator {
 	 * 
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
 	 *  @param actualization_time_rate The time rate, in seconds, to actualize the internal model of the simulation. 
-	 *  @throws SocketException */
-	public CycledSimulator(int local_socket_number, double actualization_time_rate) throws SocketException {
+	 *  @throws IOException */
+	public CycledSimulator(int local_socket_number, double actualization_time_rate) throws IOException {
 		super(local_socket_number, actualization_time_rate);		
 		this.coordinator = null;
 	}

@@ -21,12 +21,10 @@ public final class MetricCreationConfiguration extends Configuration {
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  @param sender_address The The IP address of the sender of the configuration.
-	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param metric The metric to be added to the simulation.
 	 *  @param cycle_duration The duration, in seconds, of a cycle of measurement of the metric.*/	
-	public MetricCreationConfiguration(String sender_address, int sender_socket, Metric metric, int cycle_duration) {
-		super(sender_address, sender_socket);
+	public MetricCreationConfiguration(Metric metric, int cycle_duration) {
+		super();
 		this.metric = metric;
 		this.cycle_duration = cycle_duration;
 	}
@@ -58,8 +56,6 @@ public final class MetricCreationConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.METRIC_CREATION +					  
-					  "\" sender_adress=\"" + this.sender_address +
-				      "\" sender_socket=\"" + this.sender_socket +
 				      "\" parameter=\"" + this.cycle_duration +
 				      "\">\n");
 		

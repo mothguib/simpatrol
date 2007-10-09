@@ -4,7 +4,7 @@
 package control.simulator;
 
 /* Imported classes and/or interfaces. */
-import java.net.SocketException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,8 +59,8 @@ public abstract class Simulator {
 	 * 
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
 	 *  @param atualization_time_rate The time rate to actualize the internal model of the simulation.
-	 *  @throws SocketException */
-	public Simulator(int local_socket_number, double atualization_time_rate) throws SocketException {
+	 *  @throws IOException */
+	public Simulator(int local_socket_number, double atualization_time_rate) throws IOException {
 		// screen message
 		System.out.println("[SimPatrol.Simulator]: Online.");
 		

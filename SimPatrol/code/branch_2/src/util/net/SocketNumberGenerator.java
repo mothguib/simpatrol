@@ -1,7 +1,7 @@
 /* SocketNumberGenerator.java */
 
 /* The package of this class. */
-package util.udp;
+package util.net;
 
 /* Imported classes and/or interfaces. */
 import cern.jet.random.Normal;

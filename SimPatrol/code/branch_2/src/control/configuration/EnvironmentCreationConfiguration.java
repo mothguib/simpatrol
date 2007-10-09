@@ -18,11 +18,9 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  @param sender_address The IP address of the sender of the configuration.
-	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param environment The environment to be set. */	
-	public EnvironmentCreationConfiguration(String sender_address, int sender_socket, Environment environment) {
-		super(sender_address, sender_socket);
+	public EnvironmentCreationConfiguration(Environment environment) {
+		super();
 		this.environment = environment;
 	}
 	
@@ -43,8 +41,6 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.ENVIRONMENT_CREATION +
-				      "\" sender_adress=\"" + this.sender_address +
-				      "\" sender_socket=\"" + this.sender_socket +
 				      "\">\n");
 		
 		// puts the environment

@@ -57,8 +57,9 @@ public abstract class Society implements XMLable {
 	
 	/** Adds a given agent to the society. 
 	 * 
-	 *  @param agent The agent to be added. */
-	public abstract void addAgent(Agent agent);
+	 *  @param agent The agent to be added.
+	 *  @return TRUE if the agent was added successfully, FALSE if not. */
+	public abstract boolean addAgent(Agent agent);
 	
 	public String fullToXML(int identation) {
 		// holds the answer being constructed

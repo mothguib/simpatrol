@@ -48,8 +48,6 @@ public abstract class ConfigurationTranslator extends Translator {
 		Element configuration_element = parseString(xml_string);
 		
 		// obtains its data
-		String sender_address = configuration_element.getAttribute("sender_address");
-		int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
 		int type = Integer.parseInt(configuration_element.getAttribute("type"));
 		
 		// creates the new configuration
@@ -71,7 +69,7 @@ public abstract class ConfigurationTranslator extends Translator {
 				}
 				
 				// return the new configuration as the answer of the method
-				return new EnvironmentCreationConfiguration(sender_address, sender_socket, environment);
+				return new EnvironmentCreationConfiguration(environment);
 			}
 			case(ConfigurationTypes.METRIC_CREATION): {
 				// obtains the "parameter" attribute
@@ -82,7 +80,7 @@ public abstract class ConfigurationTranslator extends Translator {
 				Metric[] read_metric = MetricTranslator.getMetrics(configuration_element);
 				
 				// returns the new configuration as the answer of the method
-				return new MetricCreationConfiguration(sender_address, sender_socket, read_metric[0], cycle_duration);
+				return new MetricCreationConfiguration(read_metric[0], cycle_duration);
 			}
 			case(ConfigurationTypes.SIMULATION_START): {
 				// obtains the "parameter" attribute
@@ -90,7 +88,7 @@ public abstract class ConfigurationTranslator extends Translator {
 				int simulation_time = Integer.parseInt(configuration_element.getAttribute("parameter"));
 				
 				// returns the new configuration as the answer of the method
-				return new SimulationStartConfiguration(sender_address, sender_socket, simulation_time);
+				return new SimulationStartConfiguration(simulation_time);
 			}
 			case(ConfigurationTypes.AGENT_DEATH): {
 				// obtains the "parameter" attribute
@@ -98,7 +96,7 @@ public abstract class ConfigurationTranslator extends Translator {
 				String agent_id = configuration_element.getAttribute("parameter");
 				
 				// returns the new configuration as the answer of the method
-				return new AgentDeathConfiguration(sender_address, sender_socket, agent_id);
+				return new AgentDeathConfiguration(agent_id);
 			}
 		}
 		
@@ -119,8 +117,6 @@ public abstract class ConfigurationTranslator extends Translator {
 		Element configuration_element = parseString(xml_string);
 		
 		// obtains the data
-		String sender_address = configuration_element.getAttribute("sender_address");
-		int sender_socket = Integer.parseInt(configuration_element.getAttribute("sender_socket"));
 		int type = Integer.parseInt(configuration_element.getAttribute("type"));
 		
 		// creates the new configuration
@@ -134,7 +130,7 @@ public abstract class ConfigurationTranslator extends Translator {
 			Agent agent = AgentTranslator.getAgents(configuration_element, false, graph)[0];
 			
 			// return the new agent creation configuration
-			return new AgentCreationConfiguration(sender_address, sender_socket, agent, society_id);
+			return new AgentCreationConfiguration(agent, society_id);
 		}
 		
 		// defautl answer

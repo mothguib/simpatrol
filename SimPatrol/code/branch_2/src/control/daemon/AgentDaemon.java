@@ -11,12 +11,12 @@ import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import util.clock.Clock;
 import util.clock.Clockable;
-import view.connection.AgentConnection;
+import view.connection.AgentUDPConnection;
 import model.agent.Agent;
 
 /** Implements the daemons of SimPatrol that attend
  *  an agent's feelings of perceptions, or intentions of actions. */
-public abstract class AgentDaemon extends Daemon implements Clockable {
+public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	/* Attributes. */
 	/** Registers if the daemon can work at the current moment. */
 	protected boolean can_work;
@@ -82,7 +82,7 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 	/** Configures the connection of the daemon.
 	 * 
 	 *  @param connection The connection of the daemon. */
-	public void setConnection(AgentConnection connection) {
+	public void setConnection(AgentUDPConnection connection) {
 		this.connection = connection;
 	}
 	
