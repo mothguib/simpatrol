@@ -33,7 +33,7 @@ public class FileReader {
     /* Methods. */
     /** Constructor.
      * 
-     *  @param path The path of the file to be read. 
+     *  @param path The path of the file to be read.
      *  @throws IOException */    
     public FileReader(String path) throws IOException {
     	// sets the reader of buffers to manipulate the file to be read
