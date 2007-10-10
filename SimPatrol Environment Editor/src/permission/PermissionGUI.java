@@ -119,6 +119,11 @@ public class PermissionGUI extends JDialog {
     				this.permission_panel = new PermissionJPanel(this, permission, true, true, false, false);
     				break;
     			}
+    			case PerceptionTypes.SELF_PERCEPTION: {
+    				this.type_label.setText("Self perception permission");
+    				this.permission_panel = new PermissionJPanel(this, permission, false, true, false, false);
+    				break;
+    			}
     		}
     	else switch(((ActionPermission) permission).getAction_type()) {
     		case ActionTypes.BROADCAST_ACTION: {

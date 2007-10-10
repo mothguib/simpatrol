@@ -24,6 +24,7 @@ public class PermissionJPanel extends javax.swing.JPanel {
      * 
      *  @param owner The GUI that contains this panel.
      *  @param permission The Permission object to be configured.
+     *  @param deth_visibility TRUE if the depth_limitation internal panel must appear, FALSE if not.
      *  @param stamina_visibility TRUE if the stamina_limitation internal panel must appear, FALSE if not.
      *  @param speed_visibility TRUE if the speed_limitation internal panel must appear, FALSE if not.
      *  @param acceleration_visibility TRUE if the acceleration_limitation internal panel must appear, FALSE if not. */
