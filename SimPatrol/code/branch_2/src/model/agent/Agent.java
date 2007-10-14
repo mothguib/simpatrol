@@ -175,7 +175,8 @@ public abstract class Agent implements XMLable {
 			this.stamina = 0;
 		
 		// screen message
-		System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " spent stamina.");
+		if(factor > 0)
+			System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " spent stamina.");
 	}
 	
 	/** Increments the stamina of the agent by the given factor.

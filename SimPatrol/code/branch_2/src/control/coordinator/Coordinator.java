@@ -4,6 +4,7 @@
 package control.coordinator;
 
 /* Imported classes and/or interfaces. */
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -303,7 +304,8 @@ public final class Coordinator extends Thread implements TimedObject {
 		}
 		
 		// stops the simulation
-		simulator.stopSimulation();
+		try { simulator.stopSimulation(); }
+		catch (IOException e) { e.printStackTrace(); }
 		
 		// screen message
 		System.out.println("[SimPatrol.Coordinator]: Simulation stopped.");

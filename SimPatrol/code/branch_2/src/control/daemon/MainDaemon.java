@@ -343,6 +343,14 @@ public final class MainDaemon extends Daemon {
 		System.out.println("[SimPatrol.MainDaemon]: Started working.");
 	}
 	
+	/** Lets the main daemon send an orientation signaling that the
+	 *  current simulation ended.
+	 *   
+	 *  @throws IOException */
+	public void sendEndSimulationSignal() throws IOException {
+		this.connection.send(new Orientation("Simulation ended.").fullToXML(0));
+	}
+	
 	public void stopWorking() {
 		super.stopWorking();
 		this.connection.stopWorking();

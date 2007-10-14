@@ -37,12 +37,12 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	protected StaminaControllerRobot stamina_robot;
 	
 	/** The coordinator that assures the correct spending of stamina to
-	 *  the agent of this daemon.
+	 *  the agent of this daemon, as well as the correct count of time.
 	 *  
 	 *  Used only when the simulator is a cycled one.
 	 *  
 	 *  @see Coordinator */
-	protected static Coordinator stamina_coordinator;
+	protected static Coordinator coordinator;
 	
 	/* Methods. */	
 	/** Constructor.
@@ -94,7 +94,7 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	 *  @see RealTimeSimulator */
 	public void setStamina_robot(StaminaControllerRobot stamina_robot) {
 		this.stamina_robot = stamina_robot;
-		stamina_coordinator = null;		
+		coordinator = null;		
 	}
 	
 	/** Configures the stamina coordinator of this daemon.
@@ -102,8 +102,8 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	 *  Used only when the simulator is a cycled one.
 	 *  
 	 *  @see CycledSimulator */
-	public static void setStamina_coordinator(Coordinator coordinator) {
-		stamina_coordinator = coordinator;
+	public static void setStamina_coordinator(Coordinator passed_coordinator) {
+		coordinator = passed_coordinator;
 	}
 	
 	public void start(int local_socket_number) throws SocketException {
@@ -114,7 +114,8 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
-		super.stopWorking();		
-		this.clock.stopWorking();
+		super.stopWorking();
+		if(this.clock != null)
+			this.clock.stopWorking();
 	}
 }

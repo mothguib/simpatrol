@@ -3,7 +3,7 @@ import control.simulator.*;
 
 public class Teste {
 	public static void main(String[] args) throws IOException {		
-		new RealTimeSimulator(5000, 0.25);
+		new CycledSimulator(5000, 0.5);
 		/*EventTimeProbabilityDistributionGUI
 		gui = new EventTimeProbabilityDistributionGUI();
 		gui.setVisible(true);*/

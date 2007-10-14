@@ -52,6 +52,13 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		this.chronometer = null;
 	}
 	
+	/** Returns the elapsed simulated time.
+	 * 
+	 *  @return The elapsed simulated time. */
+	public int getElapsedSimulatedTime() {
+		return this.chronometer.getElapsedTime();
+	}
+	
 	/** Obtains the dynamic objects and creates the
 	 *  respective dymamicity controller robots. */
 	private void createDynamicityControllerRobots() {
@@ -333,7 +340,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		this.startStaminaControllerRobots();
 	}
 	
-	public void stopSimulation() {
+	public void stopSimulation() throws IOException {
 		// super code execution
 		super.stopSimulation();
 		
@@ -357,6 +364,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		System.out.println("[SimPatrol.Simulator]: Simulation stopped at " + Calendar.getInstance().getTime().toString() + ".");
 		
 		// stops the simulator
-		this.stopSimulation();
+		try { this.stopSimulation(); }
+		catch (IOException e) { e.printStackTrace(); }
 	}
 }

@@ -65,6 +65,7 @@ public final class UDPSocket {
 		if(this.remote_socket_address != null && this.remote_socket_number > -1) {
 			DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.remote_socket_address, this.remote_socket_number);
 			this.socket.send(packet);
+			
 			return true;
 		}
 		

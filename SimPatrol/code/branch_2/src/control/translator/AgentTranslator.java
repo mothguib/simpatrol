@@ -104,8 +104,8 @@ public abstract class AgentTranslator extends Translator {
 			}
 			
 			// stamina configuration
-			if(str_max_stamina.length() > 0) agent.setMax_stamina(Integer.parseInt(str_max_stamina));
-			if(str_stamina.length() > 0) agent.setStamina(Integer.parseInt(str_stamina));
+			if(str_max_stamina.length() > 0) agent.setMax_stamina(Double.parseDouble(str_max_stamina));
+			if(str_stamina.length() > 0) agent.setStamina(Double.parseDouble(str_stamina));
 			
 			// puts on the answer
 			answer[i] = agent;

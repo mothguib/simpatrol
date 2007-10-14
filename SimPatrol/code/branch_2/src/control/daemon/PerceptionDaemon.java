@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+
+import control.simulator.SimulatorStates;
 import util.Queue;
 import model.agent.Agent;
 import model.agent.AgentStates;
@@ -165,13 +167,14 @@ public final class PerceptionDaemon extends AgentDaemon {
 		// configures the amount of stamina to be spent with perceptions
 		if(this.stamina_robot != null)
 			this.stamina_robot.setPerceptions_spent_stamina(this.spent_stamina);
-		else if(stamina_coordinator != null)
-			stamina_coordinator.setPerceptionsSpentStamina(this.agent, this.spent_stamina);
+		else if(coordinator != null)
+			coordinator.setPerceptionsSpentStamina(this.agent, this.spent_stamina);
 		
 		// mounts and returns the answer
 		Perception[] answer = new Perception[perceptions.size()];
 		for(int i = 0; i < answer.length; i++)
 			answer[i] = perceptions.get(i);
+		
 		return answer;
 	}
 	
@@ -410,8 +413,8 @@ public final class PerceptionDaemon extends AgentDaemon {
 	
 	/** @modeller This method must be modelled. */		
 	public void act(int time_gap) {
-		// if the daemon can produce perceptions at the moment
-		if(this.can_work) {
+		// if the daemon can produce perceptions at the moment and the simulator is already simulating
+		if(this.can_work && simulator.getState() == SimulatorStates.SIMULATING) {
 			// registers if some perception was succesfully sent
 			boolean sent_succesfully = false;			
 			

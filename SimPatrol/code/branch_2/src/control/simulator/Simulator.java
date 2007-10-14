@@ -372,8 +372,10 @@ public abstract class Simulator {
 			((MetricDaemon) metric_daemons_array[i]).startMetric();
 	}
 	
-	/** Stops the simulation. */
-	public void stopSimulation() {
+	/** Stops the simulation. 
+	 * 
+	 *  @throws IOException */
+	public void stopSimulation() throws IOException {
 		// stops and removes the perception daemons
 		this.stopAndRemovePerceptionDaemons();
 		
@@ -387,11 +389,16 @@ public abstract class Simulator {
 		this.state = SimulatorStates.CONFIGURING;
 		
 		// nullifies the environment
-		this.environment = null;		
+		this.environment = null;
+		
+		// lets the main daemon send an "simulation ended" orientation
+		this.main_daemon.sendEndSimulationSignal();
 	}
 	
-	/** Finishes the simulator's work. */
-	public void exit() {
+	/** Finishes the simulator's work. 
+	 *
+	 *  @throws IOException */
+	public void exit() throws IOException {
 		// if the simulator is simulating, stops it
 		if(this.state == SimulatorStates.SIMULATING)
 			this.stopSimulation();
