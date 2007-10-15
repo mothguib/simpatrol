@@ -109,10 +109,13 @@ public final class TeleportAction extends AtomicAction {
 		
 		// fills the buffer	
 		buffer.append("<action type=\"" + ActionTypes.TELEPORT_ACTION +
-					  "\" vertex_id=\"" + this.vertex.getObjectId() +
-					  "\" edge_id=\"" + this.edge.getObjectId() +
-				      "\" elapsed_length=\"" + this.elapsed_length +
-				      "\"/>\n");
+					  "\" vertex_id=\"" + this.vertex.getObjectId());
+		
+		if(this.edge != null)
+			buffer.append("\" edge_id=\"" + this.edge.getObjectId() +
+				          "\" elapsed_length=\"" + this.elapsed_length);
+		
+		buffer.append("\"/>\n");
 		
 		// returns the answer
 		return buffer.toString();
