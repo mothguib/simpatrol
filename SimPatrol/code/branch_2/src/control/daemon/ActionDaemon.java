@@ -556,7 +556,7 @@ public final class ActionDaemon extends AgentDaemon {
 		this.agent.setState(AgentStates.JUST_ACTED);
 		
 		// screen message
-		System.out.println("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " teleported.");
+		System.out.println("[SimPatrol.Event]: Agent " + this.agent.getObjectId() + " teleported to " + this.agent.getVertex().getObjectId() + ", elapsed length " + this.agent.getElapsed_length());
 	}
 	
 	/** @developer New action must change this method.

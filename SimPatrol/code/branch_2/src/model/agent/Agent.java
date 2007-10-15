@@ -104,7 +104,7 @@ public abstract class Agent implements XMLable {
 	public void setState(int state) {
 		// screen message
 		if(state != this.state)
-			System.out.println("[SimPatrol.Event] agent " + this.getObjectId() + " changed state.");
+			System.out.println("[SimPatrol.Event] Agent " + this.getObjectId() + " changed state.");
 		
 		this.state = state;
 	}

@@ -5,7 +5,6 @@ package control.parser;
 
 /* Imported classes and/or interfaces. */
 import java.util.LinkedList;
-
 import model.action.AtomicRechargeAction;
 import model.action.CompoundAction;
 import model.action.GoToAction;
@@ -66,7 +65,7 @@ public abstract class CompoundActionsParser {
 		// if the initial speed exceeds the speed limitation,
 		// sets it as the speed limitation
 		if(speed_limitation > -1 && current_initial_speed > speed_limitation)
-			current_initial_speed = speed_limitation;
+			current_initial_speed = speed_limitation;		
 		
 		// current displacement
 		double current_displacement = 0;
@@ -83,7 +82,11 @@ public abstract class CompoundActionsParser {
 		
 		// current edge positions
 		Edge current_graph_edge = agent.getEdge();
-		Edge current_path_edge = current_path_vertex.getEdges()[0];
+		
+		Edge current_path_edge = null;
+		if(current_path_vertex.getEdges().length > 0)
+			current_path_edge = current_path_vertex.getEdges()[0];
+		
 		if(current_graph_edge == null) {
 			Edge[] graph_edges = current_graph_vertex.getEdges();
 			
@@ -112,10 +115,17 @@ public abstract class CompoundActionsParser {
 				return new TeleportAction[0];
 			
 			// calculates the next position of the agent on the graph
-			double remained_length = current_path_edge.getLength() - current_elapsed_length;
+			double remained_length = 0;
+			if(current_path_edge != null)
+				remained_length = current_path_edge.getLength() - current_elapsed_length;
+			else
+				remained_length = agent.getElapsed_length(); 
 			
 			if(remained_length > current_displacement) {
-				current_elapsed_length = current_elapsed_length + current_displacement;				
+				if(current_path_edge != null)
+					current_elapsed_length = current_elapsed_length + current_displacement;
+				else
+					current_elapsed_length = current_elapsed_length - current_displacement;
 				
 				// adds the next teleport...
 				teleport_actions.add(new TeleportAction(current_graph_vertex, current_graph_edge, current_elapsed_length));
@@ -128,23 +138,25 @@ public abstract class CompoundActionsParser {
 					current_displacement = current_displacement - remained_length;
 					current_elapsed_length = 0;
 					
-					current_path_vertex = current_path_edge.getOtherVertex(current_path_vertex);
-					current_graph_vertex = current_graph_edge.getOtherVertex(current_graph_vertex);
+					if(current_path_edge != null) {
+						current_path_vertex = current_path_edge.getOtherVertex(current_path_vertex);
+						current_graph_vertex = current_graph_edge.getOtherVertex(current_graph_vertex);
+					}
 					
 					visible_objects.add(current_graph_vertex);
 					
 					depth_limitation--;
 					
 					Edge[] edges_current_path_vertex = current_path_vertex.getEdges();
-					if(edges_current_path_vertex.length == 1 || depth_limitation == 0) {
+					if(edges_current_path_vertex.length <= 1 || depth_limitation == 0) {
 						Visible[] visible_objects_array = new Visible[visible_objects.size()];
 						for(int i = 0; i < visible_objects_array.length; i++)
 							visible_objects_array[i] = visible_objects.get(i);
 						
-						teleport_actions.add(new TeleportAction(current_graph_vertex, null, 0, visible_objects_array));
-						
 						// adds the next teleport and returns the answer
-						TeleportAction[] answer = new TeleportAction[teleport_actions.size()];						
+						teleport_actions.add(new TeleportAction(current_graph_vertex, null, 0, visible_objects_array));						
+						
+						TeleportAction[] answer = new TeleportAction[teleport_actions.size()];
 						for(int i = 0; i < answer.length; i++)
 							answer[i] = teleport_actions.get(i);
 						return answer;						
