@@ -49,7 +49,7 @@ public abstract class Simulator {
 	 *  @see SimulatorStates */
 	private int state;
 	
-	/** Defines, in seconds, the time rate to procuce the
+	/** Defines, in seconds, the time rate to produce the
 	 *  agents' perceptions and to attend the eventual atomic actions
 	 *  that compound an eventual compound action. */
 	private final double ATUALIZATION_TIME_RATE;
@@ -58,7 +58,7 @@ public abstract class Simulator {
 	/** Constructor.
 	 * 
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
-	 *  @param atualization_time_rate The time rate to actualize the internal model of the simulation.
+	 *  @param atualization_time_rate The time rate to atualize the internal model of the simulation.
 	 *  @throws IOException */
 	public Simulator(int local_socket_number, double atualization_time_rate) throws IOException {
 		// screen message
