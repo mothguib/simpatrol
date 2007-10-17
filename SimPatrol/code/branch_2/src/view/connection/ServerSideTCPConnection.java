@@ -32,12 +32,8 @@ public class ServerSideTCPConnection extends Connection {
 	}
 	
 	public boolean send(String message) throws IOException {
-		if(this.socket != null) {
-			// screen message
-			System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Sent message.");
-			
+		if(this.socket != null)
 			return this.socket.send(message);
-		}
 		
 		return false;
 	}
@@ -78,9 +74,6 @@ public class ServerSideTCPConnection extends Connection {
 					catch (ClassNotFoundException e) { e.printStackTrace(); }
 					
 					this.buffer.insert(message);
-					
-					// screen message
-					System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Received message.");
 				}
 				
 				// disconnects
@@ -106,12 +99,7 @@ public class ServerSideTCPConnection extends Connection {
 				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
 			}
 			catch(IOException e2) {
-				// disconnects
-				try { this.socket.disconnect(); }
-				catch (IOException e) { e.printStackTrace(); }
-				
-				// screen message
-				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
+				e2.printStackTrace();
 			}
 		}
 	}

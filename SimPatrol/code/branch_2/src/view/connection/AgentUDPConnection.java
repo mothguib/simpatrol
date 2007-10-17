@@ -51,8 +51,5 @@ public final class AgentUDPConnection extends UDPConnection {
 				this.action_buffer.insert(message);
 			else this.perception_buffer.insert(message);
 		}
-		
-		// screen message
-		System.out.println("[SimPatrol.AgentConnection(" + this.getName() + ")]: Received message.");
 	}	
 }

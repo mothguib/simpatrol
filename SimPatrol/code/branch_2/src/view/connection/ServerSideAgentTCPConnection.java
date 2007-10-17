@@ -57,10 +57,7 @@ public final class ServerSideAgentTCPConnection extends ServerSideTCPConnection 
 				// related message
 				if(message.indexOf("<action ") > -1)
 					this.action_buffer.insert(message);
-				else this.perception_buffer.insert(message);
-				
-				// screen message
-				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Received message.");
+				else this.perception_buffer.insert(message);				
 			}
 			
 			// disconnects

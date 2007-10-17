@@ -25,12 +25,8 @@ public class UDPConnection extends Connection {
 	}
 	
 	public boolean send(String message) throws IOException {
-		if(this.socket != null) {
-			// screen message
-			System.out.println("[SimPatrol.Connection(" + this.getName() + ")]:  Sent message.");
-			
+		if(this.socket != null)
 			return this.socket.send(message);
-		}
 		
 		return false;
 	}
@@ -68,9 +64,6 @@ public class UDPConnection extends Connection {
 			}
 			
 			this.buffer.insert(message);
-			
-			// screen message
-			System.out.println("[SimPatrol.UDPConnection(" + this.getName() + ")]: Received message.");
 		}
 	}
 }
