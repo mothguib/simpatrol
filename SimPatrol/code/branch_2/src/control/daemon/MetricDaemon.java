@@ -5,9 +5,9 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.net.SocketException;
 import util.clock.Clock;
 import util.clock.Clockable;
+import view.connection.UDPConnection;
 import model.metric.IntegralMetric;
 import model.metric.Metric;
 
@@ -15,7 +15,7 @@ import model.metric.Metric;
  *  the chosen metrics of the simulation.
  *  
  *  @modeller This class must have its behaviour modelled. */
-public final class MetricDaemon extends AuxiliaryDaemon implements Clockable {
+public final class MetricDaemon extends Daemon implements Clockable {
 	/* Attributes. */
 	/** The clock that controls the daemon's work. */
 	private Clock clock;	
@@ -31,6 +31,7 @@ public final class MetricDaemon extends AuxiliaryDaemon implements Clockable {
 	 *  @param cycle_duration The duration, in seconds of a cycle of measurement of the metric. */	
 	public MetricDaemon(String thread_name, Metric metric, int cycle_duration) {
 		super(thread_name);
+		this.connection = new UDPConnection(thread_name + "'s  connection", this.buffer);
 		
 		this.clock = new Clock(thread_name + "'s clock", this);
 		this.clock.setStep(cycle_duration);
@@ -44,8 +45,8 @@ public final class MetricDaemon extends AuxiliaryDaemon implements Clockable {
 			((IntegralMetric) this.metric).start();
 	}
 	
-	public void start(int local_socket_number) throws SocketException {
-		super.start(local_socket_number);
+	public void start(int local_socket_number) throws IOException {
+		super.start(local_socket_number);		
 		this.clock.start();
 		
 		// screen message

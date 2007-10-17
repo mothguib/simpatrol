@@ -4,26 +4,22 @@
 package control.configuration;
 
 /* Imported classes and/or interfaces. */
-import model.agent.Agent;
+import model.agent.SeasonalAgent;
 
 /** Implements objects that express configurations to kill seasonal agents.
  * 
- *  @see Agent */
+ *  @see SeasonalAgent */
 public final class AgentDeathConfiguration extends Configuration {
 	/* Attributes. */
 	/** The id of the seasonal agent that must be killed. */
-	private String agent_id;
+	private final String AGENT_ID;
 	
 	/* Methods. */
 	/** Constructor.
 	 * 
-	 *  @param sender_address The IP address of the sender of the configuration.
-	 *  @param sender_socket The number of the UDP socket of the sender.
 	 *  @param agent_id The id of the seasonal agent that must be killed. */
-
 	public AgentDeathConfiguration(String agent_id) {
-		super();
-		this.agent_id = agent_id;
+		this.AGENT_ID = agent_id;
 	}
 	
 	public String fullToXML(int identation) {
@@ -33,7 +29,7 @@ public final class AgentDeathConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.AGENT_DEATH +
-				      "\" parameter=\"" + this.agent_id +
+				      "\" parameter=\"" + this.AGENT_ID +
 				      "\"/>\n");
 		
 		// return the answer to the method

@@ -13,20 +13,21 @@ import model.Environment;
 public final class EnvironmentCreationConfiguration extends Configuration {
 	/* Attributes. */
 	/** The environment to be set to the simulation. */
-	private Environment environment;
+	private final Environment ENVIRONMENT;
 	
 	/* Methods. */
 	/** Constructor.
 	 * 
 	 *  @param environment The environment to be set. */	
 	public EnvironmentCreationConfiguration(Environment environment) {
-		super();
-		this.environment = environment;
+		this.ENVIRONMENT = environment;
 	}
 	
-	/** Returns the environment of the configuration. */
+	/** Returns the environment of the configuration.
+	 * 
+	 *  @return The environment of the simulation. */
 	public Environment getEnvironment() {
-		return this.environment;
+		return this.ENVIRONMENT;
 	}
 	
 	public String fullToXML(int identation) {
@@ -39,7 +40,7 @@ public final class EnvironmentCreationConfiguration extends Configuration {
 				      "\">\n");
 		
 		// puts the environment
-		buffer.append(this.environment.fullToXML(identation + 1));
+		buffer.append(this.ENVIRONMENT.fullToXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");

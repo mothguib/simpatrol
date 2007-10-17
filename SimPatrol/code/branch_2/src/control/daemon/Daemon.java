@@ -7,6 +7,7 @@ package control.daemon;
 import java.io.IOException;
 import control.simulator.Simulator;
 import util.Queue;
+import view.connection.Connection;
 
 /** Implements the daemons of SimPatrol.
  * 
@@ -18,12 +19,15 @@ public abstract class Daemon extends Thread {
 	 *  @developer Subclasses must use the attribute "stop_working" when implementing their run() method. */
 	protected boolean stop_working;
 	
+	/** The connection used by the daemon to listen to and to send messages. */
+	protected Connection connection;
+	
 	/** The buffer shared by the daemon with the connection, for the
 	 *  exchange of messages. */
 	protected Queue<String> buffer;
 	
 	/** The simulator of the patrolling task, performed by SimPatrol.
-	 *  Shared by all the daemons. */
+	 *  Shared among all the daemons. */
 	protected static Simulator simulator;
 	
 	/* Methods. */
@@ -43,15 +47,28 @@ public abstract class Daemon extends Thread {
 		simulator = simpatrol_simulator;
 	}
 	
+	/** Returns the number of the socket connection of the daemon.
+	 * 
+	 *  @return The number of the socket connection. */
+	public int getSocketNumber() {
+		return this.connection.getSocketNumber();
+	}
+	
 	/** Starts the work of the daemon.
 	 * 
-	 *  @param local_socket_number The number of the local UDP socket. 
+	 *  @param local_socket_number The number of the local socket. 
 	 *  @throws IOException */
-	public abstract void start(int local_socket_number) throws IOException;
+	public void start(int local_socket_number) throws IOException {
+		if(!this.connection.isAlive())
+			this.connection.start(local_socket_number);
+		
+		super.start();
+	}
 	
 	/** Stops the work of the daemon. */
 	public void stopWorking() {
 		this.stop_working = true;
+		this.connection.stopWorking();
 	}
 	
 	/** Give preference to use this.start(int local_socket_number)

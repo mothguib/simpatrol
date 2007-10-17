@@ -133,7 +133,7 @@ public final class Coordinator extends Thread implements TimedObject {
 	/** Removes the eventual "agent - action spent stamina - perception spent stamina"
 	 *  trio related to the given agent from the set of such kind of trios.
 	 *  
-	 *  Util when the agent dies.
+	 *  Used when the agent dies.
 	 *  
 	 *  @param agent The agent of which trio must be removed. */
 	public void removeAgentSpentStaminas(Agent agent) {
@@ -260,13 +260,14 @@ public final class Coordinator extends Thread implements TimedObject {
 		
 		for(int i = 0; i < this.NUMBER_OF_CYCLES; i++) {
 			// lets all agents perceive
-			simulator.lockAgentsPerceptions(false);			
+			simulator.lockAgentsPerceptions(false);
 			
 			// screen message
 			System.out.println("[SimPatrol.Coordinator]: Agents are perceiving.");
 			
 			// while there are agents that didn't perceive yet, wait...
-			while(!simulator.allAgentsJustPerceived());		
+			while(!simulator.allAgentsJustPerceived())
+				simulator.lockAgentsPerceptions(false);
 			
 			// all agents perceived, so don't let them perceive anymore
 			simulator.lockAgentsPerceptions(true);
@@ -285,7 +286,8 @@ public final class Coordinator extends Thread implements TimedObject {
 			this.forceAgentsActAsPlanned();
 			
 			// while there are agents that didn't act yet, wait...
-			while(!simulator.allAgentsJustActed());		
+			while(!simulator.allAgentsJustActed())
+				simulator.lockAgentsActions(false);
 			
 			// all agents acted, so don't let them act anymore
 			simulator.lockAgentsActions(true);

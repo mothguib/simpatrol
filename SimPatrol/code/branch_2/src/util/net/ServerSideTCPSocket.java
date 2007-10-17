@@ -35,6 +35,13 @@ public class ServerSideTCPSocket {
 		this.server = new ServerSocket(socket_number);
 	}
 	
+	/** Returns the local number of the TCP socket.
+	 * 
+	 *  @return The number of the socket where this connection listens to messages. */
+	public int getSocketNumber() {
+		return this.server.getLocalPort();
+	}
+	
 	/** Establishes a connection between the local server and the
 	 *  remote client.
 	 *  

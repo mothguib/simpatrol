@@ -5,9 +5,13 @@ package view.connection;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import control.simulator.RealTimeSimulator;
 import util.Queue;
 
-/** Implements the UDP connections with the external agents. */
+/** Implements the UDP connections with the external agents.
+ *  Used by real time simulators.
+ *  
+ *  @see RealTimeSimulator */
 public final class AgentUDPConnection extends UDPConnection {
 	/* Attributes. */
 	/** The buffer where the connection writes the received
@@ -43,7 +47,7 @@ public final class AgentUDPConnection extends UDPConnection {
 			
 			// decides if the message is a perception or action
 			// related message
-			if(message.indexOf("action") > -1)
+			if(message.indexOf("<action ") > -1)
 				this.action_buffer.insert(message);
 			else this.perception_buffer.insert(message);
 		}

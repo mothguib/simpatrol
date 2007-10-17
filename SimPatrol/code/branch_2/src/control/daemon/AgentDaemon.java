@@ -4,19 +4,19 @@
 package control.daemon;
 
 /* Imported classes and/or interfaces. */
-import java.net.SocketException;
+import java.io.IOException;
 import control.coordinator.Coordinator;
 import control.robot.StaminaControllerRobot;
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import util.clock.Clock;
 import util.clock.Clockable;
-import view.connection.AgentUDPConnection;
+import view.connection.Connection;
 import model.agent.Agent;
 
 /** Implements the daemons of SimPatrol that attend
  *  an agent's feelings of perceptions, or intentions of actions. */
-public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
+public abstract class AgentDaemon extends Daemon implements Clockable {
 	/* Attributes. */
 	/** Registers if the daemon can work at the current moment. */
 	protected boolean can_work;
@@ -26,7 +26,7 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	protected Agent agent;
 	
 	/** The clock that controls the daemon's work. */
-	protected Clock clock;
+	protected Clock clock;	
 	
 	/** The robot that assures the correct spending of stamina to
 	 *  the agent of this daemon.
@@ -37,7 +37,7 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	protected StaminaControllerRobot stamina_robot;
 	
 	/** The coordinator that assures the correct spending of stamina to
-	 *  the agent of this daemon, as well as the correct count of time.
+	 *  the agent of this daemon, as well as the correct counting of time.
 	 *  
 	 *  Used only when the simulator is a cycled one.
 	 *  
@@ -51,8 +51,8 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	 *  and ActionDaemon) will share one. So the connection must be set by the
 	 *  setConnection() method.
 	 *  @see PerceptionDaemon
-	 *  
-	 *  @see ActionDaemon 
+	 *  @see ActionDaemon
+	 *   
 	 *  @param thread_name The name of the thread of the daemon.
 	 *  @param agent The agent whose perceptions are produced and intentions are attended. */
 	public AgentDaemon(String thread_name, Agent agent) {
@@ -82,7 +82,7 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	/** Configures the connection of the daemon.
 	 * 
 	 *  @param connection The connection of the daemon. */
-	public void setConnection(AgentUDPConnection connection) {
+	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 	
@@ -106,8 +106,9 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 		coordinator = passed_coordinator;
 	}
 	
-	public void start(int local_socket_number) throws SocketException {
+	public void start(int local_socket_number) throws IOException {
 		super.start(local_socket_number);
+		
 		if(this.clock != null)
 			this.clock.start();
 	}	
@@ -115,6 +116,7 @@ public abstract class AgentDaemon extends AuxiliaryDaemon implements Clockable {
 	/** Indicates that the daemon must stop working. */
 	public void stopWorking() {
 		super.stopWorking();
+		
 		if(this.clock != null)
 			this.clock.stopWorking();
 	}

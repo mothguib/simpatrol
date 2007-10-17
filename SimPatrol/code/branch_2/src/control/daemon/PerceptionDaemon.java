@@ -5,11 +5,9 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-
 import control.simulator.SimulatorStates;
 import util.Queue;
 import model.agent.Agent;
@@ -35,7 +33,7 @@ import model.stigma.Stigma;
  *  an agent's perceptions.
  *  
  *  @developer New Perception classes must change this class.
- *  @developer New Limitation classes must change this class.
+ *  @developer New Limitation classes can change this class.
  *  @modeller This class must have its behaviour modelled. */
 public final class PerceptionDaemon extends AgentDaemon {
 	/* Attributes. */
@@ -50,7 +48,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
      *  Doesn't initiate its own connection, as it will be shared with an
 	 *  ActionDaemon object. So the connection must be set by the
-	 *  setConenction() method.
+	 *  setConnection() method.
 	 *  @see PerceptionDaemon
 	 *  
 	 *  @param thread_name The name of the thread of the daemon.
@@ -79,6 +77,8 @@ public final class PerceptionDaemon extends AgentDaemon {
 				
 				// adds the message to the received ones
 				this.received_messages.insert(message);
+				
+				// quits the method
 				return;
 			}
 		
@@ -182,7 +182,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
 	 *  @param limitations The limitations to the perception of the agent itself.
 	 *  @return The perception of the agent itself
-	 *  @developer New Limitation classes must change this method. */
+	 *  @developer New Limitation classes can change this method. */
 	private SelfPerception produceSelfPerception(Limitation[] limitations) {
 		// holds an eventual stamina limitation
 		double stamina = 0;
@@ -211,7 +211,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
 	 *  @param limitations The limitations to the perception of the graph.
 	 *  @return The perception of the graph.
-	 *  @developer New Limitation classes must change this method. */
+	 *  @developer New Limitation classes can change this method. */
 	private GraphPerception produceGraphPerception(Limitation[] limitations) {
 		// holds an eventual depth limitation
 		int depth = -1;
@@ -246,7 +246,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
 	 *  @param limitations The limitations to the perception of agents.
 	 *  @return The perception of the other agents of the simulation.
-	 *  @developer New Limitation classes must change this method. */
+	 *  @developer New Limitation classes can change this method. */
 	private AgentsPerception produceAgentsPerception(Limitation[] limitations) {
 		// holds an eventual depth limitation
 		int depth = -1;
@@ -316,7 +316,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
 	 *  @param limitations The limitations to the perception of stigmas.
 	 *  @return The perception of the stigmas deposited on the graph.
-	 *  @developer New Limitation classes must change this method. */
+	 *  @developer New Limitation classes can change this method. */
 	private StigmasPerception produceStigmasPerception(Limitation[] limitations) {
 		// holds an eventual depth limitation
 		int depth = -1;
@@ -358,7 +358,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 * 
 	 *  @param limitations The limitations to the perception of broadcasted messages.
 	 *  @return The perception of broadcasted messages.
-	 *  @developer New Limitation classes must change this method. */
+	 *  @developer New Limitation classes can change this method. */
 	private BroadcastPerception[] produceBroadcastPerceptions(Limitation[] limitations) {
 		// holds the produced broadcast perceptions
 		LinkedList<BroadcastPerception> broadcast_perceptions = new LinkedList<BroadcastPerception>();
@@ -397,7 +397,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		return answer;
 	}
 	
-	public void start(int local_socket_number) throws SocketException {
+	public void start(int local_socket_number) throws IOException {
 		super.start(local_socket_number);
 		
 		// screen message

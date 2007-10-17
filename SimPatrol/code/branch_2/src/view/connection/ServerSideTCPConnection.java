@@ -6,6 +6,8 @@ package view.connection;
 /* Imported classes and/or interfaces. */
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.SocketException;
+
 import util.Queue;
 import util.net.ServerSideTCPSocket;
 import control.daemon.MainDaemon;
@@ -14,17 +16,10 @@ import control.daemon.MainDaemon;
  *  of SimPatrol.
  *  
  *  @see MainDaemon */
-public class ServerSideTCPConnection extends Thread {
+public class ServerSideTCPConnection extends Connection {
 	/* Attributes. */
-	/** Registers if the connection shall stop working. */
-	private boolean stop_working;
-	
 	/** The TCP socket of the connection. */
-	private ServerSideTCPSocket socket;
-	
-	/** The buffer where the connection writes the received
-	 *  messages. */
-	private Queue<String> buffer;
+	protected ServerSideTCPSocket socket;
 	
 	/* Methods. */
 	/** Constructor.
@@ -32,25 +27,10 @@ public class ServerSideTCPConnection extends Thread {
 	 *  @param name The name of the thread of the connection.
 	 *  @param buffer The buffer where the connection writes the received messages. */
 	public ServerSideTCPConnection(String name, Queue<String> buffer) {
-		super(name);
-		this.stop_working = false;
+		super(name, buffer);
 		this.socket = null;
-		this.buffer = buffer;
 	}
 	
-	/** Indicates that the connection must stop working. */
-	public void stopWorking() {
-		this.stop_working = true;
-		
-		// screen message
-		System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Stopped listening to messages.");
-	}
-	
-	/** Sends a given string message to the remote client.
-	 * 
-	 *  @param message The string message to be sent.
-	 *  @return TRUE if the message was successfully sent, FALSE if not. 
-	 *  @throws IOException */
 	public boolean send(String message) throws IOException {
 		if(this.socket != null) {
 			// screen message
@@ -61,24 +41,23 @@ public class ServerSideTCPConnection extends Thread {
 		
 		return false;
 	}
+	public int getSocketNumber() {
+		return this.socket.getSocketNumber();
+	}
 	
-	/** Starts the work of the connection.
-	 * 
-	 *  @param The number of the TCP socket. 
-	 *  @throws IOException */
 	public void start(int local_socket_number) throws IOException {
 		this.socket = new ServerSideTCPSocket(local_socket_number);
-		super.start();
+		super.start(local_socket_number);
 		
 		// screen message
 		System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Started listening to messages.");
 	}
 	
-	/** Give preference to use this.start(int local_socket_number).
-	 * 
-	 *  @deprecated */
-	public void start() {
-		super.start();
+	public void stopWorking() {
+		super.stopWorking();
+		
+		// screen message
+		System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Stopped listening to messages.");
 	}
 	
 	public void run() {
@@ -118,8 +97,21 @@ public class ServerSideTCPConnection extends Thread {
 				// screen message
 				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
 			}
+			catch(SocketException e2) {
+				// disconnects
+				try { this.socket.disconnect(); }
+				catch (IOException e) { e.printStackTrace(); }
+				
+				// screen message
+				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
+			}
 			catch(IOException e2) {
-				e2.printStackTrace();
+				// disconnects
+				try { this.socket.disconnect(); }
+				catch (IOException e) { e.printStackTrace(); }
+				
+				// screen message
+				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
 			}
 		}
 	}

@@ -13,10 +13,10 @@ import model.metric.Metric;
 public final class MetricCreationConfiguration extends Configuration {
 	/* Attributes. */
 	/** The new metric to be added to the simulation. */
-	private Metric metric;
+	private final Metric METRIC;
 	
 	/** The duration, in seconds, of a cycle of measurement of the metric. */
-	private int cycle_duration;
+	private final int CYCLE_DURATION;
 	
 	/* Methods. */
 	/** Constructor.
@@ -24,16 +24,15 @@ public final class MetricCreationConfiguration extends Configuration {
 	 *  @param metric The metric to be added to the simulation.
 	 *  @param cycle_duration The duration, in seconds, of a cycle of measurement of the metric.*/	
 	public MetricCreationConfiguration(Metric metric, int cycle_duration) {
-		super();
-		this.metric = metric;
-		this.cycle_duration = cycle_duration;
+		this.METRIC = metric;
+		this.CYCLE_DURATION = cycle_duration;
 	}
 	
 	/** Returns the metric of the configuration.
 	 * 
 	 *  @return The metric of the configuration. */
 	public Metric getMetric() {
-		return this.metric;
+		return this.METRIC;
 	}
 	
 	/** Returns the duration, in seconds, of a cycle of
@@ -41,7 +40,7 @@ public final class MetricCreationConfiguration extends Configuration {
 	 *  
 	 *  @return The duration of a cycle of measurement of the metric. */
 	public int getCycle_duration() {
-		return this.cycle_duration;
+		return this.CYCLE_DURATION;
 	}
 	
 	public String fullToXML(int identation) {
@@ -51,11 +50,11 @@ public final class MetricCreationConfiguration extends Configuration {
 		// applies the identation and fills the "configuration" tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");
 		buffer.append("<configuration type=\"" + ConfigurationTypes.METRIC_CREATION +					  
-				      "\" parameter=\"" + this.cycle_duration +
+				      "\" parameter=\"" + this.CYCLE_DURATION +
 				      "\">\n");
 		
 		// puts the metric
-		buffer.append(this.metric.fullToXML(identation + 1));
+		buffer.append(this.METRIC.fullToXML(identation + 1));
 		
 		// closes the tag
 		for(int i = 0; i < identation; i++) buffer.append("/t");

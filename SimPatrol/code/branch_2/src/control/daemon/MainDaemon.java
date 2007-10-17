@@ -5,12 +5,12 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.net.SocketException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-
 import util.net.SocketNumberGenerator;
+import view.connection.ServerSideAgentTCPConnection;
 import view.connection.AgentUDPConnection;
+import view.connection.Connection;
 import view.connection.ServerSideTCPConnection;
 import model.Environment;
 import model.agent.Agent;
@@ -42,9 +42,6 @@ public final class MainDaemon extends Daemon {
 	/* Attributes. */
 	/** A generator of numbers for socket connections. */
 	private SocketNumberGenerator socket_number_generator;
-	
-	/** The TCP connection of the main daemon. */
-	private ServerSideTCPConnection connection;
 
 	/* Methods. */
 	/** Constructor.
@@ -267,7 +264,11 @@ public final class MainDaemon extends Daemon {
 		ActionDaemon action_daemon = new ActionDaemon(agent.getObjectId() + "'s action daemon", agent);
 		
 		// creates a new agent connection
-		AgentUDPConnection connection = new AgentUDPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
+		Connection connection = null;
+		if(simulator instanceof RealTimeSimulator)
+			connection = new AgentUDPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
+		else
+			connection = new ServerSideAgentTCPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
 		
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);
@@ -287,7 +288,7 @@ public final class MainDaemon extends Daemon {
 				action_daemon.start(this.socket_number_generator.generateSocketNumber());
 				
 				socket_exception_happened = false;
-			} catch (SocketException e) { socket_exception_happened = true; }
+			} catch (IOException e) { socket_exception_happened = true; }
 		} while (socket_exception_happened);
 		
 		// adds the daemons to the simulator
@@ -295,7 +296,7 @@ public final class MainDaemon extends Daemon {
 		simulator.addActionDaemon(action_daemon);
 		
 		// returns the obtained number for the sockets of the daemons
-		return perception_daemon.getUDPSocketNumber();
+		return perception_daemon.getSocketNumber();
 	}
 	
 	/** Creates the metric daemon for the given metric, starts this daemon and
@@ -316,8 +317,11 @@ public final class MainDaemon extends Daemon {
 			try {
 				metric_daemon.start(this.socket_number_generator.generateSocketNumber());
 				socket_exception_happened = false;
-			} catch (SocketException e) { socket_exception_happened = true; }
-		} while (socket_exception_happened);
+			}
+			catch(IOException e) {
+				socket_exception_happened = true;
+			}
+		} while(socket_exception_happened);
 		
 		// adds the daemon to the simulator
 		simulator.addMetricDaemon(metric_daemon);
@@ -328,19 +332,7 @@ public final class MainDaemon extends Daemon {
 			metric_daemon.startMetric();
 		
 		// returns the obtained number for the sockets of the daemons
-		return metric_daemon.getUDPSocketNumber();
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void start(int local_socket_number) throws IOException {
-		if(!this.connection.isAlive()) this.connection.start(local_socket_number);
-		this.start();
-		
-		// starts the socket number generator
-		this.socket_number_generator = new SocketNumberGenerator(local_socket_number);
-		
-		// screen message
-		System.out.println("[SimPatrol.MainDaemon]: Started working.");
+		return metric_daemon.getSocketNumber();
 	}
 	
 	/** Lets the main daemon send an orientation signaling that the
@@ -351,9 +343,19 @@ public final class MainDaemon extends Daemon {
 		this.connection.send(new Orientation("Simulation ended.").fullToXML(0));
 	}
 	
+	public void start(int local_socket_number) throws IOException {
+		// super class code execution
+		super.start(local_socket_number);
+				
+		// starts the socket number generator
+		this.socket_number_generator = new SocketNumberGenerator(local_socket_number);
+		
+		// screen message
+		System.out.println("[SimPatrol.MainDaemon]: Started working.");
+	}
+	
 	public void stopWorking() {
 		super.stopWorking();
-		this.connection.stopWorking();
 		
 		// screen message
 		System.out.println("[SimPatrol.MainDaemon]: Stopped working.");
