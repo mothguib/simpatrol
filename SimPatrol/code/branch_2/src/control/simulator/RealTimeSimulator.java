@@ -17,6 +17,7 @@ import control.daemon.ActionDaemon;
 import control.daemon.PerceptionDaemon;
 import control.robot.DynamicityControllerRobot;
 import control.robot.MortalityControllerRobot;
+import control.robot.Robot;
 import control.robot.StaminaControllerRobot;
 import util.timer.Chronometer;
 import util.timer.Chronometerable;
@@ -50,6 +51,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 	public RealTimeSimulator(int local_socket_number, double actualization_time_rate) throws IOException {
 		super(local_socket_number, actualization_time_rate);
 		this.chronometer = null;
+		Robot.setSimulator(this);
 	}
 	
 	/** Returns the elapsed simulated time.

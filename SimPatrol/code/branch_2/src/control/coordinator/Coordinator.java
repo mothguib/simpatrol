@@ -259,11 +259,11 @@ public final class Coordinator extends Thread implements TimedObject {
 		System.out.println("[SimPatrol.Coordinator]: Simulation started.");
 		
 		for(int i = 0; i < this.NUMBER_OF_CYCLES; i++) {
-			// lets all agents perceive
-			simulator.lockAgentsPerceptions(false);
-			
 			// screen message
 			System.out.println("[SimPatrol.Coordinator]: Agents are perceiving.");
+			
+			// lets all agents perceive
+			simulator.lockAgentsPerceptions(false);
 			
 			// while there are agents that didn't perceive yet, wait...
 			while(!simulator.allAgentsJustPerceived())

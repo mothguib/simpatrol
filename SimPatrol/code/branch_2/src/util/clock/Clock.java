@@ -84,7 +84,7 @@ public final class Clock extends Thread {
 				
 				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
 				int time_gap = (int) ((next_ref - prev_ref) * Math.pow(this.step, -1));
-				if(!this.stop_working) this.object.act(time_gap);				
+				if(!this.stop_working) this.object.act(time_gap);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();

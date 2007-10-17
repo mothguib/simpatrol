@@ -549,175 +549,185 @@ public final class ActionDaemon extends AgentDaemon {
 		
 		// while the deamon is supposed to work
 		while (!this.stop_working) {
-			// registers if some action was attended
-			boolean attended_actions = false;
-			
-			// while the buffer has messages to be attended
-			// and the daemon can work
-			while(this.buffer.getSize() > 0 && this.can_work) {
-				// destroys the current planning of actions
-				this.planning.clear();
-				if(this.stamina_robot != null)
-					this.stamina_robot.setActions_spent_stamina(0);
-				else if(coordinator != null)
-					coordinator.setActionsSpentStamina(this.agent, 0);
-				
-				// obtains the elder message
-				String message = this.buffer.remove();
-				
-				// the action to be obtained from the message
-				Action action = null;
-				
-				// tries to obtain the action with the ActionTranslator
-				try { action = ActionTranslator.getAction(message); }
-				catch (ParserConfigurationException e1) { e1.printStackTrace(); }
-				catch (SAXException e1) { e1.printStackTrace(); }
-				catch (IOException e1) { e1.printStackTrace(); }
-								
-				// if the action is still null, tries to obtain it as a teleport action
-				if(action == null) {
-					try { action = ActionTranslator.getTeleportAction(message, simulator.getEnvironment().getGraph()); }
-					catch (ParserConfigurationException e) { e.printStackTrace(); }
-					catch (SAXException e) { e.printStackTrace(); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				
-				// if the action is still null, tries to obtain it as a goto action
-				if(action == null) {
-					try { action = ActionTranslator.getGoToAction(message, simulator.getEnvironment().getGraph()); }
-					catch (ParserConfigurationException e) { e.printStackTrace(); }
-					catch (SAXException e) { e.printStackTrace(); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				
-				// if the obtained action is a visiting one
-				if(action instanceof VisitAction) {
-					// verifies if the agent has permission to visit vertexes
-					ActionPermission[] permissions = this.agent.getAllowedActions();
+			// if the daemon can work and the simulator is simulating
+			if(this.can_work && simulator.getState() == SimulatorStates.SIMULATING) {
+				synchronized(simulator) {
+					// registers if some action was attended
+					boolean attended_actions = false;
 					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.VISIT_ACTION)
-							// attends the action
-							this.attendVisitAction((VisitAction) action, permissions[i].getLimitations());
-				}
-				// else if the obtained action is a broadcasting one
-				else if(action instanceof BroadcastAction) {
-					// verifies if the agent has permission to broadcast messages
-					ActionPermission[] permissions = this.agent.getAllowedActions();
-					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.BROADCAST_ACTION)
-							// attends the action
-							this.attendBroadcastAction((BroadcastAction) action, permissions[i].getLimitations());
-				}
-				// else if the obtained action is a stigmatize one
-				else if(action instanceof StigmatizeAction) {
-					// verifies if the agent has permission to deposit stigmas
-					ActionPermission[] permissions = this.agent.getAllowedActions();
-					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.STIGMATIZE_ACTION)
-							// attends the action
-							this.attendStigmatizeAction((StigmatizeAction) action, permissions[i].getLimitations());
-				}
-				// else if the obtained action is an atomic recharge one
-				else if(action instanceof AtomicRechargeAction) {
-					// verifies if the agent has permission to immediately recharge
-					ActionPermission[] permissions = this.agent.getAllowedActions();
-					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE_ACTION)
-							// attends the action
-							this.attendAtomicRechargeAction((AtomicRechargeAction) action, permissions[i].getLimitations());
-				}
-				// else if the obtained action is a recharge one
-				else if(action instanceof RechargeAction) {
-					// verifies if the agent has permission to recharge
-					ActionPermission[] permissions = this.agent.getAllowedActions();
-					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.RECHARGE_ACTION) {
-							// attends the action
-							this.attendRechargeAction((RechargeAction) action, permissions[i].getLimitations());
-							
-							// if the simulator is a cycled one,
-							// calls this.act(1)
-							if(simulator instanceof CycledSimulator)
-								this.act(1);
+					// while the buffer has messages to be attended and 
+					// the simulation didn't finished
+					while(this.buffer.getSize() > 0 && !this.stop_working) {
+						// destroys the current planning of actions
+						this.planning.clear();
+						if(this.stamina_robot != null)
+							this.stamina_robot.setActions_spent_stamina(0);
+						else if(coordinator != null)
+							coordinator.setActionsSpentStamina(this.agent, 0);
+						
+						// obtains the elder message
+						String message = this.buffer.remove();
+						
+						// the action to be obtained from the message
+						Action action = null;
+						
+						// tries to obtain the action with the ActionTranslator
+						try { action = ActionTranslator.getAction(message); }
+						catch (ParserConfigurationException e1) { e1.printStackTrace(); }
+						catch (SAXException e1) { e1.printStackTrace(); }
+						catch (IOException e1) { e1.printStackTrace(); }
+										
+						// if the action is still null, tries to obtain it as a teleport action
+						if(action == null) {
+							try { action = ActionTranslator.getTeleportAction(message, simulator.getEnvironment().getGraph()); }
+							catch (ParserConfigurationException e) { e.printStackTrace(); }
+							catch (SAXException e) { e.printStackTrace(); }
+							catch (IOException e) { e.printStackTrace(); }
 						}
-				}
-				// else if the action is a teleport action
-				else if(action instanceof TeleportAction) {
-					// verifies if the agent has permission to teleport
-					ActionPermission[] permissions = this.agent.getAllowedActions();
+						
+						// if the action is still null, tries to obtain it as a goto action
+						if(action == null) {
+							try { action = ActionTranslator.getGoToAction(message, simulator.getEnvironment().getGraph()); }
+							catch (ParserConfigurationException e) { e.printStackTrace(); }
+							catch (SAXException e) { e.printStackTrace(); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						
+						// if the obtained action is a visiting one
+						if(action instanceof VisitAction) {
+							// verifies if the agent has permission to visit vertexes
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.VISIT_ACTION)
+									// attends the action
+									this.attendVisitAction((VisitAction) action, permissions[i].getLimitations());
+						}
+						// else if the obtained action is a broadcasting one
+						else if(action instanceof BroadcastAction) {
+							// verifies if the agent has permission to broadcast messages
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.BROADCAST_ACTION)
+									// attends the action
+									this.attendBroadcastAction((BroadcastAction) action, permissions[i].getLimitations());
+						}
+						// else if the obtained action is a stigmatize one
+						else if(action instanceof StigmatizeAction) {
+							// verifies if the agent has permission to deposit stigmas
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.STIGMATIZE_ACTION)
+									// attends the action
+									this.attendStigmatizeAction((StigmatizeAction) action, permissions[i].getLimitations());
+						}
+						// else if the obtained action is an atomic recharge one
+						else if(action instanceof AtomicRechargeAction) {
+							// verifies if the agent has permission to immediately recharge
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE_ACTION)
+									// attends the action
+									this.attendAtomicRechargeAction((AtomicRechargeAction) action, permissions[i].getLimitations());
+						}
+						// else if the obtained action is a recharge one
+						else if(action instanceof RechargeAction) {
+							// verifies if the agent has permission to recharge
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.RECHARGE_ACTION) {
+									// attends the action
+									this.attendRechargeAction((RechargeAction) action, permissions[i].getLimitations());
+									
+									// if the simulator is a cycled one,
+									// calls this.act(1)
+									if(simulator instanceof CycledSimulator)
+										this.act(1);
+								}
+						}
+						// else if the action is a teleport action
+						else if(action instanceof TeleportAction) {
+							// verifies if the agent has permission to teleport
+							ActionPermission[] permissions = this.agent.getAllowedActions();
 
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.TELEPORT_ACTION)
-							// attends the intention of action
-							this.attendTeleportAction((TeleportAction) action, permissions[i].getLimitations());
-				}
-				// else if the action is a goto action
-				else if(action instanceof GoToAction) {
-					// verifies if the agent has permission to move
-					ActionPermission[] permissions = this.agent.getAllowedActions();
-					
-					for(int i = 0; i < permissions.length; i++)
-						if(permissions[i].getAction_type() == ActionTypes.GOTO_ACTION) {
-							// attends the intention of action
-							this.attendGoToAction((GoToAction) action, permissions[i].getLimitations());
-							
-							// if the simulator is a cycled one,
-							// calls this.act(1)
-							if(simulator instanceof CycledSimulator)
-								this.act(1);
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.TELEPORT_ACTION)
+									// attends the intention of action
+									this.attendTeleportAction((TeleportAction) action, permissions[i].getLimitations());
 						}
+						// else if the action is a goto action
+						else if(action instanceof GoToAction) {
+							// verifies if the agent has permission to move
+							ActionPermission[] permissions = this.agent.getAllowedActions();
+							
+							for(int i = 0; i < permissions.length; i++)
+								if(permissions[i].getAction_type() == ActionTypes.GOTO_ACTION) {
+									// attends the intention of action
+									this.attendGoToAction((GoToAction) action, permissions[i].getLimitations());
+									
+									// if the simulator is a cycled one,
+									// calls this.act(1)
+									if(simulator instanceof CycledSimulator)
+										this.act(1);
+								}
+						}
+						// developer: new action types must add code here
+						
+						// registers that the intentions of actions were attended
+						attended_actions = true;
+					}
+					
+					// registers that the agent just acted,
+					// if some action was attended
+					if(attended_actions)
+						this.agent.setState(AgentStates.JUST_ACTED);
 				}
-				// developer: new action types must add code here
-				
-				// registers that the intentions of actions were attended
-				attended_actions = true;
 			}
-			
-			// registers that the agent just acted,
-			// if some action was attended
-			if(attended_actions)
-				this.agent.setState(AgentStates.JUST_ACTED);
 		}
 	}
 	
 	/** @developer New CompoundAction classes must change this method.
 	 *  @modeller This method must be modelled. */
 	public void act(int time_gap) {
-		// if the agent can act and the simulator is simulating
-		if(this.can_work && simulator.getState() == SimulatorStates.SIMULATING) {
-			// if the planning is not empty
-			if(this.planning.getSize() > 0) {
-				// executes the planning, based on the eventual time gap
-				for(int i = 0; i < time_gap; i++) {
-					// executes the current atomic action
-					AtomicAction action = this.planning.remove();
-					
-					// if the atomic action is a teleport one
-					if(action instanceof TeleportAction)
-						// attends it, as a planned teleport action
-						this.attendPlannedTeleportAction((TeleportAction) action);
+		// if the simulator is simulating
+		if(simulator.getState() == SimulatorStates.SIMULATING) {
+			synchronized(simulator) {
+				// if the planning is not empty
+				if(this.planning.getSize() > 0) {
+					// executes the planning, based on the eventual time gap
+					for(int i = 0; i < time_gap; i++) {
+						// executes the current atomic action						
+						AtomicAction action = null;
+						if(!this.stop_working)
+							action = this.planning.remove();
+						
+						// if the atomic action is a teleport one
+						if(action instanceof TeleportAction)
+							// attends it, as a planned teleport action
+							this.attendPlannedTeleportAction((TeleportAction) action);
 
-					// else if the atomic action is an atomic recharge action			
-					else if(action instanceof AtomicRechargeAction)
-						// attends it, as a planned atomic recharge action
-						this.attendPlannedAtomicRechargeAction((AtomicRechargeAction) action);
+						// else if the atomic action is an atomic recharge action			
+						else if(action instanceof AtomicRechargeAction)
+							// attends it, as a planned atomic recharge action
+							this.attendPlannedAtomicRechargeAction((AtomicRechargeAction) action);
+						
+						// new AtomicAction classes must add code here
+					}
 					
-					// new AtomicAction classes must add code here
+					// registers that the agent just acted
+					if(!this.stop_working)
+						this.agent.setState(AgentStates.JUST_ACTED);
 				}
-				
-				// registers that the agent just acted
-				this.agent.setState(AgentStates.JUST_ACTED);
-			}
-			// else, sets the stamina to be spend as 0
-			else if(this.stamina_robot != null)
-				this.stamina_robot.setActions_spent_stamina(0);
-			else if(coordinator != null)
-				coordinator.setActionsSpentStamina(this.agent, 0);
+				// else, sets the stamina to be spend as 0
+				else if(this.stamina_robot != null)
+					this.stamina_robot.setActions_spent_stamina(0);
+				else if(coordinator != null)
+					coordinator.setActionsSpentStamina(this.agent, 0);
+			}			
 		}
 	}
 	

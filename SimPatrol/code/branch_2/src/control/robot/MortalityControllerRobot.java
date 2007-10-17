@@ -48,31 +48,33 @@ public final class MortalityControllerRobot extends Robot {
 	}
 	
 	public void act(int time_gap) {
-		for(int i = 0; i < time_gap; i++) {
-			// obtains the probability distribution for the death of the mortal object
-			EventTimeProbabilityDistribution death_tpd = this.object.getDeathTPD();
-			
-			// if there's a death tpd and the object must die now 
-			if(death_tpd != null && death_tpd.nextBoolean()) {
-				// kills the object
-				this.object.die();
+		synchronized (simulator) {
+			for(int i = 0; i < time_gap; i++) {
+				// obtains the probability distribution for the death of the mortal object
+				EventTimeProbabilityDistribution death_tpd = this.object.getDeathTPD();
 				
-				// if the object is an agent, stops its daemons
-				if(this.object instanceof Agent) {
-					simulator.stopAndRemoveAgentDaemons((Agent) this.object);
+				// if there's a death tpd and the object must die now 
+				if(death_tpd != null && death_tpd.nextBoolean()) {
+					// kills the object
+					this.object.die();
 					
-					// stops and removes its eventual stamina controller robot
-					simulator.stopAndRemoveStaminaControllerRobot((Agent) this.object);
+					// if the object is an agent, stops its daemons
+					if(this.object instanceof Agent) {
+						simulator.stopAndRemoveAgentDaemons((Agent) this.object);
+						
+						// stops and removes its eventual stamina controller robot
+						simulator.stopAndRemoveStaminaControllerRobot((Agent) this.object);
+					}
+					
+					// stops this robot
+					this.stopWorking();
+					
+					// removes this robot from the rt simulator
+					simulator.removeMortalityControllerRobot(this);							
+					
+					// quits the method
+					return;
 				}
-				
-				// stops this robot
-				this.stopWorking();
-				
-				// removes this robot from the rt simulator
-				simulator.removeMortalityControllerRobot(this);							
-				
-				// quits the method
-				return;
 			}
 		}
 	}

@@ -29,26 +29,28 @@ public final class DynamicityControllerRobot extends Robot {
 	}
 	
 	public void act(int time_gap) {
-		for(int i = 0; i < time_gap; i++) {		
-			// if the dynamic object is enabled
-			if(this.object.isEnabled()) {			
-				// atualizes the enabling tpd
-				this.object.getEnablingTPD().nextBoolean();
-			
-				// verifies if the object must be disabled now
-				if(this.object.getDisablingTPD().nextBoolean())
-					this.object.setIsEnabled(false);
-			}
-			// else
-			else {
-				// verifies if the object must be enabled now
-				if(this.object.getEnablingTPD().nextBoolean())
-					this.object.setIsEnabled(true);
+		synchronized (simulator) {
+			for(int i = 0; i < time_gap; i++) {		
+				// if the dynamic object is enabled
+				if(this.object.isEnabled()) {			
+					// atualizes the enabling tpd
+					this.object.getEnablingTPD().nextBoolean();
 				
-				// atualizes the disabling tpd
-				this.object.getDisablingTPD().nextBoolean();
+					// verifies if the object must be disabled now
+					if(this.object.getDisablingTPD().nextBoolean())
+						this.object.setIsEnabled(false);
+				}
+				// else
+				else {
+					// verifies if the object must be enabled now
+					if(this.object.getEnablingTPD().nextBoolean())
+						this.object.setIsEnabled(true);
+					
+					// atualizes the disabling tpd
+					this.object.getDisablingTPD().nextBoolean();
+				}
 			}
-		}
+		}		
 	}
 	
 	public void start() {

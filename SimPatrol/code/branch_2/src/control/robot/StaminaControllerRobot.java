@@ -72,11 +72,13 @@ public final class StaminaControllerRobot extends Robot {
 	}
 	
 	public void act(int time_gap) {
-		double spent_stamina = this.actions_spent_stamina + this.perceptions_spent_stamina;
-		
-		if(spent_stamina > 0)
-			for(int i = 0; i < time_gap; i++)
-				this.agent.decStamina(spent_stamina);
+		synchronized (simulator) {
+			double spent_stamina = this.actions_spent_stamina + this.perceptions_spent_stamina;
+			
+			if(spent_stamina > 0)
+				for(int i = 0; i < time_gap; i++)
+					this.agent.decStamina(spent_stamina);
+		}
 	}
 	
 	public void start() {

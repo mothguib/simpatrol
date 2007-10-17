@@ -370,88 +370,91 @@ public final class MainDaemon extends Daemon {
 			while(message == null)
 				message = this.buffer.remove();
 			
-			// obtains the configuration from the string message
-			Configuration configuration = null;
-			try { configuration = ConfigurationTranslator.getConfiguration(message); }
-			catch (ParserConfigurationException e) { e.printStackTrace(); }
-			catch (SAXException e) { e.printStackTrace(); }
-			catch (IOException e) { e.printStackTrace(); }
-			
-			// if configuration is still not valid, tries to obtain it
-			// as an "agent creation" configuration
-			if(configuration == null)
-				try { configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, simulator.getEnvironment().getGraph()); }
-				catch (ParserConfigurationException e) { e.printStackTrace(); }
-				catch (SAXException e) { e.printStackTrace(); }
-				catch (IOException e) { e.printStackTrace(); }
-			
-			// if the configuration is an "environment creation"
-			if(configuration instanceof EnvironmentCreationConfiguration) {
-				// if the simulator is not simulating yet
-				if(simulator.getState() == SimulatorStates.CONFIGURING) {
-					try { this.attendEnvironmentCreationConfiguration((EnvironmentCreationConfiguration)configuration); }
+			if(!this.stop_working) {
+				synchronized(simulator) {
+					// obtains the configuration from the string message
+					Configuration configuration = null;
+					try { configuration = ConfigurationTranslator.getConfiguration(message); }
+					catch (ParserConfigurationException e) { e.printStackTrace(); }
+					catch (SAXException e) { e.printStackTrace(); }
 					catch (IOException e) { e.printStackTrace(); }
-				}
-				else {
-					try { this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0));
-					} catch (IOException e) { e.printStackTrace(); }
+					
+					// if configuration is still not valid, tries to obtain it
+					// as an "agent creation" configuration
+					if(configuration == null)
+						try { configuration = ConfigurationTranslator.getAgentCreationConfiguration(message, simulator.getEnvironment().getGraph()); }
+						catch (ParserConfigurationException e) { e.printStackTrace(); }
+						catch (SAXException e) { e.printStackTrace(); }
+						catch (IOException e) { e.printStackTrace(); }
+					
+					// if the configuration is an "environment creation"
+					if(configuration instanceof EnvironmentCreationConfiguration) {
+						// if the simulator is not simulating yet
+						if(simulator.getState() == SimulatorStates.CONFIGURING) {
+							try { this.attendEnvironmentCreationConfiguration((EnvironmentCreationConfiguration)configuration); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						else {
+							try { this.connection.send(new Orientation("Simulator already simulating.").fullToXML(0));
+							} catch (IOException e) { e.printStackTrace(); }
+						}
+					}
+					
+					// else if the configuration is an "agent creation"
+					else if(configuration instanceof AgentCreationConfiguration) {
+						// if the environment of the simulator is valid
+						if(simulator.getEnvironment() != null) {
+							try { this.attendAgentCreationConfiguration((AgentCreationConfiguration)configuration); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						else {
+							try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
+							} catch (IOException e) { e.printStackTrace(); }
+						}
+					}
+					
+					// else if the configuration is a "metric creation"
+					else if(configuration instanceof MetricCreationConfiguration) {
+						// if the environment of the simulator is valid
+						if(simulator.getEnvironment() != null) {
+							try { this.attendMetricCreationConfiguration((MetricCreationConfiguration)configuration); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						else {
+							try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
+							} catch (IOException e) { e.printStackTrace(); }
+						}
+					}
+					
+					// else if the configuration is a "simulation start"
+					else if(configuration instanceof SimulationStartConfiguration) {
+						// if the environment of the simulator is valid
+						if(simulator.getEnvironment() != null) {
+							try { this.attendSimulationStartConfiguration((SimulationStartConfiguration)configuration); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						else {
+							try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
+							} catch (IOException e) { e.printStackTrace(); }
+						}
+					}
+					
+					// else if the configuration is an "agent death"
+					else if(configuration instanceof AgentDeathConfiguration) {
+						// if the environment of the simulator is valid
+						if(simulator.getEnvironment() != null) {
+							try { this.attendAgentDeathConfiguration((AgentDeathConfiguration) configuration); }
+							catch (IOException e) { e.printStackTrace(); }
+						}
+						else {
+							try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
+							} catch (IOException e) { e.printStackTrace(); }
+						}						
+					}
+					
+					// developer: new configurations must add code here
 				}
 			}
-			
-			// else if the configuration is an "agent creation"
-			else if(configuration instanceof AgentCreationConfiguration) {
-				// if the environment of the simulator is valid
-				if(simulator.getEnvironment() != null) {
-					try { this.attendAgentCreationConfiguration((AgentCreationConfiguration)configuration); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
-					} catch (IOException e) { e.printStackTrace(); }
-				}
-			}
-			
-			// else if the configuration is a "metric creation"
-			else if(configuration instanceof MetricCreationConfiguration) {
-				// if the environment of the simulator is valid
-				if(simulator.getEnvironment() != null) {
-					try { this.attendMetricCreationConfiguration((MetricCreationConfiguration)configuration); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
-					} catch (IOException e) { e.printStackTrace(); }
-				}
-			}
-			
-			// else if the configuration is a "simulation start"
-			else if(configuration instanceof SimulationStartConfiguration) {
-				// if the environment of the simulator is valid
-				if(simulator.getEnvironment() != null) {
-					try { this.attendSimulationStartConfiguration((SimulationStartConfiguration)configuration); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
-					} catch (IOException e) { e.printStackTrace(); }
-				}
-			}
-			
-			// else if the configuration is an "agent death"
-			else if(configuration instanceof AgentDeathConfiguration) {
-				// if the environment of the simulator is valid
-				if(simulator.getEnvironment() != null) {
-					try { this.attendAgentDeathConfiguration((AgentDeathConfiguration) configuration); }
-					catch (IOException e) { e.printStackTrace(); }
-				}
-				else {
-					try { this.connection.send(new Orientation("Environment (graph + societies) not set yet.").fullToXML(0));
-					} catch (IOException e) { e.printStackTrace(); }
-				}
-				
-			}
-			
-			// developer: new configurations must add code here
 		}
 	}
 }
