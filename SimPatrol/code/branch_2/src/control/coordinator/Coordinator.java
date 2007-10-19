@@ -262,9 +262,6 @@ public final class Coordinator extends Thread implements TimedObject {
 			// screen message
 			System.out.println("[SimPatrol.Coordinator]: Agents are perceiving.");
 			
-			// lets all agents perceive
-			simulator.lockAgentsPerceptions(false);
-			
 			// while there are agents that didn't perceive yet, wait...
 			while(!simulator.allAgentsJustPerceived())
 				simulator.lockAgentsPerceptions(false);
@@ -274,17 +271,15 @@ public final class Coordinator extends Thread implements TimedObject {
 			
 			// agents shall be thinking now...
 			// screen message
-			System.out.println("[SimPatrol.Coordinator]: Agents are thinking.");									
+			System.out.println("[SimPatrol.Coordinator]: Agents are thinking.");
 			
-			// lets all agents act
-			simulator.lockAgentsActions(false);
-			
+			// agent must act now
 			// screen message
 			System.out.println("[SimPatrol.Coordinator]: Agents are acting.");
 			
 			// forces the agents that have plans to act according to it
 			this.forceAgentsActAsPlanned();
-			
+
 			// while there are agents that didn't act yet, wait...
 			while(!simulator.allAgentsJustActed())
 				simulator.lockAgentsActions(false);

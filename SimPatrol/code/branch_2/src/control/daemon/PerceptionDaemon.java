@@ -413,16 +413,14 @@ public final class PerceptionDaemon extends AgentDaemon {
 	
 	/** @modeller This method must be modelled. */		
 	public void act(int time_gap) {
-		// if the daemon can produce perceptions at the moment and the simulator is already simulating
-		if(this.can_work && simulator.getState() == SimulatorStates.SIMULATING) {
-			synchronized(simulator) {
+		synchronized(simulator) {
+			// if the daemon can produce perceptions at the moment and the simulator is already simulating
+			if(simulator.getState() == SimulatorStates.SIMULATING && this.can_work) {
 				// registers if some perception was succesfully sent
 				boolean sent_succesfully = false;			
 				
 				// obtains all the perceptions the agent is supposed to have at the moment
-				Perception[] perceptions = new Perception[0];
-				if(!this.stop_working)
-					perceptions = this.producePerceptions();
+				Perception[] perceptions = this.producePerceptions();
 				
 				// for each perception, sends it to the remote agent
 				for(int i = 0; i < perceptions.length; i++)
@@ -437,7 +435,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 				// changes the agent's state to JUST_PERCEIVED
 				if(sent_succesfully)
 					this.agent.setState(AgentStates.JUST_PERCEIVED);
-			}			
+			}
 		}
 	}
 }

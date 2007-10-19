@@ -29,7 +29,9 @@ public final class DynamicityControllerRobot extends Robot {
 	}
 	
 	public void act(int time_gap) {
-		synchronized (simulator) {
+		synchronized(simulator) {
+			simulator.getState();
+			
 			for(int i = 0; i < time_gap; i++) {		
 				// if the dynamic object is enabled
 				if(this.object.isEnabled()) {			

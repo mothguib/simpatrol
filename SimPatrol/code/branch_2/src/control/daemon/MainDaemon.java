@@ -372,6 +372,8 @@ public final class MainDaemon extends Daemon {
 			
 			if(!this.stop_working) {
 				synchronized(simulator) {
+					simulator.getState();
+					
 					// obtains the configuration from the string message
 					Configuration configuration = null;
 					try { configuration = ConfigurationTranslator.getConfiguration(message); }

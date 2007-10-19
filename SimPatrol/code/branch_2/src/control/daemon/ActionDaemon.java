@@ -548,16 +548,14 @@ public final class ActionDaemon extends AgentDaemon {
 		while(simulator.getState() == SimulatorStates.CONFIGURING);
 		
 		// while the deamon is supposed to work
-		while (!this.stop_working) {
-			// if the daemon can work and the simulator is simulating
-			if(this.can_work && simulator.getState() == SimulatorStates.SIMULATING) {
-				synchronized(simulator) {
+		while(!this.stop_working)
+			synchronized (simulator) {
+				if(simulator.getState() == SimulatorStates.SIMULATING && this.can_work) {
 					// registers if some action was attended
 					boolean attended_actions = false;
 					
-					// while the buffer has messages to be attended and 
-					// the simulation didn't finished
-					while(this.buffer.getSize() > 0 && !this.stop_working) {
+					// while the buffer has messages to be attended
+					while(this.buffer.getSize() > 0) {
 						// destroys the current planning of actions
 						this.planning.clear();
 						if(this.stamina_robot != null)
@@ -687,15 +685,13 @@ public final class ActionDaemon extends AgentDaemon {
 						this.agent.setState(AgentStates.JUST_ACTED);
 				}
 			}
-		}
 	}
 	
 	/** @developer New CompoundAction classes must change this method.
 	 *  @modeller This method must be modelled. */
 	public void act(int time_gap) {
-		// if the simulator is simulating
-		if(simulator.getState() == SimulatorStates.SIMULATING) {
-			synchronized(simulator) {
+		synchronized(simulator) {
+			if(simulator.getState() == SimulatorStates.SIMULATING) {
 				// if the planning is not empty
 				if(this.planning.getSize() > 0) {
 					// executes the planning, based on the eventual time gap
@@ -727,7 +723,7 @@ public final class ActionDaemon extends AgentDaemon {
 					this.stamina_robot.setActions_spent_stamina(0);
 				else if(coordinator != null)
 					coordinator.setActionsSpentStamina(this.agent, 0);
-			}			
+			}
 		}
 	}
 	

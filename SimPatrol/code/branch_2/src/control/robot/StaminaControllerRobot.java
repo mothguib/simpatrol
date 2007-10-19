@@ -72,7 +72,9 @@ public final class StaminaControllerRobot extends Robot {
 	}
 	
 	public void act(int time_gap) {
-		synchronized (simulator) {
+		synchronized(simulator) {
+			simulator.getState();
+			
 			double spent_stamina = this.actions_spent_stamina + this.perceptions_spent_stamina;
 			
 			if(spent_stamina > 0)
