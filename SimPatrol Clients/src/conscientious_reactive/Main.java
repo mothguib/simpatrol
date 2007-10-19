@@ -1,4 +1,4 @@
-package reactive_with_flags;
+package conscientious_reactive;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -19,7 +19,7 @@ public class Main {
 	 * @throws IOException 
 	 * @throws UnknownHostException */
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		System.out.println("Reactive with flags agents!");
+		System.out.println("Conscientious reactive agents!");
 		String remote_socket_address = args[0];
 		int remote_socket_number = Integer.parseInt(args[1]);
 		String environment_file_path = args[2];
@@ -27,7 +27,7 @@ public class Main {
 		int time_of_simulation = Integer.parseInt(args[7]);
 		boolean is_real_time_simulator = Boolean.parseBoolean(args[8]);
 			
-		ReactiveWithFlagsClient client = new ReactiveWithFlagsClient(remote_socket_address, remote_socket_number, environment_file_path, metric_file_paths, time_of_simulation, is_real_time_simulator);
+		ConscientiousReactiveClient client = new ConscientiousReactiveClient(remote_socket_address, remote_socket_number, environment_file_path, metric_file_paths, time_of_simulation, is_real_time_simulator);
 		client.start();
 	}
 }

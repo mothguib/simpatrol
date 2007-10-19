@@ -1,7 +1,7 @@
-/* ReactiveWithFlagsClient.java */
+/* ConscientiousReactiveClient.java */
 
 /* The package of this class. */
-package reactive_with_flags;
+package conscientious_reactive;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
@@ -14,9 +14,9 @@ import util.file.FileReader;
 import util.net.TCPClientConnection;
 
 /** Implements a client that connects to the SimPatrol server
- *  and configures it, letting reactive with flags agent clients
+ *  and configures it, letting conscientious reactive agent clients
  *  connect to it, in the sequence. */
-public class ReactiveWithFlagsClient extends Thread {
+public class ConscientiousReactiveClient extends Thread {
 	/* Attributes. */
 	/** The path of the file that contains the environment. */
 	private final String ENVIRONMENT_FILE_PATH;
@@ -33,8 +33,8 @@ public class ReactiveWithFlagsClient extends Thread {
 	/** The TCP connection with the server. */
 	private TCPClientConnection connection;
 	
-	/** The set of reactive with flags agents acting in the simulation. */
-	private Set<ReactiveWithFlagsAgent> agents;
+	/** The set of conscientious reactive agents acting in the simulation. */
+	private Set<ConscientiousReactiveAgent> agents;
 	
 	/** The metric collector clients added to the simulation. */
 	private MetricFileClient[] metric_clients;
@@ -55,7 +55,7 @@ public class ReactiveWithFlagsClient extends Thread {
 	 *        
 	 *  @throws IOException 
 	 *  @throws UnknownHostException */  
-	public ReactiveWithFlagsClient(String remote_socket_address, int remote_socket_number, String environment_file_path, String[] metrics_file_paths, int time_of_simulation, boolean is_real_time_simulator) throws UnknownHostException, IOException {
+	public ConscientiousReactiveClient(String remote_socket_address, int remote_socket_number, String environment_file_path, String[] metrics_file_paths, int time_of_simulation, boolean is_real_time_simulator) throws UnknownHostException, IOException {
 		this.connection = new TCPClientConnection(remote_socket_address, remote_socket_number);
 		this.ENVIRONMENT_FILE_PATH = environment_file_path;
 		this.METRICS_FILE_PATHS = metrics_file_paths;
@@ -112,21 +112,21 @@ public class ReactiveWithFlagsClient extends Thread {
 		return answer;
 	}
 	
-	/** Creates and starts the reactive with flags agents, given
+	/** Creates and starts the conscientious reactive agents, given
 	 *  the numbers of the sockets for each agent.
 	 *   
 	 *  @param socket_numbers The socket numbers offered by the server to connect to the remote agents.
 	 *  @throws IOException */
 	private void createAndStartAgents(int[] socket_numbers) throws IOException {
-		this.agents = new HashSet<ReactiveWithFlagsAgent>();
+		this.agents = new HashSet<ConscientiousReactiveAgent>();
 		
 		for(int i = 0; i < socket_numbers.length; i++) {
-			ReactiveWithFlagsAgent agent = null;
+			ConscientiousReactiveAgent agent = null;
 			
 			if(this.IS_REAL_TIME_SIMULATOR)
-				agent = new RealTimeReactiveWithFlagsAgent(this.connection.getRemoteSocketAdress(), socket_numbers[i]);
+				agent = new RealTimeConscientiousReactiveAgent(this.connection.getRemoteSocketAdress(), socket_numbers[i]);
 			else
-				agent = new CycledReactiveWithFlagsAgent(this.connection.getRemoteSocketAdress(), socket_numbers[i]);
+				agent = new CycledConscientiousReactiveAgent(this.connection.getRemoteSocketAdress(), socket_numbers[i]);
 			
 			this.agents.add(agent);
 			agent.start();
@@ -251,7 +251,7 @@ public class ReactiveWithFlagsClient extends Thread {
 	private void stopAgents() {
 		Object[] agents_array = this.agents.toArray();
 		for(int i = 0; i < agents_array.length; i++)
-			((ReactiveWithFlagsAgent) agents_array[i]).stopWorking();
+			((ConscientiousReactiveAgent) agents_array[i]).stopWorking();
 	}
 	
 	/** Stops the metric clients. */
