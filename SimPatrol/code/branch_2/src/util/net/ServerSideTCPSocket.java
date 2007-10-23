@@ -4,9 +4,9 @@
 package util.net;
 
 /* Imported classes and/or interfaces. */
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,10 +15,10 @@ import java.net.Socket;
 public class ServerSideTCPSocket {
 	/* Attributes. */
 	/** The input stream received from the client. */
-	private ObjectInputStream input;
+	private DataInputStream input;
 	
 	/** The output stream sent to the client. */
-	private ObjectOutputStream output;
+	private DataOutputStream output;
 	
 	/** The java 2 native TCP socket. */
 	private Socket socket;
@@ -49,10 +49,10 @@ public class ServerSideTCPSocket {
 	public void connect() throws IOException {
 		socket = server.accept();
 		
-		this.output = new ObjectOutputStream(this.socket.getOutputStream());
+		this.output = new DataOutputStream(this.socket.getOutputStream());
 		this.output.flush();
 		
-		this.input = new ObjectInputStream(this.socket.getInputStream());
+		this.input = new DataInputStream(this.socket.getInputStream());
 	}
 	
 	/** Sends a given message to the remote client.
@@ -64,7 +64,7 @@ public class ServerSideTCPSocket {
 	 *  @throws IOException */
 	public boolean send(String message) throws IOException {
 		if(this.output != null) {
-			this.output.writeObject(message);
+			this.output.writeUTF(message);
 			this.output.flush();
 			
 			return true;
@@ -80,7 +80,7 @@ public class ServerSideTCPSocket {
 	 *  @throws IOException */
 	public String receive() throws IOException, ClassNotFoundException {
 		if(this.input != null)
-			return (String) this.input.readObject();
+			return this.input.readUTF();
 		
 		return null;
 	}
