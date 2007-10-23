@@ -4,11 +4,10 @@
 package util.net;
 
 /* Imported classes and/or interfaces. */
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /** Implements a TCP client connection. */
@@ -18,10 +17,10 @@ public class TCPClientConnection extends ClientConnection {
 	private final Socket SOCKET;
 	
 	/** The input stream received from the server. */
-	private ObjectInputStream input;
+	private DataInputStream input;
 	
 	/** The output stream sent to the server. */
-	private ObjectOutputStream output;
+	private DataOutputStream output;
 	
 	/* Methods. */
 	/** Constructor.
@@ -34,10 +33,10 @@ public class TCPClientConnection extends ClientConnection {
 		super();
 		this.SOCKET = new Socket(remote_socket_address, remote_socket_number);
 		
-		this.output = new ObjectOutputStream(this.SOCKET.getOutputStream());
+		this.output = new DataOutputStream(this.SOCKET.getOutputStream());
 		this.output.flush();
 		
-		this.input = new ObjectInputStream(this.SOCKET.getInputStream());
+		this.input = new DataInputStream(this.SOCKET.getInputStream());
 	}
 	
 	/** Returns the socket address of the remote contact (in IP format). */
@@ -56,7 +55,7 @@ public class TCPClientConnection extends ClientConnection {
 		
 		this.output.close();
 		this.input.close();
-		this.SOCKET.close();		
+		this.SOCKET.close();
 	}
 	
 	/** Sends a given string message to the remote contact.
@@ -64,16 +63,14 @@ public class TCPClientConnection extends ClientConnection {
 	 *  @param message The string message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
-		this.output.writeObject(message);
+		this.output.writeUTF(message);
 		this.output.flush();
 	}
 	
 	/** Implements the receiving of a message.
 	 *  @throws IOException */
-	protected void receive() throws IOException, ClassNotFoundException {
-		String message = null;
-		try { message = (String) this.input.readObject(); }
-		catch(SocketException e) {}
+	protected void receive() throws IOException {
+		String message = this.input.readUTF();
 		
 		if(message != null && message.length() > 0)
 			this.buffer.insert(message);
@@ -83,7 +80,6 @@ public class TCPClientConnection extends ClientConnection {
 		while(!this.stop_working) {
 			try { this.receive(); }
 			catch (IOException e) { e.printStackTrace(); }
-			catch (ClassNotFoundException e) { e.printStackTrace(); }
 		}
 	}
 }
