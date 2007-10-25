@@ -3,8 +3,8 @@
 /* The package of this class. */
 package util.net;
 
+/* Imported classes and/or interfaces. */
 import java.io.IOException;
-
 import util.Queue;
 
 /** Implements a client of a remote connection. */
@@ -15,22 +15,22 @@ public abstract class ClientConnection extends Thread {
 	
 	/** The buffer where the connection writes the received
 	 *  messages. */
-	protected Queue<String> buffer;
+	protected final Queue<String> BUFFER;
 	
 	/* Methods. */
 	/** Constructor. */
 	public ClientConnection() {
 		this.stop_working = false;
-		this.buffer = new Queue<String>();
+		this.BUFFER = new Queue<String>();
 	}
 	
 	/** Returns the content of the buffer of the connection
 	 * and clears it. */
 	public String[] getBufferAndFlush() {
-		String[] answer = new String[this.buffer.getSize()];
+		String[] answer = new String[this.BUFFER.getSize()];
 		
 		for(int i = 0; i < answer.length; i++)
-			answer[i] = this.buffer.remove();
+			answer[i] = this.BUFFER.remove();
 		
 		return answer;		
 	}
@@ -50,7 +50,6 @@ public abstract class ClientConnection extends Thread {
 	
 	/** Implements the receiving of a message.
 	 *  
-	 *  @throws IOException
-     *  @throws ClassNotFoundException */
-	protected abstract void receive() throws IOException, ClassNotFoundException;
+	 *  @throws IOException */
+	protected abstract void receive() throws IOException;
 }

@@ -258,7 +258,7 @@ public abstract class ConscientiousReactiveAgent extends Thread {
 				try { this.visitCurrentPosition(current_position); }
 				catch (IOException e) { e.printStackTrace(); }
 				
-				// 3.2. lets the agent goe to the next vertex
+				// 3.2. lets the agent go to the next vertex
 				try { this.goTo(next_vertex_id); }
 				catch (IOException e) { e.printStackTrace(); }
 			}

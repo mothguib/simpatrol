@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 public class UDPClientConnection extends ClientConnection {
 	/* Attributes. */		
 	/** The java 2 native UDP socket. */
-	private DatagramSocket socket;
+	private final DatagramSocket SOCKET;
 	
 	/** The address of the remote socket. */
 	private final InetAddress REMOTE_SOCKET_ADDRESS;
@@ -37,7 +37,7 @@ public class UDPClientConnection extends ClientConnection {
 	public UDPClientConnection(String remote_socket_address, int remote_socket_number) throws SocketException, UnknownHostException {
 		super();
 		
-		this.socket = new DatagramSocket();
+		this.SOCKET = new DatagramSocket();
 		this.REMOTE_SOCKET_ADDRESS = InetAddress.getByName(remote_socket_address);
 		this.REMOTE_SOCKET_NUMBER = remote_socket_number;
 	}
@@ -48,7 +48,7 @@ public class UDPClientConnection extends ClientConnection {
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
 		DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.REMOTE_SOCKET_ADDRESS, this.REMOTE_SOCKET_NUMBER);
-		this.socket.send(packet);
+		this.SOCKET.send(packet);
 	}
 	
 	/** Implements the receiving of a message.
@@ -57,9 +57,9 @@ public class UDPClientConnection extends ClientConnection {
 	protected void receive() throws IOException {
 		byte[] buffer = new byte[BUFFER_SIZE];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);		
-		this.socket.receive(packet);
+		this.SOCKET.receive(packet);
 		
-		this.buffer.insert(new String(packet.getData(), 0, packet.getLength()));
+		this.BUFFER.insert(new String(packet.getData(), 0, packet.getLength()));
 	}
 	
 	public void run() {

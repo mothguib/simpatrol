@@ -4,9 +4,11 @@
 package util.net;
 
 /* Imported classes and/or interfaces. */
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -17,10 +19,13 @@ public class TCPClientConnection extends ClientConnection {
 	private final Socket SOCKET;
 	
 	/** The input stream received from the server. */
-	private DataInputStream input;
+	private final BufferedReader INPUT;
 	
 	/** The output stream sent to the server. */
-	private DataOutputStream output;
+	private final PrintStream OUTPUT;
+	
+	/** Waiting time to read some data from the input stream. */
+	private static final int READING_TIME_TOLERANCE = 5000; // 5 sec
 	
 	/* Methods. */
 	/** Constructor.
@@ -32,18 +37,19 @@ public class TCPClientConnection extends ClientConnection {
 	public TCPClientConnection(String remote_socket_address, int remote_socket_number) throws UnknownHostException, IOException {
 		super();
 		this.SOCKET = new Socket(remote_socket_address, remote_socket_number);
+		this.SOCKET.setSoTimeout(READING_TIME_TOLERANCE);
 		
-		this.output = new DataOutputStream(this.SOCKET.getOutputStream());
-		this.output.flush();
+		this.INPUT = new BufferedReader(new InputStreamReader(this.SOCKET.getInputStream()));
 		
-		this.input = new DataInputStream(this.SOCKET.getInputStream());
+		this.OUTPUT = new PrintStream(this.SOCKET.getOutputStream());
+		this.OUTPUT.flush();
 	}
 	
 	/** Returns the socket address of the remote contact (in IP format). */
 	public String getRemoteSocketAdress() {
 		String complete_address = this.SOCKET.getRemoteSocketAddress().toString();
 		
-		int socket_index = complete_address.indexOf(":");				
+		int socket_index = complete_address.indexOf(":");
 		return complete_address.substring(1, socket_index);		
 	}
 	
@@ -53,8 +59,8 @@ public class TCPClientConnection extends ClientConnection {
 	public void stopWorking() throws IOException {
 		super.stopWorking();
 		
-		this.output.close();
-		this.input.close();
+		this.OUTPUT.close();
+		this.INPUT.close();
 		this.SOCKET.close();
 	}
 	
@@ -63,23 +69,38 @@ public class TCPClientConnection extends ClientConnection {
 	 *  @param message The string message to be sent. 
 	 *  @throws IOException */
 	public void send(String message) throws IOException {
-		this.output.writeUTF(message);
-		this.output.flush();
+		this.OUTPUT.println(message);
+		this.OUTPUT.flush();
 	}
 	
 	/** Implements the receiving of a message.
 	 *  @throws IOException */
 	protected void receive() throws IOException {
-		String message = this.input.readUTF();
+		StringBuffer buffer = new StringBuffer();
 		
-		if(message != null && message.length() > 0)
-			this.buffer.insert(message);
+		String message_line = null;
+		do {
+			try {
+				message_line = this.INPUT.readLine();
+				if(message_line != null)
+					buffer.append(message_line);
+				else this.stopWorking();
+			}
+			catch(InterruptedIOException e) {
+				break;
+			}
+		} while(true);
+		
+		if(buffer.length() > 0)
+			this.BUFFER.insert(buffer.toString());
 	}
 	
 	public void run() {
 		while(!this.stop_working) {
-			try { this.receive(); }
-			catch (IOException e) { e.printStackTrace(); }
+			try { this.receive(); }			
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -161,7 +161,7 @@ public class ConscientiousReactiveClient extends Thread {
 		
 		// the message to create a metric that collects the
 		// max instantaneous idlenesses of the environment
-		message = "<configuration type=\"2\" parameter=\"5\"><metric type=\"1\"/></configuration>";			
+		message = "<configuration type=\"2\" parameter=\"10\"><metric type=\"1\"/></configuration>";			
 		
 		// sends it to the server
 		this.connection.send(message);
@@ -178,7 +178,7 @@ public class ConscientiousReactiveClient extends Thread {
 		
 		// the message to create a metric that collects the
 		// mean idleness of the environment
-		message = "<configuration type=\"2\" parameter=\"5\"><metric type=\"2\"/></configuration>";			
+		message = "<configuration type=\"2\" parameter=\"10\"><metric type=\"2\"/></configuration>";			
 		
 		// sends it to the server
 		this.connection.send(message);
@@ -195,7 +195,7 @@ public class ConscientiousReactiveClient extends Thread {
 		
 		// the message to create a metric that collects the
 		// max idleness of the environment
-		message = "<configuration type=\"2\" parameter=\"5\"><metric type=\"3\"/></configuration>";			
+		message = "<configuration type=\"2\" parameter=\"10\"><metric type=\"3\"/></configuration>";			
 		
 		// sends it to the server
 		this.connection.send(message);
@@ -288,32 +288,17 @@ public class ConscientiousReactiveClient extends Thread {
 		try { this.configureStart(); }
 		catch (IOException e) { e.printStackTrace(); }
 		
-		// while the received orientation doesn't contains the
-		// "Simulation ended." string, keep online
-		boolean end_signal_found = false;
-		while(!end_signal_found) {
-			String[] orientations = this.connection.getBufferAndFlush();
-			
-			if(orientations.length > 0) {
-				for(int i = 0; i < orientations.length; i++) {
-					String current_message = orientations[i];
-					if(current_message.indexOf("Simulation ended.") > -1) {
-						end_signal_found = true;
-						break;	
-					}
-				}	
-			}
-		}
-		
-		// stops its connection
-		try { this.connection.stopWorking(); }
-		catch (IOException e) { e.printStackTrace(); }
+		// while the TCP connection is alive, waits...
+		while(this.connection.getState() != Thread.State.TERMINATED);
 		
 		// stops the agents
 		this.stopAgents();
 		
 		// stops the metric clients
 		this.stopMetricClients();
+		
+		// screen message
+		System.out.println("Finished working.");
 		
 		// system exit
 		System.exit(0);

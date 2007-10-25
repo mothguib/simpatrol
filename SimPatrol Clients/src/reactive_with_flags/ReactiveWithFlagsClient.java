@@ -288,32 +288,17 @@ public class ReactiveWithFlagsClient extends Thread {
 		try { this.configureStart(); }
 		catch (IOException e) { e.printStackTrace(); }
 		
-		// while the received orientation doesn't contains the
-		// "Simulation ended." string, keep online
-		boolean end_signal_found = false;
-		while(!end_signal_found) {
-			String[] orientations = this.connection.getBufferAndFlush();
-			
-			if(orientations.length > 0) {
-				for(int i = 0; i < orientations.length; i++) {
-					String current_message = orientations[i];
-					if(current_message.indexOf("Simulation ended.") > -1) {
-						end_signal_found = true;
-						break;	
-					}
-				}	
-			}
-		}
-		
-		// stops its connection
-		try { this.connection.stopWorking(); }
-		catch (IOException e) { e.printStackTrace(); }
+		// while the TCP connection is alive, waits...
+		while(this.connection.getState() != Thread.State.TERMINATED);
 		
 		// stops the agents
 		this.stopAgents();
 		
 		// stops the metric clients
 		this.stopMetricClients();
+		
+		// screen message
+		System.out.println("Finished working.");
 		
 		// system exit
 		System.exit(0);

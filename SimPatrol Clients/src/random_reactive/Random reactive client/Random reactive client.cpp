@@ -31,9 +31,15 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		// TODO: code your application's behavior here.
 		string SERVER_NAME = "127.0.0.1";
 		int SERVER_PORT = 5000;
-
-		TCPSocket sock(SERVER_NAME,SERVER_PORT);
 		
+		TCPSocket sock(SERVER_NAME,SERVER_PORT);
+
+		string environment_message = "<configuration type=\"0\" parameter=\"c:/env2.txt\"/>";
+		const char * environment_message_char = environment_message.c_str();
+		
+		sock.send(environment_message_char, strlen(environment_message_char));
+
+		// http://www.geocities.com/eric6930/cplus.html
 	}
 
 	return nRetCode;
