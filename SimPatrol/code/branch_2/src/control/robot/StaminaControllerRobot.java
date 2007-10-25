@@ -16,7 +16,7 @@ import model.agent.Agent;
 public final class StaminaControllerRobot extends Robot {
 	/* Attributes. */
 	/** The agent whose stamina is to be controlled. */
-	private Agent agent;
+	private final Agent AGENT;
 	
 	/** Registers how much stamina must be decremented from the agent,
 	 *  due to the execution of compound actions.
@@ -35,7 +35,7 @@ public final class StaminaControllerRobot extends Robot {
 	 *  @param agent The agent whose stamina is to be controlled. */
 	public StaminaControllerRobot(String clock_thread_name, Agent agent) {
 		super(clock_thread_name);
-		this.agent = agent;
+		this.AGENT = agent;
 		this.actions_spent_stamina = 0;
 		this.perceptions_spent_stamina = 0;
 	}
@@ -44,7 +44,7 @@ public final class StaminaControllerRobot extends Robot {
 	 *  
 	 *  @return The agent controlled by the robot. */
 	public Agent getAgent() {
-		return this.agent;
+		return this.AGENT;
 	}
 	
 	/** Configures how much stamina must be spent due to
@@ -79,7 +79,7 @@ public final class StaminaControllerRobot extends Robot {
 			
 			if(spent_stamina > 0)
 				for(int i = 0; i < time_gap; i++)
-					this.agent.decStamina(spent_stamina);
+					this.AGENT.decStamina(spent_stamina);
 		}
 	}
 	
@@ -87,13 +87,13 @@ public final class StaminaControllerRobot extends Robot {
 		super.start();
 		
 		// screen message
-		System.out.println("[SimPatrol.StaminaRobot(" + this.agent.getObjectId() + ")]: Started working.");
+		System.out.println("[SimPatrol.StaminaRobot(" + this.AGENT.getObjectId() + ")]: Started working.");
 	}
 	
 	public void stopWorking() {
 		super.stopWorking();
 		
 		// screen message
-		System.out.println("[SimPatrol.StaminaRobot(" + this.agent.getObjectId() + ")]: Stopped working.");
+		System.out.println("[SimPatrol.StaminaRobot(" + this.AGENT.getObjectId() + ")]: Stopped working.");
 	}
 }

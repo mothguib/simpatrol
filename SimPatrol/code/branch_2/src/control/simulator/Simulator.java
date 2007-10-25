@@ -20,6 +20,7 @@ import model.metric.Metric;
 import model.permission.ActionPermission;
 import model.permission.PerceptionPermission;
 import control.daemon.ActionDaemon;
+import control.daemon.Daemon;
 import control.daemon.MainDaemon;
 import control.daemon.MetricDaemon;
 import control.daemon.PerceptionDaemon;
@@ -31,16 +32,16 @@ import control.daemon.PerceptionDaemon;
 public abstract class Simulator {
 	/* Attributes. */
 	/** The main daemon of SimPatrol. */
-	private MainDaemon main_daemon;
+	private final MainDaemon MAIN_DAEMON;
 	
 	/** The set of perception daemons of SimPatrol. */
-	protected Set<PerceptionDaemon> perception_daemons;
+	protected final Set<PerceptionDaemon> PERCEPTION_DAEMONS;
 	
 	/** The set of action daemons of SimPatrol. */
-	protected Set<ActionDaemon> action_daemons;
+	protected final Set<ActionDaemon> ACTION_DAEMONS;
 	
 	/** The set of metric daemons of Simpatrol. */
-	private Set<MetricDaemon> metric_daemons;
+	private final Set<MetricDaemon> METRIC_DAEMONS;
 	
 	/** The environment (graph + societies) of the simulation. */
 	private Environment environment;
@@ -65,16 +66,16 @@ public abstract class Simulator {
 		System.out.println("[SimPatrol.Simulator]: Online.");
 		
 		// creates, starts and configures the main daemon
-		this.main_daemon = new MainDaemon("main daemon", this);
-		this.main_daemon.start(local_socket_number);
-		MainDaemon.setSimulator(this);
+		this.MAIN_DAEMON = new MainDaemon("main daemon", this);
+		this.MAIN_DAEMON.start(local_socket_number);
+		Daemon.setSimulator(this);
 		
 		// initiates the sets of agent_daemons
-		this.perception_daemons = Collections.synchronizedSet(new HashSet<PerceptionDaemon>());
-		this.action_daemons = Collections.synchronizedSet(new HashSet<ActionDaemon>());
+		this.PERCEPTION_DAEMONS = Collections.synchronizedSet(new HashSet<PerceptionDaemon>());
+		this.ACTION_DAEMONS = Collections.synchronizedSet(new HashSet<ActionDaemon>());
 		
 		// initiates the sets of metric_daemons
-		this.metric_daemons = Collections.synchronizedSet(new HashSet<MetricDaemon>());
+		this.METRIC_DAEMONS = Collections.synchronizedSet(new HashSet<MetricDaemon>());
 		Metric.setSimulator(this);
 		
 		// nullifies the environment of the simulator
@@ -91,7 +92,7 @@ public abstract class Simulator {
 	 *  
 	 *  @param perception_daemon The perception daemon to be added. */
 	public void addPerceptionDaemon(PerceptionDaemon perception_daemon) {
-		this.perception_daemons.add(perception_daemon);
+		this.PERCEPTION_DAEMONS.add(perception_daemon);
 	}
 	
 	/** Returns the perception daemon of which agent is the given one.
@@ -100,7 +101,7 @@ public abstract class Simulator {
 	 *  @return The perception daemon of the given agent. */
 	public PerceptionDaemon getPerceptionDaemon(Agent agent) {
 		// finds the perception daemon of which agent is the given one
-		Object[] perception_daemons_array = this.perception_daemons.toArray();
+		Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 		for(int i = 0; i < perception_daemons_array.length; i++)
 			if(((PerceptionDaemon) perception_daemons_array[i]).getAgent().equals(agent))
 				return (PerceptionDaemon) perception_daemons_array[i];
@@ -113,14 +114,14 @@ public abstract class Simulator {
 	 * 
 	 *  @param action_daemon The action daemon to be added. */
 	public void addActionDaemon(ActionDaemon action_daemon) {
-		this.action_daemons.add(action_daemon);
+		this.ACTION_DAEMONS.add(action_daemon);
 	}
 	
 	/** Returns the action daemon of a given agent.
 	 * 
 	 *  @return The action daemon of the given agent. */
 	public ActionDaemon getActionDaemon(Agent agent) {
-		Object[] action_daemons_array = this.action_daemons.toArray();
+		Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 		for(int i = 0; i < action_daemons_array.length; i++)
 			if(((ActionDaemon) action_daemons_array[i]).getAgent().equals(agent))
 				return (ActionDaemon) action_daemons_array[i];
@@ -132,7 +133,7 @@ public abstract class Simulator {
 	 * 
 	 *  @return The action daemons of the simulator.*/
 	public ActionDaemon[] getActionDaemons() {
-		Object[] action_daemons_array = this.action_daemons.toArray();
+		Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 		ActionDaemon[] answer = new ActionDaemon[action_daemons_array.length];
 		
 		for(int i = 0; i < answer.length; i++)
@@ -145,7 +146,7 @@ public abstract class Simulator {
 	 * 
 	 *  @param metric_daemon The metric daemon to be added. */
 	public void addMetricDaemon(MetricDaemon metric_daemon) {
-		this.metric_daemons.add(metric_daemon);
+		this.METRIC_DAEMONS.add(metric_daemon);
 	}
 	
 	/** Configures the environment of the simulation. */
@@ -177,12 +178,13 @@ public abstract class Simulator {
 	/** Stops and removes the perception and action daemons of a given agent,
 	 *  probably because it has died.
 	 *  
-	 *  @param agent The agent who has died. */
-	public void stopAndRemoveAgentDaemons(Agent agent) {
+	 *  @param agent The agent who has died. 
+	 *  @throws IOException */
+	public void stopAndRemoveAgentDaemons(Agent agent) throws IOException {
 		// finds the perception daemon
 		PerceptionDaemon perception_daemon = null;
 		
-		Object[] perception_daemons_array = this.perception_daemons.toArray();
+		Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 		for(int i = 0; i < perception_daemons_array.length; i++)
 			if(((PerceptionDaemon) perception_daemons_array[i]).getAgent().equals(agent)) {
 				perception_daemon = (PerceptionDaemon) perception_daemons_array[i];
@@ -192,7 +194,7 @@ public abstract class Simulator {
 		// finds the action daemon
 		ActionDaemon action_daemon = null;
 		
-		Object[] action_daemons_array = this.action_daemons.toArray();
+		Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 		for(int i = 0; i < action_daemons_array.length; i++)
 			if(((ActionDaemon) action_daemons_array[i]).getAgent().equals(agent)) {
 				action_daemon = (ActionDaemon) action_daemons_array[i];
@@ -204,8 +206,8 @@ public abstract class Simulator {
 		action_daemon.stopWorking();
 		
 		// removes the daemons
-		this.perception_daemons.remove(perception_daemon);
-		this.action_daemons.remove(action_daemon);
+		this.PERCEPTION_DAEMONS.remove(perception_daemon);
+		this.ACTION_DAEMONS.remove(action_daemon);
 	}
 	
 	/** Obtains the dynamic objects of the simulation.
@@ -326,37 +328,43 @@ public abstract class Simulator {
 		return answer;
 	}
 	
-	/** Stops and removes the perception daemons of the simulator. */
-	private void stopAndRemovePerceptionDaemons() {
+	/** Stops and removes the perception daemons of the simulator. 
+	 * 
+	 *  @throws IOException */
+	private void stopAndRemovePerceptionDaemons() throws IOException {
 		// for each perception daemon, stops it
-		Object[] perception_daemons_array = this.perception_daemons.toArray();
+		Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 		for(int i = 0; i < perception_daemons_array.length; i++)
 			((PerceptionDaemon) perception_daemons_array[i]).stopWorking();
 		
 		// removes all perceptions daemons
-		this.perception_daemons.clear();
+		this.PERCEPTION_DAEMONS.clear();
 	}
 	
-	/** Stops and removes the action daemons of the simulator. */
-	private void stopAndRemoveActionDaemons() {
+	/** Stops and removes the action daemons of the simulator. 
+	 * 
+	 *  @throws IOException */
+	private void stopAndRemoveActionDaemons() throws IOException {
 		// for each action daemon, stops it
-		Object[] action_daemons_array = this.action_daemons.toArray();
+		Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 		for(int i = 0; i < action_daemons_array.length; i++)
 			((ActionDaemon) action_daemons_array[i]).stopWorking();
 		
 		// removes all action daemons
-		this.action_daemons.clear();
+		this.ACTION_DAEMONS.clear();
 	}
 	
-	/** Stops and removes the metric daemons of the simulator. */
-	private void stopAndRemoveMetricDaemons() {
+	/** Stops and removes the metric daemons of the simulator. 
+	 * 
+	 *  @throws IOException */
+	private void stopAndRemoveMetricDaemons() throws IOException {
 		// for each metric daemon, stops it
-		Object[] metric_daemons_array = this.metric_daemons.toArray();
+		Object[] metric_daemons_array = this.METRIC_DAEMONS.toArray();
 		for(int i = 0; i < metric_daemons_array.length; i++)
 			((MetricDaemon) metric_daemons_array[i]).stopWorking();
 		
 		// removes all the metric daemons
-		this.metric_daemons.clear();
+		this.METRIC_DAEMONS.clear();
 	}
 	
 	/** Starts the simulation.
@@ -367,7 +375,7 @@ public abstract class Simulator {
 		this.state = SimulatorStates.SIMULATING;
 		
 		// initiates the metrics controlled by the metric daemons
-		Object[] metric_daemons_array = this.metric_daemons.toArray();
+		Object[] metric_daemons_array = this.METRIC_DAEMONS.toArray();
 		for(int i = 0; i < metric_daemons_array.length; i++)
 			((MetricDaemon) metric_daemons_array[i]).startMetric();
 	}
@@ -391,8 +399,8 @@ public abstract class Simulator {
 		// nullifies the environment
 		this.environment = null;
 		
-		// lets the main daemon send an "simulation ended" orientation
-		this.main_daemon.sendEndSimulationSignal();
+		// resets the main daemon's connection
+		this.MAIN_DAEMON.resetConnection();
 	}
 	
 	/** Finishes the simulator's work. 
@@ -404,7 +412,7 @@ public abstract class Simulator {
 			this.stopSimulation();
 		
 		// stops the main daemon
-		this.main_daemon.stopWorking();
+		this.MAIN_DAEMON.stopWorking();
 		
 		// screen message
 		System.out.println("[SimPatrol.Simulator]: offline.");

@@ -16,11 +16,11 @@ public final class AgentUDPConnection extends UDPConnection {
 	/* Attributes. */
 	/** The buffer where the connection writes the received
 	 *  perception messages. */
-	private Queue<String> perception_buffer;
+	private final Queue<String> PERCEPTION_BUFFER;
 	
 	/** The buffer where the connection writes the received
 	 *  action messages. */
-	private Queue<String> action_buffer;
+	private Queue<String> ACTION_BUFFER;
 	
 	/* Methods. */
 	/** Constructor.
@@ -30,8 +30,8 @@ public final class AgentUDPConnection extends UDPConnection {
 	 *  @param action_buffer The buffer where the connection writes the received action messages. */
 	public AgentUDPConnection(String name, Queue<String> perception_buffer, Queue<String> action_buffer) {
 		super(name, perception_buffer);
-		this.perception_buffer = this.buffer;
-		this.action_buffer = action_buffer;
+		this.PERCEPTION_BUFFER = this.BUFFER;
+		this.ACTION_BUFFER = action_buffer;
 	}
 	
 	public void run() {
@@ -48,8 +48,8 @@ public final class AgentUDPConnection extends UDPConnection {
 			// decides if the message is a perception or action
 			// related message
 			if(message.indexOf("<action ") > -1)
-				this.action_buffer.insert(message);
-			else this.perception_buffer.insert(message);
+				this.ACTION_BUFFER.insert(message);
+			else this.PERCEPTION_BUFFER.insert(message);
 		}
 	}	
 }

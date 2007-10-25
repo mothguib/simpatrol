@@ -180,8 +180,10 @@ public final class Coordinator extends Thread implements TimedObject {
 		}		
 	}
 	
-	/** Assures the mortal objects the correct behaviour. */
-	private void assureMortality() {
+	/** Assures the mortal objects the correct behaviour. 
+	 * 
+	 *  @throws IOException */
+	private void assureMortality() throws IOException {
 		// obtains the mortal objects to be controlled
 		Mortal[] mortal_objects = simulator.getMortalObjects();
 		
@@ -290,8 +292,12 @@ public final class Coordinator extends Thread implements TimedObject {
 			// atualizes the environment's model
 			// screen message
 			System.out.println("[SimPatrol.Coordinator]: The environment is being atualized.");
+			
 			this.assureDynamicity();
-			this.assureMortality();
+			
+			try { this.assureMortality(); }
+			catch (IOException e) { e.printStackTrace(); }
+			
 			this.assureStaminaControl();
 			
 			// increments the cycle count

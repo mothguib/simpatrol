@@ -1,5 +1,5 @@
-* New limitations must add new classes in this package;
-* New limitations must change the "LimitationTypes" class.
-* New limitations must change the "control.translator.LimitationTranslator" class.
-* New limitations must change the "control.daemon.PerceptionDaemon" class.
-* New limitations must change the "control.daemon.ActionDaemon" class.
+* New Limitation subclasses must add new classes in this package;
+* New Limitation subclasses must change the "LimitationTypes" class.
+* New Limitation subclasses must change the "control.translator.LimitationTranslator" class.
+* New Limitation subclasses must change the "control.daemon.PerceptionDaemon" class.
+* New Limitation subclasses must change the "control.daemon.ActionDaemon" class.

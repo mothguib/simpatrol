@@ -4,6 +4,8 @@
 package control.robot;
 
 /* Imported classes and/or interfaces. */
+import java.io.IOException;
+
 import control.simulator.RealTimeSimulator;
 import model.agent.Agent;
 import model.etpd.EventTimeProbabilityDistribution;
@@ -18,10 +20,7 @@ import model.interfaces.Mortal;
 public final class MortalityControllerRobot extends Robot {
 	/* Attributes. */
 	/** The mortal object to be controlled. */
-	private Mortal object;
-
-	/** The real time simulator of the patrolling task. */
-	private static RealTimeSimulator simulator;
+	private final Mortal OBJECT;
 	
 	/* Methods. */
 	/** Constructor.
@@ -30,21 +29,14 @@ public final class MortalityControllerRobot extends Robot {
 	 *  @param object The mortal object to be controlled. */
 	public MortalityControllerRobot(String clock_thread_name, Mortal object) {
 		super(clock_thread_name);
-		this.object = object;
-	}		
-	
-	/** Configures the simulator of the patrolling task.
-	 * 
-	 *  @param rt_simulator The simulator of the patrolling task. */
-	public static void setSimulator(RealTimeSimulator rt_simulator) {
-		simulator = rt_simulator;
+		this.OBJECT = object;
 	}
 	
 	/** Returns the mortal object controlled by the robot.
 	 * 
 	 *  @return The mortal object controlled by the robot. */
 	public Mortal getObject() {
-		return this.object;
+		return this.OBJECT;
 	}
 	
 	public void act(int time_gap) {
@@ -53,19 +45,20 @@ public final class MortalityControllerRobot extends Robot {
 			
 			for(int i = 0; i < time_gap; i++) {
 				// obtains the probability distribution for the death of the mortal object
-				EventTimeProbabilityDistribution death_tpd = this.object.getDeathTPD();
+				EventTimeProbabilityDistribution death_tpd = this.OBJECT.getDeathTPD();
 				
 				// if there's a death tpd and the object must die now 
 				if(death_tpd != null && death_tpd.nextBoolean()) {
 					// kills the object
-					this.object.die();
+					this.OBJECT.die();
 					
 					// if the object is an agent, stops its daemons
-					if(this.object instanceof Agent) {
-						simulator.stopAndRemoveAgentDaemons((Agent) this.object);
+					if(this.OBJECT instanceof Agent) {
+						try { simulator.stopAndRemoveAgentDaemons((Agent) this.OBJECT); }
+						catch (IOException e) { e.printStackTrace(); }
 						
 						// stops and removes its eventual stamina controller robot
-						simulator.stopAndRemoveStaminaControllerRobot((Agent) this.object);
+						simulator.stopAndRemoveStaminaControllerRobot((Agent) this.OBJECT);
 					}
 					
 					// stops this robot
@@ -85,13 +78,13 @@ public final class MortalityControllerRobot extends Robot {
 		super.start();
 		
 		// screen message
-		System.out.println("[SimPatrol.MortalityRobot(" + this.object + ")]: Started working.");
+		System.out.println("[SimPatrol.MortalityRobot(" + this.OBJECT + ")]: Started working.");
 	}
 	
 	public void stopWorking() {
 		super.stopWorking();
 		
 		// screen message
-		System.out.println("[SimPatrol.MortalityRobot(" + this.object + ")]: Stopped working.");
+		System.out.println("[SimPatrol.MortalityRobot(" + this.OBJECT + ")]: Stopped working.");
 	}	
 }

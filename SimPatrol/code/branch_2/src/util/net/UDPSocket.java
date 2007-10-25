@@ -17,10 +17,10 @@ public final class UDPSocket {
 	private static final int BUFFER_SIZE = 1024;
 	
 	/** The java 2 native UDP socket. */
-	private DatagramSocket socket;
+	private final DatagramSocket SOCKET;
 	
 	/** The number of the local socket. */
-	private int local_socket_number;
+	private final int LOCAL_SOCKET_NUMBER;
 	
 	/** The number of the remote socket. */
 	private int remote_socket_number;
@@ -34,8 +34,8 @@ public final class UDPSocket {
 	 *  @param socket_number The number of the UDP socket. 
 	 *  @throws SocketException */
 	public UDPSocket(int socket_number) throws SocketException {
-		this.local_socket_number = socket_number;
-		this.socket = new DatagramSocket(this.local_socket_number);
+		this.LOCAL_SOCKET_NUMBER = socket_number;
+		this.SOCKET = new DatagramSocket(this.LOCAL_SOCKET_NUMBER);
 		this.remote_socket_number = -1;
 		this.remote_socket_address = null;
 	}
@@ -47,7 +47,7 @@ public final class UDPSocket {
 	public String receive() throws IOException {
 		byte[] buffer = new byte[UDPSocket.BUFFER_SIZE];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);		
-		this.socket.receive(packet);
+		this.SOCKET.receive(packet);
 		
 		this.remote_socket_number = packet.getPort();
 		this.remote_socket_address = packet.getAddress();
@@ -64,7 +64,7 @@ public final class UDPSocket {
 	public boolean send(String message) throws IOException {
 		if(this.remote_socket_address != null && this.remote_socket_number > -1) {
 			DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), this.remote_socket_address, this.remote_socket_number);
-			this.socket.send(packet);
+			this.SOCKET.send(packet);
 			
 			return true;
 		}
@@ -88,6 +88,6 @@ public final class UDPSocket {
 	 * 
 	 *  @return The number of the UDP socket. */
 	public int getSocketNumber() {
-		return this.local_socket_number;
+		return this.LOCAL_SOCKET_NUMBER;
 	}
 }

@@ -75,7 +75,7 @@ public final class CycledSimulator extends Simulator {
 	 * 
 	 * @param lock FALSE if the agents can perceive, TRUE if cannot. */
 	public void lockAgentsPerceptions(boolean lock) {
-		Object[] perception_daemons_array = this.perception_daemons.toArray();
+		Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 		for(int i = 0; i < perception_daemons_array.length; i++)
 			((PerceptionDaemon) perception_daemons_array[i]).setCan_work(!lock);
 	}
@@ -84,7 +84,7 @@ public final class CycledSimulator extends Simulator {
 	 * 
 	 *  @param lock FALSE if the agents can act, TRUE if cannot. */
 	public void lockAgentsActions(boolean lock) {
-		Object[] action_daemons_array = this.action_daemons.toArray();
+		Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 		for(int i = 0; i < action_daemons_array.length; i++)
 			((ActionDaemon) action_daemons_array[i]).setCan_work(!lock);
 	}

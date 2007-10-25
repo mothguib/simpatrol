@@ -4,7 +4,6 @@
 package control.robot;
 
 /* Imported classes and/or interfaces. */
-import java.io.IOException;
 import control.simulator.RealTimeSimulator;
 import util.clock.Clock;
 import util.clock.Clockable;
@@ -13,7 +12,7 @@ import util.clock.Clockable;
 public abstract class Robot implements Clockable {
 	/* Attributes. */
 	/** The clock of the robot. */
-	private Clock clock;
+	private final Clock CLOCK;
 	
 	/** The simulator of the patrolling task, performed by SimPatrol.
 	 *  Shared among all the robots. */
@@ -24,23 +23,23 @@ public abstract class Robot implements Clockable {
 	 * 
 	 *  @param clock_thread_name The name of the thread of the clock of this robot. */
 	public Robot(String clock_thread_name) {
-		this.clock = new Clock(clock_thread_name, this);
+		this.CLOCK = new Clock(clock_thread_name, this);
 	}
 	
 	/** Sets the simulator of the robot.
 	 * 
 	 *  @param simpatrol_simulator The simulator of SimPatrol. */
-	public static void setSimulator(RealTimeSimulator simpatrol_simulator) throws IOException {
+	public static void setSimulator(RealTimeSimulator simpatrol_simulator) {
 		simulator = simpatrol_simulator;
 	}
 	
 	/** Starts the clock's work, and so the robot's. */
 	public void start() {
-		this.clock.start();
+		this.CLOCK.start();
 	}
 	
 	/** Stops the clock's work and so the robot's. */
 	public void stopWorking() {
-		this.clock.stopWorking();
+		this.CLOCK.stopWorking();
 	}
 }

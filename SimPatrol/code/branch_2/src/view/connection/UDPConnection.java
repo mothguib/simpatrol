@@ -45,7 +45,7 @@ public class UDPConnection extends Connection {
 		System.out.println("[SimPatrol.UDPConnection(" + this.getName() + ")]: Started listening to messages.");
 	}
 	
-	public void stopWorking() {
+	public void stopWorking() throws IOException {
 		super.stopWorking();
 		
 		// screen message
@@ -63,7 +63,7 @@ public class UDPConnection extends Connection {
 				e.printStackTrace();
 			}
 			
-			this.buffer.insert(message);
+			this.BUFFER.insert(message);
 		}
 	}
 }

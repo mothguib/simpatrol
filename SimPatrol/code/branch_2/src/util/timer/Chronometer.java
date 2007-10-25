@@ -10,13 +10,13 @@ import java.util.Calendar;
 public final class Chronometer extends Thread implements TimedObject {
 	/* Attributes. */
 	/** The object to be chronometerized. */
-	private Chronometerable object;
+	private final Chronometerable OBJECT;
 	
 	/** Holds the elapsed time. */
 	private int elapsed_time;
 	
 	/** Holds the deadline, when the chronometer must stop working. */
-	private int deadline;		
+	private final int DEADLINE;		
 	
 	/** The chronometer count step.
 	 *  The default value is one second.*/
@@ -38,8 +38,8 @@ public final class Chronometer extends Thread implements TimedObject {
 	 *  @param deadline The deadline, when the chronometer must stop working. */
 	public Chronometer(String name, Chronometerable object, int deadline) {
 		super(name);
-		this.object = object;
-		this.deadline = deadline;
+		this.OBJECT = object;
+		this.DEADLINE = deadline;
 		this.elapsed_time = 0;
 	}
 	
@@ -74,7 +74,7 @@ public final class Chronometer extends Thread implements TimedObject {
 	
 	public void run() {
 		// lets the chronometerized object start working
-		this.object.startWorking();
+		this.OBJECT.startWorking();
 		
 		// screen message
 		System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Started counting time.");
@@ -94,9 +94,9 @@ public final class Chronometer extends Thread implements TimedObject {
 			}
 			
 			// checks if the elapsed time hit the deadline
-			if(this.elapsed_time >= this.deadline) {
+			if(this.elapsed_time >= this.DEADLINE) {
 				// lets the chronometrized object stop working
-				this.object.stopWorking();
+				this.OBJECT.stopWorking();
 				
 				// screen message
 				System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Stopped counting time.");

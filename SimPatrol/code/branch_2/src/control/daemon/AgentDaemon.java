@@ -23,7 +23,7 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 	
 	/** The agent whose perceptions are produced and
 	 *  whose intentions are attended. */
-	protected Agent agent;
+	protected final Agent AGENT;
 	
 	/** The clock that controls the daemon's work. */
 	protected Clock clock;	
@@ -57,7 +57,7 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 	 *  @param agent The agent whose perceptions are produced and intentions are attended. */
 	public AgentDaemon(String thread_name, Agent agent) {
 		super(thread_name);
-		this.agent = agent;		
+		this.AGENT = agent;		
 		this.clock = new Clock(thread_name + "'s clock", this);
 		this.can_work = false; // the daemon cannot work in the beginning
 		this.stamina_robot = null;
@@ -76,7 +76,7 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 	 * 
 	 *  @return The agent served by the daemon. */
 	public Agent getAgent() {
-		return this.agent;
+		return this.AGENT;
 	}
 	
 	/** Configures the connection of the daemon.
@@ -113,8 +113,10 @@ public abstract class AgentDaemon extends Daemon implements Clockable {
 			this.clock.start();
 	}	
 	
-	/** Indicates that the daemon must stop working. */
-	public void stopWorking() {
+	/** Indicates that the daemon must stop working. 
+	 * 
+	 *  @throws IOException */
+	public void stopWorking() throws IOException {
 		super.stopWorking();
 		
 		if(this.clock != null)

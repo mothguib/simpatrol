@@ -4,10 +4,8 @@
 package view.connection;
 
 /* Imported classes and/or interfaces. */
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
-
 import util.Queue;
 import util.net.ServerSideTCPSocket;
 import control.daemon.MainDaemon;
@@ -37,6 +35,7 @@ public class ServerSideTCPConnection extends Connection {
 		
 		return false;
 	}
+	
 	public int getSocketNumber() {
 		return this.socket.getSocketNumber();
 	}
@@ -49,58 +48,56 @@ public class ServerSideTCPConnection extends Connection {
 		System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Started listening to messages.");
 	}
 	
-	public void stopWorking() {
-		super.stopWorking();
-		
-		// screen message
-		System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Stopped listening to messages.");
+	public void stopWorking() throws IOException {
+		if(!this.stop_working) {
+			super.stopWorking();
+			
+			// disconnects the remote client
+			this.socket.disconnect();
+			
+			// screen message
+			System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Server disconnected client.");
+				
+			// screen message
+			System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Stopped listening to messages. ");
+		}
 	}
 	
 	public void run() {
-		while(!this.stop_working) {
-			try {
-				// establishes the TCP connection
-				this.socket.connect();
+		try {
+			// establishes the TCP connection
+			this.socket.connect();
+			
+			// screen message
+			System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client connected.");
+			
+			// reads the eventual sent messages, while the connection
+			// is supposed to work
+			while(!this.stop_working) {
+				String message = this.socket.receive();					
 				
-				// screen message
-				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client connected.");
-				
-				// reads the eventual sent messages, while the connection
-				// is supposed to work
-				while(!this.stop_working) {
-					String message = null;
-					
-					try { message = this.socket.receive(); }
-					catch (ClassNotFoundException e) { e.printStackTrace(); }
-					
-					this.buffer.insert(message);
-				}
-				
-				// disconnects
-				this.socket.disconnect();
-				
-				// screen message
-				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Server disconnected client.");
+				if(message != null)
+					this.BUFFER.insert(message);
 			}
-			catch(EOFException e1) {
+		}
+		catch(SocketException e1) {
+			if(!this.stop_working) {
+				// registers that the connection must stop working
+				this.stop_working = true;
+				
 				// disconnects
 				try { this.socket.disconnect(); }
 				catch (IOException e) { e.printStackTrace(); }
 				
 				// screen message
 				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
-			}
-			catch(SocketException e2) {
-				// disconnects
-				try { this.socket.disconnect(); }
-				catch (IOException e) { e.printStackTrace(); }
 				
 				// screen message
-				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Client disconnected.");
+				System.out.println("[SimPatrol.TCPConnection(" + this.getName() + ")]: Stopped listening to messages. ");			
 			}
-			catch(IOException e2) {
-				e2.printStackTrace();
-			}
+		}
+		catch(IOException e2) {
+			e2.printStackTrace();
 		}
 	}
 }

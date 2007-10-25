@@ -18,7 +18,7 @@ public abstract class Connection extends Thread {
 	
 	/** The buffer where the connection writes the received
 	 *  messages. */
-	protected Queue<String> buffer;
+	protected final Queue<String> BUFFER;
 	
 	/* Methods. */
 	/** Constructor.
@@ -28,11 +28,18 @@ public abstract class Connection extends Thread {
 	public Connection(String thread_name, Queue<String> buffer) {
 		super(thread_name);
 		this.stop_working = false;
-		this.buffer = buffer;
+		this.BUFFER = buffer;
+	}
+	
+	/** Returns if the connection will or is stopping work.
+	 * 
+	 *  @return TRUE if the connection will or is stopping, FALSE if not. */
+	public boolean isStopWorking() {
+		return this.stop_working;
 	}
 	
 	/** Indicates that the connection must stop working. */
-	public void stopWorking() {
+	public void stopWorking() throws IOException {
 		this.stop_working = true;
 	}
 	

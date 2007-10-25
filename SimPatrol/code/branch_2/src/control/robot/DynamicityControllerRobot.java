@@ -16,7 +16,7 @@ import model.interfaces.Dynamic;
 public final class DynamicityControllerRobot extends Robot {
 	/* Attributes. */
 	/** The dynamic object to be controlled. */
-	private Dynamic object;
+	private final Dynamic OBJECT;
 	
 	/* Methods. */
 	/** Constructor.
@@ -25,7 +25,7 @@ public final class DynamicityControllerRobot extends Robot {
 	 *  @param object The dynamic object to be controlled. */
 	public DynamicityControllerRobot(String clock_thread_name, Dynamic object) {
 		super(clock_thread_name);
-		this.object = object;
+		this.OBJECT = object;
 	}
 	
 	public void act(int time_gap) {
@@ -34,22 +34,22 @@ public final class DynamicityControllerRobot extends Robot {
 			
 			for(int i = 0; i < time_gap; i++) {		
 				// if the dynamic object is enabled
-				if(this.object.isEnabled()) {			
+				if(this.OBJECT.isEnabled()) {			
 					// atualizes the enabling tpd
-					this.object.getEnablingTPD().nextBoolean();
+					this.OBJECT.getEnablingTPD().nextBoolean();
 				
 					// verifies if the object must be disabled now
-					if(this.object.getDisablingTPD().nextBoolean())
-						this.object.setIsEnabled(false);
+					if(this.OBJECT.getDisablingTPD().nextBoolean())
+						this.OBJECT.setIsEnabled(false);
 				}
 				// else
 				else {
 					// verifies if the object must be enabled now
-					if(this.object.getEnablingTPD().nextBoolean())
-						this.object.setIsEnabled(true);
+					if(this.OBJECT.getEnablingTPD().nextBoolean())
+						this.OBJECT.setIsEnabled(true);
 					
 					// atualizes the disabling tpd
-					this.object.getDisablingTPD().nextBoolean();
+					this.OBJECT.getDisablingTPD().nextBoolean();
 				}
 			}
 		}		
@@ -59,13 +59,13 @@ public final class DynamicityControllerRobot extends Robot {
 		super.start();
 		
 		// screen message
-		System.out.println("[SimPatrol.DynamicityRobot(" + this.object + ")]: Started working.");
+		System.out.println("[SimPatrol.DynamicityRobot(" + this.OBJECT + ")]: Started working.");
 	}
 	
 	public void stopWorking() {
 		super.stopWorking();
 		
 		// screen message
-		System.out.println("[SimPatrol.DynamicityRobot(" + this.object + ")]: Stopped working.");
+		System.out.println("[SimPatrol.DynamicityRobot(" + this.OBJECT + ")]: Stopped working.");
 	}
 }

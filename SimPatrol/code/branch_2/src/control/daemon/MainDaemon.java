@@ -50,7 +50,7 @@ public final class MainDaemon extends Daemon {
 	public MainDaemon(String thread_name, Simulator simulator) {
 		super(thread_name);
 		this.socket_number_generator = null;
-		this.connection = new ServerSideTCPConnection(thread_name + "'s connection", this.buffer);
+		this.connection = new ServerSideTCPConnection(thread_name + "'s connection", this.BUFFER);
 	}
 	
 	/** Attends a given "environment creation" configuration, sending the correspondent
@@ -266,9 +266,9 @@ public final class MainDaemon extends Daemon {
 		// creates a new agent connection
 		Connection connection = null;
 		if(simulator instanceof RealTimeSimulator)
-			connection = new AgentUDPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
+			connection = new AgentUDPConnection(agent.getObjectId() + "'s connection", perception_daemon.BUFFER, action_daemon.BUFFER);
 		else
-			connection = new ServerSideAgentTCPConnection(agent.getObjectId() + "'s connection", perception_daemon.buffer, action_daemon.buffer);
+			connection = new ServerSideAgentTCPConnection(agent.getObjectId() + "'s connection", perception_daemon.BUFFER, action_daemon.BUFFER);
 		
 		// configures the perception and action daemons' connection
 		perception_daemon.setConnection(connection);
@@ -335,12 +335,17 @@ public final class MainDaemon extends Daemon {
 		return metric_daemon.getSocketNumber();
 	}
 	
-	/** Lets the main daemon send an orientation signaling that the
-	 *  current simulation ended.
-	 *   
-	 *  @throws IOException */
-	public void sendEndSimulationSignal() throws IOException {
-		this.connection.send(new Orientation("Simulation ended.").fullToXML(0));
+	/** Resets the main daemon's connection. 
+	 * 
+	 *  @throws IOException */	
+	public void resetConnection() throws IOException {
+		int local_socket_number = this.connection.getSocketNumber();
+		
+		synchronized(this) {
+			this.connection.stopWorking();
+			this.connection = new ServerSideTCPConnection(this.getName() + "'s connection", this.BUFFER);
+			this.connection.start(local_socket_number);
+		}
 	}
 	
 	public void start(int local_socket_number) throws IOException {
@@ -354,7 +359,7 @@ public final class MainDaemon extends Daemon {
 		System.out.println("[SimPatrol.MainDaemon]: Started working.");
 	}
 	
-	public void stopWorking() {
+	public void stopWorking() throws IOException {
 		super.stopWorking();
 		
 		// screen message
@@ -367,8 +372,18 @@ public final class MainDaemon extends Daemon {
 		while(!this.stop_working) {
 			// obtains a string message from the buffer
 			String message = null;
-			while(message == null)
-				message = this.buffer.remove();
+			while(message == null) {
+				message = this.BUFFER.remove();
+				
+				// if the connection of the main daemon
+				// was eventually terminated (due to an error in the client side)
+				if(this.connection.isStopWorking()) {
+					// cancels all configurations
+					message = null;
+					try { simulator.stopSimulation(); }
+					catch (IOException e) { e.printStackTrace(); }
+				}
+			}
 			
 			if(!this.stop_working) {
 				synchronized(simulator) {

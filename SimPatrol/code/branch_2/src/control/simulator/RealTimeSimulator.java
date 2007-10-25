@@ -117,7 +117,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				this.stamina_robots.add(stamina_robot);
 				
 				// sets the robot to the perception daemon
-				Object[] perception_daemons_array = this.perception_daemons.toArray();
+				Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 				for(int j = 0; j < perception_daemons_array.length; j++) {
 					PerceptionDaemon perception_daemon = (PerceptionDaemon) perception_daemons_array[j];
 					
@@ -128,7 +128,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				}
 				
 				// sets the robot to the action daemon
-				Object[] action_daemons_array = this.action_daemons.toArray();
+				Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 				for(int j = 0; j < action_daemons_array.length; j++) {
 					ActionDaemon action_daemon = (ActionDaemon) action_daemons_array[j];
 					
@@ -195,7 +195,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				StaminaControllerRobot robot = new StaminaControllerRobot(agent.getObjectId() + "'s stamina robot's clock", agent);
 				
 				// sets the robot to the perception daemon
-				Object[] perception_daemons_array = this.perception_daemons.toArray();
+				Object[] perception_daemons_array = this.PERCEPTION_DAEMONS.toArray();
 				for(int j = 0; j < perception_daemons_array.length; j++) {
 					PerceptionDaemon perception_daemon = (PerceptionDaemon) perception_daemons_array[j];
 					
@@ -206,7 +206,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 				}
 				
 				// sets the robot to the action daemon
-				Object[] action_daemons_array = this.action_daemons.toArray();
+				Object[] action_daemons_array = this.ACTION_DAEMONS.toArray();
 				for(int j = 0; j < action_daemons_array.length; j++) {
 					ActionDaemon action_daemon = (ActionDaemon) action_daemons_array[j];
 					

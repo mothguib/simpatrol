@@ -24,7 +24,7 @@ public abstract class Daemon extends Thread {
 	
 	/** The buffer shared by the daemon with the connection, for the
 	 *  exchange of messages. */
-	protected Queue<String> buffer;
+	protected final Queue<String> BUFFER;
 	
 	/** The simulator of the patrolling task, performed by SimPatrol.
 	 *  Shared among all the daemons. */
@@ -37,13 +37,13 @@ public abstract class Daemon extends Thread {
 	public Daemon(String thread_name) {
 		super(thread_name);
 		this.stop_working = false;
-		this.buffer = new Queue<String>();		
+		this.BUFFER = new Queue<String>();		
 	}
 	
 	/** Sets the simulator of the daemon.
 	 * 
 	 *  @param simpatrol_simulator The simulator of SimPatrol. */
-	public static void setSimulator(Simulator simpatrol_simulator) throws IOException {
+	public static void setSimulator(Simulator simpatrol_simulator) {
 		simulator = simpatrol_simulator;
 	}
 	
@@ -65,10 +65,14 @@ public abstract class Daemon extends Thread {
 		super.start();
 	}
 	
-	/** Stops the work of the daemon. */
-	public void stopWorking() {
+	/** Stops the work of the daemon. 
+	 * 
+	 *  @throws IOException */
+	public void stopWorking() throws IOException {
 		this.stop_working = true;
-		this.connection.stopWorking();
+		
+		if(!this.connection.isStopWorking())
+			this.connection.stopWorking();
 	}
 	
 	/** Give preference to use this.start(int local_socket_number)

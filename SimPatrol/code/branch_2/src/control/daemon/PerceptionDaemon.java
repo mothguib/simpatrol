@@ -69,7 +69,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 	 *  @param message The message to be received by the agent of this daemon. */
 	public void receiveMessage(String message) {
 		// verifies if the agent has permission to receive broadcasted messages
-		PerceptionPermission[] permissions = this.agent.getAllowedPerceptions();
+		PerceptionPermission[] permissions = this.AGENT.getAllowedPerceptions();
 		for(int i = 0; i < permissions.length; i++)
 			if(permissions[i].getPerception_type() == PerceptionTypes.BROADCAST_PERCEPTION) {
 				if(this.received_messages == null)
@@ -98,7 +98,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		this.spent_stamina = 0;
 		
 		//  obtains the allowed perceptions for the agent
-		PerceptionPermission[] allowed_perceptions = this.agent.getAllowedPerceptions();
+		PerceptionPermission[] allowed_perceptions = this.AGENT.getAllowedPerceptions();
 		
 		// for each allowed perception
 		for(int i = 0; i < allowed_perceptions.length; i++) {
@@ -168,7 +168,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		if(this.stamina_robot != null)
 			this.stamina_robot.setPerceptions_spent_stamina(this.spent_stamina);
 		else if(coordinator != null)
-			coordinator.setPerceptionsSpentStamina(this.agent, this.spent_stamina);
+			coordinator.setPerceptionsSpentStamina(this.AGENT, this.spent_stamina);
 		
 		// mounts and returns the answer
 		Perception[] answer = new Perception[perceptions.size()];
@@ -195,12 +195,12 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+		if(this.AGENT.getStamina() > this.spent_stamina + stamina) {
 			// atualizes the spent stamina
 			this.spent_stamina = this.spent_stamina + stamina;
 			
 			// returns the agent perceiving itself
-			return new SelfPerception(this.agent);
+			return new SelfPerception(this.AGENT);
 		}
 		
 		// default answer
@@ -229,12 +229,12 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+		if(this.AGENT.getStamina() > this.spent_stamina + stamina) {
 			// atualizes the spent stamina
 			this.spent_stamina = this.spent_stamina + stamina;
 			
 			// returns the perceived subgraph
-			return new GraphPerception(simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth));
+			return new GraphPerception(simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.AGENT.getVertex(), depth));
 		}
 		
 		// default answer
@@ -264,7 +264,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+		if(this.AGENT.getStamina() > this.spent_stamina + stamina) {
 			// atualizes the spent stamina
 			this.spent_stamina = this.spent_stamina + stamina;
 			
@@ -273,7 +273,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			
 			// obtains the visible subgraph
 			// with the given depth
-			Graph subgraph = simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth);
+			Graph subgraph = simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.AGENT.getVertex(), depth);
 			
 			// obtains the societies of the simulation
 			Society[] societies = simulator.getEnvironment().getSocieties();
@@ -286,7 +286,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 				// for each agent
 				for(int j = 0; j < agents.length; j++)
 					// if the current agent is not the one that's perceiving
-					if(!this.agent.equals(agents[j])) {
+					if(!this.AGENT.equals(agents[j])) {
 						// obtains the vertex that the current agent comes from
 						Vertex vertex = agents[j].getVertex();
 						
@@ -334,13 +334,13 @@ public final class PerceptionDaemon extends AgentDaemon {
 		}
 		
 		// if there's enough stamina to perceive
-		if(this.agent.getStamina() > this.spent_stamina + stamina) {
+		if(this.AGENT.getStamina() > this.spent_stamina + stamina) {
 			// atualizes the spent stamina
 			this.spent_stamina = this.spent_stamina + stamina;
 			
 			// obtains the visible subgraph
 			// with the given depth
-			Graph subgraph = simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.agent.getVertex(), depth);
+			Graph subgraph = simulator.getEnvironment().getGraph().getVisibleEnabledSubgraph(this.AGENT.getVertex(), depth);
 			
 			// obtains the stigmas of the subgraph
 			Stigma[] stigmas = subgraph.getStigmas();
@@ -379,7 +379,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 				String message = this.received_messages.remove();
 				
 				// if the agent has enough stamina to perceive
-				if(this.agent.getStamina() > this.spent_stamina + stamina) {
+				if(this.AGENT.getStamina() > this.spent_stamina + stamina) {
 					// atualizes the spent stamina
 					this.spent_stamina = this.spent_stamina + stamina;
 					
@@ -401,14 +401,14 @@ public final class PerceptionDaemon extends AgentDaemon {
 		super.start(local_socket_number);
 		
 		// screen message
-		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Started working.");
+		System.out.println("[SimPatrol.PerceptionDaemon(" + this.AGENT.getObjectId() + ")]: Started working.");
 	}
 	
-	public void stopWorking() {
+	public void stopWorking() throws IOException {
 		super.stopWorking();
 		
 		// screen message
-		System.out.println("[SimPatrol.PerceptionDaemon(" + this.agent.getObjectId() + ")]: Stopped working.");
+		System.out.println("[SimPatrol.PerceptionDaemon(" + this.AGENT.getObjectId() + ")]: Stopped working.");
 	}
 	
 	/** @modeller This method must be modelled. */		
@@ -434,7 +434,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 				// if the perceptions were succesfully sent,
 				// changes the agent's state to JUST_PERCEIVED
 				if(sent_succesfully)
-					this.agent.setState(AgentStates.JUST_PERCEIVED);
+					this.AGENT.setState(AgentStates.JUST_PERCEIVED);
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public final class MetricDaemon extends Daemon implements Clockable {
 	 *  @param cycle_duration The duration, in seconds of a cycle of measurement of the metric. */	
 	public MetricDaemon(String thread_name, Metric metric, int cycle_duration) {
 		super(thread_name);
-		this.connection = new UDPConnection(thread_name + "'s  connection", this.buffer);
+		this.connection = new UDPConnection(thread_name + "'s  connection", this.BUFFER);
 		
 		this.clock = new Clock(thread_name + "'s clock", this);
 		this.clock.setStep(cycle_duration);
@@ -53,7 +53,7 @@ public final class MetricDaemon extends Daemon implements Clockable {
 		System.out.println("[SimPatrol.MetricDaemon(" + this.metric.getClass().getName() + ")]: Started working.");
 	}	
 	
-	public void stopWorking() {
+	public void stopWorking() throws IOException {
 		super.stopWorking();		
 		this.clock.stopWorking();
 		

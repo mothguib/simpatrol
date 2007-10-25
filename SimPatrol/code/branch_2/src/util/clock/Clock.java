@@ -16,7 +16,7 @@ public final class Clock extends Thread {
 	private boolean stop_working;
 	
 	/** The object to be clocked. */
-	private Clockable object;
+	private final Clockable OBJECT;
 	
 	/** The clock count step.
 	 *  The default value is one second. */
@@ -39,7 +39,7 @@ public final class Clock extends Thread {
 	 *  @param object The object to be clocked. */
 	public Clock(String name, Clockable object) {
 		super(name);
-		this.object = object;
+		this.OBJECT = object;
 		this.stop_working = false;
 	}
 	
@@ -84,7 +84,7 @@ public final class Clock extends Thread {
 				
 				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
 				int time_gap = (int) ((next_ref - prev_ref) * Math.pow(this.step, -1));
-				if(!this.stop_working) this.object.act(time_gap);
+				if(!this.stop_working) this.OBJECT.act(time_gap);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
