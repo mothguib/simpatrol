@@ -89,6 +89,9 @@ public class TCPClientConnection extends ClientConnection {
 			catch(InterruptedIOException e) {
 				break;
 			}
+			catch(IOException e) {
+				break;
+			}
 		} while(true);
 		
 		if(buffer.length() > 0)

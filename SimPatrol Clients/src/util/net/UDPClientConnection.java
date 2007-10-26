@@ -65,9 +65,8 @@ public class UDPClientConnection extends ClientConnection {
 	public void run() {
 		try {
 			this.send("");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		while(!this.stop_working) {
