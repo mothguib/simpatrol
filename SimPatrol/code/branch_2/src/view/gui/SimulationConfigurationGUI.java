@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -109,6 +110,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
         // 2.3. configures the atualization rate panel
         this.atualization_rate_panel = new JPanel();
         this.atualization_rate_input = new JFormattedTextField(new Double(0.25));
+        this.atualization_rate_input.setHorizontalAlignment(JTextField.RIGHT);
         this.sec_label = new JLabel();
         this.atualization_rate_panel.setLayout(new BorderLayout());
         this.atualization_rate_panel.setBorder(new TitledBorder("Atualization rate"));

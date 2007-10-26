@@ -342,7 +342,7 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		this.startStaminaControllerRobots();
 	}
 	
-	public void stopSimulation() throws IOException {
+	public void stopSimulation() throws IOException, InterruptedException {
 		// super code execution
 		super.stopSimulation();
 		
@@ -368,5 +368,6 @@ public final class RealTimeSimulator extends Simulator implements Chronometerabl
 		// stops the simulator
 		try { this.stopSimulation(); }
 		catch (IOException e) { e.printStackTrace(); }
+		catch (InterruptedException e) { e.printStackTrace(); }
 	}
 }

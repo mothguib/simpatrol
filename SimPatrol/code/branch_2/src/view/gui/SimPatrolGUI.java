@@ -20,6 +20,7 @@ import java.io.PrintStream;
 import java.net.BindException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -145,7 +146,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
         // changes the look and feel of the window, if running on MS Windows
         UIManager.LookAndFeelInfo[] lookings = UIManager.getInstalledLookAndFeels();
         try { UIManager.setLookAndFeel(lookings[2].getClassName()); }
-        catch(Exception excecao) { /* do nothing */ }
+        catch(Exception e) { e.printStackTrace(); }
         
         // redirects the default system output to the text area
         OutputStream output_stream = new OutputStream() {
@@ -188,10 +189,12 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 			}
 		}
 		catch(BindException e) {
-			// TODO
+			JOptionPane.showMessageDialog(this, "Port number already in use. The program will be closed.", "Port error", JOptionPane.ERROR_MESSAGE);
+	        System.exit(0);
 		}
 		catch(IOException e) {
-			// TODO
+			JOptionPane.showMessageDialog(this, "IO error ocurred. The program will be closed.", "IO error", JOptionPane.ERROR_MESSAGE);
+	        System.exit(0);
 		}
 	}
 	
@@ -202,37 +205,31 @@ public class SimPatrolGUI extends javax.swing.JFrame {
     
     /** Executed when the reset button is clicked. */
     private void reset_buttonActionPerformed(ActionEvent evt) {
-    	//synchronized (this.simulator) {
-    		try {
-        		this.simulator.stopSimulation();
-    		}
-        	catch (IOException e) {
-        		// TODO
-    		}
-		//}    	
+    	try {
+    		this.simulator.stopSimulation();
+		}
+    	catch (IOException e) {
+    		JOptionPane.showMessageDialog(this, "IO error ocurred. The program will be closed.", "IO error", JOptionPane.ERROR_MESSAGE);
+	        System.exit(0);
+		}
+    	catch (InterruptedException e) {
+    		e.printStackTrace();
+    	}
     }
     
     /** Executed when the exit button is clicked. */
     private void exit_buttonActionPerformed(ActionEvent evt) {
-        try {
-        	this.simulator.exit();
-		}
-        catch (IOException e) {
-        	// TODO
-		}
-        
+        try { this.simulator.exit(); }
+        catch (IOException e) { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
         System.exit(0);
     }
     
     /** Exits the window and terminates the application. */
     private void exitWindow(WindowEvent evt) {
-    	try {
-        	this.simulator.exit();
-		}
-        catch (IOException e) {
-        	// TODO
-		}
-        
+    	try { this.simulator.exit(); }
+        catch (IOException e) { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
         System.exit(0);
     }
     

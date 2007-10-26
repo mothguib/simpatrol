@@ -5,6 +5,8 @@ package control.daemon;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import java.net.BindException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.net.SocketNumberGenerator;
@@ -337,8 +339,9 @@ public final class MainDaemon extends Daemon {
 	
 	/** Resets the main daemon's connection. 
 	 * 
-	 *  @throws IOException */	
-	public void resetConnection() throws IOException {		
+	 *  @throws IOException 
+	 *  @throws InterruptedException */	
+	public void resetConnection() throws IOException, InterruptedException {		
 		synchronized(simulator) {
 			simulator.getState(); // synchronization
 			
@@ -346,7 +349,17 @@ public final class MainDaemon extends Daemon {
 			int local_socket_number = this.connection.getSocketNumber();
 			this.connection.stopWorking();
 			this.connection = new ServerSideTCPConnection(this.getName() + "'s connection", this.BUFFER);			
-			this.connection.start(local_socket_number);
+			
+			boolean restarted_connection = false;
+			while(!restarted_connection) {
+				try {
+					this.connection.start(local_socket_number);
+					restarted_connection = true;
+				}
+				catch(BindException e) {
+					sleep(3000); // wait 3 seconds
+				}
+			}
 		}
 	}
 	
@@ -386,6 +399,7 @@ public final class MainDaemon extends Daemon {
 						message = null;
 						try { simulator.stopSimulation(); }
 						catch (IOException e) { e.printStackTrace(); }
+						catch (InterruptedException e) { e.printStackTrace(); }
 					}
 				}
 			}

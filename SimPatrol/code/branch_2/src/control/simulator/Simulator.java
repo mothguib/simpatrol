@@ -61,14 +61,11 @@ public abstract class Simulator {
 	 *  @param local_socket_number The number of the UDP socket of the main connection.
 	 *  @param atualization_time_rate The time rate to atualize the internal model of the simulation.
 	 *  @throws IOException */
-	public Simulator(int local_socket_number, double atualization_time_rate) throws IOException {
-		// screen message
-		System.out.println("[SimPatrol.Simulator]: Online.");
-		
+	public Simulator(int local_socket_number, double atualization_time_rate) throws IOException {		
 		// creates, starts and configures the main daemon
-		this.MAIN_DAEMON = new MainDaemon("main daemon", this);
-		this.MAIN_DAEMON.start(local_socket_number);
 		Daemon.setSimulator(this);
+		this.MAIN_DAEMON = new MainDaemon("main daemon", this);
+		this.MAIN_DAEMON.start(local_socket_number);		
 		
 		// initiates the sets of agent_daemons
 		this.PERCEPTION_DAEMONS = Collections.synchronizedSet(new HashSet<PerceptionDaemon>());
@@ -85,7 +82,10 @@ public abstract class Simulator {
 		this.state = SimulatorStates.CONFIGURING;
 		
 		// configures the model's atualization time rate
-		this.ATUALIZATION_TIME_RATE = atualization_time_rate;		
+		this.ATUALIZATION_TIME_RATE = atualization_time_rate;
+		
+		// screen message
+		System.out.println("[SimPatrol.Simulator]: Online.");
 	}
 	
 	/** Adds a given perception daemon to the set of perception daemons.
@@ -382,8 +382,9 @@ public abstract class Simulator {
 	
 	/** Stops the simulation. 
 	 * 
-	 *  @throws IOException */
-	public void stopSimulation() throws IOException {
+	 *  @throws IOException 
+	 *  @throws InterruptedException */
+	public void stopSimulation() throws IOException, InterruptedException {
 		// stops and removes the perception daemons
 		this.stopAndRemovePerceptionDaemons();
 		
@@ -405,8 +406,9 @@ public abstract class Simulator {
 	
 	/** Finishes the simulator's work. 
 	 *
-	 *  @throws IOException */
-	public void exit() throws IOException {
+	 *  @throws IOException 
+	 *  @throws InterruptedException */
+	public void exit() throws IOException, InterruptedException {
 		// if the simulator is simulating, stops it
 		if(this.state == SimulatorStates.SIMULATING)
 			this.stopSimulation();

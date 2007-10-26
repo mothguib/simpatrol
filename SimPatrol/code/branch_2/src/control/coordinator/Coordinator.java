@@ -307,6 +307,7 @@ public final class Coordinator extends Thread implements TimedObject {
 		// stops the simulation
 		try { simulator.stopSimulation(); }
 		catch (IOException e) { e.printStackTrace(); }
+		catch (InterruptedException e) { e.printStackTrace(); }
 		
 		// screen message
 		System.out.println("[SimPatrol.Coordinator]: Simulation stopped.");
