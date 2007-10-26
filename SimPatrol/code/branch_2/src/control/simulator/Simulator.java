@@ -416,8 +416,5 @@ public abstract class Simulator {
 		
 		// screen message
 		System.out.println("[SimPatrol.Simulator]: offline.");
-		
-		// system exit
-		System.exit(0);
 	}
 }
