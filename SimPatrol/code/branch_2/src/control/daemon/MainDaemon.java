@@ -338,12 +338,14 @@ public final class MainDaemon extends Daemon {
 	/** Resets the main daemon's connection. 
 	 * 
 	 *  @throws IOException */	
-	public void resetConnection() throws IOException {
-		int local_socket_number = this.connection.getSocketNumber();
-		
-		synchronized(this) {
+	public void resetConnection() throws IOException {		
+		synchronized(simulator) {
+			simulator.getState(); // synchronization
+			
+			this.BUFFER.clear();
+			int local_socket_number = this.connection.getSocketNumber();
 			this.connection.stopWorking();
-			this.connection = new ServerSideTCPConnection(this.getName() + "'s connection", this.BUFFER);
+			this.connection = new ServerSideTCPConnection(this.getName() + "'s connection", this.BUFFER);			
 			this.connection.start(local_socket_number);
 		}
 	}
@@ -377,17 +379,20 @@ public final class MainDaemon extends Daemon {
 				
 				// if the connection of the main daemon
 				// was eventually terminated (due to an error in the client side)
-				if(this.connection.isStopWorking()) {
-					// cancels all configurations
-					message = null;
-					try { simulator.stopSimulation(); }
-					catch (IOException e) { e.printStackTrace(); }
+				synchronized (simulator) {
+					simulator.getState(); // synchronization...
+					if(this.connection.isStopWorking()) {
+						// cancels all configurations
+						message = null;
+						try { simulator.stopSimulation(); }
+						catch (IOException e) { e.printStackTrace(); }
+					}
 				}
 			}
 			
 			if(!this.stop_working) {
 				synchronized(simulator) {
-					simulator.getState();
+					simulator.getState(); // synchronization...
 					
 					// obtains the configuration from the string message
 					Configuration configuration = null;
