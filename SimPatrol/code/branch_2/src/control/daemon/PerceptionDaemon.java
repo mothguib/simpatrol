@@ -399,19 +399,13 @@ public final class PerceptionDaemon extends AgentDaemon {
 	
 	public void start(int local_socket_number) throws IOException {
 		super.start(local_socket_number);
-		
-		// screen message
-		System.out.println("[SimPatrol.PerceptionDaemon(" + this.AGENT.getObjectId() + ")]: Started working.");
 	}
 	
 	public void stopWorking() throws IOException {
 		super.stopWorking();
-		
-		// screen message
-		System.out.println("[SimPatrol.PerceptionDaemon(" + this.AGENT.getObjectId() + ")]: Stopped working.");
 	}
 	
-	/** @modeller This method must be modelled. */		
+	/** @modeller This method must be modeled. */		
 	public void act(int time_gap) {
 		synchronized(simulator) {
 			// if the daemon can produce perceptions at the moment and the simulator is already simulating
