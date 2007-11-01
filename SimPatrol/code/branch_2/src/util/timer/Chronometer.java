@@ -11,96 +11,110 @@ public final class Chronometer extends Thread implements TimedObject {
 	/* Attributes. */
 	/** The object to be chronometerized. */
 	private final Chronometerable OBJECT;
-	
+
 	/** Holds the elapsed time. */
 	private int elapsed_time;
-	
+
 	/** Holds the deadline, when the chronometer must stop working. */
-	private final int DEADLINE;		
-	
-	/** The chronometer count step.
-	 *  The default value is one second.*/
+	private final int DEADLINE;
+
+	/**
+	 * The chronometer count step. The default value is one second.
+	 */
 	private int step = 1;
-	
-	/** The chronometer count unity, as in Calendar field.
-	 *  The default value is java.util.Calendar.SECOND. */
+
+	/**
+	 * The chronometer count unity, as in Calendar field. The default value is
+	 * java.util.Calendar.SECOND.
+	 */
 	private int unity = Calendar.SECOND;
-	
-	/** The time interval used by the chronometer to count the time.
-	 * Its default value is 1000 milliseconds (1 second). */
+
+	/**
+	 * The time interval used by the chronometer to count the time. Its default
+	 * value is 1000 milliseconds (1 second).
+	 */
 	private long time_interval = 1000;
-	
+
 	/* Methods. */
-	/** Constructor.
+	/**
+	 * Constructor.
 	 * 
-	 *  @param name The name of the thread of the chronometer.
-	 *  @param object The object to be chronometrized.
-	 *  @param deadline The deadline, when the chronometer must stop working. */
+	 * @param name
+	 *            The name of the thread of the chronometer.
+	 * @param object
+	 *            The object to be chronometrized.
+	 * @param deadline
+	 *            The deadline, when the chronometer must stop working.
+	 */
 	public Chronometer(String name, Chronometerable object, int deadline) {
 		super(name);
 		this.OBJECT = object;
 		this.DEADLINE = deadline;
 		this.elapsed_time = 0;
 	}
-	
-	/** Changes the chronometer's counting step.
+
+	/**
+	 * Changes the chronometer's counting step.
 	 * 
-	 *  @param step The counting step. */
+	 * @param step
+	 *            The counting step.
+	 */
 	public void setStep(int step) {
-		this.time_interval = (long) (this.time_interval * Math.pow(this.step, -1));
+		this.time_interval = (long) (this.time_interval * Math.pow(this.step,
+				-1));
 		this.step = step;
 		this.time_interval = this.time_interval * this.step;
 	}
-	
-	/** Changes the chronometer's counting unity.
+
+	/**
+	 * Changes the chronometer's counting unity.
 	 * 
-	 *  @param unity The java.util.Calendar's time unity.
-	 *  @see Calendar */
+	 * @param unity
+	 *            The java.util.Calendar's time unity.
+	 * @see Calendar
+	 */
 	public void setUnity(int unity) {
 		this.unity = unity;
-		
-		if(this.unity == Calendar.HOUR)
+
+		if (this.unity == Calendar.HOUR) {
 			this.time_interval = this.step * 360000;
-		else if(this.unity == Calendar.MINUTE)
+		} else if (this.unity == Calendar.MINUTE) {
 			this.time_interval = this.step * 6000;
-		else if(this.unity == Calendar.SECOND)
+		} else if (this.unity == Calendar.SECOND) {
 			this.time_interval = this.step * 1000;
-		else this.time_interval = this.step;
+		} else {
+			this.time_interval = this.step;
+		}
 	}
-	
+
 	public int getElapsedTime() {
 		return this.elapsed_time;
 	}
-	
+
 	public void run() {
 		// lets the chronometerized object start working
 		this.OBJECT.startWorking();
-		
-		// screen message
-		System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Started counting time.");
-		
+
 		// counts the elapsed time, oriented by the count unity
-		while(true) {
+		while (true) {
 			try {
 				int prev_ref = Calendar.getInstance().get(this.unity);
 				sleep(this.time_interval);
 				int next_ref = Calendar.getInstance().get(this.unity);
-				
-				if(next_ref < prev_ref) next_ref = next_ref + prev_ref + this.step;
-				this.elapsed_time = this.elapsed_time + (next_ref - prev_ref);				
-			}
-			catch (InterruptedException e) {
+
+				if (next_ref < prev_ref) {
+					next_ref = next_ref + prev_ref + this.step;
+				}
+				this.elapsed_time = this.elapsed_time + (next_ref - prev_ref);
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+
 			// checks if the elapsed time hit the deadline
-			if(this.elapsed_time >= this.DEADLINE) {
+			if (this.elapsed_time >= this.DEADLINE) {
 				// lets the chronometrized object stop working
 				this.OBJECT.stopWorking();
-				
-				// screen message
-				System.out.println("[SimPatrol.Chronometer(" + this.getName() + ")]: Stopped counting time.");
-				
+
 				// ends the thread work
 				return;
 			}
