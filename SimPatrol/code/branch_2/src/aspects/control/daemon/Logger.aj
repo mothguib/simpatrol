@@ -1,5 +1,8 @@
 package control.daemon;
 
+import logger.event.AgentRechargingEvent;
+import logger.event.AgentTeleportingEvent;
+import logger.event.AgentVisitEvent;
 import model.graph.Vertex;
 import model.graph.Edge;
 import model.stigma.Stigma;
@@ -17,6 +20,9 @@ public aspect Logger {
 	pointcut setLastVisitTime(ActionDaemon daemon) : call(* Vertex.setLast_visit_time(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : setLastVisitTime(daemon) {
+		AgentVisitEvent event = new AgentVisitEvent(daemon.AGENT.getObjectId());
+		// TODO completar enviando event por porta
+		
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " visited vertex "
@@ -29,6 +35,10 @@ public aspect Logger {
 	pointcut incStamina(ActionDaemon daemon) : call(* Agent.incStamina(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : incStamina(daemon) {
+		AgentRechargingEvent event = new AgentRechargingEvent(daemon.AGENT
+				.getObjectId(), daemon.AGENT.getStamina());		
+		// TODO completar enviando event por porta
+		
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " recharged.");
@@ -44,6 +54,11 @@ public aspect Logger {
 		args(object);
 
 	after(ActionDaemon daemon, Object object) : attendStigmatizeAction(daemon, object) {
+		// JOSUE, a linha abaixo descomentada deve funcionar sem problemas...
+		// AgentStigmatizingEvent event = new
+		// AgentStigmatizingEvent(daemon.AGENT.getObjectId(), stigma);
+		// TODO enviar event pela porta
+
 		String result = "";
 		if (object instanceof Vertex) {
 			result = "vertex " + daemon.AGENT.getVertex().reducedToXML(0);
@@ -59,9 +74,13 @@ public aspect Logger {
 	/**
 	 * Logs the message broadcasting
 	 */
-	pointcut broadcastMessage(ActionDaemon daemon) : call(* ActionDaemon.broadCastMessage(..)) && this(daemon);
+	pointcut broadcastMessage(ActionDaemon daemon) : call(* ActionDaemon.broadcastMessage(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : broadcastMessage(daemon) {
+		// JOSUE, a linha abaixo descomentada deve funcionar sem problemas...
+		// AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT.getObjectId(), message);
+		// TODO enviar event por porta
+		
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " broadcasted a message.");
@@ -75,6 +94,12 @@ public aspect Logger {
 		&& withincode(* ActionDaemon.attendTeleportAction(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : teleportAction1(daemon) {
+		Agent agent = daemon.AGENT;
+		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
+				.getObjectId(), agent.getVertex().getObjectId(), agent
+				.getEdge().getObjectId(), agent.getElapsed_length());
+		// TODO enviar event por porta
+		
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " teleported.");
@@ -88,6 +113,12 @@ public aspect Logger {
 		&& withincode(* ActionDaemon.attendPlannedTeleportAction(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : teleportAction2(daemon) {
+		Agent agent = daemon.AGENT;
+		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
+				.getObjectId(), agent.getVertex().getObjectId(), agent
+				.getEdge().getObjectId(), agent.getElapsed_length());
+		// TODO enviar event por porta
+		
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " teleported to "
