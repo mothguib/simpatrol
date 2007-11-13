@@ -290,59 +290,54 @@ public final class Coordinator extends Thread implements TimedObject {
 
 	/** @modeller This method must be modelled. */
 	public void run() {
-		// stops the simulation
 		try {
+			// for the number of cycles to be simulated...
 			for (int i = 0; i < this.NUMBER_OF_CYCLES; i++) {
-				this.makeAgentsPerceive(simulator);
-				this.makeAgentsAct(simulator);
+				// lets agents perceive, act and updates the environment
+				this.makeAgentsPerceive();
+				this.makeAgentsAct();
 				this.updateEnvironmentModel();
 
 				// increments the cycle count
 				this.cycles_count++;
 			}
+
+			// stops the simulation
 			simulator.stopSimulation();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * While there are agents that didn't perceive yet, wait...
-	 */
-	private void makeAgentsPerceive(CycledSimulator simulator2) {
+	/** Forces the agents to perceive the environment. */
+	private void makeAgentsPerceive() {
 		// while there are agents that didn't perceive yet, wait...
-		while (!simulator2.allAgentsJustPerceived()) {
-			simulator2.lockAgentsPerceptions(false);
-		}
+		while (simulator.allAgentsJustPerceived())
+			simulator.lockAgentsPerceptions(false);
 
 		// all agents perceived, so don't let them perceive anymore
-		simulator2.lockAgentsPerceptions(true);
+		simulator.lockAgentsPerceptions(true);
 
 		// agents shall be thinking now...
 	}
 
-	/**
-	 * Agents act now.
-	 */
-	private void makeAgentsAct(CycledSimulator simulator2) {
-		// agent must act now
-
+	/** Forces the agents to act. */
+	private void makeAgentsAct() {
 		// forces the agents that have plans to act according to it
 		this.forceAgentsActAsPlanned();
 
 		// while there are agents that didn't act yet, wait...
-		while (!simulator2.allAgentsJustActed())
-			simulator2.lockAgentsActions(false);
+		while (!simulator.allAgentsJustActed())
+			simulator.lockAgentsActions(false);
 
 		// all agents acted, so don't let them act anymore
-		simulator2.lockAgentsActions(true);
+		simulator.lockAgentsActions(true);
 	}
 
 	/**
-	 * Atualizes the environment's model
+	 * Updates the environment's model
 	 * 
 	 * @throws IOException
 	 */

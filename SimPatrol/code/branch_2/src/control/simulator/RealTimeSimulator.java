@@ -70,15 +70,6 @@ public final class RealTimeSimulator extends Simulator implements
 	}
 
 	/**
-	 * Returns the elapsed simulated time.
-	 * 
-	 * @return The elapsed simulated time.
-	 */
-	public int getElapsedSimulatedTime() {
-		return this.chronometer.getElapsedTime();
-	}
-
-	/**
 	 * Obtains the dynamic objects and creates the respective dymamicity
 	 * controller robots.
 	 */
@@ -429,5 +420,10 @@ public final class RealTimeSimulator extends Simulator implements
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public int getElapsedTime() {
+		return this.chronometer.getElapsedTime();
 	}
 }

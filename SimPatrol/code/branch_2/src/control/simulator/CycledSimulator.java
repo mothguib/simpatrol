@@ -114,5 +114,10 @@ public final class CycledSimulator extends Simulator {
 		
 		// starts the coordinator (and so, the simulation)
 		this.coordinator.start();
+	}
+
+	@Override
+	public int getElapsedTime() {
+		return coordinator.getElapsedTime();
 	}	
 }

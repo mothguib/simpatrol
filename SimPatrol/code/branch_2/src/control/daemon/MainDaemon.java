@@ -151,6 +151,12 @@ public final class MainDaemon extends Daemon {
 					// sends an orientation to the sender of the configuration
 					this.connection.send(new Orientation(String
 							.valueOf(socket_number)).fullToXML(0));
+
+					// JOSUE
+					// screen message
+					System.out.println("[SimPatrol.Event]: Agent "
+							+ agent.reducedToXML(0) + " created in society "
+							+ society.getObjectId() +  ".");
 				}
 				// else, sends an orientation reporting error
 				else

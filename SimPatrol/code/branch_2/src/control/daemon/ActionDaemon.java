@@ -115,14 +115,9 @@ public final class ActionDaemon extends AgentDaemon {
 				this.AGENT.decStamina(stamina);
 
 			// resets the idleness of the vertex where the agent is
-			if (simulator instanceof RealTimeSimulator) {
+			if (simulator instanceof RealTimeSimulator)
 				this.AGENT.getVertex().setLast_visit_time(
-						((RealTimeSimulator) simulator)
-								.getElapsedSimulatedTime());
-			} else {
-				this.AGENT.getVertex().setLast_visit_time(
-						coordinator.getElapsedTime());
-			}
+						simulator.getElapsedTime());
 		}
 	}
 
@@ -209,12 +204,16 @@ public final class ActionDaemon extends AgentDaemon {
 					|| this.AGENT.getElapsed_length() == 0) {
 				simulator.getEnvironment().getGraph().addStigma(
 						new Stigma(this.AGENT.getVertex()));
+
+				// JOSUE, preciso do objeto stigma criado no aspecto
 			}
 
 			// else, deposits the stigma on the edge
 			else {
 				simulator.getEnvironment().getGraph().addStigma(
 						new Stigma(this.AGENT.getEdge()));
+
+				// JOSUE, preciso do objeto stigma criado no aspecto
 			}
 		}
 	}
@@ -262,16 +261,22 @@ public final class ActionDaemon extends AgentDaemon {
 				message_depth = depth;
 			}
 
-			/* Broadcasts message */
-			this.broadCastMessage(action, message_depth);
+			// broadcasts the message
+			this.broadcastMessage(action.getMessage(), message_depth);
+
+			// JOSUE, precido do parametro "action.getMessage()" no aspecto
 		}
 	}
 
 	/**
-	 * Auxiliary method that broadcasts a message given a
-	 * <code>message_depth</code>.
+	 * Broadcasts the given message. Its depth must be also informed.
+	 * 
+	 * @param message
+	 *            The message to be broadcasted.
+	 * @param message_depth
+	 *            The depth of the message to be broadcasted.
 	 */
-	private void broadCastMessage(BroadcastAction action, int message_depth) {
+	private void broadcastMessage(String message, int message_depth) {
 		// holds the reachable agents
 		List<Agent> reachable_agents = new LinkedList<Agent>();
 
@@ -314,7 +319,7 @@ public final class ActionDaemon extends AgentDaemon {
 		// and sends the message
 		for (int i = 0; i < reachable_agents.size(); i++) {
 			simulator.getPerceptionDaemon(reachable_agents.get(i))
-					.receiveMessage(action.getMessage());
+					.receiveMessage(message);
 		}
 	}
 

@@ -483,4 +483,16 @@ public abstract class Simulator {
 		// stops the main daemon
 		this.MAIN_DAEMON.stopWorking();
 	}
+
+	/**
+	 * Returns the time already simulated.
+	 * 
+	 * The time is supposed to be measured in seconds, if the simulator is a
+	 * real time one, or in cycles, if it's a cycled one.
+	 * 
+	 * @return The time already simulated.
+	 * @see RealTimeSimulator
+	 * @see CycledSimulator.
+	 */
+	public abstract int getElapsedTime();
 }
