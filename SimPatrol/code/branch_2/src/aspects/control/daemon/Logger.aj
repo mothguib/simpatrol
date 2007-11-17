@@ -186,6 +186,18 @@ public aspect Logger {
 	}
 
 	/**
+	 * Main daemon is attending an event collecting request
+	 */
+	pointcut attendEventCollectingConfiguration(): call(* MainDaemon.attendEventCollectingConfiguration(..));
+
+	before() : attendEventCollectingConfiguration() {
+		logger.Logger
+				.getInstance()
+				.log(
+						"[SimPatrol.MainDaemon]: \"Event collecting\" configuration received.");
+	}
+
+	/**
 	 * Main daemon is attending a metric creation request
 	 */
 	pointcut attendMetricCreationConfiguration(): call(* MainDaemon.attendMetricCreationConfiguration(..));
