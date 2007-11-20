@@ -61,12 +61,12 @@ public abstract class ActionTranslator extends Translator {
 		// switches the action type
 		switch (action_type) {
 		// if it is a visit action, returns it
-		case ActionTypes.VISIT_ACTION: {
+		case ActionTypes.VISIT: {
 			return new VisitAction();
 		}
 
 			// if it is a broadcast action
-		case ActionTypes.BROADCAST_ACTION: {
+		case ActionTypes.BROADCAST: {
 			// obtains the message and its depth
 			String message = action_element.getAttribute("message");
 
@@ -81,12 +81,12 @@ public abstract class ActionTranslator extends Translator {
 		}
 
 			// if it is a stigmatize action, returns it
-		case ActionTypes.STIGMATIZE_ACTION: {
+		case ActionTypes.STIGMATIZE: {
 			return new StigmatizeAction();
 		}
 
 			// if it is an atomic recharge action
-		case ActionTypes.ATOMIC_RECHARGE_ACTION: {
+		case ActionTypes.ATOMIC_RECHARGE: {
 			// obtains the stamina value to be added to the agent
 			double stamina = Double.parseDouble(action_element
 					.getAttribute("stamina"));
@@ -96,7 +96,7 @@ public abstract class ActionTranslator extends Translator {
 		}
 
 			// if it is a recharge action
-		case ActionTypes.RECHARGE_ACTION: {
+		case ActionTypes.RECHARGE: {
 			// obtains the stamina value to be added to the agent
 			double stamina = Double.parseDouble(action_element
 					.getAttribute("stamina"));
@@ -132,7 +132,7 @@ public abstract class ActionTranslator extends Translator {
 
 		// verifies the type of the action
 		int type = Integer.parseInt(action_element.getAttribute("type"));
-		if (type != ActionTypes.TELEPORT_ACTION)
+		if (type != ActionTypes.TELEPORT)
 			return null;
 
 		// obtains the data from the action
@@ -191,7 +191,7 @@ public abstract class ActionTranslator extends Translator {
 
 		// verifies the type of the action
 		int type = Integer.parseInt(action_element.getAttribute("type"));
-		if (type != ActionTypes.GOTO_ACTION)
+		if (type != ActionTypes.GOTO)
 			return null;
 
 		// obtains the data from the action

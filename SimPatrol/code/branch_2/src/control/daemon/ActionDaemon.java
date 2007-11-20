@@ -708,7 +708,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.VISIT_ACTION)
+								if (permissions[i].getAction_type() == ActionTypes.VISIT)
 									// attends the action
 									this.attendVisitAction(
 											(VisitAction) action,
@@ -722,7 +722,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_ACTION)
+								if (permissions[i].getAction_type() == ActionTypes.BROADCAST)
 									// attends the action
 									this.attendBroadcastAction(
 											(BroadcastAction) action,
@@ -736,7 +736,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE_ACTION)
+								if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE)
 									// attends the action
 									this.attendStigmatizeAction(
 											(StigmatizeAction) action,
@@ -750,7 +750,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE_ACTION)
+								if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE)
 									// attends the action
 									this.attendAtomicRechargeAction(
 											(AtomicRechargeAction) action,
@@ -763,7 +763,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.RECHARGE_ACTION) {
+								if (permissions[i].getAction_type() == ActionTypes.RECHARGE) {
 									// attends the action
 									this.attendRechargeAction(
 											(RechargeAction) action,
@@ -782,7 +782,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.TELEPORT_ACTION)
+								if (permissions[i].getAction_type() == ActionTypes.TELEPORT)
 									// attends the intention of action
 									this.attendTeleportAction(
 											(TeleportAction) action,
@@ -795,7 +795,7 @@ public final class ActionDaemon extends AgentDaemon {
 									.getAllowedActions();
 
 							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.GOTO_ACTION) {
+								if (permissions[i].getAction_type() == ActionTypes.GOTO) {
 									// attends the intention of action
 									this.attendGoToAction((GoToAction) action,
 											permissions[i].getLimitations());
