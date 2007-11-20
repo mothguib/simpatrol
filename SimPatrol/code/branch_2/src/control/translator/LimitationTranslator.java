@@ -50,7 +50,7 @@ public abstract class LimitationTranslator extends Translator {
 			// instatiates the new limitation
 			// developer: new Limitation subclasses must change this code
 			switch (limitation_type) {
-			case (LimitationTypes.DEPTH_LIMITATION): {
+			case (LimitationTypes.DEPTH): {
 				// obtains the parameters of the limitation
 				int parameter = Integer
 						.parseInt(getLimitationParameters(limitation_element)[0]);
@@ -59,7 +59,7 @@ public abstract class LimitationTranslator extends Translator {
 				answer[i] = new DepthLimitation(parameter);
 				break;
 			}
-			case (LimitationTypes.STAMINA_LIMITATION): {
+			case (LimitationTypes.STAMINA): {
 				// obtains the parameters of the limitation
 				int parameter = Integer
 						.parseInt(getLimitationParameters(limitation_element)[0]);
@@ -68,7 +68,7 @@ public abstract class LimitationTranslator extends Translator {
 				answer[i] = new StaminaLimitation(parameter);
 				break;
 			}
-			case (LimitationTypes.SPEED_LIMITATION): {
+			case (LimitationTypes.SPEED): {
 				// obtains the parameters of the limitation
 				double parameter = Double
 						.parseDouble(getLimitationParameters(limitation_element)[0]);
@@ -77,7 +77,7 @@ public abstract class LimitationTranslator extends Translator {
 				answer[i] = new SpeedLimitation(parameter);
 				break;
 			}
-			case (LimitationTypes.ACCELERATION_LIMITATION): {
+			case (LimitationTypes.ACCELERATION): {
 				// obtains the parameters of the limitation
 				double parameter = Double
 						.parseDouble(getLimitationParameters(limitation_element)[0]);
