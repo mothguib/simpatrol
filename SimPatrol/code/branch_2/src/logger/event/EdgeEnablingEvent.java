@@ -7,7 +7,7 @@ package logger.event;
 public final class EdgeEnablingEvent extends Event {
 	/* Attributes. */
 	/** The id of the edge being enabled / disabled. */
-	private String edge_id;
+	private final String EDGE_ID;
 
 	/* Methods. */
 	/**
@@ -17,10 +17,10 @@ public final class EdgeEnablingEvent extends Event {
 	 *            The id of the edge being enabled / disabled.
 	 */
 	public EdgeEnablingEvent(String edge_id) {
-		this.edge_id = edge_id;
+		this.EDGE_ID = edge_id;
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -29,9 +29,8 @@ public final class EdgeEnablingEvent extends Event {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\""
-				+ EventTypes.EDGE_CHANGING_ENABLING_EVENT + "\" time=\""
-				+ simulator.getElapsedTime() + "\" edge_id=\"" + this.edge_id
+		buffer.append("<event type=\"" + EventTypes.EDGE_ENABLING
+				+ "\" time=\"" + event_time + "\" edge_id=\"" + this.EDGE_ID
 				+ "\"/>\n");
 
 		// returns the answer

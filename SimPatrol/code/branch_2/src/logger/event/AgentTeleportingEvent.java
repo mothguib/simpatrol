@@ -7,13 +7,13 @@ package logger.event;
 public final class AgentTeleportingEvent extends AgentEvent {
 	/* Attributes. */
 	/** The id of the vertex to where the agent teleported. */
-	private String vertex_id;
+	private final String VERTEX_ID;
 
 	/** The id of the edge to where the agent teleported. */
-	private String edge_id;
+	private final String EDGE_ID;
 
 	/** The length of the edge already trespassed by the agent. */
-	private double length;
+	private final double LENGTH;
 
 	/* Methods. */
 	/**
@@ -31,12 +31,12 @@ public final class AgentTeleportingEvent extends AgentEvent {
 	public AgentTeleportingEvent(String agent_id, String vertex_id,
 			String edge_id, double length) {
 		super(agent_id);
-		this.vertex_id = vertex_id;
-		this.edge_id = edge_id;
-		this.length = length;
+		this.VERTEX_ID = vertex_id;
+		this.EDGE_ID = edge_id;
+		this.LENGTH = length;
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -45,14 +45,14 @@ public final class AgentTeleportingEvent extends AgentEvent {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\"" + EventTypes.AGENT_TELEPORTING_EVENT
-				+ "\" time=\"" + simulator.getElapsedTime() + "\" agent_id=\""
-				+ this.agent_id + "\" vertex_id=\"" + this.vertex_id);
+		buffer.append("<event type=\"" + EventTypes.AGENT_TELEPORTING
+				+ "\" time=\"" + event_time + "\" agent_id=\"" + this.AGENT_ID
+				+ "\" vertex_id=\"" + this.VERTEX_ID);
 
 		// if the edge id is valid
-		if (this.edge_id != null)
-			buffer.append("\" edge_id= \"" + this.edge_id + "\" length=\""
-					+ this.length);
+		if (this.EDGE_ID != null)
+			buffer.append("\" edge_id= \"" + this.EDGE_ID + "\" length=\""
+					+ this.LENGTH);
 
 		// closes the tag
 		buffer.append("\"/>\n");

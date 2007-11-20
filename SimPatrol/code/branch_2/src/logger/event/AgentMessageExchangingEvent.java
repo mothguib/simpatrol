@@ -10,7 +10,7 @@ package logger.event;
 public abstract class AgentMessageExchangingEvent extends AgentEvent {
 	/* Attributes. */
 	/** The message broadcasted by the agent. */
-	protected String message;
+	protected final String MESSAGE;
 
 	/* Methods. */
 	/**
@@ -23,6 +23,6 @@ public abstract class AgentMessageExchangingEvent extends AgentEvent {
 	 */
 	public AgentMessageExchangingEvent(String agent_id, String message) {
 		super(agent_id);
-		this.message = message;
+		this.MESSAGE = message;
 	}
 }

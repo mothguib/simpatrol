@@ -7,7 +7,7 @@ package logger.event;
 public abstract class AgentEvent extends Event {
 	/* Attributes. */
 	/** The id of the agent to which this event is related to. */
-	protected String agent_id;
+	protected final String AGENT_ID;
 
 	/* Methods. */
 	/**
@@ -17,6 +17,6 @@ public abstract class AgentEvent extends Event {
 	 *            The id of the agent to which this event is related to.
 	 */
 	public AgentEvent(String agent_id) {
-		this.agent_id = agent_id;
+		this.AGENT_ID = agent_id;
 	}
 }

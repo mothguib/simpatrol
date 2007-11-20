@@ -7,7 +7,7 @@ package logger.event;
 public final class VertexEnablingEvent extends Event {
 	/* Attributes. */
 	/** The id of the vertex being enabled / disabled. */
-	private String vertex_id;
+	private final String VERTEX_ID;
 
 	/* Methods. */
 	/**
@@ -17,10 +17,10 @@ public final class VertexEnablingEvent extends Event {
 	 *            The id of the vertex being enabled / disabled.
 	 */
 	public VertexEnablingEvent(String vertex_id) {
-		this.vertex_id = vertex_id;
+		this.VERTEX_ID = vertex_id;
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -29,10 +29,9 @@ public final class VertexEnablingEvent extends Event {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\""
-				+ EventTypes.VERTEX_CHANGING_ENABLING_EVENT + "\" time=\""
-				+ simulator.getElapsedTime() + "\" vertex_id=\""
-				+ this.vertex_id + "\"/>\n");
+		buffer.append("<event type=\"" + EventTypes.VERTEX_ENABLING
+				+ "\" time=\"" + event_time + "\" vertex_id=\""
+				+ this.VERTEX_ID + "\"/>\n");
 
 		// returns the answer
 		return buffer.toString();

@@ -18,7 +18,7 @@ public final class AgentRechargingEvent extends AgentStaminaEvent {
 		super(agent_id, quantity);
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -27,9 +27,9 @@ public final class AgentRechargingEvent extends AgentStaminaEvent {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\"" + EventTypes.AGENT_RECHARGING_EVENT
-				+ "\" time=\"" + simulator.getElapsedTime() + "\" agent_id=\"" + this.agent_id
-				+ "\" quantity=\"" + this.quantity + "\"/>\n");
+		buffer.append("<event type=\"" + EventTypes.AGENT_RECHARGING
+				+ "\" time=\"" + event_time + "\" agent_id=\"" + this.AGENT_ID
+				+ "\" quantity=\"" + this.QUANTITY + "\"/>\n");
 
 		// returns the answer
 		return buffer.toString();

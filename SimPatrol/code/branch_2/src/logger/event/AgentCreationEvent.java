@@ -12,10 +12,10 @@ import model.agent.Agent;
 public final class AgentCreationEvent extends Event {
 	/* Attributes. */
 	/** The agent just created. */
-	private Agent agent;
+	private final Agent AGENT;
 
 	/** The id of the society to where the agent was added. */
-	private String society_id;
+	private final String SOCIETY_ID;
 
 	/* Methods. */
 	/**
@@ -27,11 +27,11 @@ public final class AgentCreationEvent extends Event {
 	 *            The id of the society to where the new agent is being added.
 	 */
 	public AgentCreationEvent(Agent agent, String society_id) {
-		this.agent = agent;
-		this.society_id = society_id;
+		this.AGENT = agent;
+		this.SOCIETY_ID = society_id;
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -40,12 +40,12 @@ public final class AgentCreationEvent extends Event {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\"" + EventTypes.AGENT_STIGMATIZING_EVENT
-				+ "\" time=\"" + simulator.getElapsedTime()
-				+ "\" society_id=\"" + this.society_id + "\">\n");
+		buffer.append("<event type=\"" + EventTypes.AGENT_STIGMATIZING
+				+ "\" time=\"" + event_time + "\" society_id=\""
+				+ this.SOCIETY_ID + "\">\n");
 
 		// puts the new agent in the buffer
-		buffer.append(agent.fullToXML(identation + 1));
+		buffer.append(AGENT.fullToXML(identation + 1));
 
 		// closes the tag
 		for (int i = 0; i < identation; i++)

@@ -21,7 +21,7 @@ public final class AgentBroadcastingEvent extends AgentMessageExchangingEvent {
 		super(agent_id, message);
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -30,9 +30,9 @@ public final class AgentBroadcastingEvent extends AgentMessageExchangingEvent {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\"" + EventTypes.AGENT_BROADCASTING_EVENT
-				+ "\" time=\"" + simulator.getElapsedTime() + "\" agent_id=\""
-				+ this.agent_id + "\" message=\"" + this.message + "\"/>\n");
+		buffer.append("<event type=\"" + EventTypes.AGENT_BROADCASTING
+				+ "\" time=\"" + event_time + "\" agent_id=\"" + this.AGENT_ID
+				+ "\" message=\"" + this.MESSAGE + "\"/>\n");
 
 		// returns the answer
 		return buffer.toString();

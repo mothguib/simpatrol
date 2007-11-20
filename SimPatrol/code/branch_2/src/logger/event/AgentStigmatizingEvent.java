@@ -13,7 +13,7 @@ import model.stigma.Stigma;
 public final class AgentStigmatizingEvent extends AgentEvent {
 	/* Attributes. */
 	/** The stigma deposited by the agent. */
-	private Stigma stigma;
+	private final Stigma STIGMA;
 
 	/* Methods. */
 	/**
@@ -26,10 +26,10 @@ public final class AgentStigmatizingEvent extends AgentEvent {
 	 */
 	public AgentStigmatizingEvent(String agent_id, Stigma stigma) {
 		super(agent_id);
-		this.stigma = stigma;
+		this.STIGMA = stigma;
 	}
 
-	public String fullToXML(int identation) {
+	public String fullToXML(int identation, int event_time) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
 
@@ -38,12 +38,12 @@ public final class AgentStigmatizingEvent extends AgentEvent {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<event type=\"" + EventTypes.AGENT_STIGMATIZING_EVENT
-				+ "\" time=\"" + simulator.getElapsedTime() + "\" agent_id=\""
-				+ this.agent_id + "\">\n");
+		buffer.append("<event type=\"" + EventTypes.AGENT_STIGMATIZING
+				+ "\" time=\"" + event_time + "\" agent_id=\"" + this.AGENT_ID
+				+ "\">\n");
 
 		// puts the stigma on the buffer
-		buffer.append(stigma.fullToXML(identation + 1));
+		buffer.append(STIGMA.fullToXML(identation + 1));
 
 		// closes the tag
 		for (int i = 0; i < identation; i++)

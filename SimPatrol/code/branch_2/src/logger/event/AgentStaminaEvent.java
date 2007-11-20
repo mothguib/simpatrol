@@ -7,7 +7,7 @@ package logger.event;
 public abstract class AgentStaminaEvent extends AgentEvent {
 	/* Attributes. */
 	/** The quantity of stamina related to the event. */
-	protected double quantity;
+	protected final double QUANTITY;
 
 	/* Methods. */
 	/**
@@ -20,6 +20,6 @@ public abstract class AgentStaminaEvent extends AgentEvent {
 	 */
 	public AgentStaminaEvent(String agent_id, double quantity) {
 		super(agent_id);
-		this.quantity = quantity;
+		this.QUANTITY = quantity;
 	}
 }
