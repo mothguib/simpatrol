@@ -7,7 +7,6 @@ package conscientious_reactive;
 import java.io.IOException;
 import java.util.LinkedList;
 import common.Agent;
-import util.net.ClientConnection;
 
 /**
  * Implements the conscientious reactive agents, as it is described in the work
@@ -20,9 +19,6 @@ public abstract class ConscientiousReactiveAgent extends Agent {
 
 	/** Lets the agent count the time. */
 	private int time_counting;
-
-	/** The connection of the agent. */
-	protected ClientConnection connection;
 
 	/* Methods. */
 	/** Constructor. */

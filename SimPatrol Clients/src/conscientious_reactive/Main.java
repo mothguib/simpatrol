@@ -3,7 +3,7 @@ package conscientious_reactive;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-public class Main {
+public final class Main {
 	/**
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.

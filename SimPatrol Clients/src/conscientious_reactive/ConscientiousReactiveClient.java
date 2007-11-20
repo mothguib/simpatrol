@@ -15,7 +15,7 @@ import common.Client;
  * Implements a client that connects to the SimPatrol server and configures it,
  * letting conscientious reactive agent clients connect to it, in the sequence.
  */
-public class ConscientiousReactiveClient extends Client {
+public final class ConscientiousReactiveClient extends Client {
 	/**
 	 * Constructor.
 	 * 

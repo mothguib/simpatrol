@@ -12,7 +12,7 @@ import util.net.TCPClientConnection;
  * Implements the conscientious reactive agents, as it is described in the work
  * of [MACHADO, 2002], for a cycled simulator.
  */
-public class CycledConscientiousReactiveAgent extends
+public final class CycledConscientiousReactiveAgent extends
 		ConscientiousReactiveAgent {
 	/* Methods. */
 	/**
@@ -28,7 +28,6 @@ public class CycledConscientiousReactiveAgent extends
 	 */
 	public CycledConscientiousReactiveAgent(String remote_socket_address,
 			int remote_socket_number) throws UnknownHostException, IOException {
-		super();
 		this.connection = new TCPClientConnection(remote_socket_address,
 				remote_socket_number);
 	}

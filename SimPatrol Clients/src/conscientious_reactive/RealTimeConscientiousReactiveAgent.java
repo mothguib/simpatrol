@@ -12,7 +12,7 @@ import util.net.UDPClientConnection;
  * Implements the conscientious reactive agents, as it is described in the work
  * of [MACHADO, 2002], for a real time simulator.
  */
-public class RealTimeConscientiousReactiveAgent extends
+public final class RealTimeConscientiousReactiveAgent extends
 		ConscientiousReactiveAgent {
 	/* Methods. */
 	/**
@@ -29,7 +29,6 @@ public class RealTimeConscientiousReactiveAgent extends
 	public RealTimeConscientiousReactiveAgent(String remote_socket_address,
 			int remote_socket_number) throws SocketException,
 			UnknownHostException {
-		super();
 		this.connection = new UDPClientConnection(remote_socket_address,
 				remote_socket_number);
 	}
