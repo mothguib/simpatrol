@@ -7,7 +7,7 @@ package util.timer;
 public interface Chronometerable {
 	/** Forces the objects to have a start working method. */
 	public void startWorking();
-	
-	/** Forces the objects to have a finish working method.*/
-	public void stopWorking();		
+
+	/** Forces the objects to have a finish working method. */
+	public void stopWorking();
 }
