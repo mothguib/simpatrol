@@ -7,7 +7,6 @@ package heuristic_conscientious_reactive;
 import java.io.IOException;
 import java.util.LinkedList;
 import common.Agent;
-import util.net.ClientConnection;
 
 /**
  * Implements the heuristic conscientious reactive agents, as it is described in
@@ -42,18 +41,16 @@ public abstract class HeuristicConscientiousReactiveAgent extends Agent {
 	/** Holds the smallest edge length ever perceived by the agent. */
 	private double smallest_length;
 
-	/** The connection of the agent. */
-	protected ClientConnection connection;
-
 	/* Methods. */
 	/** Constructor. */
 	public HeuristicConscientiousReactiveAgent() {
+		this.last_position = null;
 		this.vertexes_idlenesses = new LinkedList<StringAndDouble>();
 		this.time_counting = 0;
 		this.biggest_idleness = -1;
 		this.smallest_idleness = Integer.MAX_VALUE;
 		this.biggest_length = -1;
-		this.smallest_length = Integer.MAX_VALUE;
+		this.smallest_length = Double.MAX_VALUE;
 	}
 
 	/**
@@ -121,43 +118,36 @@ public abstract class HeuristicConscientiousReactiveAgent extends Agent {
 					String emitter_id = perception_copy.substring(0,
 							perception_copy.indexOf("\""));
 
-					try {
+					// if the emitter id is the current vertex of the
+					// obtained vertex
+					if (emitter_id.equals(current_vertex_id)
+							|| emitter_id.equals(vertex_id)) {
+						// obtains the collector if of the edge
+						int collector_id_index = perception_copy
+								.indexOf("collector_id=\"");
+						perception_copy = perception_copy
+								.substring(collector_id_index + 14);
+						String collector_id = perception_copy.substring(0,
+								perception_copy.indexOf("\""));
 
-						// if the emitter id is the current vertex of the
+						// if the collector id is the current vertex of the
 						// obtained vertex
-						if (emitter_id.equals(current_vertex_id)
-								|| emitter_id.equals(vertex_id)) {
-							// obtains the collector if of the edge
-							int collector_id_index = perception_copy
-									.indexOf("collector_id=\"");
+						if ((collector_id.equals(current_vertex_id) || collector_id
+								.equals(vertex_id))) {
+							// obtains the length of the edge, and sets it
+							// if it's
+							// smaller than the previoulsy held one
+							int length_id_index = perception_copy
+									.indexOf("length=\"");
 							perception_copy = perception_copy
-									.substring(collector_id_index + 14);
-							String collector_id = perception_copy.substring(0,
-									perception_copy.indexOf("\""));
+									.substring(length_id_index + 8);
+							double obtained_length = Double
+									.parseDouble(perception_copy.substring(0,
+											perception_copy.indexOf("\"")));
 
-							// if the collector id is the current vertex of the
-							// obtained vertex
-							if ((collector_id.equals(current_vertex_id) || collector_id
-									.equals(vertex_id))) {
-								// obtains the length of the edge, and sets it
-								// if it's
-								// smaller than the previoulsy held one
-								int length_id_index = perception_copy
-										.indexOf("length=\"");
-								perception_copy = perception_copy
-										.substring(length_id_index + 8);
-								double obtained_length = Double
-										.parseDouble(perception_copy.substring(
-												0, perception_copy
-														.indexOf("\"")));
-
-								if (obtained_length < length)
-									length = obtained_length;
-							}
+							if (obtained_length < length)
+								length = obtained_length;
 						}
-
-					} catch (StringIndexOutOfBoundsException e) {
-						System.out.println("erro " + perception);
 					}
 
 					// reads next edge

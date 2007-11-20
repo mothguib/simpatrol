@@ -29,7 +29,6 @@ public class RealTimeHeuristicConscientiousReactiveAgent extends
 	public RealTimeHeuristicConscientiousReactiveAgent(
 			String remote_socket_address, int remote_socket_number)
 			throws SocketException, UnknownHostException {
-		super();
 		this.connection = new UDPClientConnection(remote_socket_address,
 				remote_socket_number);
 	}
