@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import logger.Logger;
 import model.Environment;
 import model.agent.Agent;
 import model.agent.OpenSociety;
@@ -467,6 +468,9 @@ public abstract class Simulator {
 
 		// resets the main daemon's connection
 		this.MAIN_DAEMON.resetConnection();
+
+		// closes the eventual connections reserved for logging the events
+		Logger.reset();
 	}
 
 	/**

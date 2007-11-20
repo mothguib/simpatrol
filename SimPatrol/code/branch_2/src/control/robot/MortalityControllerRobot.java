@@ -5,7 +5,6 @@ package control.robot;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-
 import model.agent.Agent;
 import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Mortal;

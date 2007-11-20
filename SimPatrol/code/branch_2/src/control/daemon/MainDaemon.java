@@ -6,7 +6,6 @@ package control.daemon;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.net.BindException;
-
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.net.SocketNumberGenerator;
@@ -14,6 +13,8 @@ import view.connection.ServerSideAgentTCPConnection;
 import view.connection.AgentUDPConnection;
 import view.connection.Connection;
 import view.connection.ServerSideTCPConnection;
+import view.connection.UDPConnection;
+import logger.Logger;
 import model.Environment;
 import model.agent.Agent;
 import model.agent.OpenSociety;
@@ -24,6 +25,7 @@ import control.configuration.AgentCreationConfiguration;
 import control.configuration.AgentDeathConfiguration;
 import control.configuration.Configuration;
 import control.configuration.EnvironmentCreationConfiguration;
+import control.configuration.EventCollectingConfiguration;
 import control.configuration.MetricCreationConfiguration;
 import control.configuration.Orientation;
 import control.configuration.SimulationStartConfiguration;
@@ -57,6 +59,42 @@ public final class MainDaemon extends Daemon {
 		this.socket_number_generator = null;
 		this.connection = new ServerSideTCPConnection(thread_name
 				+ "'s connection", this.BUFFER);
+	}
+
+	/**
+	 * Attends a given "event collecting" configuration, sending the
+	 * correspondent orientation to the remote contact.
+	 * 
+	 * @param configuration
+	 *            The configuration to be attended.
+	 * @throws IOException
+	 */
+	private void attendEventCollectingConfiguration(
+			EventCollectingConfiguration configuration) throws IOException {
+		// creates an UDP connection to send the events
+		UDPConnection connection = new UDPConnection(
+				"event collecting's connection", null);
+
+		// tries to start the connection's work
+		boolean socket_exception_happened = true;
+		do {
+			try {
+				connection.start(this.socket_number_generator
+						.generateSocketNumber());
+			} catch (IOException e) {
+				socket_exception_happened = true;
+			}
+		} while (socket_exception_happened);
+
+		// adds the connection to the logger of events
+		Logger.addConnection(connection);
+
+		// mounts the orientation containing the reserved socket number
+		Orientation orientation = new Orientation(String.valueOf(connection
+				.getSocketNumber()));
+
+		// sends the created orientation to the remote contact
+		this.connection.send(orientation.fullToXML(0));
 	}
 
 	/**
@@ -156,7 +194,7 @@ public final class MainDaemon extends Daemon {
 					// screen message
 					System.out.println("[SimPatrol.Event]: Agent "
 							+ agent.reducedToXML(0) + " created in society "
-							+ society.getObjectId() +  ".");
+							+ society.getObjectId() + ".");
 				}
 				// else, sends an orientation reporting error
 				else
@@ -605,6 +643,15 @@ public final class MainDaemon extends Daemon {
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
+						}
+					}
+					// else if the configuration is an "event collecting"
+					else if (configuration instanceof EventCollectingConfiguration) {
+						try {
+							this
+									.attendEventCollectingConfiguration((EventCollectingConfiguration) configuration);
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
 					}
 

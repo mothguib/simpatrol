@@ -6,19 +6,20 @@ package control.configuration;
 /* Imported classes and/or interfaces. */
 import view.XMLable;
 
-/** Implements objects that express configurations of
- *  a simulation. */
+/**
+ * Implements objects that express configurations of a simulation.
+ */
 public abstract class Configuration implements XMLable {
 	/* Attributes. */
-	
+
 	/* Methods. */
 	public String reducedToXML(int identation) {
 		// a configuration doesn't have a lighter XML version
 		return this.fullToXML(identation);
 	}
-	
+
 	public String getObjectId() {
-		// a configuration doesn't need an id'
+		// a configuration doesn't need an id
 		return null;
 	}
 
