@@ -49,6 +49,7 @@ public class UDPConnection extends Connection {
 
 	public void stopWorking() throws IOException {
 		super.stopWorking();
+		this.socket.disconnect();
 	}
 
 	public void run() {
@@ -61,7 +62,8 @@ public class UDPConnection extends Connection {
 				e.printStackTrace();
 			}
 
-			this.BUFFER.insert(message);
+			if (this.BUFFER != null)
+				this.BUFFER.insert(message);
 		}
 	}
 }

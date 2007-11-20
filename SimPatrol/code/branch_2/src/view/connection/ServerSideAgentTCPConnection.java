@@ -75,8 +75,8 @@ public final class ServerSideAgentTCPConnection extends ServerSideTCPConnection 
 					this.socket.disconnect(); // disconnects
 
 					this.socket = new ServerSideTCPSocket(local_socket_number); // restarts
-																				// the
-																				// connection
+					// the
+					// connection
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
