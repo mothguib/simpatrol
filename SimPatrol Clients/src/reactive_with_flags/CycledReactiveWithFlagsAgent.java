@@ -27,7 +27,6 @@ public class CycledReactiveWithFlagsAgent extends ReactiveWithFlagsAgent {
 	 */
 	public CycledReactiveWithFlagsAgent(String remote_socket_address,
 			int remote_socket_number) throws UnknownHostException, IOException {
-		super();
 		this.connection = new TCPClientConnection(remote_socket_address,
 				remote_socket_number);
 	}

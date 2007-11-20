@@ -7,17 +7,12 @@ package reactive_with_flags;
 import java.io.IOException;
 import java.util.LinkedList;
 import common.Agent;
-import util.net.ClientConnection;
 
 /**
  * Implements the reactive with flags agents, as it is described in the work of
  * [MACHADO, 2002].
  */
 public abstract class ReactiveWithFlagsAgent extends Agent {
-	/* Attributes. */
-	/** The connection of the agent. */
-	protected ClientConnection connection;
-
 	/* Methods. */
 	/**
 	 * Lets the agent perceive its current position.
