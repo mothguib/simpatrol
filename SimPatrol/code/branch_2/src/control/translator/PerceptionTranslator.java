@@ -67,7 +67,7 @@ public abstract class PerceptionTranslator extends Translator {
 					.parseInt(perception_element.getAttribute("type"));
 
 			// 1st. if the type is of a graph perception
-			if (type == PerceptionTypes.GRAPH_PERCEPTION) {
+			if (type == PerceptionTypes.GRAPH) {
 				Graph[] read_graph = GraphTranslator
 						.getGraphs(perception_element);
 				if (read_graph.length > 0)
@@ -75,7 +75,7 @@ public abstract class PerceptionTranslator extends Translator {
 			}
 
 			// 2nd. else, if the perception is a broadcasted message
-			else if (type == PerceptionTypes.BROADCAST_PERCEPTION) {
+			else if (type == PerceptionTypes.BROADCAST) {
 				String message = perception_element.getAttribute("message");
 				if (message.length() > 0)
 					perception = new BroadcastPerception(message);
@@ -128,7 +128,7 @@ public abstract class PerceptionTranslator extends Translator {
 					.parseInt(perception_element.getAttribute("type"));
 
 			// if the type is an agents perception
-			if (type == PerceptionTypes.AGENTS_PERCEPTION) {
+			if (type == PerceptionTypes.AGENTS) {
 				// tries to obtain the agents from the perception element
 				Agent[] agents = AgentTranslator.getAgents(perception_element,
 						false, graph);
@@ -181,7 +181,7 @@ public abstract class PerceptionTranslator extends Translator {
 					.parseInt(perception_element.getAttribute("type"));
 
 			// if the type is a self perception
-			if (type == PerceptionTypes.SELF_PERCEPTION) {
+			if (type == PerceptionTypes.SELF) {
 				// tries to obtain the agent itself from the perception element
 				Agent[] agents = AgentTranslator.getAgents(perception_element,
 						false, graph);
@@ -234,7 +234,7 @@ public abstract class PerceptionTranslator extends Translator {
 					.parseInt(perception_element.getAttribute("type"));
 
 			// if the type is a self perception
-			if (type == PerceptionTypes.STIGMAS_PERCEPTION) {
+			if (type == PerceptionTypes.STIGMAS) {
 				// tries to obtain the stigmas from the perception element
 				Stigma[] stigmas = StigmaTranslator.getStigmas(
 						perception_element, graph);

@@ -81,7 +81,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		// verifies if the agent has permission to receive broadcasted messages
 		PerceptionPermission[] permissions = this.AGENT.getAllowedPerceptions();
 		for (int i = 0; i < permissions.length; i++)
-			if (permissions[i].getPerception_type() == PerceptionTypes.BROADCAST_PERCEPTION) {
+			if (permissions[i].getPerception_type() == PerceptionTypes.BROADCAST) {
 				if (this.received_messages == null)
 					this.received_messages = new Queue<String>();
 
@@ -124,7 +124,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			// depending on the type of the current permission
 			switch (allowed_perceptions[i].getPerception_type()) {
 			// if it's a permission for "graph perceptions"
-			case (PerceptionTypes.GRAPH_PERCEPTION): {
+			case (PerceptionTypes.GRAPH): {
 				// obtains the perception of the graph
 				GraphPerception perception = this
 						.produceGraphPerception(allowed_perceptions[i]
@@ -139,7 +139,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			}
 
 				// if it's a permission for "agents perceptions"
-			case (PerceptionTypes.AGENTS_PERCEPTION): {
+			case (PerceptionTypes.AGENTS): {
 				// obtains the perception of the agents
 				AgentsPerception perception = this
 						.produceAgentsPerception(allowed_perceptions[i]
@@ -154,7 +154,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			}
 
 				// if it's a permission for "stigmas perceptions"
-			case (PerceptionTypes.STIGMAS_PERCEPTION): {
+			case (PerceptionTypes.STIGMAS): {
 				// obtains the perceptions of the stigmas
 				StigmasPerception perception = this
 						.produceStigmasPerception(allowed_perceptions[i]
@@ -169,7 +169,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			}
 
 				// if it's a permission for "broadcasted messages perceptions"
-			case (PerceptionTypes.BROADCAST_PERCEPTION): {
+			case (PerceptionTypes.BROADCAST): {
 				// obtains the perceptions of the messages
 				BroadcastPerception[] broadcast_perceptions = this
 						.produceBroadcastPerceptions(allowed_perceptions[i]
@@ -183,7 +183,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 			}
 
 				// if it's a permission of itself
-			case (PerceptionTypes.SELF_PERCEPTION): {
+			case (PerceptionTypes.SELF): {
 				// obtains the perceptions of itself
 				SelfPerception self_perception = this
 						.produceSelfPerception(allowed_perceptions[i]
