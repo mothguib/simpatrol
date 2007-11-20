@@ -6,7 +6,6 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
-
 import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Dynamic;
 
