@@ -7,56 +7,68 @@ package model.permission;
 import model.action.ActionTypes;
 import model.limitation.Limitation;
 
-/** Implements the permissions that control the actions of an agent
- *  in SimPatrol.  */
+/**
+ * Implements the permissions that control the actions of an agent in SimPatrol.
+ */
 public final class ActionPermission extends Permission {
 	/* Attributes */
-	/** The type of the allowed actions.
+	/**
+	 * The type of the allowed actions.
 	 * 
-	 *  @see ActionTypes */
+	 * @see ActionTypes
+	 */
 	private int action_type;
-	
+
 	/* Methods. */
-	/** Constructor.
+	/**
+	 * Constructor.
 	 * 
-	 *  @param limitations The limitations imposed to the agent.
-	 *  @param action_type The type of the allowed actions.
-	 *  @see ActionTypes */
+	 * @param limitations
+	 *            The limitations imposed to the agent.
+	 * @param action_type
+	 *            The type of the allowed actions.
+	 * @see ActionTypes
+	 */
 	public ActionPermission(Limitation[] limitations, int action_type) {
 		super(limitations);
 		this.action_type = action_type;
 	}
-	
-	/** Returns the type of the allowed actions.
+
+	/**
+	 * Returns the type of the allowed actions.
 	 * 
-	 *  @return The type of the allowed actions. */	
+	 * @return The type of the allowed actions.
+	 */
 	public int getAction_type() {
 		return this.action_type;
 	}
-	
+
 	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
-		
+
 		// applies the identation
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
 		// fills the buffer
 		buffer.append("<allowed_action type=\"" + this.action_type);
-		
+
 		// puts the eventual limitations in the buffer
-		if(this.limitations != null) {
+		if (this.limitations != null) {
 			buffer.append("\">\n");
-			
-			Object[] limitations_array = this.limitations.toArray();				
-			for(int i = 0; i < limitations_array.length; i++)
-				buffer.append(((Limitation) limitations_array[i]).fullToXML(identation + 1));
-			
+
+			Object[] limitations_array = this.limitations.toArray();
+			for (int i = 0; i < limitations_array.length; i++)
+				buffer.append(((Limitation) limitations_array[i])
+						.fullToXML(identation + 1));
+
 			// closes the buffer tag
-			for(int i = 0; i < identation; i++) buffer.append("\t");
+			for (int i = 0; i < identation; i++)
+				buffer.append("\t");
 			buffer.append("</allowed_action>\n");
-		}
-		else buffer.append("\"/>\n");
+		} else
+			buffer.append("\"/>\n");
 
 		// returns the answer
 		return buffer.toString();

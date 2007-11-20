@@ -13,35 +13,40 @@ public final class AgentsPerception extends Perception {
 	/* Attributes. */
 	/** The perceived agents. */
 	private Set<Agent> agents;
-	
+
 	/* Methods. */
-	/** Constructor.
+	/**
+	 * Constructor.
 	 * 
-	 *  @param perceived_agents The perceived agents. */
+	 * @param perceived_agents
+	 *            The perceived agents.
+	 */
 	public AgentsPerception(Agent[] perceived_agents) {
-		this.agents = new HashSet<Agent>();		
-		for(int i = 0; i < perceived_agents.length; i++)
+		this.agents = new HashSet<Agent>();
+		for (int i = 0; i < perceived_agents.length; i++)
 			this.agents.add(perceived_agents[i]);
 	}
-	
+
 	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
-		
+
 		// applies the identation and opens the "perception" tag
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception type=\"" + PerceptionTypes.AGENTS_PERCEPTION +
-				      "\">\n");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+		buffer.append("<perception type=\"" + PerceptionTypes.AGENTS + "\">\n");
+
 		// puts the agents, in a lighter version
 		Object[] agents_array = this.agents.toArray();
-		for(int i = 0; i < agents_array.length; i++)
-			buffer.append(((Agent) agents_array[i]).reducedToXML(identation + 1));
-		
+		for (int i = 0; i < agents_array.length; i++)
+			buffer.append(((Agent) agents_array[i])
+					.reducedToXML(identation + 1));
+
 		// applies the identation and closes the "perception" tag
-		for(int i = 0; i < identation; i++) buffer.append("\t");
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
 		buffer.append("</perception>\n");
-		
+
 		// returns the answer
 		return buffer.toString();
 	}

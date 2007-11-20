@@ -11,31 +11,35 @@ public class SelfPerception extends Perception {
 	/* Attributes. */
 	/** The agent itself. */
 	private Agent itself;
-	
+
 	/* Methods. */
-	/** Constructor.
+	/**
+	 * Constructor.
 	 * 
-	 *  @param itself The agent itself. */
+	 * @param itself
+	 *            The agent itself.
+	 */
 	public SelfPerception(Agent itelf) {
 		this.itself = itelf;
 	}
-	
+
 	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
-		
+
 		// applies the identation and opens the "perception" tag
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		buffer.append("<perception type=\"" + PerceptionTypes.SELF_PERCEPTION +
-				      "\">\n");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+		buffer.append("<perception type=\"" + PerceptionTypes.SELF + "\">\n");
+
 		// puts the agent
 		buffer.append(this.itself.fullToXML(identation + 1));
-		
+
 		// applies the identation and closes the "perception" tag
-		for(int i = 0; i < identation; i++) buffer.append("\t");
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
 		buffer.append("</perception>\n");
-		
+
 		// returns the answer
 		return buffer.toString();
 	}
