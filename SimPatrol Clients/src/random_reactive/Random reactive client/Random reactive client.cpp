@@ -37,7 +37,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		const int BUFFER_SIZE = 1024;
 		const bool IS_REALTIME_SIMULATION = true;
 		const string ENVIRONMENT_CONFIGURATION_MESSAGE = "<configuration type=\"0\" parameter=\"c:/env2.txt\"/>\n";
-		const string START_SIMULATION_MESSAGE = "<configuration type=\"3\" parameter=\"100\"/>\n";
+		const string START_SIMULATION_MESSAGE = "<configuration type=\"3\" parameter=\"30\"/>\n";
 		
 		// initializing WinSock
 		WSADATA wsaData;
