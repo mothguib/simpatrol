@@ -28,4 +28,9 @@ public abstract class Agent extends Thread {
 	public void stopWorking() {
 		this.stop_working = true;
 	}
+
+	/** Configures the connection of the agent. */
+	public void setConnection(ClientConnection connection) {
+		this.connection = connection;
+	}
 }
