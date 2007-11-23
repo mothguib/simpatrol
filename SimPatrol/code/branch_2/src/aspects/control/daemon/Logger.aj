@@ -3,10 +3,14 @@ package control.daemon;
 import logger.event.AgentRechargingEvent;
 import logger.event.AgentTeleportingEvent;
 import logger.event.AgentVisitEvent;
+import logger.event.AgentStigmatizingEvent;
+import logger.event.AgentBroadcastingEvent;
+import model.graph.Graph;
 import model.graph.Vertex;
-import model.graph.Edge;
 import model.stigma.Stigma;
 import model.agent.Agent;
+import model.agent.Society;
+import model.action.BroadcastAction;
 import model.action.TeleportAction;
 
 /**
@@ -22,7 +26,7 @@ public aspect Logger {
 	after(ActionDaemon daemon) : setLastVisitTime(daemon) {
 		AgentVisitEvent event = new AgentVisitEvent(daemon.AGENT.getObjectId());
 		// TODO completar enviando event por porta
-		
+
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
 						+ " visited vertex "
@@ -47,24 +51,22 @@ public aspect Logger {
 	/**
 	 * Logs the creation of stigmas in ActionDaemon.attendStigmatizeAction()
 	 */
-	pointcut attendStigmatizeAction(ActionDaemon daemon, Object object) : 
-		call(Stigma.new(Vertex || Edge)) && 
+	pointcut attendStigmatizeAction(ActionDaemon daemon, Stigma stigma) : 
+		call(* Graph.addStigma(..)) &&
 		this(daemon) && 
 		withincode(* ActionDaemon.attendStigmatizeAction(..)) &&
-		args(object);
+		args(stigma);
 
-	after(ActionDaemon daemon, Object object) : attendStigmatizeAction(daemon, object) {
-		// JOSUE, a linha abaixo descomentada deve funcionar sem problemas...
-		// AgentStigmatizingEvent event = new
-		// AgentStigmatizingEvent(daemon.AGENT.getObjectId(), stigma);
+	after(ActionDaemon daemon, Stigma stigma) : attendStigmatizeAction(daemon, stigma) {
+		AgentStigmatizingEvent event = new AgentStigmatizingEvent(daemon.AGENT
+				.getObjectId(), stigma);
 		// TODO enviar event pela porta
 
 		String result = "";
-		if (object instanceof Vertex) {
-			result = "vertex " + daemon.AGENT.getVertex().reducedToXML(0);
-
-		} else if (object instanceof Edge) {
+		if (stigma.getEdge() != null) {
 			result = "edge " + daemon.AGENT.getEdge().reducedToXML(0);
+		} else if (stigma.getVertex() != null) {
+			result = "vertex " + daemon.AGENT.getVertex().reducedToXML(0);
 		}
 		logger.Logger.getInstance().log(
 				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
@@ -74,16 +76,22 @@ public aspect Logger {
 	/**
 	 * Logs the message broadcasting
 	 */
-	pointcut broadcastMessage(ActionDaemon daemon) : call(* ActionDaemon.broadcastMessage(..)) && this(daemon);
+	// pointcut broadcastMessage(ActionDaemon daemon, BroadcastAction action) :
+	pointcut broadcastMessage(BroadcastAction action) :
+		execution(* ActionDaemon.attendBroadcastAction(..)) 
+// && this(daemon) && args(action);
+		&& args(action);
 
-	after(ActionDaemon daemon) : broadcastMessage(daemon) {
-		// JOSUE, a linha abaixo descomentada deve funcionar sem problemas...
-		// AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT.getObjectId(), message);
+	// after(ActionDaemon daemon, BroadcastAction action) :
+	// broadcastMessage(daemon, action) {
+	after(BroadcastAction action) : broadcastMessage(action) {
+		// AgentBroadcastingEvent event = new
+		// AgentBroadcastingEvent(daemon.AGENT
+		// .getObjectId(), action.getMessage());
 		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " broadcasted a message.");
+		// logger.Logger.getInstance().log(
+		// "[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
+		// + " broadcasted a message.");
 	}
 
 	/**
@@ -232,6 +240,18 @@ public aspect Logger {
 	}
 
 	/**
+	 * MainDaemon creating agents
+	 */
+	pointcut createAgents(Agent agent, Society society) : 
+		call(* MainDaemon.createAgents(..)) && args(agent, society);
+
+	after(Agent agent, Society society) : createAgents(agent, society) {
+		logger.Logger.getInstance().log(
+				"[SimPatrol.Event]: Agent " + agent.reducedToXML(0)
+						+ " created in society " + society.getObjectId() + ".");
+	}
+
+	/**
 	 * MetricDaemon starts working
 	 */
 	pointcut startMetricDaemon(MetricDaemon daemon) : execution(* MetricDaemon.start(..)) && this(daemon);
@@ -264,6 +284,18 @@ public aspect Logger {
 		logger.Logger.getInstance().log(
 				"[SimPatrol.PerceptionDaemon(" + daemon.AGENT.getObjectId()
 						+ ")]: Started working.");
+	}
+
+	/**
+	 * PerceptionDaemon.insertMessage
+	 */
+	pointcut insertMessage(PerceptionDaemon daemon, String message) : 
+		call(* PerceptionDaemon.insertMessage(..)) && this(daemon) && args(message);
+
+	after(PerceptionDaemon daemon, String message) : insertMessage(daemon, message) {
+		System.out.println("[SimPatrol.Event]: Agent "
+				+ daemon.AGENT.getObjectId() + " received message " + message
+				+ ".");
 	}
 
 	/**
