@@ -199,21 +199,16 @@ public final class ActionDaemon extends AgentDaemon {
 			if (stamina > 0)
 				this.AGENT.decStamina(stamina);
 
-			// deposits a new stigma on the vertex, if the agent is on it
+			// puts a new stigma on the vertex, if the agent is on it
 			if (this.AGENT.getEdge() == null
 					|| this.AGENT.getElapsed_length() == 0) {
 				simulator.getEnvironment().getGraph().addStigma(
 						new Stigma(this.AGENT.getVertex()));
-
-				// JOSUE, preciso do objeto stigma criado no aspecto
 			}
-
-			// else, deposits the stigma on the edge
+			// else, puts the stigma on the edge
 			else {
 				simulator.getEnvironment().getGraph().addStigma(
 						new Stigma(this.AGENT.getEdge()));
-
-				// JOSUE, preciso do objeto stigma criado no aspecto
 			}
 		}
 	}
@@ -247,25 +242,32 @@ public final class ActionDaemon extends AgentDaemon {
 
 		// if there's enough stamina to act
 		if (this.AGENT.getStamina() > stamina) {
-			// decrements the agent's stamina
-			if (stamina > 0) {
-				this.AGENT.decStamina(stamina);
-			}
-
-			// obtains the depth of the broadcasted message
-			int message_depth = action.getMessage_depth();
-
-			// if the depth of the message is bigger than the
-			// depth limitation, replace it by the depth limitation
-			if (depth > -1 && (message_depth > depth || message_depth < 0)) {
-				message_depth = depth;
-			}
-
-			// broadcasts the message
-			this.broadcastMessage(action.getMessage(), message_depth);
-
-			// JOSUE, precido do parametro "action.getMessage()" no aspecto
+			broadcastMessage(action, depth, stamina);
 		}
+	}
+
+	/**
+	 * Broadcasts a message given an <code>action</code>, a
+	 * <code>depth</code> and <code>stamina</code>.
+	 */
+	private void broadcastMessage(BroadcastAction action, int depth,
+			double stamina) {
+		// decrements the agent's stamina
+		if (stamina > 0) {
+			this.AGENT.decStamina(stamina);
+		}
+
+		// obtains the depth of the broadcasted message
+		int message_depth = action.getMessage_depth();
+
+		// if the depth of the message is bigger than the
+		// depth limitation, replace it by the depth limitation
+		if (depth > -1 && (message_depth > depth || message_depth < 0)) {
+			message_depth = depth;
+		}
+
+		// broadcasts the message
+		this.broadcastMessage(action.getMessage(), message_depth);
 	}
 
 	/**
