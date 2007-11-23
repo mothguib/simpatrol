@@ -170,46 +170,50 @@ public final class MainDaemon extends Daemon {
 					|| society instanceof OpenSociety) {
 				// if adds the agent to the society successfully
 				if (society.addAgent(agent)) {
-					// creates and starts its perception and action daemons
-					int socket_number = this.createAndStartAgentDaemons(agent);
-
-					// if the simulator is a rt one and its state is SIMULATING
-					if (simulator instanceof RealTimeSimulator
-							&& simulator.getState() == SimulatorStates.SIMULATING) {
-						// creates and starts its mortal controller robot
-						((RealTimeSimulator) simulator)
-								.createAndStartMortalityControlerRobot((Mortal) agent);
-
-						// creates and starts its eventual stamina controller
-						// robot
-						((RealTimeSimulator) simulator)
-								.createAndStartStaminaControlerRobot(agent);
-					}
-
-					// sends an orientation to the sender of the configuration
-					this.connection.send(new Orientation(String
-							.valueOf(socket_number)).fullToXML(0));
-
-					// JOSUE
-					// screen message
-					System.out.println("[SimPatrol.Event]: Agent "
-							+ agent.reducedToXML(0) + " created in society "
-							+ society.getObjectId() + ".");
+					createAgents(agent, society);
 				}
 				// else, sends an orientation reporting error
-				else
+				else {
 					this.connection.send(new Orientation(
 							"Agent already exists.").fullToXML(0));
+				}
 			}
 			// if not, sends an orientation reporting error
-			else
+			else {
 				this.connection.send(new Orientation("Closed society.")
 						.fullToXML(0));
+			}
 		}
 		// if not, sends an orientation reporting error
-		else
+		else {
 			this.connection.send(new Orientation("Society not found.")
 					.fullToXML(0));
+		}
+	}
+
+	/**
+	 * Creates the agents given a society
+	 */
+	private void createAgents(Agent agent, Society society) throws IOException {
+		// creates and starts its perception and action daemons
+		int socket_number = this.createAndStartAgentDaemons(agent);
+
+		// if the simulator is a rt one and its state is SIMULATING
+		if (simulator instanceof RealTimeSimulator
+				&& simulator.getState() == SimulatorStates.SIMULATING) {
+			// creates and starts its mortal controller robot
+			((RealTimeSimulator) simulator)
+					.createAndStartMortalityControlerRobot((Mortal) agent);
+
+			// creates and starts its eventual stamina controller
+			// robot
+			((RealTimeSimulator) simulator)
+					.createAndStartStaminaControlerRobot(agent);
+		}
+
+		// sends an orientation to the sender of the configuration
+		this.connection.send(new Orientation(String.valueOf(socket_number))
+				.fullToXML(0));
 	}
 
 	/**
