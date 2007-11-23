@@ -80,26 +80,27 @@ public final class PerceptionDaemon extends AgentDaemon {
 	public void receiveMessage(String message) {
 		// verifies if the agent has permission to receive broadcasted messages
 		PerceptionPermission[] permissions = this.AGENT.getAllowedPerceptions();
-		for (int i = 0; i < permissions.length; i++)
+		for (int i = 0; i < permissions.length; i++) {
 			if (permissions[i].getPerception_type() == PerceptionTypes.BROADCAST) {
-				if (this.received_messages == null)
-					this.received_messages = new Queue<String>();
-
-				// adds the message to the received ones
-				this.received_messages.insert(message);
-
-				// JOSUE
-				// screen message
-				System.out.println("[SimPatrol.Event]: Agent "
-						+ this.AGENT.getObjectId() + " received message "
-						+ message + ".");
-
-				// quits the method
+				insertMessage(message);
 				return;
 			}
-
+		}
 		// nullifies the received messages
 		this.received_messages = null;
+	}
+
+	/**
+	 * Inserts <code>message</code> into <code>received_messages</code>
+	 * queue.
+	 */
+	private void insertMessage(String message) {
+		if (this.received_messages == null) {
+			this.received_messages = new Queue<String>();
+		}
+
+		// adds the message to the received ones
+		this.received_messages.insert(message);
 	}
 
 	/**
