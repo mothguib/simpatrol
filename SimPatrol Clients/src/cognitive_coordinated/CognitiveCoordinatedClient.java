@@ -74,6 +74,8 @@ public final class CognitiveCoordinatedClient extends Client {
 			else
 				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
+			
+			agent.start();
 		}
 	}
 
@@ -93,43 +95,30 @@ public final class CognitiveCoordinatedClient extends Client {
 	 *            metrics; index 8: The time of simulation. index 9: false if
 	 *            the simulator is a cycled one, true if not.
 	 */
-	public static void main(String[] args) throws UnknownHostException,
-			IOException {
+	public static void main(String[] args) {
 		System.out.println("Cognitive coordinated agents!");
 
-		String remote_socket_address = null;
-		int remote_socket_number = 0;
-		String environment_file_path = null;
-		String[] metric_file_paths = null;
-		int metrics_collecting_rate = 0;
-		int time_of_simulation = 0;
-		boolean is_real_time_simulator = false;
-
 		try {
-			remote_socket_address = args[0];
-			remote_socket_number = Integer.parseInt(args[1]);
-			environment_file_path = args[2];
-			metric_file_paths = new String[4];
-			metric_file_paths[0] = args[3];
-			metric_file_paths[1] = args[4];
-			metric_file_paths[2] = args[5];
-			metric_file_paths[3] = args[6];
-			metrics_collecting_rate = Integer.parseInt(args[7]);
-			time_of_simulation = Integer.parseInt(args[8]);
-			is_real_time_simulator = Boolean.parseBoolean(args[9]);
+			String remote_socket_address = args[0];
+			int remote_socket_number = Integer.parseInt(args[1]);
+			String environment_file_path = args[2];
+			String[] metric_file_paths = { args[3], args[4], args[5], args[6] };
+			int metrics_collecting_rate = Integer.parseInt(args[7]);
+			int time_of_simulation = Integer.parseInt(args[8]);
+			boolean is_real_time_simulator = Boolean.parseBoolean(args[9]);
+
+			CognitiveCoordinatedClient client = new CognitiveCoordinatedClient(
+					remote_socket_address, remote_socket_number,
+					environment_file_path, metric_file_paths,
+					metrics_collecting_rate, time_of_simulation,
+					is_real_time_simulator);
+			client.start();
 		} catch (Exception e) {
 			System.out
 					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedClient\n"
-							+ "<IP address> <Remote socket number> <Environment file path>"
-							+ "<Metric file name 1 | \"\"> <Metric file name 2 | \"\"> <Metric file name 3 | \"\"> <Metric file name 4 | \"\">"
+							+ "<IP address> <Remote socket number> <Environment file path>\n"
+							+ "<Metric file name 1 | \"\"> <Metric file name 2 | \"\"> <Metric file name 3 | \"\"> <Metric file name 4 | \"\">\n"
 							+ "<Metric collecting rate> <Time of simulation> <Is real time simulator? (true | false)>\"");
 		}
-
-		CognitiveCoordinatedClient client = new CognitiveCoordinatedClient(
-				remote_socket_address, remote_socket_number,
-				environment_file_path, metric_file_paths,
-				metrics_collecting_rate, time_of_simulation,
-				is_real_time_simulator);
-		client.start();
 	}
 }
