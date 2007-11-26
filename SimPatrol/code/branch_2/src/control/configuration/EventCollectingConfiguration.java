@@ -5,7 +5,7 @@ package control.configuration;
 
 /**
  * Implements objects that express configurations to collect events from the
- * simulation through an UDP socket.
+ * simulation through UDP sockets.
  */
 public final class EventCollectingConfiguration extends Configuration {
 	/* Methods. */
