@@ -10,7 +10,6 @@ import model.graph.Vertex;
 import model.stigma.Stigma;
 import model.agent.Agent;
 import model.agent.Society;
-import model.action.BroadcastAction;
 import model.action.TeleportAction;
 
 /**
