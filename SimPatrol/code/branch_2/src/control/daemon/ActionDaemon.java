@@ -57,6 +57,11 @@ public final class ActionDaemon extends AgentDaemon {
 	 */
 	private final Queue<AtomicAction> PLANNING;
 
+	/**
+	 * This attribute is only currently use for logging.
+	 */
+	protected String actionMessage;
+
 	/* Methods. */
 	/**
 	 * Constructor.
@@ -242,32 +247,25 @@ public final class ActionDaemon extends AgentDaemon {
 
 		// if there's enough stamina to act
 		if (this.AGENT.getStamina() > stamina) {
-			broadcastMessage(action, depth, stamina);
+			// broadcastMessage(action, depth, stamina);
+			// decrements the agent's stamina
+			if (stamina > 0) {
+				this.AGENT.decStamina(stamina);
+			}
+
+			// obtains the depth of the broadcasted message
+			int message_depth = action.getMessage_depth();
+
+			// if the depth of the message is bigger than the
+			// depth limitation, replace it by the depth limitation
+			if (depth > -1 && (message_depth > depth || message_depth < 0)) {
+				message_depth = depth;
+			}
+
+			// broadcasts the message
+			actionMessage = action.getMessage();
+			this.broadcastMessage(actionMessage, message_depth);
 		}
-	}
-
-	/**
-	 * Broadcasts a message given an <code>action</code>, a
-	 * <code>depth</code> and <code>stamina</code>.
-	 */
-	private void broadcastMessage(BroadcastAction action, int depth,
-			double stamina) {
-		// decrements the agent's stamina
-		if (stamina > 0) {
-			this.AGENT.decStamina(stamina);
-		}
-
-		// obtains the depth of the broadcasted message
-		int message_depth = action.getMessage_depth();
-
-		// if the depth of the message is bigger than the
-		// depth limitation, replace it by the depth limitation
-		if (depth > -1 && (message_depth > depth || message_depth < 0)) {
-			message_depth = depth;
-		}
-
-		// broadcasts the message
-		this.broadcastMessage(action.getMessage(), message_depth);
 	}
 
 	/**
