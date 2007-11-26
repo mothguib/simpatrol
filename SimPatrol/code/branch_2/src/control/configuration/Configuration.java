@@ -10,8 +10,6 @@ import view.XMLable;
  * Implements objects that express configurations of a simulation.
  */
 public abstract class Configuration implements XMLable {
-	/* Attributes. */
-
 	/* Methods. */
 	public String reducedToXML(int identation) {
 		// a configuration doesn't have a lighter XML version
