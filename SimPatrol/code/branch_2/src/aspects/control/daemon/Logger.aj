@@ -3,8 +3,8 @@ package control.daemon;
 import logger.event.AgentRechargingEvent;
 import logger.event.AgentTeleportingEvent;
 import logger.event.AgentVisitEvent;
-import logger.event.AgentStigmatizingEvent;
 import logger.event.AgentBroadcastingEvent;
+import logger.event.AgentStigmatizingEvent;
 import model.graph.Graph;
 import model.graph.Vertex;
 import model.stigma.Stigma;
@@ -76,22 +76,18 @@ public aspect Logger {
 	/**
 	 * Logs the message broadcasting
 	 */
-	// pointcut broadcastMessage(ActionDaemon daemon, BroadcastAction action) :
-	pointcut broadcastMessage(BroadcastAction action) :
-		execution(* ActionDaemon.attendBroadcastAction(..)) 
-// && this(daemon) && args(action);
-		&& args(action);
+	pointcut broadcastMessage(ActionDaemon daemon) :
+		call(* ActionDaemon.broadcastMessage(..))
+		&& this(daemon);
 
-	// after(ActionDaemon daemon, BroadcastAction action) :
-	// broadcastMessage(daemon, action) {
-	after(BroadcastAction action) : broadcastMessage(action) {
-		// AgentBroadcastingEvent event = new
-		// AgentBroadcastingEvent(daemon.AGENT
-		// .getObjectId(), action.getMessage());
+	after(ActionDaemon daemon) :
+		broadcastMessage(daemon) {
+		AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT
+				.getObjectId(), daemon.actionMessage);
 		// TODO enviar event por porta
-		// logger.Logger.getInstance().log(
-		// "[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-		// + " broadcasted a message.");
+		logger.Logger.getInstance().log(
+				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
+						+ " broadcasted a message.");
 	}
 
 	/**
