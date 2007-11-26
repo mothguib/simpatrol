@@ -46,8 +46,7 @@ public abstract class ConfigurationTypes {
 	public static final int AGENT_DEATH = 4;
 
 	/**
-	 * Configurations to collect events from the simulation through an UDP
-	 * socket.
+	 * Configurations to collect events from the simulation through UDP sockets.
 	 * 
 	 * @see EventCollectingConfiguration
 	 */
