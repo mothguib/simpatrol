@@ -9,8 +9,6 @@ import model.Environment;
 /**
  * Implements objects that express configurations to set the environment (graph +
  * societies) of a simulation.
- * 
- * @see Environment
  */
 public final class EnvironmentCreationConfiguration extends Configuration {
 	/* Attributes. */

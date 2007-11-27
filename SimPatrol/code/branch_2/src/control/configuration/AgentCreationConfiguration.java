@@ -5,19 +5,22 @@ package control.configuration;
 
 /* Imported classes and/or interfaces. */
 import model.agent.Agent;
+import model.agent.Society;
 
 /**
  * Implements objects that express configurations to add an agent to a
  * simulation.
- * 
- * @see Agent
  */
 public final class AgentCreationConfiguration extends Configuration {
 	/* Attributes. */
 	/** The new agent to be added to the simulation. */
 	private final Agent AGENT;
 
-	/** The id of the society where the new agent must be added. */
+	/**
+	 * The id of the society where the new agent must be added.
+	 * 
+	 * @see Society
+	 */
 	private final String SOCIETY_ID;
 
 	/* Methods. */

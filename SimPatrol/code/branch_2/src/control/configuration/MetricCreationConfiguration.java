@@ -9,8 +9,6 @@ import model.metric.Metric;
 /**
  * Implements objects that express configurations to add a metric to a
  * simulation.
- * 
- * @see Metric
  */
 public final class MetricCreationConfiguration extends Configuration {
 	/* Attributes. */

@@ -3,9 +3,14 @@
 /* The package of this class. */
 package control.configuration;
 
+/* Imported classes and/or interfaces. */
+import logger.event.Event;
+
 /**
  * Implements objects that express configurations to collect events from the
  * simulation through UDP sockets.
+ * 
+ * @see Event
  */
 public final class EventCollectingConfiguration extends Configuration {
 	/* Methods. */
