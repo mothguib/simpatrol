@@ -1,9 +1,10 @@
 package control.daemon;
 
+import logger.event.AgentBroadcastingEvent;
+import logger.event.AgentReceivingMessageEvent;
 import logger.event.AgentRechargingEvent;
 import logger.event.AgentTeleportingEvent;
 import logger.event.AgentVisitEvent;
-import logger.event.AgentBroadcastingEvent;
 import logger.event.AgentStigmatizingEvent;
 import model.graph.Graph;
 import model.graph.Vertex;
@@ -24,12 +25,7 @@ public aspect Logger {
 
 	after(ActionDaemon daemon) : setLastVisitTime(daemon) {
 		AgentVisitEvent event = new AgentVisitEvent(daemon.AGENT.getObjectId());
-		// TODO completar enviando event por porta
-
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " visited vertex "
-						+ daemon.AGENT.getVertex().reducedToXML(0));
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -40,11 +36,7 @@ public aspect Logger {
 	after(ActionDaemon daemon) : incStamina(daemon) {
 		AgentRechargingEvent event = new AgentRechargingEvent(daemon.AGENT
 				.getObjectId(), daemon.AGENT.getStamina());		
-		// TODO completar enviando event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " recharged.");
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -59,17 +51,7 @@ public aspect Logger {
 	after(ActionDaemon daemon, Stigma stigma) : attendStigmatizeAction(daemon, stigma) {
 		AgentStigmatizingEvent event = new AgentStigmatizingEvent(daemon.AGENT
 				.getObjectId(), stigma);
-		// TODO enviar event pela porta
-
-		String result = "";
-		if (stigma.getEdge() != null) {
-			result = "edge " + daemon.AGENT.getEdge().reducedToXML(0);
-		} else if (stigma.getVertex() != null) {
-			result = "vertex " + daemon.AGENT.getVertex().reducedToXML(0);
-		}
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " stigmatized " + result);
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -82,11 +64,8 @@ public aspect Logger {
 	after(ActionDaemon daemon) :
 		broadcastMessage(daemon) {
 		AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT
-				.getObjectId(), daemon.actionMessage);
-		// TODO enviar event por porta
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " broadcasted a message.");
+				.getObjectId(), daemon.actionMessage);		
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -101,11 +80,7 @@ public aspect Logger {
 		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
 				.getObjectId(), agent.getVertex().getObjectId(), agent
 				.getEdge().getObjectId(), agent.getElapsed_length());
-		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " teleported.");
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -117,17 +92,17 @@ public aspect Logger {
 
 	after(ActionDaemon daemon) : teleportAction2(daemon) {
 		Agent agent = daemon.AGENT;
-		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
-				.getObjectId(), agent.getVertex().getObjectId(), agent
-				.getEdge().getObjectId(), agent.getElapsed_length());
-		// TODO enviar event por porta
 		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + daemon.AGENT.getObjectId()
-						+ " teleported to "
-						+ daemon.AGENT.getVertex().getObjectId()
-						+ ", elapsed length "
-						+ daemon.AGENT.getElapsed_length());
+		String edge_id = null;
+		double length = 0;
+		if(agent.getEdge() != null) {
+			edge_id = agent.getEdge().getObjectId();
+			length = agent.getElapsed_length(); 
+		}
+		
+		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
+				.getObjectId(), agent.getVertex().getObjectId(), edge_id, length);
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -136,9 +111,8 @@ public aspect Logger {
 	pointcut startActionDaemon(ActionDaemon daemon) : execution(* ActionDaemon.start(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : startActionDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.ActionDaemon(" + daemon.AGENT.getObjectId()
-						+ ")]: Started working.");
+		logger.Logger.println("[SimPatrol.ActionDaemon("
+				+ daemon.AGENT.getObjectId() + ")]: Started working.");
 	}
 
 	/**
@@ -147,9 +121,8 @@ public aspect Logger {
 	pointcut stopActionDaemon(ActionDaemon daemon) : execution(* ActionDaemon.stopWorking(..)) && this(daemon);
 
 	after(ActionDaemon daemon) : stopActionDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.ActionDaemon(" + daemon.AGENT.getObjectId()
-						+ ")]: Stopped working.");
+		logger.Logger.println("[SimPatrol.ActionDaemon("
+				+ daemon.AGENT.getObjectId() + ")]: Stopped working.");
 	}
 
 	/**
@@ -159,9 +132,7 @@ public aspect Logger {
 
 	before() : attendEnvironmentCreationConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Environment's creation\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Environment's creation\" configuration received.");
 	}
 
 	/**
@@ -171,9 +142,7 @@ public aspect Logger {
 
 	before() : attendAgentCreationConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Agent's creation\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Agent's creation\" configuration received.");
 	}
 
 	/**
@@ -183,9 +152,7 @@ public aspect Logger {
 
 	before() : attendAgentDeathConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Agent's death\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Agent's death\" configuration received.");
 	}
 
 	/**
@@ -195,9 +162,7 @@ public aspect Logger {
 
 	before() : attendEventCollectingConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Event collecting\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Event collecting\" configuration received.");
 	}
 
 	/**
@@ -207,9 +172,7 @@ public aspect Logger {
 
 	before() : attendMetricCreationConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Metric creation\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Metric creation\" configuration received.");
 	}
 
 	/**
@@ -219,9 +182,7 @@ public aspect Logger {
 
 	before() : attendSimulationStartConfiguration() {
 		logger.Logger
-				.getInstance()
-				.log(
-						"[SimPatrol.MainDaemon]: \"Start simulation\" configuration received.");
+				.println("[SimPatrol.MainDaemon]: \"Start simulation\" configuration received.");
 	}
 
 	/**
@@ -230,20 +191,19 @@ public aspect Logger {
 	pointcut startMainDaemon() : execution(* MainDaemon.start(..));
 
 	after() : startMainDaemon() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.MainDaemon]: Started working.");
+		logger.Logger.println("[SimPatrol.MainDaemon]: Started working.");
 	}
 
 	/**
 	 * MainDaemon creating agents
 	 */
-	pointcut createAgents(Agent agent, Society society) : 
-		call(* MainDaemon.createAgents(..)) && args(agent, society);
+	pointcut createAgent(Agent agent, Society society) : 
+		call(* MainDaemon.completeAgentCreationAttendment(..)) && args(agent, society);
 
-	after(Agent agent, Society society) : createAgents(agent, society) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event]: Agent " + agent.reducedToXML(0)
-						+ " created in society " + society.getObjectId() + ".");
+	after(Agent agent, Society society) : createAgent(agent, society) {
+		logger.Logger.println("[SimPatrol.Event]: Agent "
+				+ agent.reducedToXML(0) + " created in society "
+				+ society.getObjectId() + ".");
 	}
 
 	/**
@@ -252,22 +212,21 @@ public aspect Logger {
 	pointcut startMetricDaemon(MetricDaemon daemon) : execution(* MetricDaemon.start(..)) && this(daemon);
 
 	after(MetricDaemon daemon) : startMetricDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.MetricDaemon("
-						+ daemon.getMetric().getClass().getName()
-						+ ")]: Started working.");
+		logger.Logger.println("[SimPatrol.MetricDaemon("
+				+ daemon.getMetric().getClass().getName()
+				+ ")]: Started working.");
 	}
 
 	/**
 	 * MetricDaemon stops working
 	 */
-	pointcut stopMetricDaemon(MetricDaemon daemon) : execution(* MetricDaemon.stopWorking(..)) && this(daemon);
+	pointcut stopMetricDaemon(MetricDaemon daemon) : execution(*
+	MetricDaemon.stopWorking(..)) && this(daemon);
 
 	after(MetricDaemon daemon) : stopMetricDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.MetricDaemon("
-						+ daemon.getMetric().getClass().getName()
-						+ ")]: Stopped working.");
+		logger.Logger.println("[SimPatrol.MetricDaemon("
+				+ daemon.getMetric().getClass().getName()
+				+ ")]: Stopped working.");
 	}
 
 	/**
@@ -276,9 +235,8 @@ public aspect Logger {
 	pointcut startPerceptionDaemon(PerceptionDaemon daemon) : execution(* PerceptionDaemon.start(..)) && this(daemon);
 
 	after(PerceptionDaemon daemon) : startPerceptionDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.PerceptionDaemon(" + daemon.AGENT.getObjectId()
-						+ ")]: Started working.");
+		logger.Logger.println("[SimPatrol.PerceptionDaemon("
+				+ daemon.AGENT.getObjectId() + ")]: Started working.");
 	}
 
 	/**
@@ -288,19 +246,19 @@ public aspect Logger {
 		call(* PerceptionDaemon.insertMessage(..)) && this(daemon) && args(message);
 
 	after(PerceptionDaemon daemon, String message) : insertMessage(daemon, message) {
-		System.out.println("[SimPatrol.Event]: Agent "
-				+ daemon.AGENT.getObjectId() + " received message " + message
-				+ ".");
+		AgentReceivingMessageEvent event = new AgentReceivingMessageEvent(
+				daemon.AGENT.getObjectId(), message);
+		logger.Logger.send(event);
 	}
 
 	/**
 	 * PerceptionDaemon stops working
 	 */
-	pointcut stopPerceptionDaemon(PerceptionDaemon daemon) : execution(* PerceptionDaemon.stopWorking(..)) && this(daemon);
+	pointcut stopPerceptionDaemon(PerceptionDaemon daemon) : execution(*
+	PerceptionDaemon.stopWorking(..)) && this(daemon);
 
 	after(PerceptionDaemon daemon) : stopPerceptionDaemon(daemon) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.PerceptionDaemon(" + daemon.AGENT.getObjectId()
-						+ ")]: Stopped working.");
+		logger.Logger.println("[SimPatrol.PerceptionDaemon("
+				+ daemon.AGENT.getObjectId() + ")]: Stopped working.");
 	}
 }
