@@ -481,7 +481,7 @@ public abstract class Client extends Thread {
 	 */
 	private void configureStart() throws IOException {
 		// waits for the user to press any key to start simulation
-		System.out.println("Press any key to start simulation.");
+		System.out.print("Press [ENTER] to start simulation.");
 		Keyboard.readLine();
 
 		// the message to be sent to the server
