@@ -49,7 +49,6 @@ public class UDPConnection extends Connection {
 
 	public void stopWorking() throws IOException {
 		super.stopWorking();
-		this.socket.disconnect();
 	}
 
 	public void run() {
