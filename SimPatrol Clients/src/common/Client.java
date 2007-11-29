@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Set;
+import log_clients.LogFileClient;
 import metric_clients.MetricFileClient;
 import util.Keyboard;
 import util.file.FileReader;
@@ -28,6 +29,9 @@ public abstract class Client extends Thread {
 	/** The time interval used to collect the metrics. */
 	private final int METRICS_COLLECTING_RATE;
 
+	/** The path of the file to store the log of the simulation. */
+	private final String LOG_FILE_PATH;
+
 	/** The time of the simulation. */
 	private final int TIME_OF_SIMULATION;
 
@@ -42,6 +46,9 @@ public abstract class Client extends Thread {
 
 	/** The metric collector clients added to the simulation. */
 	private LinkedList<MetricFileClient> metric_clients;
+
+	/** The client added to log the simulation. */
+	private LogFileClient log_client;
 
 	/* Methods. */
 	/**
@@ -61,6 +68,8 @@ public abstract class Client extends Thread {
 	 *            instantaneous idlenesses; index 2: The file that will save the
 	 *            mean idlenesses; index 3: The file that will save the max
 	 *            idlenesses;
+	 * @param log_file_path
+	 *            The path of the file to log the simulation.
 	 * @param metrics_collection_rate
 	 *            The time interval used to collect the metrics.
 	 * @param time_of_simulation
@@ -73,18 +82,20 @@ public abstract class Client extends Thread {
 	 */
 	public Client(String remote_socket_address, int remote_socket_number,
 			String environment_file_path, String[] metrics_file_paths,
-			int metrics_collecting_rate, int time_of_simulation,
-			boolean is_real_time_simulator) throws UnknownHostException,
-			IOException {
+			int metrics_collecting_rate, String log_file_path,
+			int time_of_simulation, boolean is_real_time_simulator)
+			throws UnknownHostException, IOException {
 		this.ENVIRONMENT_FILE_PATH = environment_file_path;
 		this.METRICS_FILE_PATHS = metrics_file_paths;
 		this.METRICS_COLLECTING_RATE = metrics_collecting_rate;
+		this.LOG_FILE_PATH = log_file_path;
 		this.TIME_OF_SIMULATION = time_of_simulation;
 		this.IS_REAL_TIME_SIMULATOR = is_real_time_simulator;
 		this.CONNECTION = new TCPClientConnection(remote_socket_address,
 				remote_socket_number);
 		this.metric_clients = null;
 		this.agents = null;
+		this.log_client = null;
 	}
 
 	/**
@@ -303,7 +314,7 @@ public abstract class Client extends Thread {
 	 * 
 	 * @param socket_numbers
 	 *            The socket numbers offered by the server to connect to the
-	 *            remote agents.
+	 *            remote clients.
 	 * @throws IOException
 	 */
 	private void createAndStartMetricClients(int[] socket_numbers)
@@ -367,14 +378,98 @@ public abstract class Client extends Thread {
 						}
 					}
 
+				// starts the metric clients
+				for (int i = 0; i < this.metric_clients.size(); i++)
+					this.metric_clients.get(i).start();
+
 				// screen message
-				System.out.print("Finished.");
+				System.out.println("Finished.");
 			} else
 				for (int i = 0; i < socket_numbers.length; i++)
 					if (socket_numbers[i] > -1)
 						System.out
 								.println("Port offered by SimPatrol to attend metric client: "
 										+ socket_numbers[i]);
+		}
+	}
+
+	/**
+	 * Configures the collecting of events during the simulation.
+	 * 
+	 * @return The socket number for the log clients be connected.
+	 * @throws IOException
+	 */
+	private int configureLogging() throws IOException {
+		// the answer for the method
+		int answer = -1;
+
+		// asks if a log connection shall be established
+		System.out.println("Should I log the simulation? [y]es or [n]o?");
+		String key = Keyboard.readLine();
+
+		if (key.equalsIgnoreCase("y")) {
+			// the message to establish a connection to the server to log the
+			// simulation
+			String message = "<configuration type=\"5\"/>";
+
+			// sends it to the server
+			this.CONNECTION.send(message);
+
+			// obtains the answer from the server
+			String[] server_answer = this.CONNECTION.getBufferAndFlush();
+			while (server_answer.length == 0)
+				server_answer = this.CONNECTION.getBufferAndFlush();
+
+			// adds it to the answer of the method
+			int metric_socket_index = server_answer[0].indexOf("message=\"");
+			server_answer[0] = server_answer[0]
+					.substring(metric_socket_index + 9);
+			answer = Integer.parseInt(server_answer[0].substring(0,
+					server_answer[0].indexOf("\"")));
+
+			// screen message
+			System.out.println("Log connection established.");
+		}
+
+		// returns the answer
+		return answer;
+	}
+
+	/**
+	 * Creates and starts the log client, given the numbers of the socket
+	 * offered by the server.
+	 * 
+	 * @param socket_number
+	 *            The socket number offered by the server to connect to the
+	 *            remote client.
+	 * @throws IOException
+	 */
+	private void createAndStartLogClient(int socket_number) throws IOException {
+		// if the socket number is valid
+		if (socket_number > -1) {
+			// asks if the client shall itself start the log client
+			System.out
+					.println("Should I myself create and start the log client? [y]es or [n]o?");
+			String key = Keyboard.readLine();
+
+			if (key.equalsIgnoreCase("y")) {
+				// screen message
+				System.out.print("Creating and starting the log client... ");
+
+				// creates the log client
+				this.log_client = new LogFileClient(this.CONNECTION
+						.getRemoteSocketAdress(), socket_number,
+						this.LOG_FILE_PATH);
+
+				// starts the log client
+				this.log_client.start();
+
+				// screen message
+				System.out.println("Finished.");
+			} else
+				System.out
+						.println("Port offered by SimPatrol to attend log client: "
+								+ socket_number);
 		}
 	}
 
@@ -443,6 +538,22 @@ public abstract class Client extends Thread {
 			this.createAndStartMetricClients(metrics_socket_numbers);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+
+		// configures the log client of the simulation, obtaining its socket
+		// number
+		int log_socket_number = -1;
+		try {
+			log_socket_number = this.configureLogging();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+
+		// creates, connects and starts the log client
+		try {
+			this.createAndStartLogClient(log_socket_number);
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		}
 
 		// creates, connects and starts the agents
