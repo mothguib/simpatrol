@@ -76,8 +76,13 @@ public abstract class Simulator {
 	 */
 	public Simulator(int local_socket_number, double atualization_time_rate)
 			throws IOException {
-		// creates, starts and configures the main daemon
+		// configures the logger object
+		Logger.setSimulator(this);
+
+		// configures the daemon objects
 		Daemon.setSimulator(this);
+
+		// creates and starts the main daemon
 		this.MAIN_DAEMON = new MainDaemon("main daemon", this);
 		this.MAIN_DAEMON.start(local_socket_number);
 
