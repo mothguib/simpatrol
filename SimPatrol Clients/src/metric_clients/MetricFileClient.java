@@ -33,8 +33,8 @@ public class MetricFileClient extends Thread {
 	 * @param remote_socket_address
 	 *            The IP address of the SimPatrol server.
 	 * @param remote_socket_number
-	 *            The number of the socket that the server listens to, related
-	 *            to this metric.
+	 *            The number of the socket that the server writes to, related to
+	 *            this metric.
 	 * @param file_path
 	 *            The path of the file where the metric values will be saved.
 	 * @param metric_name
@@ -51,7 +51,7 @@ public class MetricFileClient extends Thread {
 		this.file_writer.println(metric_name);
 	}
 
-	/** Indicates that the agent must stop working. */
+	/** Indicates that the client must stop working. */
 	public void stopWorking() {
 		this.stop_working = true;
 	}
