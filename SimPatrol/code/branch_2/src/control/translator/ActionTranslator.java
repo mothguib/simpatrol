@@ -67,9 +67,10 @@ public abstract class ActionTranslator extends Translator {
 
 			// if it is a broadcast action
 		case ActionTypes.BROADCAST: {
-			// obtains the message and its depth
+			// obtains the message
 			String message = action_element.getAttribute("message");
 
+			// obtains the depth of the message
 			int message_depth = -1;
 			String str_message_depth = action_element
 					.getAttribute("message_depth");
