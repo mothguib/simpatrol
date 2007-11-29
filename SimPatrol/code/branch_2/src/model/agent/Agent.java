@@ -77,8 +77,7 @@ public abstract class Agent implements XMLable {
 		this.label = label;
 		this.vertex = vertex;
 
-		this.state = AgentStates.JUST_ACTED; // the agent is ready to
-		// perceive!
+		this.state = AgentStates.JUST_ACTED; // agent ready to perceive!
 		this.edge = null;
 		this.elapsed_length = 0;
 
@@ -136,7 +135,12 @@ public abstract class Agent implements XMLable {
 		return this.vertex;
 	}
 
-	/** Configures the vertex that the agent comes from. */
+	/**
+	 * Configures the vertex from where the agent comes from.
+	 * 
+	 * @param vertex
+	 *            The vertex from where the agent comes from.
+	 */
 	public void setVertex(Vertex vertex) {
 		this.vertex = vertex;
 	}
@@ -369,7 +373,7 @@ public abstract class Agent implements XMLable {
 	}
 
 	public boolean equals(Object object) {
-		if (object instanceof XMLable)
+		if (this.id != null && object instanceof XMLable)
 			return this.id.equals(((XMLable) object).getObjectId());
 		else
 			return super.equals(object);
@@ -381,9 +385,5 @@ public abstract class Agent implements XMLable {
 
 	public void setObjectId(String object_id) {
 		this.id = object_id;
-	}
-
-	public int getState() {
-		return state;
 	}
 }

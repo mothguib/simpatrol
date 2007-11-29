@@ -137,7 +137,7 @@ public abstract class Society implements XMLable {
 	}
 
 	public boolean equals(Object object) {
-		if (object instanceof XMLable)
+		if (this.id != null && object instanceof XMLable)
 			return this.id.equals(((XMLable) object).getObjectId());
 		else
 			return super.equals(object);
