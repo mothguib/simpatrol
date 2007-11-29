@@ -34,6 +34,15 @@ public final class DynamicityControllerRobot extends Robot {
 		this.OBJECT = object;
 	}
 
+	/**
+	 * Returns the dynamic object controlled by this robot.
+	 * 
+	 * @return The dynamic object controlled by this robot.
+	 */
+	public Dynamic getObject() {
+		return OBJECT;
+	}
+
 	public void act(int time_gap) {
 		synchronized (simulator) {
 			simulator.getState();
@@ -67,12 +76,5 @@ public final class DynamicityControllerRobot extends Robot {
 
 	public void stopWorking() {
 		super.stopWorking();
-	}
-
-	/**
-	 * @return The current Dynamic OBJECT
-	 */
-	public Dynamic getOBJECT() {
-		return OBJECT;
 	}
 }

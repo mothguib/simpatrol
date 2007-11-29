@@ -114,11 +114,4 @@ public final class StaminaControllerRobot extends Robot {
 	public void stopWorking() {
 		super.stopWorking();
 	}
-
-	/**
-	 * @return The AGENT object.
-	 */
-	public Agent getAGENT() {
-		return AGENT;
-	}
 }
