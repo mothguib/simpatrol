@@ -65,9 +65,9 @@ public final class BroadcastAction extends AtomicAction {
 			buffer.append("\t");
 
 		// fills the buffer
-		buffer.append("<action type=\"" + ActionTypes.BROADCAST + "\" message=\""
-				+ this.message + "\" message_depth=\"" + this.message_depth
-				+ "\"/>\n");
+		buffer.append("<action type=\"" + ActionTypes.BROADCAST
+				+ "\" message=\"" + this.message + "\" message_depth=\""
+				+ this.message_depth + "\"/>\n");
 
 		// returns the answer
 		return buffer.toString();
