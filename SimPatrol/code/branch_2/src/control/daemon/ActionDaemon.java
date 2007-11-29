@@ -51,16 +51,14 @@ import model.stigma.Stigma;
  */
 public final class ActionDaemon extends AgentDaemon {
 	/* Attributes. */
+	/** Used for logging events. */
+	protected String action_message;
+
 	/**
 	 * Queue that holds the planning of atomic actions that the daemon must
 	 * regularly attend, in order to satisfy an eventual compound action.
 	 */
 	private final Queue<AtomicAction> PLANNING;
-
-	/**
-	 * This attribute is only currently use for logging.
-	 */
-	protected String actionMessage;
 
 	/* Methods. */
 	/**
@@ -263,8 +261,8 @@ public final class ActionDaemon extends AgentDaemon {
 			}
 
 			// broadcasts the message
-			actionMessage = action.getMessage();
-			this.broadcastMessage(actionMessage, message_depth);
+			this.action_message = action.getMessage();
+			this.broadcastMessage(this.action_message, message_depth);
 		}
 	}
 
@@ -317,10 +315,9 @@ public final class ActionDaemon extends AgentDaemon {
 
 		// for each reachable agent, obtains its perception daemon
 		// and sends the message
-		for (int i = 0; i < reachable_agents.size(); i++) {
+		for (int i = 0; i < reachable_agents.size(); i++)
 			simulator.getPerceptionDaemon(reachable_agents.get(i))
 					.receiveMessage(message);
-		}
 	}
 
 	/**

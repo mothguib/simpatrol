@@ -82,7 +82,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 		PerceptionPermission[] permissions = this.AGENT.getAllowedPerceptions();
 		for (int i = 0; i < permissions.length; i++) {
 			if (permissions[i].getPerception_type() == PerceptionTypes.BROADCAST) {
-				insertMessage(message);
+				this.insertMessage(message);
 				return;
 			}
 		}
@@ -91,8 +91,12 @@ public final class PerceptionDaemon extends AgentDaemon {
 	}
 
 	/**
-	 * Inserts <code>message</code> into <code>received_messages</code>
-	 * queue.
+	 * Inserts the given message into the queue of received messages.
+	 * 
+	 * @param message
+	 *            The message to be enqueued.
+	 * @param perduration
+	 *            The perduration of the message in the environment.
 	 */
 	private void insertMessage(String message) {
 		if (this.received_messages == null) {
@@ -434,15 +438,15 @@ public final class PerceptionDaemon extends AgentDaemon {
 				stamina = ((StaminaLimitation) limitations[j]).getCost();
 		// developer: new limitations can change the code here
 
-		// for each received message
 		if (this.received_messages != null)
+			// for each received message
 			while (this.received_messages.getSize() > 0) {
 				// obtains the current message
 				String message = this.received_messages.remove();
 
 				// if the agent has enough stamina to perceive
 				if (this.AGENT.getStamina() > this.spent_stamina + stamina) {
-					// atualizes the spent stamina
+					// updates the spent stamina
 					this.spent_stamina = this.spent_stamina + stamina;
 
 					// adds a new broadcast perception to the produced ones

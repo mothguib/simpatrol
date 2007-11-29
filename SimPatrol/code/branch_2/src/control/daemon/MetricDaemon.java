@@ -48,6 +48,15 @@ public final class MetricDaemon extends Daemon implements Clockable {
 		this.metric = metric;
 	}
 
+	/**
+	 * Returns the metric collected by this daemon.
+	 * 
+	 * @return The metric collected by this daemon.
+	 */
+	public Metric getMetric() {
+		return this.metric;
+	}
+
 	/** Starts the metric counting, if the metric is an integral one. */
 	public void startMetric() {
 		if (this.metric instanceof IntegralMetric)
@@ -75,12 +84,5 @@ public final class MetricDaemon extends Daemon implements Clockable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @return The current metric
-	 */
-	public Metric getMetric() {
-		return metric;
 	}
 }

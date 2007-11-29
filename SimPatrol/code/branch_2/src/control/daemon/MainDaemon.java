@@ -76,7 +76,7 @@ public final class MainDaemon extends Daemon {
 				"event collecting's connection", null);
 
 		// tries to start the connection's work
-		boolean socket_exception_happened = true;
+		boolean socket_exception_happened = false;
 		do {
 			try {
 				connection.start(this.socket_number_generator
@@ -170,7 +170,7 @@ public final class MainDaemon extends Daemon {
 					|| society instanceof OpenSociety) {
 				// if adds the agent to the society successfully
 				if (society.addAgent(agent)) {
-					createAgents(agent, society);
+					this.completeAgentCreationAttendment(agent, society);
 				}
 				// else, sends an orientation reporting error
 				else {
@@ -192,9 +192,15 @@ public final class MainDaemon extends Daemon {
 	}
 
 	/**
-	 * Creates the agents given a society
+	 * Completes the attendment of an "agent creation" configuration.
+	 * 
+	 * @param agent
+	 *            The new agent to be created.
+	 * @param society
+	 *            The society where the agent is supposed to be added.
 	 */
-	private void createAgents(Agent agent, Society society) throws IOException {
+	private void completeAgentCreationAttendment(Agent agent, Society society)
+			throws IOException {
 		// creates and starts its perception and action daemons
 		int socket_number = this.createAndStartAgentDaemons(agent);
 
