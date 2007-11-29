@@ -102,11 +102,6 @@ public final class UDPSocket {
 		this.send(message);
 	}
 
-	/** Closes the UDP connection. */
-	public void disconnect() {
-		this.SOCKET.disconnect();
-	}
-
 	/**
 	 * Returns the number of the UDP socket.
 	 * 
