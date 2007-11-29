@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-
 import util.Keyboard;
 import util.Translator;
 import util.graph.Graph;
@@ -39,6 +38,8 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	 */
 	private final LinkedList<String> AGENTS_OBJECTIVES;
 
+	/** Holds the messages already attended by the coordinator. */
+	// private final Set<String> ATTENDED_MESSAGES;
 	/* Methods. */
 	/** Constructor. */
 	public CognitiveCoordinatorAgent() {
@@ -80,8 +81,10 @@ public final class CognitiveCoordinatorAgent extends Agent {
 				int message_index = perception.indexOf("message=\"");
 				if (message_index > -1) {
 					perception = perception.substring(message_index + 9);
-					this.RECEIVED_MESSAGES.add(perception.substring(0,
-							perception.indexOf("\"")));
+					String message = perception.substring(0, perception
+							.indexOf("\""));
+
+					this.RECEIVED_MESSAGES.add(message);
 				}
 			}
 		}
@@ -128,7 +131,7 @@ public final class CognitiveCoordinatorAgent extends Agent {
 
 				// sends a message containig the chosen vertex
 				String action = "<action type=\"3\" message=\"" + agent_id
-						+ "###" + vertex_id + "\">";
+						+ "###" + vertex_id + "\"/>";
 				this.connection.send(action);
 			}
 
@@ -138,6 +141,9 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	}
 
 	public void run() {
+		// starts its connection
+		this.connection.start();
+
 		while (!this.stop_working) {
 			// lets the agent perceive
 			try {
@@ -156,6 +162,13 @@ public final class CognitiveCoordinatorAgent extends Agent {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+
+		// stops the connection of the agent
+		try {
+			this.connection.stopWorking();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

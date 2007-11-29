@@ -5,10 +5,10 @@ package cognitive_coordinated;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.LinkedList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-
 import util.Keyboard;
 import util.Translator;
 import util.graph.Edge;
@@ -30,6 +30,15 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	/** The plan of walking through the graph. */
 	private final LinkedList<String> PLAN;
 
+	/** The current goal of the agent. */
+	private String goal;
+
+	/**
+	 * The time interval the agent is supposed to wait for a message sent by the
+	 * coordinator. Mesaured in seconds.
+	 */
+	private final int WAITING_TIME = 5; // 5 seconds
+
 	/* Methods. */
 	/**
 	 * Contructor.
@@ -40,6 +49,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	public CognitiveCoordinatedAgent(String id) {
 		this.ID = id;
 		this.PLAN = new LinkedList<String>();
+		this.goal = null;
 	}
 
 	/**
@@ -156,24 +166,26 @@ public final class CognitiveCoordinatedAgent extends Agent {
 				break;
 			}
 
-		Vertex current_vertex = begin_vertex.getEdges()[0]
-				.getOtherVertex(begin_vertex);
-		Edge[] current_vertex_edges = begin_vertex.getEdges();
-		this.PLAN.add(current_vertex.getObjectId());
+		if (begin_vertex.getEdges().length > 0) {
+			Vertex current_vertex = begin_vertex.getEdges()[0]
+					.getOtherVertex(begin_vertex);
+			Edge[] current_vertex_edges = current_vertex.getEdges();
+			this.PLAN.add(current_vertex.getObjectId());
 
-		while (current_vertex_edges.length > 1) {
-			if (this.PLAN.contains(current_vertex_edges[0].getOtherVertex(
-					current_vertex).getObjectId())) {
-				current_vertex = current_vertex_edges[1]
+			while (current_vertex_edges.length > 1) {
+				Vertex next_vertex = current_vertex_edges[0]
 						.getOtherVertex(current_vertex);
+
+				if (this.PLAN.contains(next_vertex.getObjectId())
+						|| next_vertex.equals(begin_vertex)) {
+					current_vertex = current_vertex_edges[1]
+							.getOtherVertex(current_vertex);
+				} else
+					current_vertex = next_vertex;
+
 				this.PLAN.add(current_vertex.getObjectId());
-			} else {
-				current_vertex = current_vertex_edges[0]
-						.getOtherVertex(current_vertex);
-				this.PLAN.add(current_vertex.getObjectId());
+				current_vertex_edges = current_vertex.getEdges();
 			}
-
-			current_vertex_edges = current_vertex.getEdges();
 		}
 	}
 
@@ -187,13 +199,19 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			// obtains the id of the next vertex
 			String next_vertex = this.PLAN.remove();
 
-			// sends the action to the server
+			// sends the action to visit the current vertex
+			this.connection.send("<action type=\"2\"/>");
+
+			// sends the action to go to the next vertex
 			this.connection.send("<action type=\"1\" vertex_id=\""
 					+ next_vertex + "\"/>");
 		}
 	}
 
 	public void run() {
+		// starts its connection
+		this.connection.start();
+
 		while (!this.stop_working) {
 			// lets the agent ask for a goal vertex to the coordinator
 			try {
@@ -208,6 +226,13 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			String goal_vertex = null;
 			Graph graph = null;
 
+			// tracks the time the agent has been waiting for a message from the
+			// coordinator
+			int begin_waiting_time = Calendar.getInstance()
+					.get(Calendar.SECOND);
+
+			// while the agent did not perceive its position, its goal vertex
+			// and the graph of the simulation
 			while ((position == null || goal_vertex == null || graph == null)
 					&& !this.stop_working) {
 				// obtains the perceptions sent by SimPatrol server
@@ -216,12 +241,22 @@ public final class CognitiveCoordinatedAgent extends Agent {
 				// for each perception, starting from the most recent one
 				for (int i = perceptions.length - 1; i >= 0; i--) {
 					// tries to obtain the current position
-					if ((position = this.perceivePosition(perceptions[i])) == null)
+					StringAndDouble perceived_position = this
+							.perceivePosition(perceptions[i]);
+					if (perceived_position != null)
+						position = perceived_position;
+					else {
 						// tries to obtain the goal vertex
-						if ((goal_vertex = this
-								.perceiveGoalVertex(perceptions[i])) == null)
+						String perceived_goal_vertex = this
+								.perceiveGoalVertex(perceptions[i]);
+						if (perceived_goal_vertex != null) {
+							goal_vertex = perceived_goal_vertex;
+							this.goal = goal_vertex;
+						} else {
+							Graph perceived_graph = null;
 							try {
-								graph = this.perceiveGraph(perceptions[i]);
+								perceived_graph = this
+										.perceiveGraph(perceptions[i]);
 							} catch (ParserConfigurationException e) {
 								e.printStackTrace();
 							} catch (SAXException e) {
@@ -230,15 +265,50 @@ public final class CognitiveCoordinatedAgent extends Agent {
 								e.printStackTrace();
 							}
 
+							if (perceived_graph != null)
+								graph = perceived_graph;
+						}
+					}
+
 					// if the needed perceptions were obtained, breaks the loop
 					if (position != null && goal_vertex != null
-							&& graph != null)
+							&& graph != null) {
+						System.out.println("Agent " + this.ID
+								+ " percebi tudoo.");
 						break;
+					}
+					// if not, counts the time the agent has been waiting for a
+					// message from the coordinator
+					else {
+						int end_wainting_time = Calendar.getInstance().get(
+								Calendar.SECOND);
+
+						if (end_wainting_time < begin_waiting_time)
+							end_wainting_time = end_wainting_time + 60;
+
+						// if the agent waited too long, resends a request for a
+						// new goal vertex
+						if (end_wainting_time - begin_waiting_time >= this.WAITING_TIME) {
+							try {
+								this.requestGoal();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+
+							begin_waiting_time = Calendar.getInstance().get(
+									Calendar.SECOND);
+						}
+					}
 				}
 			}
 
 			// lets the agent plan its actions
 			this.plan(position.STRING, goal_vertex, graph);
+
+			System.out.print("Agent " + this.ID + " plan:");
+			for (int i = 0; i < this.PLAN.size(); i++)
+				System.out.print(" " + this.PLAN.get(i));
+			System.out.println();
 
 			// executes next step of the planning
 			try {
@@ -247,9 +317,8 @@ public final class CognitiveCoordinatedAgent extends Agent {
 				e.printStackTrace();
 			}
 
-			// while the planning was not entirely executed
-			while ((position.DOUBLE != 0 || !this.PLAN.isEmpty())
-					&& !this.stop_working) {
+			// while the goal was not achieved
+			while (!position.STRING.equals(this.goal) && !this.stop_working) {
 				// perceives the current position of the agent
 				StringAndDouble current_position = null;
 				while (current_position == null && !this.stop_working) {
@@ -280,6 +349,13 @@ public final class CognitiveCoordinatedAgent extends Agent {
 						}
 				}
 			}
+		}
+
+		// stops the connection of the agent
+		try {
+			this.connection.stopWorking();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -320,8 +396,8 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			agent.stopWorking();
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedAgent\n" +
-							"<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
+					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedAgent\n"
+							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
 		}
 	}
 }
