@@ -17,14 +17,10 @@ public aspect Logger {
 		this(agent) && args(state);
 
 	before(Agent agent, int state) : setAgentState(agent, state) {
-		if (state != agent.getState()) {
+		if (state != agent.getAgentState()) {
 			AgentChangingStateEvent event = new AgentChangingStateEvent(
 					agent.getObjectId());
-			
-			// TODO enviar event por porta
-			logger.Logger.getInstance().log(
-					"[SimPatrol.Event]: Agent " + agent.getObjectId()
-							+ " changed state to " + state + ".");
+			logger.Logger.send(event);
 		}
 	}
 
@@ -35,11 +31,7 @@ public aspect Logger {
 
 	after(Agent agent) : decrementStamina(agent) {
 		AgentSpendingStaminaEvent event = new AgentSpendingStaminaEvent(agent.getObjectId(), agent.getStamina());
-		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event] agent " + agent.getObjectId()
-						+ " spent stamina.");
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -49,9 +41,6 @@ public aspect Logger {
 
 	after(Agent agent) : agentDied(agent) {
 		AgentDeathEvent event = new AgentDeathEvent(agent.getObjectId());
-		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event] agent " + agent.getObjectId() + " died.");
+		logger.Logger.send(event);
 	}
 }

@@ -15,9 +15,8 @@ public aspect Logger {
 	pointcut startWorkingRealTimeSimulator() :  execution (* RealTimeSimulator.startWorking());
 
 	before(): startWorkingRealTimeSimulator() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Simulator]: Simulation started at "
-						+ Calendar.getInstance().getTime().toString() + ".");
+		logger.Logger.println("[SimPatrol.Simulator]: Simulation started at "
+				+ Calendar.getInstance().getTime().toString() + ".");
 	}
 
 	/**
@@ -26,9 +25,8 @@ public aspect Logger {
 	pointcut stopWorkingRealTimeSimulator() : execution (* RealTimeSimulator.stopWorking());
 
 	before(): stopWorkingRealTimeSimulator() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Simulator]: Simulation stopped at "
-						+ Calendar.getInstance().getTime().toString() + ".");
+		logger.Logger.println("[SimPatrol.Simulator]: Simulation stopped at "
+				+ Calendar.getInstance().getTime().toString() + ".");
 	}
 
 	/**
@@ -37,7 +35,7 @@ public aspect Logger {
 	pointcut simulatorConstructor() : execution(Simulator.new(..));
 
 	before(): simulatorConstructor(){
-		logger.Logger.getInstance().log("[SimPatrol.Simulator]: Online.");
+		logger.Logger.println("[SimPatrol.Simulator]: Online.");
 	}
 
 	/**
@@ -47,8 +45,7 @@ public aspect Logger {
 	pointcut exitSimulator() : execution(* MainDaemon.stopWorking());
 
 	after(): exitSimulator() {
-		logger.Logger.getInstance().log("[SimPatrol.Simulator]: offline.");
-		logger.Logger.getInstance().log(
-				"[SimPatrol.MainDaemon]: Stopped working.");
+		logger.Logger.println("[SimPatrol.Simulator]: offline.");
+		logger.Logger.println("[SimPatrol.MainDaemon]: Stopped working.");
 	}
 }

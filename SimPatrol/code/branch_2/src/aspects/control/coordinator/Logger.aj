@@ -11,13 +11,11 @@ public aspect Logger {
 	pointcut run1() : execution(* Coordinator.run(..));
 
 	before(): run1() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: Simulation started.");
+		logger.Logger.println("[SimPatrol.Coordinator]: Simulation started.");
 	}
 
 	after(): run1() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: Simulation stopped.");
+		logger.Logger.println("[SimPatrol.Coordinator]: Simulation stopped.");
 	}
 
 	/**
@@ -26,13 +24,12 @@ public aspect Logger {
 	pointcut run2() : execution(* Coordinator.makeAgentsPerceive(..));
 
 	before(): run2(){
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: Agents are perceiving.");
+		logger.Logger
+				.println("[SimPatrol.Coordinator]: Agents are perceiving.");
 	}
 
 	after(): run2(){
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: Agents are thinking.");
+		logger.Logger.println("[SimPatrol.Coordinator]: Agents are thinking.");
 	}
 
 	/**
@@ -41,8 +38,7 @@ public aspect Logger {
 	pointcut run3() : execution(* Coordinator.makeAgentsAct(..));
 
 	before(): run3() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: Agents are acting.");
+		logger.Logger.println("[SimPatrol.Coordinator]: Agents are acting.");
 	}
 
 	/**
@@ -51,7 +47,7 @@ public aspect Logger {
 	pointcut run4() : execution(* Coordinator.updateEnvironmentModel(..));
 
 	before(): run4() {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Coordinator]: The environment is being atualized.");
+		logger.Logger
+				.println("[SimPatrol.Coordinator]: The environment is being atualized.");
 	}
 }

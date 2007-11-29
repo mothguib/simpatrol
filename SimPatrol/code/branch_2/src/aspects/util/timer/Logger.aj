@@ -15,9 +15,8 @@ public aspect Logger {
 
 	after(Chronometer chronometer) : 
 		runChronometer(chronometer) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Chronometer(" + chronometer.getName()
-						+ ")]: Started counting time.");
+		logger.Logger.println("[SimPatrol.Chronometer(" + chronometer.getName()
+				+ ")]: Started counting time.");
 	}
 
 	pointcut runChronometer1(Chronometer chronometer) : 
@@ -27,8 +26,7 @@ public aspect Logger {
 
 	after(Chronometer chronometer) : 
 		runChronometer1(chronometer) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Chronometer(" + chronometer.getName()
-						+ ")]: Stopped counting time.");
+		logger.Logger.println("[SimPatrol.Chronometer(" + chronometer.getName()
+				+ ")]: Stopped counting time.");
 	}
 }

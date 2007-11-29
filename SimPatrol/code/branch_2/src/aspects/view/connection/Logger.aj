@@ -16,9 +16,8 @@ public aspect Logger {
 		execution(* ServerSideTCPConnection.start(..)) && this(connection);
 
 	after(ServerSideTCPConnection connection) : startServerSideTCPConnection(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Started listening to messages.");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Started listening to messages.");
 	}
 
 	/**
@@ -30,12 +29,10 @@ public aspect Logger {
 		withincode(* ServerSideTCPConnection.stopWorking(..));
 
 	after(ServerSideTCPConnection connection) : stopServerSideTCPConnection(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Server disconnected client.");
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Stopped listening to messages. ");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Server disconnected client.");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Stopped listening to messages. ");
 	}
 
 	/**
@@ -47,9 +44,8 @@ public aspect Logger {
 		withincode(* ServerSideTCPConnection.run(..));
 
 	after(ServerSideTCPConnection connection) : runServerSideTCPConnection(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Client connected.");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Client connected.");
 	}
 
 	/**
@@ -61,12 +57,10 @@ public aspect Logger {
 		withincode(* ServerSideTCPConnection.run(..));
 
 	after(ServerSideTCPConnection connection) : runServerSideTCPConnection1(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Client disconnected.");
-		logger.Logger.getInstance().log(
-				"[SimPatrol.TCPConnection(" + connection.getName()
-						+ ")]: Waiting for new connections. ");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Client disconnected.");
+		logger.Logger.println("[SimPatrol.TCPConnection("
+				+ connection.getName() + ")]: Waiting for new connections. ");
 	}
 
 	/**
@@ -76,9 +70,8 @@ public aspect Logger {
 		execution(* UDPConnection.start(..)) && this(connection);
 
 	after(UDPConnection connection) : startUDPConnection(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.UDPConnection(" + connection.getName()
-						+ ")]: Started listening to messages.");
+		logger.Logger.println("[SimPatrol.UDPConnection("
+				+ connection.getName() + ")]: Started listening to messages.");
 	}
 
 	/**
@@ -88,8 +81,7 @@ public aspect Logger {
 		execution(* UDPConnection.stopWorking(..)) && this(connection);
 
 	after(UDPConnection connection) : stopUDPConnection(connection) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.UDPConnection(" + connection.getName()
-						+ ")]: Stopped listening to messages.");
+		logger.Logger.println("[SimPatrol.UDPConnection("
+				+ connection.getName() + ")]: Stopped listening to messages.");
 	}
 }

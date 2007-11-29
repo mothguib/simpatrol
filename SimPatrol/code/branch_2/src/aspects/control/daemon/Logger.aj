@@ -64,7 +64,7 @@ public aspect Logger {
 	after(ActionDaemon daemon) :
 		broadcastMessage(daemon) {
 		AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT
-				.getObjectId(), daemon.actionMessage);		
+				.getObjectId(), daemon.action_message);		
 		logger.Logger.send(event);
 	}
 

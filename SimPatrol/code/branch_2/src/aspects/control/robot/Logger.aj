@@ -17,7 +17,7 @@ public aspect Logger {
 		if (robot instanceof DynamicityControllerRobot) {
 			DynamicityControllerRobot dynamicityControllerRobot = (DynamicityControllerRobot) robot;
 			message += "[SimPatrol.DynamicityRobot("
-					+ dynamicityControllerRobot.getOBJECT();
+					+ dynamicityControllerRobot.getObject();
 		} else if (robot instanceof MortalityControllerRobot) {
 			MortalityControllerRobot mortalityControllerRobot = (MortalityControllerRobot) robot;
 			message += "[SimPatrol.MortalityRobot("
@@ -25,10 +25,10 @@ public aspect Logger {
 		} else if (robot instanceof StaminaControllerRobot) {
 			StaminaControllerRobot staminaControllerRobot = (StaminaControllerRobot) robot;
 			message += "[SimPatrol.StaminaRobot("
-					+ staminaControllerRobot.getAGENT().getObjectId();
+					+ staminaControllerRobot.getAgent().getObjectId();
 		}
 		message += ")]: Started working.";
-		logger.Logger.getInstance().log(message);
+		logger.Logger.println(message);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public aspect Logger {
 		if (robot instanceof DynamicityControllerRobot) {
 			DynamicityControllerRobot dynamicityControllerRobot = (DynamicityControllerRobot) robot;
 			message += "[SimPatrol.DynamicityRobot("
-					+ dynamicityControllerRobot.getOBJECT();
+					+ dynamicityControllerRobot.getObject();
 		} else if (robot instanceof MortalityControllerRobot) {
 			MortalityControllerRobot mortalityControllerRobot = (MortalityControllerRobot) robot;
 			message += "[SimPatrol.MortalityRobot("
@@ -51,9 +51,9 @@ public aspect Logger {
 		} else if (robot instanceof StaminaControllerRobot) {
 			StaminaControllerRobot staminaControllerRobot = (StaminaControllerRobot) robot;
 			message += "[SimPatrol.StaminaRobot("
-					+ staminaControllerRobot.getAGENT().getObjectId();
+					+ staminaControllerRobot.getAgent().getObjectId();
 		}
 		message += ")]: Stopped working.";
-		logger.Logger.getInstance().log(message);
+		logger.Logger.println(message);
 	}
 }

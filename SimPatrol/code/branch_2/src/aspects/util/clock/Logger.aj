@@ -11,12 +11,12 @@ public aspect Logger {
 	pointcut runClock(Clock clock) : execution(* Clock.run(..)) && this(clock);
 
 	before(Clock clock) : runClock(clock) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Clock(" + clock.getName() + ")]: Started working.");
+		logger.Logger.println("[SimPatrol.Clock(" + clock.getName()
+				+ ")]: Started working.");
 	}
 
 	after(Clock clock) : runClock(clock) {
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Clock(" + clock.getName() + ")]: Stopped working.");
+		logger.Logger.println("[SimPatrol.Clock(" + clock.getName()
+				+ ")]: Stopped working.");
 	}
 }

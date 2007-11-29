@@ -14,11 +14,7 @@ public aspect Logger {
 
 	before(DynamicVertex vertex, boolean enabled) : isDynamicVertexEnabled(vertex, enabled) {
 		VertexEnablingEvent event = new VertexEnablingEvent(vertex.getObjectId());
-		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event] " + vertex.getObjectId() + " enabled "
-						+ enabled + ".");
+		logger.Logger.send(event);
 	}
 
 	/**
@@ -29,10 +25,6 @@ public aspect Logger {
 
 	after(Edge edge, boolean enabled) : isEdgeEnabled(edge, enabled) {
 		EdgeEnablingEvent event = new EdgeEnablingEvent(edge.getObjectId());
-		// TODO enviar event por porta
-		
-		logger.Logger.getInstance().log(
-				"[SimPatrol.Event] " + edge.getObjectId() + " enabled "
-						+ enabled + ".");
+		logger.Logger.send(event);
 	}
 }
