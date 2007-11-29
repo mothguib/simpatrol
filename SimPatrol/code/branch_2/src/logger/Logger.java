@@ -77,37 +77,40 @@ public class Logger {
 	 * 
 	 * @param event
 	 *            The event to be logged.
-	 * @throws IOException
 	 */
-	public static void send(Event event) throws IOException {
-		if (connections != null)
+	public static void send(Event event) {
+		/*if (connections != null)
 			for (int i = 0; i < connections.size(); i++) {
 				UDPConnectionAndBooleanValue connection = connections.get(i);
 
 				if (!connection.received_environment) {
 					Environment environment = simulator.getEnvironment();
 					if (environment != null) {
-						connection.received_environment = connection.CONNECTION
-								.send(environment.fullToXML(0));
+						try {
+							connection.received_environment = connection.CONNECTION
+									.send(environment.fullToXML(0));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 
 						if (connection.received_environment)
-							connection.CONNECTION.send(event.fullToXML(0,
-									simulator.getElapsedTime()));
+							try {
+								connection.CONNECTION.send(event.fullToXML(0,
+										simulator.getElapsedTime()));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 					} else
 						return;
 				} else
-					connection.CONNECTION.send(event.fullToXML(0, simulator
-							.getElapsedTime()));
-			}
-	}
-
-	// TODO apagar metodos abaixo...
-	public static Logger getInstance() {
-		return null;
-	}
-
-	public void log(String data) {
-		System.out.println(data);
+					try {
+						connection.CONNECTION.send(event.fullToXML(0, simulator
+								.getElapsedTime()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}*/
+		System.out.print(event.fullToXML(0, simulator.getElapsedTime()));
 	}
 }
 
