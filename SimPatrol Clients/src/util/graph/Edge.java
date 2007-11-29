@@ -154,7 +154,7 @@ public final class Edge {
 	}
 
 	public boolean equals(Object object) {
-		if (object instanceof Edge)
+		if (this.id != null && object instanceof Edge)
 			return this.id.equals(((Edge) object).getObjectId());
 		else
 			return super.equals(object);

@@ -372,7 +372,7 @@ public final class Vertex {
 	}
 
 	public boolean equals(Object object) {
-		if (object instanceof Vertex)
+		if (this.id != null && object instanceof Vertex)
 			return this.id.equals(((Vertex) object).getObjectId());
 		else
 			return super.equals(object);
