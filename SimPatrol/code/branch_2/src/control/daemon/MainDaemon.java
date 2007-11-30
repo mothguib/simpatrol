@@ -6,6 +6,7 @@ package control.daemon;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.net.BindException;
+import java.net.SocketException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.net.SocketNumberGenerator;
@@ -81,7 +82,7 @@ public final class MainDaemon extends Daemon {
 			try {
 				connection.start(this.socket_number_generator
 						.generateSocketNumber());
-			} catch (IOException e) {
+			} catch (SocketException e) {
 				socket_exception_happened = true;
 			}
 		} while (socket_exception_happened);
