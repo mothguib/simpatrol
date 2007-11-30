@@ -5,6 +5,7 @@ package metric_clients;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import util.Keyboard;
 import util.file.FileWriter;
 import util.net.UDPClientConnection;
 
@@ -78,5 +79,40 @@ public class MetricFileClient extends Thread {
 			e.printStackTrace();
 		}
 		this.file_writer.close();
+	}
+
+	/**
+	 * Turns this class into an executable one. Util when running this client in
+	 * an individual machine.
+	 * 
+	 * @param args
+	 *            Arguments: index 0: The IP address of the SimPatrol server.
+	 *            index 1: The number of the socket that the server is supposed
+	 *            to writes to this client. index 2: The path of the file that
+	 *            will store the collected metric. index 3: The name of such
+	 *            metric.
+	 */
+	public static void main(String args[]) {
+		try {
+			String server_address = args[0];
+			int server_socket_number = Integer.parseInt(args[1]);
+			String file_path = args[2];
+			String metric_name = args[3];
+
+			MetricFileClient client = new MetricFileClient(server_address,
+					server_socket_number, file_path, metric_name);
+			client.start();
+
+			System.out.println("Press [t] key to terminate this client.");
+			String key = "";
+			while (!key.equals("t"))
+				key = Keyboard.readLine();
+
+			client.stopWorking();
+		} catch (Exception e) {
+			System.out
+					.println("Usage \"java metric_clients.MetricFileClient\n"
+							+ "<IP address> <Remote socket number> <File path> <Metric name>\"");
+		}
 	}
 }
