@@ -27,7 +27,7 @@ public class UDPClientConnection extends ClientConnection {
 	private final int REMOTE_SOCKET_NUMBER;
 
 	/** The size of the buffer to be read from the UDP socket. */
-	private static final int BUFFER_SIZE = 20480;
+	private static final int BUFFER_SIZE = 65536;
 
 	/* Methods. */
 	/**
