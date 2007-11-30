@@ -137,7 +137,8 @@ public final class CognitiveCoordinatorAgent extends Agent {
 
 		}
 		// else do nothing
-		// TODO implementar do nothing!
+		else
+			this.connection.send("<action type=\"-1\"/>");
 	}
 
 	public void run() {
