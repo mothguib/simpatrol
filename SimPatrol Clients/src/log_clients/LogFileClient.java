@@ -78,7 +78,7 @@ public class LogFileClient extends Thread {
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.
 	 *            index 1: The number of the socket that the server is supposed
-	 *            to writes to this client. index 2: the path of the file that
+	 *            to writes to this client. index 2: The path of the file that
 	 *            will store the collected events.
 	 */
 	public static void main(String args[]) {
@@ -99,7 +99,7 @@ public class LogFileClient extends Thread {
 			client.stopWorking();
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedAgent\n"
+					.println("Usage \"java log_clients.LogFileClient\n"
 							+ "<IP address> <Remote socket number> <File path>\"");
 		}
 	}
