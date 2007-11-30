@@ -35,7 +35,7 @@ public aspect Logger {
 
 	after(ActionDaemon daemon) : incStamina(daemon) {
 		AgentRechargingEvent event = new AgentRechargingEvent(daemon.AGENT
-				.getObjectId(), daemon.AGENT.getStamina());		
+				.getObjectId(), daemon.AGENT.getStamina());
 		logger.Logger.send(event);
 	}
 
@@ -61,8 +61,7 @@ public aspect Logger {
 		call(* ActionDaemon.broadcastMessage(..))
 		&& this(daemon);
 
-	after(ActionDaemon daemon) :
-		broadcastMessage(daemon) {
+	after(ActionDaemon daemon) : broadcastMessage(daemon) {
 		AgentBroadcastingEvent event = new AgentBroadcastingEvent(daemon.AGENT
 				.getObjectId(), daemon.action_message);		
 		logger.Logger.send(event);
@@ -102,6 +101,7 @@ public aspect Logger {
 		
 		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
 				.getObjectId(), agent.getVertex().getObjectId(), edge_id, length);
+		
 		logger.Logger.send(event);
 	}
 

@@ -18,8 +18,8 @@ public aspect Logger {
 
 	before(Agent agent, int state) : setAgentState(agent, state) {
 		if (state != agent.getAgentState()) {
-			AgentChangingStateEvent event = new AgentChangingStateEvent(
-					agent.getObjectId());
+			AgentChangingStateEvent event = new AgentChangingStateEvent(agent
+					.getObjectId());
 			logger.Logger.send(event);
 		}
 	}
@@ -30,7 +30,8 @@ public aspect Logger {
 	pointcut decrementStamina(Agent agent) : execution(* Agent.decStamina(..)) && this(agent);
 
 	after(Agent agent) : decrementStamina(agent) {
-		AgentSpendingStaminaEvent event = new AgentSpendingStaminaEvent(agent.getObjectId(), agent.getStamina());
+		AgentSpendingStaminaEvent event = new AgentSpendingStaminaEvent(agent
+				.getObjectId(), agent.getStamina());
 		logger.Logger.send(event);
 	}
 

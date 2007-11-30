@@ -13,7 +13,8 @@ public aspect Logger {
 		this(vertex) && args(enabled);
 
 	before(DynamicVertex vertex, boolean enabled) : isDynamicVertexEnabled(vertex, enabled) {
-		VertexEnablingEvent event = new VertexEnablingEvent(vertex.getObjectId());
+		VertexEnablingEvent event = new VertexEnablingEvent(vertex
+				.getObjectId());
 		logger.Logger.send(event);
 	}
 
