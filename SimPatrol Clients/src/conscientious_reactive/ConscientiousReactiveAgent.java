@@ -6,13 +6,16 @@ package conscientious_reactive;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.LinkedList;
+import util.Keyboard;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
 import common.Agent;
 
 /**
  * Implements the conscientious reactive agents, as it is described in the work
  * of [MACHADO, 2002].
  */
-public abstract class ConscientiousReactiveAgent extends Agent {
+public class ConscientiousReactiveAgent extends Agent {
 	/* Attributes. */
 	/** Memorizes the last time this agent visited the vertexes. */
 	private LinkedList<StringAndDouble> vertexes_idlenesses;
@@ -307,6 +310,45 @@ public abstract class ConscientiousReactiveAgent extends Agent {
 			this.connection.stopWorking();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Turns this class into an executable one. Util when running this agent in
+	 * an individual machine.
+	 * 
+	 * @param args
+	 *            Arguments: index 0: The IP address of the SimPatrol server.
+	 *            index 1: The number of the socket that the server is supposed
+	 *            to listen to this client. index 2: "true", if the simulation
+	 *            is a real time one, "false" if not.
+	 */
+	public static void main(String args[]) {
+		try {
+			String server_address = args[0];
+			int server_socket_number = Integer.parseInt(args[1]);
+			boolean is_real_time_simulation = Boolean.parseBoolean(args[2]);
+
+			ConscientiousReactiveAgent agent = new ConscientiousReactiveAgent();
+			if (is_real_time_simulation)
+				agent.setConnection(new UDPClientConnection(server_address,
+						server_socket_number));
+			else
+				agent.setConnection(new TCPClientConnection(server_address,
+						server_socket_number));
+
+			agent.start();
+
+			System.out.println("Press [t] key to terminate this agent.");
+			String key = "";
+			while (!key.equals("t"))
+				key = Keyboard.readLine();
+
+			agent.stopWorking();
+		} catch (Exception e) {
+			System.out
+					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedAgent\n"
+							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)>\"");
 		}
 	}
 }
