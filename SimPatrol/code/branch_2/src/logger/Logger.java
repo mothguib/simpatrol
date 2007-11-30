@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import logger.event.Event;
 import model.Environment;
+import model.agent.Society;
 import control.simulator.Simulator;
 import view.connection.UDPConnection;
 
@@ -79,18 +80,30 @@ public class Logger {
 	 *            The event to be logged.
 	 */
 	public static void send(Event event) {
-		/*if (connections != null)
+		if (connections != null)
 			for (int i = 0; i < connections.size(); i++) {
 				UDPConnectionAndBooleanValue connection = connections.get(i);
 
 				if (!connection.received_environment) {
 					Environment environment = simulator.getEnvironment();
+
 					if (environment != null) {
 						try {
 							connection.received_environment = connection.CONNECTION
-									.send(environment.fullToXML(0));
+									.send(environment.getGraph().fullToXML(0));
 						} catch (IOException e) {
 							e.printStackTrace();
+						}
+
+						if (connection.received_environment) {
+							Society[] societies = environment.getSocieties();
+							for (int j = 0; j < societies.length; j++)
+								try {
+									connection.received_environment = connection.CONNECTION
+											.send(societies[j].fullToXML(0));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 						}
 
 						if (connection.received_environment)
@@ -100,8 +113,7 @@ public class Logger {
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-					} else
-						return;
+					}
 				} else
 					try {
 						connection.CONNECTION.send(event.fullToXML(0, simulator
@@ -109,8 +121,7 @@ public class Logger {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-			}*/
-		System.out.print(event.fullToXML(0, simulator.getElapsedTime()));
+			}
 	}
 }
 
