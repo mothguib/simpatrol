@@ -76,9 +76,17 @@ public aspect Logger {
 
 	after(ActionDaemon daemon) : teleportAction1(daemon) {
 		Agent agent = daemon.AGENT;
+		
+		String edge_id = null;
+		double length = 0;
+		if(agent.getEdge() != null) {
+			edge_id = agent.getEdge().getObjectId();
+			length = agent.getElapsed_length(); 
+		}
+		
 		AgentTeleportingEvent event = new AgentTeleportingEvent(agent
-				.getObjectId(), agent.getVertex().getObjectId(), agent
-				.getEdge().getObjectId(), agent.getElapsed_length());
+				.getObjectId(), agent.getVertex().getObjectId(), edge_id, length);
+		
 		logger.Logger.send(event);
 	}
 
