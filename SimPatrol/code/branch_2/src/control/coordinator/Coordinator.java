@@ -314,7 +314,7 @@ public final class Coordinator extends Thread implements TimedObject {
 	/** Forces the agents to perceive the environment. */
 	private void makeAgentsPerceive() {
 		// while there are agents that didn't perceive yet, wait...
-		while (simulator.allAgentsJustPerceived())
+		while (!simulator.allAgentsJustPerceived())
 			simulator.lockAgentsPerceptions(false);
 
 		// all agents perceived, so don't let them perceive anymore
