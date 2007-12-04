@@ -104,7 +104,7 @@ public final class Vertex {
 	 * @return The edges associated with the vertex.
 	 */
 	public Edge[] getEdges() {
-		HashSet<Edge> edges = new HashSet<Edge>();
+		Set<Edge> edges = new HashSet<Edge>();
 
 		if (this.in_edges != null) {
 			Object[] in_edges_array = this.in_edges.toArray();
