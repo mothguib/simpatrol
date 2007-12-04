@@ -94,6 +94,10 @@ public class ConscientiousReactiveAgent extends Agent {
 
 				// while there are vertexes to be read
 				while (next_vertex_index > -1) {
+					// updates the current perception
+					current_perception = current_perception
+							.substring(next_vertex_index);
+
 					// obtains the id of the current vertex
 					int current_vertex_id_index = current_perception
 							.indexOf("id=\"");
