@@ -607,6 +607,10 @@ public abstract class Client extends Thread {
 
 		// stops the metric clients
 		this.stopMetricClients();
+		
+		// stops the log client
+		if(this.log_client != null)
+			this.log_client.stopWorking();
 
 		// screen message
 		System.out.println("Finished working.");
