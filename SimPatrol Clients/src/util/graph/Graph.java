@@ -582,6 +582,32 @@ public final class Graph {
 
 		return null;
 	}
+
+	public boolean equals(Graph graph) {
+		if (graph != null) {
+			if (!graph.label.equals(this.label))
+				return false;
+
+			Vertex[] vertexes = graph.getVertexes();
+			for (int i = 0; i < vertexes.length; i++) {
+				Vertex vertex = this.getVertex(vertexes[i].getObjectId());
+				if (vertex == null
+						|| vertex.getIdleness() != vertexes[i].getIdleness())
+					return false;
+			}
+
+			Edge[] edges = graph.getEdges();
+			for (int i = 0; i < edges.length; i++) {
+				Edge edge = this.getEdge(edges[i].getObjectId());
+				if (edge == null)
+					return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 }
 
 /**
