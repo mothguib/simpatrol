@@ -59,8 +59,11 @@ public class LogFileClient extends Thread {
 		while (!this.stop_working) {
 			String[] events = this.connection.getBufferAndFlush();
 
-			for (int i = 0; i < events.length; i++)
-				this.file_writer.print(events[i]);
+			for (int i = 0; i < events.length; i++) {
+				String event = events[i];
+				event = event.substring(0, event.lastIndexOf("\n"));
+				this.file_writer.println(event);
+			}
 		}
 
 		try {
@@ -68,6 +71,7 @@ public class LogFileClient extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		this.file_writer.close();
 	}
 
@@ -98,9 +102,8 @@ public class LogFileClient extends Thread {
 
 			client.stopWorking();
 		} catch (Exception e) {
-			System.out
-					.println("Usage \"java log_clients.LogFileClient\n"
-							+ "<IP address> <Remote socket number> <File path>\"");
+			System.out.println("Usage \"java log_clients.LogFileClient\n"
+					+ "<IP address> <Remote socket number> <File path>\"");
 		}
 	}
 }
