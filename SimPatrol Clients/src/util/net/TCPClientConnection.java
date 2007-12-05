@@ -97,9 +97,16 @@ public class TCPClientConnection extends ClientConnection {
 		do {
 			try {
 				message_line = this.INPUT.readLine();
-				if (message_line != null)
+				if (message_line != null) {
 					buffer.append(message_line);
-				else
+
+					if (buffer.indexOf("</perception>") > -1)
+						break;
+					else if (buffer.indexOf("<perception ") > -1
+							&& buffer.indexOf("message=\"") > -1
+							&& buffer.indexOf("/>") > -1)
+						break;
+				} else
 					this.stopWorking();
 			} catch (InterruptedIOException e) {
 				break;
