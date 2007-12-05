@@ -69,7 +69,8 @@ public final class CognitiveCoordinatedClient extends Client {
 			if (agent_ids[i].equals("coordinator"))
 				agent = new CognitiveCoordinatorAgent();
 			else
-				agent = new CognitiveCoordinatedAgent(agent_ids[i]);
+				agent = new CognitiveCoordinatedAgent(agent_ids[i],
+						this.IS_REAL_TIME_SIMULATOR);
 
 			if (this.IS_REAL_TIME_SIMULATOR)
 				agent.setConnection(new UDPClientConnection(this.CONNECTION
