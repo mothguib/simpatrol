@@ -118,9 +118,8 @@ public final class ActionDaemon extends AgentDaemon {
 				this.AGENT.decStamina(stamina);
 
 			// resets the idleness of the vertex where the agent is
-			if (simulator instanceof RealTimeSimulator)
-				this.AGENT.getVertex().setLast_visit_time(
-						simulator.getElapsedTime());
+			this.AGENT.getVertex().setLast_visit_time(
+					simulator.getElapsedTime());
 		}
 	}
 
@@ -563,6 +562,9 @@ public final class ActionDaemon extends AgentDaemon {
 	 *            The action of teleport planned to be executed.
 	 */
 	private void attendPlannedTeleportAction(TeleportAction action) {
+		System.err.println("Agent " + this.AGENT.getObjectId()
+				+ " going as planned.");
+
 		// if there isn't enough stamina to act, clears the planning
 		// and quits the method
 		double remained_stamina = 0;
@@ -699,6 +701,9 @@ public final class ActionDaemon extends AgentDaemon {
 
 						// if the obtained action is a visiting one
 						if (action instanceof VisitAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId() + " visiting");
+
 							// verifies if the agent has permission to visit
 							// vertexes
 							ActionPermission[] permissions = this.AGENT
@@ -713,6 +718,10 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the obtained action is a broadcasting one
 						else if (action instanceof BroadcastAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId()
+									+ " broadcasting");
+
 							// verifies if the agent has permission to broadcast
 							// messages
 							ActionPermission[] permissions = this.AGENT
@@ -727,6 +736,10 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the obtained action is a stigmatize one
 						else if (action instanceof StigmatizeAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId()
+									+ " stigmatizing");
+
 							// verifies if the agent has permission to deposit
 							// stigmas
 							ActionPermission[] permissions = this.AGENT
@@ -741,6 +754,10 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the obtained action is an atomic recharge one
 						else if (action instanceof AtomicRechargeAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId()
+									+ " atomic recharging");
+
 							// verifies if the agent has permission to
 							// immediately recharge
 							ActionPermission[] permissions = this.AGENT
@@ -755,6 +772,9 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the obtained action is a recharge one
 						else if (action instanceof RechargeAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId() + " recharging");
+
 							// verifies if the agent has permission to recharge
 							ActionPermission[] permissions = this.AGENT
 									.getAllowedActions();
@@ -774,6 +794,11 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the action is a teleport action
 						else if (action instanceof TeleportAction) {
+							System.err
+									.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " teleporting");
+
 							// verifies if the agent has permission to teleport
 							ActionPermission[] permissions = this.AGENT
 									.getAllowedActions();
@@ -787,6 +812,9 @@ public final class ActionDaemon extends AgentDaemon {
 						}
 						// else if the action is a goto action
 						else if (action instanceof GoToAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId() + " going");
+
 							// verifies if the agent has permission to move
 							ActionPermission[] permissions = this.AGENT
 									.getAllowedActions();
