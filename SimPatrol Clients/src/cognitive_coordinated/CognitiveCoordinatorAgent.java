@@ -38,8 +38,6 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	 */
 	private final LinkedList<String> AGENTS_OBJECTIVES;
 
-	/** Holds the messages already attended by the coordinator. */
-	// private final Set<String> ATTENDED_MESSAGES;
 	/* Methods. */
 	/** Constructor. */
 	public CognitiveCoordinatorAgent() {
@@ -49,19 +47,21 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	}
 
 	/**
-	 * Implements the perception process of the coordinator.
+	 * Implements the perception process of the coordinator. Returns TRUE if the
+	 * agent perceived something different, FALSE if not.
 	 * 
+	 * @return TRUE if the agent perceived something different, FALSE if not.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	private void perceive() throws ParserConfigurationException, SAXException,
-			IOException {
+	private boolean perceive() throws ParserConfigurationException,
+			SAXException, IOException {
+		// the answer for the method
+		boolean answer = false;
+
 		// obtains the perceptions from the connection
 		String[] perceptions = this.connection.getBufferAndFlush();
-
-		// registers if the graph was already perceived this time
-		boolean perceived_graph = false;
 
 		// for each perception, starting from the most recent one
 		for (int i = perceptions.length - 1; i >= 0; i--) {
@@ -72,9 +72,9 @@ public final class CognitiveCoordinatorAgent extends Agent {
 			Graph[] graph_perception = Translator.getGraphs(Translator
 					.parseString(perception));
 			if (graph_perception.length > 0) {
-				if (!perceived_graph) {
+				if (!graph_perception[0].equals(this.graph)) {
 					this.graph = graph_perception[0];
-					perceived_graph = true;
+					answer = true;
 				}
 			} else {
 				// if failed to obtain a graph, tries to obtain a message
@@ -85,9 +85,15 @@ public final class CognitiveCoordinatorAgent extends Agent {
 							.indexOf("\""));
 
 					this.RECEIVED_MESSAGES.add(message);
+
+					// registers that the perceptions changed
+					answer = true;
 				}
 			}
 		}
+
+		// returns the answer of the method
+		return answer;
 	}
 
 	/**
@@ -146,9 +152,12 @@ public final class CognitiveCoordinatorAgent extends Agent {
 		this.connection.start();
 
 		while (!this.stop_working) {
+			// registers if the perceptions of the agent changed
+			boolean changed_perception = false;
+
 			// lets the agent perceive
 			try {
-				this.perceive();
+				changed_perception = this.perceive();
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
 			} catch (SAXException e) {
@@ -158,11 +167,13 @@ public final class CognitiveCoordinatorAgent extends Agent {
 			}
 
 			// lets the agent act
-			try {
-				this.act();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// if the perceptions changed
+			if (changed_perception)
+				try {
+					this.act();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 
 		// stops the connection of the agent
