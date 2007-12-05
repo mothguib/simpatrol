@@ -33,6 +33,12 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	/** The current goal of the agent. */
 	private String goal;
 
+	/** The graph perceived by the agent. */
+	private Graph graph;
+
+	/** Holds if the simulation is a real time one. */
+	private static boolean is_real_time_simulation;
+
 	/**
 	 * The time interval the agent is supposed to wait for a message sent by the
 	 * coordinator. Mesaured in seconds.
@@ -45,11 +51,16 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 * 
 	 * @param id
 	 *            The id of this agent.
+	 * @param is_real_time
+	 *            TRUE if the simulation is a real time one, FALSE if it is a
+	 *            cycled one.
 	 */
-	public CognitiveCoordinatedAgent(String id) {
+	public CognitiveCoordinatedAgent(String id, boolean is_real_time) {
 		this.ID = id;
 		this.PLAN = new LinkedList<String>();
 		this.goal = null;
+		this.graph = null;
+		is_real_time_simulation = is_real_time;
 	}
 
 	/**
@@ -224,7 +235,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			// the simulation
 			StringAndDouble position = null;
 			String goal_vertex = null;
-			Graph graph = null;
+			Graph current_graph = null;
 
 			// tracks the time the agent has been waiting for a message from the
 			// coordinator
@@ -233,7 +244,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 
 			// while the agent did not perceive its position, its goal vertex
 			// and the graph of the simulation
-			while ((position == null || goal_vertex == null || graph == null)
+			while ((position == null || goal_vertex == null || current_graph == null)
 					&& !this.stop_working) {
 				// obtains the perceptions sent by SimPatrol server
 				String[] perceptions = this.connection.getBufferAndFlush();
@@ -253,6 +264,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 							goal_vertex = perceived_goal_vertex;
 							this.goal = goal_vertex;
 						} else {
+							// tries to obtain the graph of the simulation
 							Graph perceived_graph = null;
 							try {
 								perceived_graph = this
@@ -266,20 +278,18 @@ public final class CognitiveCoordinatedAgent extends Agent {
 							}
 
 							if (perceived_graph != null)
-								graph = perceived_graph;
+								current_graph = perceived_graph;
 						}
 					}
 
 					// if the needed perceptions were obtained, breaks the loop
 					if (position != null && goal_vertex != null
-							&& graph != null) {
-						System.out.println("Agent " + this.ID
-								+ " percebi tudoo.");
+							&& current_graph != null)
 						break;
-					}
-					// if not, counts the time the agent has been waiting for a
-					// message from the coordinator
-					else {
+					// else if the simulation is a real time one
+					else if (is_real_time_simulation) {
+						// counts the time the agent has been waiting for a
+						// message from the coordinator
 						int end_wainting_time = Calendar.getInstance().get(
 								Calendar.SECOND);
 
@@ -299,16 +309,26 @@ public final class CognitiveCoordinatedAgent extends Agent {
 									Calendar.SECOND);
 						}
 					}
+					// else, if the perceived graph is not the one previously
+					// perceived
+					else if (current_graph != null
+							&& !current_graph.equals(this.graph)) {
+						// memorizes the perceived graph
+						this.graph = current_graph;
+
+						// sends a message of "do nothing" due to
+						// synchronization reasons
+						try {
+							this.connection.send("<action type=\"-1\"/>");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 
 			// lets the agent plan its actions
-			this.plan(position.STRING, goal_vertex, graph);
-
-			System.out.print("Agent " + this.ID + " plan:");
-			for (int i = 0; i < this.PLAN.size(); i++)
-				System.out.print(" " + this.PLAN.get(i));
-			System.out.println();
+			this.plan(position.STRING, goal_vertex, current_graph);
 
 			// executes next step of the planning
 			try {
@@ -378,7 +398,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			String agent_id = args[3];
 
 			CognitiveCoordinatedAgent agent = new CognitiveCoordinatedAgent(
-					agent_id);
+					agent_id, is_real_time_simulation);
 			if (is_real_time_simulation)
 				agent.setConnection(new UDPClientConnection(server_address,
 						server_socket_number));
