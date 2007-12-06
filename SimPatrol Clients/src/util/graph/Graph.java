@@ -202,6 +202,28 @@ public final class Graph {
 		}
 	}
 
+	/**
+	 * Returns, for two given vertexes, the distance between them.
+	 * 
+	 * @return The distance between the two given vertexes. Returns the maximum
+	 *         possible value if the vertexes are not in the same partition.
+	 */
+	public double getDistance(Vertex vertex_1, Vertex vertex_2) {
+		if (distances_table == null || distances_table.isEmpty())
+			this.calculateDistances();
+
+		for (int i = 0; i < distances_table.size(); i++)
+			if (distances_table.get(i).VERTEX.equals(vertex_1)) {
+				List<VertexWithDistance> list = distances_table.get(i).DISTANCES_LIST;
+
+				for (int j = 0; j < list.size(); j++)
+					if (list.get(j).VERTEX.equals(vertex_2))
+						return list.get(j).DISTANCE;
+			}
+
+		return Double.MAX_VALUE;
+	}
+
 	/** Returns the smallest and biggest idlenesses of the graph. */
 	public int[] getSmallestAndBiggestIdlenesses() {
 		int smallest_idleness = Integer.MAX_VALUE;
@@ -227,21 +249,15 @@ public final class Graph {
 	 * graph.
 	 */
 	public double[] getSmallestAndBiggestDistances() {
-		double[] answer = { 0, 0 };
-
-		if (distances_table == null)
-			return answer;
-
-		if (distances_table.isEmpty())
+		if (distances_table == null || distances_table.isEmpty())
 			this.calculateDistances();
 
 		double smallest_distance = Double.MAX_VALUE;
 		double biggest_distance = -1;
 
-		for (int i = 0; i <distances_table.size(); i++)
+		for (int i = 0; i < distances_table.size(); i++)
 			for (int j = i; j < distances_table.size(); j++) {
-				double distance = distances_table.get(i).DISTANCES_LIST
-						.get(j).DISTANCE;
+				double distance = distances_table.get(i).DISTANCES_LIST.get(j).DISTANCE;
 
 				if (distance > biggest_distance)
 					biggest_distance = distance;
@@ -250,8 +266,7 @@ public final class Graph {
 					smallest_distance = distance;
 			}
 
-		answer[0] = smallest_distance;
-		answer[1] = biggest_distance;
+		double[] answer = { smallest_distance, biggest_distance };
 		return answer;
 	}
 
