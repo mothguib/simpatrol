@@ -318,7 +318,7 @@ public class ConscientiousReactiveAgent extends Agent {
 	}
 
 	/**
-	 * Turns this class into an executable one. Util when running this agent in
+	 * Turns this class into an executable one. Useful when running this agent in
 	 * an individual machine.
 	 * 
 	 * @param args
