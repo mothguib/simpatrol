@@ -14,9 +14,7 @@ import java.util.Set;
  */
 public final class Vertex {
 	/* Atributes. */
-	/**
-	 * The object id of the vertex. Not part of the patrol problem modelling.
-	 */
+	/** The object id of the vertex. */
 	private String id;
 
 	/** The label of the vertex. */

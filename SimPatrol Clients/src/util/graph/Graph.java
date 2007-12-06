@@ -32,6 +32,12 @@ public final class Graph {
 	 */
 	private static List<DistancesList> distances_table;
 
+	/** Holds the biggest distance between the vertexes of the graph. */
+	private static double biggest_distance;
+
+	/** Holds the smallest distance between the vertexes of the graph. */
+	private static double smallest_distance;
+
 	/* Methods. */
 	/**
 	 * Constructor.
@@ -42,8 +48,6 @@ public final class Graph {
 	 *            The vertexes of the graph.
 	 */
 	public Graph(String label, Vertex[] vertexes) {
-		IdlenessedVertexDistanceEdge.graph = this;
-
 		this.label = label;
 
 		this.vertexes = new HashSet<Vertex>();
@@ -149,8 +153,11 @@ public final class Graph {
 	 * other vertexes of the graph.
 	 */
 	private void calculateDistances() {
-		if (distances_table == null)
-			distances_table = new LinkedList<DistancesList>();
+		distances_table = new LinkedList<DistancesList>();
+
+		// initiates the bound distances
+		biggest_distance = -1;
+		smallest_distance = Double.MAX_VALUE;
 
 		// for each vertex of the graph, obtains its distance to the other
 		// vertexes
@@ -171,7 +178,7 @@ public final class Graph {
 				// mounts an item copying data from the previous line
 				VertexWithDistance new_item = new VertexWithDistance(
 						previous_list.VERTEX, previous_list.DISTANCES_LIST
-								.get(i).DISTANCE);
+								.get(i - 1).DISTANCE);
 
 				// adds it to the current list
 				list.DISTANCES_LIST.add(new_item);
@@ -195,6 +202,13 @@ public final class Graph {
 				// adds a new item to the current list
 				list.DISTANCES_LIST.add(new VertexWithDistance(other_vertex,
 						path_length));
+
+				// verifies if such path is one of the bounds of distance
+				if (path_length > biggest_distance)
+					biggest_distance = path_length;
+
+				if (path_length < smallest_distance)
+					smallest_distance = path_length;
 			}
 
 			// adds the list to the table of distances
@@ -251,20 +265,6 @@ public final class Graph {
 	public double[] getSmallestAndBiggestDistances() {
 		if (distances_table == null || distances_table.isEmpty())
 			this.calculateDistances();
-
-		double smallest_distance = Double.MAX_VALUE;
-		double biggest_distance = -1;
-
-		for (int i = 0; i < distances_table.size(); i++)
-			for (int j = i; j < distances_table.size(); j++) {
-				double distance = distances_table.get(i).DISTANCES_LIST.get(j).DISTANCE;
-
-				if (distance > biggest_distance)
-					biggest_distance = distance;
-
-				if (distance < smallest_distance)
-					smallest_distance = distance;
-			}
 
 		double[] answer = { smallest_distance, biggest_distance };
 		return answer;
@@ -443,6 +443,9 @@ public final class Graph {
 	 */
 	public Graph getIdlenessedDijkstraPath(Vertex begin_vertex,
 			Vertex end_vertex) {
+		// configures the trios "vertex - distance - edge"
+		IdlenessedVertexDistanceEdge.graph = this;
+
 		// for each vertex of the graph, correlates it with its distance
 		// to the begin_vertex, as well as the last edge to reach it
 		LinkedList<IdlenessedVertexDistanceEdge> vertexes_with_distances_list = new LinkedList<IdlenessedVertexDistanceEdge>();
@@ -472,7 +475,7 @@ public final class Graph {
 		// while the heap is not empty
 		while (!heap.isEmpty()) {
 			// removes the minimum element of the heap
-			VertexDistanceEdge minimum = (VertexDistanceEdge) heap
+			IdlenessedVertexDistanceEdge minimum = (IdlenessedVertexDistanceEdge) heap
 					.removeSmallest();
 
 			// if the distance set to the minimum element is the maximum
@@ -523,7 +526,7 @@ public final class Graph {
 							break;
 						}
 
-					// verifies if it's necessary to atualize the
+					// verifies if it's necessary to update the
 					// neighbour's trio
 					if (neighbour_with_distance.distance > minimum.distance
 							+ smallest_edge.getLength()) {
@@ -678,7 +681,6 @@ final class DistancesList {
 	/** The list of vertexes and their respective distances. */
 	public final List<VertexWithDistance> DISTANCES_LIST;
 
-	/* Methods. */
 	/**
 	 * Constructor.
 	 * 
@@ -800,6 +802,10 @@ final class IdlenessedVertexDistanceEdge implements Comparable {
 				return true;
 			else if (((IdlenessedVertexDistanceEdge) object).distance == 0)
 				return false;
+			else if (this.distance == Double.MAX_VALUE)
+				return false;
+			else if (((IdlenessedVertexDistanceEdge) object).distance == Double.MAX_VALUE)
+				return true;
 
 			// obtains the biggest and smallest idlenesses of the graph
 			int[] bound_idlenesses = graph.getSmallestAndBiggestIdlenesses();
@@ -810,14 +816,13 @@ final class IdlenessedVertexDistanceEdge implements Comparable {
 			// obtains the value for this object
 			double this_norm_idleness = 0;
 			if (bound_idlenesses[0] < bound_idlenesses[1])
-				this_norm_idleness = (bound_idlenesses[1] - this.VERTEX
-						.getIdleness())
+				this_norm_idleness = (this.VERTEX.getIdleness() - bound_idlenesses[0])
 						* Math.pow((bound_idlenesses[1] - bound_idlenesses[0]),
 								-1);
 
 			double this_norm_distance = 0;
 			if (bound_distances[0] < bound_distances[1])
-				this_norm_distance = (this.distance - bound_distances[0])
+				this_norm_distance = (bound_distances[1] - this.distance)
 						* Math.pow((bound_distances[1] - bound_distances[0]),
 								-1);
 
@@ -828,14 +833,14 @@ final class IdlenessedVertexDistanceEdge implements Comparable {
 			// obtains the value for the other object
 			double other_norm_idleness = 0;
 			if (bound_idlenesses[0] < bound_idlenesses[1])
-				other_norm_idleness = (bound_idlenesses[1] - ((IdlenessedVertexDistanceEdge) object).VERTEX
-						.getIdleness())
+				other_norm_idleness = (((IdlenessedVertexDistanceEdge) object).VERTEX
+						.getIdleness() - bound_idlenesses[0])
 						* Math.pow((bound_idlenesses[1] - bound_idlenesses[0]),
 								-1);
 
 			double other_norm_distance = 0;
 			if (bound_distances[0] < bound_distances[1])
-				other_norm_distance = (((IdlenessedVertexDistanceEdge) object).distance - bound_distances[0])
+				other_norm_distance = (bound_distances[1] - ((IdlenessedVertexDistanceEdge) object).distance)
 						* Math.pow((bound_distances[1] - bound_distances[0]),
 								-1);
 

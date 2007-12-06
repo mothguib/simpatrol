@@ -10,9 +10,7 @@ package util.graph;
  */
 public final class Edge {
 	/* Attributes. */
-	/**
-	 * The object id of the edge. Not part of the patrol problem modelling.
-	 */
+	/** The object id of the edge. */
 	private String id;
 
 	/** The emitter of this edge, if it is an arc. */
