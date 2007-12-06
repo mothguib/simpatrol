@@ -76,7 +76,7 @@ public class LogFileClient extends Thread {
 	}
 
 	/**
-	 * Turns this class into an executable one. Util when running this client in
+	 * Turns this class into an executable one. Useful when running this client in
 	 * an individual machine.
 	 * 
 	 * @param args
