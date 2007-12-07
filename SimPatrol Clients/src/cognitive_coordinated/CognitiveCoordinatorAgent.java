@@ -5,6 +5,7 @@ package cognitive_coordinated;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -105,6 +106,9 @@ public final class CognitiveCoordinatorAgent extends Agent {
 		// while there are messages to be attended
 		// and the coordinator perceived the graph
 		if (this.RECEIVED_MESSAGES.size() > 0 && this.graph != null) {
+			// holds the id of the agents already attended this time
+			HashSet<String> attended_agents = new HashSet<String>();
+
 			// mounts a heap with the vertexes, based on their idlenesses
 			Vertex[] vertexes = this.graph.getVertexes();
 			ComparableVertex[] comparable_vertexes = new ComparableVertex[vertexes.length];
@@ -123,31 +127,37 @@ public final class CognitiveCoordinatorAgent extends Agent {
 				// obtains the id of the agent from the received message
 				String agent_id = message.substring(0, message.indexOf("###"));
 
-				// obtains the id of the vertex that is the position of such
-				// agent
-				String position_id = message
-						.substring(message.indexOf("###") + 3);
+				// if such agent was not attended this time
+				if (!attended_agents.contains(agent_id)) {
+					// obtains the id of the vertex that is the position of such
+					// agent
+					String position_id = message.substring(message
+							.indexOf("###") + 3);
 
-				// chooses the vertex to be visited by such agent
-				while ((vertex_id.equals(position_id) || this.AGENTS_GOALS
-						.contains(vertex_id))
-						&& !heap.isEmpty())
-					vertex_id = ((ComparableVertex) heap.removeSmallest()).VERTEX
-							.getObjectId();
+					// chooses the vertex to be visited by such agent
+					while ((vertex_id.equals(position_id) || this.AGENTS_GOALS
+							.contains(vertex_id))
+							&& !heap.isEmpty())
+						vertex_id = ((ComparableVertex) heap.removeSmallest()).VERTEX
+								.getObjectId();
 
-				// updates the agents and vertexes memory
-				int agent_index = this.AGENTS_GOALS.indexOf(agent_id);
-				if (agent_index > -1)
-					this.AGENTS_GOALS.set(agent_index + 1, vertex_id);
-				else {
-					this.AGENTS_GOALS.add(agent_id);
-					this.AGENTS_GOALS.add(vertex_id);
+					// updates the agents and vertexes memory
+					int agent_index = this.AGENTS_GOALS.indexOf(agent_id);
+					if (agent_index > -1)
+						this.AGENTS_GOALS.set(agent_index + 1, vertex_id);
+					else {
+						this.AGENTS_GOALS.add(agent_id);
+						this.AGENTS_GOALS.add(vertex_id);
+					}
+
+					// sends a message containig the chosen vertex
+					String action = "<action type=\"3\" message=\"" + agent_id
+							+ "###" + vertex_id + "\"/>";
+					this.connection.send(action);
+
+					// adds the id of the agent to the attended ones
+					attended_agents.add(agent_id);
 				}
-
-				// sends a message containig the chosen vertex
-				String action = "<action type=\"3\" message=\"" + agent_id
-						+ "###" + vertex_id + "\"/>";
-				this.connection.send(action);
 			}
 
 		}
