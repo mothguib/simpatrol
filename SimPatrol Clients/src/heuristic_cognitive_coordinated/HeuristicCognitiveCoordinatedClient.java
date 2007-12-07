@@ -102,7 +102,7 @@ public final class HeuristicCognitiveCoordinatedClient extends Client {
 	 *            false if the simulator is a cycled one, true if not.
 	 */
 	public static void main(String[] args) {
-		System.out.println("Heuristic Cognitive coordinated agents!");
+		System.out.println("Heuristic cognitive coordinated agents!");
 
 		try {
 			String remote_socket_address = args[0];

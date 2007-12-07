@@ -46,7 +46,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 * The time interval the agent is supposed to wait for a message sent by the
 	 * coordinator. Mesaured in seconds.
 	 */
-	private final int WAITING_TIME = 5; // 5 seconds
+	private final int WAITING_TIME = 10; // 5 seconds
 
 	/* Methods. */
 	/**
