@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.Keyboard;
-import util.Translator;
 import util.graph.Edge;
 import util.graph.Graph;
+import util.graph.GraphTranslator;
 import util.graph.Vertex;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
@@ -36,6 +36,9 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	/** The graph perceived by the agent. */
 	private Graph graph;
 
+	/** The current position of the agent. */
+	private StringAndDouble position;
+
 	/** Holds if the simulation is a real time one. */
 	private static boolean is_real_time_simulation;
 
@@ -43,7 +46,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 * The time interval the agent is supposed to wait for a message sent by the
 	 * coordinator. Mesaured in seconds.
 	 */
-	private final int WAITING_TIME = 5; // 5 seconds
+	private final int WAITING_TIME = 10; // 5 seconds
 
 	/* Methods. */
 	/**
@@ -60,6 +63,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 		this.PLAN = new LinkedList<String>();
 		this.goal = null;
 		this.graph = null;
+		this.position = null;
 		is_real_time_simulation = is_real_time;
 	}
 
@@ -129,7 +133,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 */
 	private Graph perceiveGraph(String perception)
 			throws ParserConfigurationException, SAXException, IOException {
-		Graph[] parsed_perception = Translator.getGraphs(Translator
+		Graph[] parsed_perception = GraphTranslator.getGraphs(GraphTranslator
 				.parseString(perception));
 		if (parsed_perception.length > 0)
 			return parsed_perception[0];
@@ -143,8 +147,9 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 * @throws IOException
 	 */
 	private void requestGoal() throws IOException {
-		this.connection
-				.send("<action type=\"3\" message=\"" + this.ID + "\"/>");
+		if (this.position != null)
+			this.connection.send("<action type=\"3\" message=\"" + this.ID
+					+ "###" + this.position.STRING + "\"/>");
 	}
 
 	/**
@@ -224,18 +229,27 @@ public final class CognitiveCoordinatedAgent extends Agent {
 		this.connection.start();
 
 		while (!this.stop_working) {
+			// lets the agent perceive its current position
+			while (this.position == null) {
+				// obtains the perceptions sent by SimPatrol server
+				String[] perceptions = this.connection.getBufferAndFlush();
+
+				// for each perception, starting from the most recent one
+				for (int i = perceptions.length - 1; i >= 0; i--) {
+					// tries to obtain the current position
+					this.position = this.perceivePosition(perceptions[i]);
+
+					if (this.position != null)
+						break;
+				}
+			}
+
 			// lets the agent ask for a goal vertex to the coordinator
 			try {
 				this.requestGoal();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			// perceives the position of the agent, goal vertex and graph of
-			// the simulation
-			StringAndDouble position = null;
-			String goal_vertex = null;
-			Graph current_graph = null;
 
 			// tracks the time the agent has been waiting for a message from the
 			// coordinator
@@ -244,18 +258,21 @@ public final class CognitiveCoordinatedAgent extends Agent {
 
 			// while the agent did not perceive its position, its goal vertex
 			// and the graph of the simulation
-			while ((position == null || goal_vertex == null || current_graph == null)
+			String goal_vertex = null;
+			Graph current_graph = null;
+
+			while ((goal_vertex == null || current_graph == null)
 					&& !this.stop_working) {
 				// obtains the perceptions sent by SimPatrol server
 				String[] perceptions = this.connection.getBufferAndFlush();
 
 				// for each perception, starting from the most recent one
 				for (int i = perceptions.length - 1; i >= 0; i--) {
-					// tries to obtain the current position
+					// tries to update the current position
 					StringAndDouble perceived_position = this
 							.perceivePosition(perceptions[i]);
 					if (perceived_position != null)
-						position = perceived_position;
+						this.position = perceived_position;
 					else {
 						// tries to obtain the goal vertex
 						String perceived_goal_vertex = this
@@ -283,8 +300,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 					}
 
 					// if the needed perceptions were obtained, breaks the loop
-					if (position != null && goal_vertex != null
-							&& current_graph != null)
+					if (goal_vertex != null && current_graph != null)
 						break;
 					// else if the simulation is a real time one
 					else if (is_real_time_simulation) {
@@ -328,7 +344,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			}
 
 			// lets the agent plan its actions
-			this.plan(position.STRING, goal_vertex, current_graph);
+			this.plan(this.position.STRING, goal_vertex, current_graph);
 
 			// executes next step of the planning
 			try {
@@ -338,7 +354,8 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			}
 
 			// while the goal was not achieved
-			while (!position.STRING.equals(this.goal) && !this.stop_working) {
+			while (!this.position.STRING.equals(this.goal)
+					&& !this.stop_working) {
 				// perceives the current position of the agent
 				StringAndDouble current_position = null;
 				while (current_position == null && !this.stop_working) {
@@ -355,13 +372,13 @@ public final class CognitiveCoordinatedAgent extends Agent {
 
 				// if the the current perceived position is different from the
 				// previous one
-				if (!current_position.equals(position)) {
+				if (!current_position.equals(this.position)) {
 					// updates the position of the agent
-					position = current_position;
+					this.position = current_position;
 
 					// if the agent trespassed an edge entirely, executes next
 					// step of the plan
-					if (position.DOUBLE == 0)
+					if (this.position.DOUBLE == 0)
 						try {
 							this.executeNextStep();
 						} catch (IOException e) {
@@ -380,8 +397,8 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	}
 
 	/**
-	 * Turns this class into an executable one. Util when running this agent in
-	 * an individual machine.
+	 * Turns this class into an executable one. Useful when running this agent
+	 * in an individual machine.
 	 * 
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.

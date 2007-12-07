@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.Keyboard;
-import util.Translator;
 import util.graph.Graph;
+import util.graph.GraphTranslator;
 import util.graph.Vertex;
 import util.heap.Comparable;
 import util.heap.MinimumHeap;
@@ -36,14 +36,14 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	 * List that holds in the ith position the id of the agent, and in the
 	 * (i+1)th position the id of the vertex to be visited by such agent.
 	 */
-	private final LinkedList<String> AGENTS_OBJECTIVES;
+	private final LinkedList<String> AGENTS_GOALS;
 
 	/* Methods. */
 	/** Constructor. */
 	public CognitiveCoordinatorAgent() {
 		this.graph = null;
 		this.RECEIVED_MESSAGES = new LinkedList<String>();
-		this.AGENTS_OBJECTIVES = new LinkedList<String>();
+		this.AGENTS_GOALS = new LinkedList<String>();
 	}
 
 	/**
@@ -69,8 +69,8 @@ public final class CognitiveCoordinatorAgent extends Agent {
 			String perception = perceptions[i];
 
 			// tries to obtain a graph from the perception
-			Graph[] graph_perception = Translator.getGraphs(Translator
-					.parseString(perception));
+			Graph[] graph_perception = GraphTranslator
+					.getGraphs(GraphTranslator.parseString(perception));
 			if (graph_perception.length > 0) {
 				if (!graph_perception[0].equals(this.graph)) {
 					this.graph = graph_perception[0];
@@ -117,22 +117,31 @@ public final class CognitiveCoordinatorAgent extends Agent {
 
 			// for each message, attends it
 			for (int i = 0; i < this.RECEIVED_MESSAGES.size(); i++) {
-				// obtains the id of the agent to be attended
-				String agent_id = this.RECEIVED_MESSAGES.remove();
+				// obtains the received message
+				String message = this.RECEIVED_MESSAGES.remove();
+
+				// obtains the id of the agent from the received message
+				String agent_id = message.substring(0, message.indexOf("###"));
+
+				// obtains the id of the vertex that is the position of such
+				// agent
+				String position_id = message
+						.substring(message.indexOf("###") + 3);
 
 				// chooses the vertex to be visited by such agent
-				while (this.AGENTS_OBJECTIVES.contains(vertex_id)
+				while ((vertex_id.equals(position_id) || this.AGENTS_GOALS
+						.contains(vertex_id))
 						&& !heap.isEmpty())
 					vertex_id = ((ComparableVertex) heap.removeSmallest()).VERTEX
 							.getObjectId();
 
 				// updates the agents and vertexes memory
-				int agent_index = this.AGENTS_OBJECTIVES.indexOf(agent_id);
+				int agent_index = this.AGENTS_GOALS.indexOf(agent_id);
 				if (agent_index > -1)
-					this.AGENTS_OBJECTIVES.set(agent_index + 1, vertex_id);
+					this.AGENTS_GOALS.set(agent_index + 1, vertex_id);
 				else {
-					this.AGENTS_OBJECTIVES.add(agent_id);
-					this.AGENTS_OBJECTIVES.add(vertex_id);
+					this.AGENTS_GOALS.add(agent_id);
+					this.AGENTS_GOALS.add(vertex_id);
 				}
 
 				// sends a message containig the chosen vertex
@@ -185,8 +194,8 @@ public final class CognitiveCoordinatorAgent extends Agent {
 	}
 
 	/**
-	 * Turns this class into an executable one. Util when running this agent in
-	 * an individual machine.
+	 * Turns this class into an executable one. Useful when running this agent
+	 * in an individual machine.
 	 * 
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.
