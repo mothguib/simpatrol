@@ -244,7 +244,6 @@ public final class ActionDaemon extends AgentDaemon {
 
 		// if there's enough stamina to act
 		if (this.AGENT.getStamina() > stamina) {
-			// broadcastMessage(action, depth, stamina);
 			// decrements the agent's stamina
 			if (stamina > 0) {
 				this.AGENT.decStamina(stamina);
