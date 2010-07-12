@@ -1,0 +1,2 @@
+This package contains the implementation of the UDP socket connection and
+related utensils.

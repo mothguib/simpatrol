@@ -1,0 +1,2 @@
+This package contains the robots of SimPatrol, that periodically
+atualize the internal models, assuring the correct behaviour of the simulator.

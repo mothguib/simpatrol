@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- GRAPH -->
+<!ELEMENT graph (vertex+, edge*, stigma*)>
+<!ATTLIST graph label CDATA #REQUIRED>
+
+<!-- VERTEX -->
+<!ELEMENT vertex (etpd, etpd)?>
+<!ATTLIST vertex id ID #REQUIRED>
+<!ATTLIST vertex label CDATA #REQUIRED>
+<!ATTLIST vertex priority CDATA "0">
+<!ATTLIST vertex visibility CDATA "true">
+<!ATTLIST vertex idleness CDATA "0">
+<!ATTLIST vertex fuel CDATA "false">
+<!ATTLIST vertex is_appearing CDATA "true">
+
+<!-- EDGE -->
+<!ELEMENT edge (etpd, etpd)?>
+<!ATTLIST edge id ID #REQUIRED>
+<!ATTLIST edge emitter_id IDREF #REQUIRED>
+<!ATTLIST edge collector_id IDREF #REQUIRED>
+<!ATTLIST edge oriented CDATA "false">
+<!ATTLIST edge length CDATA #REQUIRED>
+<!ATTLIST edge visibility CDATA "true">
+<!ATTLIST edge is_appearing CDATA "true">
+<!ATTLIST edge is_in_dynamic_emitter_memory CDATA "false">
+<!ATTLIST edge is_in_dynamic_collector_memory CDATA "false">

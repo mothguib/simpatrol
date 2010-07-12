@@ -1,0 +1,1 @@
+This package contains the daemons of SimPatrol, that attend the remote actors.

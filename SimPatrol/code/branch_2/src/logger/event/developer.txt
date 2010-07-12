@@ -1,3 +1,0 @@
-* New Event subclasses must add new classes in this package;
-* New Event subclasses must change the "EventTypes" class.
-* New Event subclasses must change the orthogonal package of aspects "src/aspects".
