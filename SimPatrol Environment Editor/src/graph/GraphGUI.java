@@ -20,7 +20,7 @@ public class GraphGUI extends JDialog {
 
 	Graph graph;
     
-    VertexJPanel vertex_panel;
+    NodeJPanel vertex_panel;
     EdgeJPanel node_panel;
     int actual_panel;
     
@@ -88,7 +88,7 @@ public class GraphGUI extends JDialog {
         this.label_panel.add(this.label_field);
         getContentPane().add(label_panel,java.awt.BorderLayout.NORTH);
 
-        this.tabbed_panel.addTab("Vertices", null);
+        this.tabbed_panel.addTab("Nodes", null);
         this.tabbed_panel.addTab("Edges", null);
         this.tabbed_panel.addTab("XML", this.xml_scroll);
         tabbed_panel.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -138,7 +138,7 @@ public class GraphGUI extends JDialog {
     	
     	this.label_field.setText(graph.getLabel());
     	
-    	this.vertex_panel = new VertexJPanel(this, graph);
+    	this.vertex_panel = new NodeJPanel(this, graph);
     	this.tabbed_panel.setComponentAt(0, this.vertex_panel);
     	
     	this.node_panel = new EdgeJPanel(this, graph);

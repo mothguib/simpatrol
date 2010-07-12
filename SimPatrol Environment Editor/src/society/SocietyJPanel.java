@@ -246,9 +246,9 @@ public class SocietyJPanel extends javax.swing.JPanel {
         Agent added_agent = null;
         
     	if(this.is_closed_society)
-    		added_agent = new PerpetualAgent("", this.graph.getVertexes()[0], null, null);
+    		added_agent = new PerpetualAgent("", this.graph.getNodes()[0], null, null);
     	else
-    		added_agent = new SeasonalAgent("", this.graph.getVertexes()[0], null, null, null);
+    		added_agent = new SeasonalAgent("", this.graph.getNodes()[0], null, null, null);
     	
     	added_agent.setObjectId(added_agent.getClass().getName() + "@" + Integer.toHexString(added_agent.hashCode()) + "#" + Long.toHexString(System.currentTimeMillis()));
     	

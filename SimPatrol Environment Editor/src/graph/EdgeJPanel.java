@@ -27,20 +27,20 @@ import model.etpd.NormalEventTimeProbabilityDistribution;
 import model.etpd.SpecificEventTimeProbabilityDistribution;
 import model.etpd.UniformEventTimeProbabilityDistribution;
 import model.graph.DynamicEdge;
-import model.graph.DynamicVertex;
+import model.graph.DynamicNode;
 import model.graph.Edge;
 import model.graph.Graph;
-import model.graph.Vertex;
+import model.graph.Node;
 
 public class EdgeJPanel extends JPanel{
 	
 	Graph graph;
 	JDialog owner;
-	Vertex[] vertex;
+	Node[] node;
 	Edge[] edges;
-	boolean[] oriented;
+	boolean[] directed;
 	int selected_edge;
-	int collector_index;
+	int target_index;
 	
 	private EventTimeProbabilityDistributionGUI death_gui;
 	private boolean change_from_ui;
@@ -79,15 +79,15 @@ public class EdgeJPanel extends JPanel{
 	private JComboBox disabltpd_combo;
 	
 	private JPanel locprop_panel;
-	private JPanel emitter_panel;
-	private JLabel emitter_label;
-	private JComboBox emitter_combo;
-	private JPanel collector_panel;
-	private JLabel collector_label;
-	private JComboBox collector_combo;
-	private JPanel oriented_panel;
-	private JLabel oriented_label;
-	private JCheckBox oriented_check;
+	private JPanel source_panel;
+	private JLabel source_label;
+	private JComboBox source_combo;
+	private JPanel target_panel;
+	private JLabel target_label;
+	private JComboBox target_combo;
+	private JPanel directed_panel;
+	private JLabel directed_label;
+	private JCheckBox directed_check;
 	
 	
 
@@ -136,15 +136,15 @@ public class EdgeJPanel extends JPanel{
         disabltpd_combo = new javax.swing.JComboBox();
         
     	locprop_panel = new javax.swing.JPanel();
-    	emitter_panel = new javax.swing.JPanel();
-    	emitter_label = new javax.swing.JLabel();
-    	emitter_combo  = new javax.swing.JComboBox();
-    	collector_panel = new javax.swing.JPanel();
-    	collector_label = new javax.swing.JLabel();
-    	collector_combo = new javax.swing.JComboBox();
-    	oriented_panel = new javax.swing.JPanel();
-    	oriented_label = new javax.swing.JLabel();
-    	oriented_check = new javax.swing.JCheckBox();
+    	source_panel = new javax.swing.JPanel();
+    	source_label = new javax.swing.JLabel();
+    	source_combo  = new javax.swing.JComboBox();
+    	target_panel = new javax.swing.JPanel();
+    	target_label = new javax.swing.JLabel();
+    	target_combo = new javax.swing.JComboBox();
+    	directed_panel = new javax.swing.JPanel();
+    	directed_label = new javax.swing.JLabel();
+    	directed_check = new javax.swing.JCheckBox();
     	
     	
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -326,51 +326,51 @@ public class EdgeJPanel extends JPanel{
         locprop_panel.setPreferredSize(new Dimension(300, 120));
         locprop_panel.setMinimumSize(new Dimension(200, 80));
         
-    	emitter_panel.setLayout(new BoxLayout(emitter_panel, BoxLayout.X_AXIS));
-    	emitter_label.setText("Emitter");
-    	emitter_label.setPreferredSize(new Dimension(100, 25));
-        emitter_panel.add(emitter_label);
-        emitter_combo.setPreferredSize(new Dimension(95, 25));
-        emitter_combo.addActionListener(new java.awt.event.ActionListener() {
+    	source_panel.setLayout(new BoxLayout(source_panel, BoxLayout.X_AXIS));
+    	source_label.setText("source");
+    	source_label.setPreferredSize(new Dimension(100, 25));
+        source_panel.add(source_label);
+        source_combo.setPreferredSize(new Dimension(95, 25));
+        source_combo.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				emitter_comboactionPerformed(e);
+				source_comboactionPerformed(e);
 				
 			}
 
         });
-        emitter_panel.add(emitter_combo);
-        locprop_panel.add(emitter_panel);
+        source_panel.add(source_combo);
+        locprop_panel.add(source_panel);
         
         
-    	collector_panel.setLayout(new BoxLayout(collector_panel, BoxLayout.X_AXIS));
-    	collector_label.setText("collector");
-    	collector_label.setPreferredSize(new Dimension(100, 25));
-    	collector_panel.add(collector_label);
-        collector_combo.setPreferredSize(new Dimension(95, 25));
-        collector_combo.addActionListener(new java.awt.event.ActionListener() {
+    	target_panel.setLayout(new BoxLayout(target_panel, BoxLayout.X_AXIS));
+    	target_label.setText("target");
+    	target_label.setPreferredSize(new Dimension(100, 25));
+    	target_panel.add(target_label);
+        target_combo.setPreferredSize(new Dimension(95, 25));
+        target_combo.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				collector_comboactionPerformed(e);
+				target_comboactionPerformed(e);
 				
 			}
 
         });
-        collector_panel.add(collector_combo);
-        locprop_panel.add(collector_panel);
+        target_panel.add(target_combo);
+        locprop_panel.add(target_panel);
         
         
-    	oriented_panel.setLayout(new FlowLayout());
-    	oriented_label.setText("oriented ?");
-    	oriented_label.setPreferredSize(new Dimension(100, 25));
-    	oriented_panel.add(oriented_label);
-    	oriented_check.addActionListener(new java.awt.event.ActionListener() {
+    	directed_panel.setLayout(new FlowLayout());
+    	directed_label.setText("directed ?");
+    	directed_label.setPreferredSize(new Dimension(100, 25));
+    	directed_panel.add(directed_label);
+    	directed_check.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				oriented_checkactionPerformed(e);
+				directed_checkactionPerformed(e);
 				
 			}
 
         });
-    	oriented_panel.add(oriented_check);
-    	locprop_panel.add(oriented_panel);
+    	directed_panel.add(directed_check);
+    	locprop_panel.add(directed_panel);
     	
     	
     	genprop_panel.add(locprop_panel);
@@ -467,19 +467,19 @@ public class EdgeJPanel extends JPanel{
 	private void initialize2(JDialog owner, Graph graph){
 		this.owner = owner;
 		this.graph = graph;
-		this.vertex = graph.getVertexes();
+		this.node = graph.getNodes();
 		this.edges = graph.getEdges();
 		
-		this.oriented = new boolean[edges.length];
+		this.directed = new boolean[edges.length];
 		
 		for(int i = 0; i < edges.length; i++)
-			if(edges[i].getEmitter().isCollectorOf(edges[i])
-				&& edges[i].getEmitter().isEmitterOf(edges[i])
-				&& edges[i].getCollector().isCollectorOf(edges[i])
-				&& edges[i].getCollector().isEmitterOf(edges[i]))
-				oriented[i] = false;
+			if(edges[i].getSource().isTargetOf(edges[i])
+				&& edges[i].getSource().isTargetOf(edges[i])
+				&& edges[i].getTarget().isTargetOf(edges[i])
+				&& edges[i].getTarget().isSourceOf(edges[i]))
+				directed[i] = false;
 			else
-				oriented[i] = true;
+				directed[i] = true;
 		
 		if(edges.length > 0){
 			populate_edges();
@@ -538,7 +538,7 @@ public class EdgeJPanel extends JPanel{
     	
 		
     	for(int i = 0; i < edges.length; i++) {
-    		String[] content = { edges[i].getObjectId() + ",<" + edges[i].getEmitter().getObjectId() + "," +  edges[i].getCollector().getObjectId() + ">"};
+    		String[] content = { edges[i].getObjectId() + ",<" + edges[i].getSource().getObjectId() + "," +  edges[i].getTarget().getObjectId() + ">"};
     		((DefaultTableModel) this.edge_table.getModel()).addRow(content);
     	}
 	}
@@ -546,7 +546,7 @@ public class EdgeJPanel extends JPanel{
 	
 	/**
 	 * This function calls the next one using the selected 
-	 * edge in the vertex table as argument
+	 * edge in the node table as argument
 	 */
 	private void edge_selected(){
 		edge_selected(this.edge_table.getSelectedRow());
@@ -556,7 +556,7 @@ public class EdgeJPanel extends JPanel{
 	 * this function fills in the different fields from the selected edge
 	 * it enables the dynamicity if the edge is dynamic
 	 * 
-	 * @param select : index of the selected edge in the vertex list
+	 * @param select : index of the selected edge in the node list
 	 */
 	private void edge_selected(int select){
 		change_from_ui = false;
@@ -569,10 +569,10 @@ public class EdgeJPanel extends JPanel{
 		if(edges[selected_edge] instanceof DynamicEdge){
 			dynamic_check.setSelected(true);
 			enable_check.setSelected(((DynamicEdge) edges[selected_edge]).isEnabled());
-			if(edges[selected_edge].getEmitter() instanceof DynamicVertex
-					&& ((DynamicVertex) edges[selected_edge].getEmitter()).isEnabled()
-					&& edges[selected_edge].getCollector() instanceof DynamicVertex
-					&& ((DynamicVertex) edges[selected_edge].getCollector()).isEnabled())
+			if(edges[selected_edge].getSource() instanceof DynamicNode
+					&& ((DynamicNode) edges[selected_edge].getSource()).isEnabled()
+					&& edges[selected_edge].getTarget() instanceof DynamicNode
+					&& ((DynamicNode) edges[selected_edge].getTarget()).isEnabled())
 				enable_check.setEnabled(true);
 			
 			set_birth_tpd((DynamicEdge) edges[selected_edge]);
@@ -593,9 +593,9 @@ public class EdgeJPanel extends JPanel{
 			disabltpd_combo.setEnabled(false);				
 		}
 
-		populate_collector(edges[selected_edge]);
-		populate_emitter(edges[selected_edge]);
-		oriented_check.setSelected(oriented[selected_edge]);
+		populate_target(edges[selected_edge]);
+		populate_source(edges[selected_edge]);
+		directed_check.setSelected(directed[selected_edge]);
 		
 		this.revalidate();
 		this.repaint();
@@ -606,44 +606,44 @@ public class EdgeJPanel extends JPanel{
 	}
 	
 	/**
-	 * this function fills in the combo list for the collector and select the good one
+	 * this function fills in the combo list for the target and select the good one
 	 * 
 	 * @param edge : the selected edge
 	 */
-	private void populate_collector(Edge edge) {
-		String[] model = new String[vertex.length];
+	private void populate_target(Edge edge) {
+		String[] model = new String[node.length];
 		int i = 0;
-		collector_index = 0;
-		for(Vertex vert : vertex){
+		target_index = 0;
+		for(Node vert : node){
 			model[i] = vert.getObjectId() + ", " + vert.getLabel();
-			if(vert.isCollectorOf(edge)) collector_index = i;
+			if(vert.isTargetOf(edge)) target_index = i;
 			i++;
 		}
 		
-		collector_combo.setModel(new javax.swing.DefaultComboBoxModel(model));
-		collector_combo.setSelectedIndex(collector_index);
+		target_combo.setModel(new javax.swing.DefaultComboBoxModel(model));
+		target_combo.setSelectedIndex(target_index);
 		
 	}
 
 	/**
-	 * this function fills in the combo list for the emitter and select the good one
+	 * this function fills in the combo list for the source and select the good one
 	 * 
 	 * @param edge : the selected edge
 	 */
-	private void populate_emitter(Edge edge) {
-		String[] model = new String[vertex.length];
+	private void populate_source(Edge edge) {
+		String[] model = new String[node.length];
 		int i = 0;
 		int option = 0;
-		for(Vertex vert : vertex){
+		for(Node vert : node){
 			model[i] = vert.getObjectId() + ", " + vert.getLabel();
-			if(vert.isEmitterOf(edge) && i!=collector_index) option = i;
+			if(vert.isSourceOf(edge) && i!=target_index) option = i;
 			i++;
 		}
 		
 		
 		
-		emitter_combo.setModel(new javax.swing.DefaultComboBoxModel(model));
-		emitter_combo.setSelectedIndex(option);
+		source_combo.setModel(new javax.swing.DefaultComboBoxModel(model));
+		source_combo.setSelectedIndex(option);
 		
 	}
 
@@ -694,13 +694,13 @@ public class EdgeJPanel extends JPanel{
 	}
 	
 	
-	protected void oriented_checkactionPerformed(ActionEvent e) {
+	protected void directed_checkactionPerformed(ActionEvent e) {
 		if(edges[selected_edge] != null)
-			oriented[selected_edge] = oriented_check.isSelected();
+			directed[selected_edge] = directed_check.isSelected();
 		
 	}
 
-	protected void emitter_comboactionPerformed(ActionEvent e) {
+	protected void source_comboactionPerformed(ActionEvent e) {
 		if(edges[selected_edge] != null && change_from_ui){
 			change_origins();
 			populate_edges();
@@ -708,7 +708,7 @@ public class EdgeJPanel extends JPanel{
 		
 	}
 	
-	protected void collector_comboactionPerformed(ActionEvent e) {
+	protected void target_comboactionPerformed(ActionEvent e) {
 		if(edges[selected_edge] != null && change_from_ui){
 			change_origins();
 			populate_edges();
@@ -717,23 +717,23 @@ public class EdgeJPanel extends JPanel{
 	}
 	
 	/**
-	 * This method change the emitter and collector of the edge by creating a new one to replace it
+	 * This method change the source and target of the edge by creating a new one to replace it
 	 * 
 	 */
 	private void change_origins(){
 		Edge mynewedge = null;
 		if(edges[selected_edge] instanceof DynamicEdge){
-			mynewedge = new DynamicEdge(vertex[emitter_combo.getSelectedIndex()], 
-										vertex[collector_combo.getSelectedIndex()], 
-										oriented[selected_edge], 
+			mynewedge = new DynamicEdge(node[source_combo.getSelectedIndex()], 
+										node[target_combo.getSelectedIndex()], 
+										directed[selected_edge], 
 										edges[selected_edge].getLength(),
 										((DynamicEdge)edges[selected_edge]).getEnablingTPD(),
 										((DynamicEdge)edges[selected_edge]).getDisablingTPD(),
 										((DynamicEdge)edges[selected_edge]).isEnabled());
 		} else {
-			mynewedge = new Edge(vertex[emitter_combo.getSelectedIndex()], 
-									vertex[collector_combo.getSelectedIndex()], 
-									oriented[selected_edge], 
+			mynewedge = new Edge(node[source_combo.getSelectedIndex()], 
+									node[target_combo.getSelectedIndex()], 
+									directed[selected_edge], 
 									edges[selected_edge].getLength());
 		}
 		mynewedge.setObjectId(edges[selected_edge].getObjectId());
@@ -886,8 +886,8 @@ public class EdgeJPanel extends JPanel{
 		if(edges[selected_edge] != null){
 			if(dynamic_check.isSelected()){
 				if(!(edges[selected_edge] instanceof DynamicEdge)){
-					DynamicEdge answer = new DynamicEdge(edges[selected_edge].getEmitter(), 
-															edges[selected_edge].getCollector(), 
+					DynamicEdge answer = new DynamicEdge(edges[selected_edge].getSource(), 
+															edges[selected_edge].getTarget(), 
 															edges[selected_edge].getLength(), 
 															null, 
 															null, 
@@ -899,10 +899,10 @@ public class EdgeJPanel extends JPanel{
 					
 				}
 				enable_check.setSelected(((DynamicEdge) edges[selected_edge]).isEnabled());
-				if(edges[selected_edge].getEmitter() instanceof DynamicVertex
-						&& ((DynamicVertex) edges[selected_edge].getEmitter()).isEnabled()
-						&& edges[selected_edge].getCollector() instanceof DynamicVertex
-						&& ((DynamicVertex) edges[selected_edge].getCollector()).isEnabled())
+				if(edges[selected_edge].getSource() instanceof DynamicNode
+						&& ((DynamicNode) edges[selected_edge].getSource()).isEnabled()
+						&& edges[selected_edge].getTarget() instanceof DynamicNode
+						&& ((DynamicNode) edges[selected_edge].getTarget()).isEnabled())
 					enable_check.setEnabled(true);
 				enabtpd_combo.setEnabled(true);
 				disabltpd_combo.setEnabled(true);				
@@ -911,7 +911,7 @@ public class EdgeJPanel extends JPanel{
 			
 			else {
 				if(edges[selected_edge] instanceof DynamicEdge){
-					Edge answer = new Edge(edges[selected_edge].getEmitter(), edges[selected_edge].getCollector(), edges[selected_edge].getLength());
+					Edge answer = new Edge(edges[selected_edge].getSource(), edges[selected_edge].getTarget(), edges[selected_edge].getLength());
 					answer.setObjectId(edges[selected_edge].getObjectId());
 					answer.setVisibility(edges[selected_edge].isVisible());
 					
@@ -950,18 +950,18 @@ public class EdgeJPanel extends JPanel{
 
 	protected void removeedge_buttonactionPerformed(ActionEvent e) {
 		Edge[] new_edge = new Edge[edges.length - 1];
-		boolean[] new_oriented = new boolean[edges.length - 1];
+		boolean[] new_directed = new boolean[edges.length - 1];
 		for(int i = 0; i < selected_edge; i ++){
 			new_edge[i] = edges[i];
-			new_oriented[i] = oriented[i];
+			new_directed[i] = directed[i];
 		}
 		for(int i = selected_edge + 1; i < edges.length; i ++){
 			new_edge[i-1] = edges[i];
-			new_oriented[i-1] = oriented[i];
+			new_directed[i-1] = directed[i];
 		}
 		
 		edges = new_edge;
-		oriented = new_oriented;
+		directed = new_directed;
 		
 		populate_edges();
 		edge_selected(0);
@@ -971,18 +971,18 @@ public class EdgeJPanel extends JPanel{
 	protected void addedge_buttonactionPerformed(ActionEvent e) {
 		int ednum = edges.length;
 		Edge[] new_edges = new Edge[ednum + 1];
-		boolean[] new_oriented = new boolean[ednum + 1];
+		boolean[] new_directed = new boolean[ednum + 1];
 		for(int i = 0; i < ednum; i ++){
 			new_edges[i] = edges[i];
-			new_oriented[i] = oriented[i];
+			new_directed[i] = directed[i];
 		}
-		new_edges[ednum] = new Edge(vertex[0], vertex[0], false, 1);
+		new_edges[ednum] = new Edge(node[0], node[0], false, 1);
 		new_edges[ednum].setObjectId("e" + (ednum+1) + "@" + Long.toHexString(System.currentTimeMillis()));
-		new_oriented[ednum] = false;
+		new_directed[ednum] = false;
 		
 		
 		edges = new_edges;
-		oriented = new_oriented;
+		directed = new_directed;
 		
 		populate_edges();
 		edge_selected(ednum);
@@ -991,44 +991,44 @@ public class EdgeJPanel extends JPanel{
 
 
 	public Graph getGraph(){
-		Vertex[] new_vert = new Vertex[vertex.length];
-		for(int i = 0; i < vertex.length; i++){
-			if(vertex[i] instanceof DynamicVertex){
-				DynamicVertex myvert = ((DynamicVertex)vertex[i]).getCopy();
+		Node[] new_vert = new Node[node.length];
+		for(int i = 0; i < node.length; i++){
+			if(node[i] instanceof DynamicNode){
+				DynamicNode myvert = ((DynamicNode)node[i]).getCopy();
 				new_vert[i] = myvert;
 			} else {
-				Vertex myvert = vertex[i].getCopy();
+				Node myvert = node[i].getCopy();
 				new_vert[i] = myvert;
 			}
 		}
 
 		
-		vertex = new_vert;
+		node = new_vert;
 		
 		for(int i = 0; i < edges.length; i++){
-			int emitter = -1;
-			int collector = -1;
+			int source = -1;
+			int target = -1;
 			Edge mynewedge = null;
-			for(int j = 0; j < vertex.length; j++){
-				if(edges[i].getEmitter().getObjectId() == vertex[j].getObjectId()){
-					emitter = j;
+			for(int j = 0; j < node.length; j++){
+				if(edges[i].getSource().getObjectId() == node[j].getObjectId()){
+					source = j;
 				}
-				if(edges[i].getCollector().getObjectId() == vertex[j].getObjectId()){
-					collector = j;
+				if(edges[i].getTarget().getObjectId() == node[j].getObjectId()){
+					target = j;
 				}
 			}
 			if(edges[i] instanceof DynamicEdge){
-				mynewedge = new DynamicEdge(vertex[emitter], 
-											vertex[collector], 
-											oriented[i], 
+				mynewedge = new DynamicEdge(node[source], 
+											node[target], 
+											directed[i], 
 											edges[i].getLength(),
 											((DynamicEdge)edges[i]).getEnablingTPD(),
 											((DynamicEdge)edges[i]).getDisablingTPD(),
 											((DynamicEdge)edges[i]).isEnabled());
 			} else {
-				mynewedge = new Edge(vertex[emitter], 
-										vertex[collector], 
-										oriented[i], 
+				mynewedge = new Edge(node[source], 
+										node[target], 
+										directed[i], 
 										edges[i].getLength());
 			}
 			mynewedge.setObjectId(edges[i].getObjectId());
@@ -1040,7 +1040,7 @@ public class EdgeJPanel extends JPanel{
 		
 
 		
-		Graph mynewgraph = new Graph(graph.getObjectId(), vertex);
+		Graph mynewgraph = new Graph(graph.getObjectId(), node);
 		return mynewgraph;
 	}
 

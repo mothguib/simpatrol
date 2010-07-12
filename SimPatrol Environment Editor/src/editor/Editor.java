@@ -23,7 +23,9 @@ import society.SocietyGUI;
 import model.Environment;
 import model.agent.*;
 import model.graph.Graph;
-import model.graph.Vertex;
+import model.graph.Node;
+import control.exception.EdgeNotFoundException;
+import control.exception.NodeNotFoundException;
 import control.translator.EnvironmentTranslator;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
@@ -267,6 +269,12 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 					e1.printStackTrace();
 				} catch (IOException e1) {
 					e1.printStackTrace();
+				} catch (NodeNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (EdgeNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 			if(source == "Save"){
@@ -307,8 +315,10 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
+	 * @throws EdgeNotFoundException 
+	 * @throws NodeNotFoundException 
 	 */
-	private void OpenFile() throws ParserConfigurationException, SAXException, IOException{
+	private void OpenFile() throws ParserConfigurationException, SAXException, IOException, NodeNotFoundException, EdgeNotFoundException{
 		JFileChooser fc = new JFileChooser();
 		int returnVal = fc.showOpenDialog(this);
 
@@ -456,7 +466,7 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 * This method create a new graph and launches the associated GUI
 	 */
 	private void Create_Graph() {
-		this.graph = new Graph("", new Vertex[0]);
+		this.graph = new Graph("", new Node[0]);
 		Modify_Graph();
 		
 	}

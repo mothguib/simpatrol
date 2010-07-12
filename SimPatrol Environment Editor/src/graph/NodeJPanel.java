@@ -25,25 +25,25 @@ import model.etpd.NormalEventTimeProbabilityDistribution;
 import model.etpd.SpecificEventTimeProbabilityDistribution;
 import model.etpd.UniformEventTimeProbabilityDistribution;
 import model.graph.DynamicEdge;
-import model.graph.DynamicVertex;
+import model.graph.DynamicNode;
 import model.graph.Edge;
 import model.graph.Graph;
-import model.graph.Vertex;
+import model.graph.Node;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-public class VertexJPanel extends JPanel{
+public class NodeJPanel extends JPanel{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7193140398518522829L;
 	private Graph graph;
-	private int selected_vertex;
-	private Vertex[] vertex;
+	private int selected_node;
+	private Node[] node;
 	private Edge[] edges;
 	private JDialog owner;
 	
@@ -51,12 +51,12 @@ public class VertexJPanel extends JPanel{
 	private boolean change_from_ui;
 	
 	
-	private JPanel vertex_panel;
-	private JScrollPane vertex_scroll;
-	private JTable vertex_table;
-	private JPanel buttonsvertex_panel;
-	private JButton addvertex_button;
-	private JButton removevertex_button;
+	private JPanel node_panel;
+	private JScrollPane node_scroll;
+	private JTable node_table;
+	private JPanel buttonsnode_panel;
+	private JButton addnode_button;
+	private JButton removenode_button;
 	private JPanel genprop_panel;
 	private JPanel basicprop_panel;
 	private JPanel id_panel;
@@ -100,18 +100,18 @@ public class VertexJPanel extends JPanel{
 
 
 
-	public VertexJPanel(JDialog owner, Graph graph) {
+	public NodeJPanel(JDialog owner, Graph graph) {
 		initComponents();
 		initComponents2(owner, graph);
 	}
 	
 	private void initComponents() {
-		vertex_panel = new javax.swing.JPanel();
-        vertex_scroll = new javax.swing.JScrollPane();
-        vertex_table = new javax.swing.JTable();
-        buttonsvertex_panel = new javax.swing.JPanel();
-        addvertex_button = new javax.swing.JButton();
-        removevertex_button = new javax.swing.JButton();
+		node_panel = new javax.swing.JPanel();
+        node_scroll = new javax.swing.JScrollPane();
+        node_table = new javax.swing.JTable();
+        buttonsnode_panel = new javax.swing.JPanel();
+        addnode_button = new javax.swing.JButton();
+        removenode_button = new javax.swing.JButton();
         
         genprop_panel = new javax.swing.JPanel();
         basicprop_panel = new javax.swing.JPanel();
@@ -164,17 +164,17 @@ public class VertexJPanel extends JPanel{
          * vertices table
          * 
          */
-        vertex_panel.setLayout(new BoxLayout(vertex_panel, BoxLayout.X_AXIS));
-        vertex_panel.setBorder(new javax.swing.border.TitledBorder("Vertices"));
-        vertex_panel.setPreferredSize(new Dimension(240, 250));
-        vertex_panel.setMinimumSize(new Dimension(240, 250));
+        node_panel.setLayout(new BoxLayout(node_panel, BoxLayout.X_AXIS));
+        node_panel.setBorder(new javax.swing.border.TitledBorder("Nodes"));
+        node_panel.setPreferredSize(new Dimension(240, 250));
+        node_panel.setMinimumSize(new Dimension(240, 250));
         
-        vertex_table.setModel(new javax.swing.table.DefaultTableModel(
+        node_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Vertices"
+                "Nodes"
             }
         ) {
 			private static final long serialVersionUID = -466062034300696031L;
@@ -194,9 +194,9 @@ public class VertexJPanel extends JPanel{
                 return canEdit [columnIndex];
             }
         });
-        vertex_table.addMouseListener(new java.awt.event.MouseListener() {
+        node_table.addMouseListener(new java.awt.event.MouseListener() {
 			public void mouseReleased(MouseEvent e) {
-				vertex_selected();
+				node_selected();
 				
 			}
 
@@ -222,46 +222,46 @@ public class VertexJPanel extends JPanel{
 
 
         });
-        vertex_scroll.setViewportView(vertex_table);
-        //vertex_scroll.setMinimumSize(new Dimension(150, 250));
-        vertex_scroll.setPreferredSize(new Dimension(150, 250));
-        vertex_panel.add(vertex_scroll);
+        node_scroll.setViewportView(node_table);
+        //node_scroll.setMinimumSize(new Dimension(150, 250));
+        node_scroll.setPreferredSize(new Dimension(150, 250));
+        node_panel.add(node_scroll);
         
-	    buttonsvertex_panel.setLayout(new FlowLayout());
-	    buttonsvertex_panel.setPreferredSize(new Dimension(100, 150));
-	    buttonsvertex_panel.setMaximumSize(new Dimension(110, 150)); 
+	    buttonsnode_panel.setLayout(new FlowLayout());
+	    buttonsnode_panel.setPreferredSize(new Dimension(100, 150));
+	    buttonsnode_panel.setMaximumSize(new Dimension(110, 150)); 
         
-        addvertex_button.setText("Add");
-        addvertex_button.setHorizontalAlignment(SwingConstants.CENTER);
-        addvertex_button.setHorizontalTextPosition(SwingConstants.CENTER);
-        addvertex_button.setMaximumSize(null);
-        addvertex_button.setPreferredSize(new Dimension(90, 25));
-        addvertex_button.addActionListener(new java.awt.event.ActionListener() {
+        addnode_button.setText("Add");
+        addnode_button.setHorizontalAlignment(SwingConstants.CENTER);
+        addnode_button.setHorizontalTextPosition(SwingConstants.CENTER);
+        addnode_button.setMaximumSize(null);
+        addnode_button.setPreferredSize(new Dimension(90, 25));
+        addnode_button.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addvertex_buttonactionPerformed(e);
+				addnode_buttonactionPerformed(e);
 				
 			}
 
         });
-        buttonsvertex_panel.add(addvertex_button);
+        buttonsnode_panel.add(addnode_button);
 
-        removevertex_button.setText("Delete");
-        removevertex_button.setHorizontalAlignment(SwingConstants.CENTER);
-        removevertex_button.setHorizontalTextPosition(SwingConstants.CENTER);
-        removevertex_button.setMaximumSize(null);
-        removevertex_button.setPreferredSize(new Dimension(90, 25));
-        removevertex_button.addActionListener(new java.awt.event.ActionListener() {
+        removenode_button.setText("Delete");
+        removenode_button.setHorizontalAlignment(SwingConstants.CENTER);
+        removenode_button.setHorizontalTextPosition(SwingConstants.CENTER);
+        removenode_button.setMaximumSize(null);
+        removenode_button.setPreferredSize(new Dimension(90, 25));
+        removenode_button.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removevertex_buttonactionPerformed(e);
+				removenode_buttonactionPerformed(e);
 				
 			}
 
         });
-        buttonsvertex_panel.add(removevertex_button);
+        buttonsnode_panel.add(removenode_button);
         
-        vertex_panel.add(buttonsvertex_panel);
+        node_panel.add(buttonsnode_panel);
         
-        add(vertex_panel);
+        add(node_panel);
 
         
         /** 
@@ -531,9 +531,9 @@ public class VertexJPanel extends JPanel{
 	private void initComponents2(JDialog owner, Graph graph) {
 		this.owner = owner;
 		this.graph = graph;
-    	this.vertex = graph.getVertexes();
+    	this.node = graph.getNodes();
     	
-    	populate_vertex();
+    	populate_node();
     	
     	change_from_ui = true;
 				
@@ -555,55 +555,55 @@ public class VertexJPanel extends JPanel{
 	 * * * * * */
 	
 	/**
-	 * This function populates the vertex table from the vertex list
+	 * This function populates the node table from the node list
 	 */
-	private void populate_vertex(){
+	private void populate_node(){
 		
-		int nrow = ((DefaultTableModel) this.vertex_table.getModel()).getRowCount();
+		int nrow = ((DefaultTableModel) this.node_table.getModel()).getRowCount();
     	for(int i=0; i < nrow ; i++)
-    		((DefaultTableModel) this.vertex_table.getModel()).removeRow(0);
+    		((DefaultTableModel) this.node_table.getModel()).removeRow(0);
     	
 		
-    	for(int i = 0; i < vertex.length; i++) {
-    		String[] content = { vertex[i].getObjectId() };
-    		((DefaultTableModel) this.vertex_table.getModel()).addRow(content);
+    	for(int i = 0; i < node.length; i++) {
+    		String[] content = { node[i].getObjectId() };
+    		((DefaultTableModel) this.node_table.getModel()).addRow(content);
     	}
 	}
 
 	/**
 	 * This function calls the next one using the selected 
-	 * vertex in the vertex table as argument
+	 * node in the node table as argument
 	 */
-	private void vertex_selected(){
-		vertex_selected(this.vertex_table.getSelectedRow());
+	private void node_selected(){
+		node_selected(this.node_table.getSelectedRow());
 	}
 	
 	/**
-	 * this function fills in the different fields from the selected vertex
-	 * it enables the dynamicity if the vertex is dynamic
+	 * this function fills in the different fields from the selected node
+	 * it enables the dynamicity if the node is dynamic
 	 * 
-	 * @param select : index of the selected vertex in the vertex list
+	 * @param select : index of the selected node in the node list
 	 */
-	private void vertex_selected(int select){
+	private void node_selected(int select){
 		change_from_ui = false;
-		selected_vertex = select;
+		selected_node = select;
 		
-		id_field.setText(vertex[selected_vertex].getObjectId());
-		label_field.setText(vertex[selected_vertex].getLabel());
-		priority_field.setText(String.valueOf(vertex[selected_vertex].getPriority()));
-		if(vertex[selected_vertex].isFuel()==true) fuel_field.setSelectedIndex(1);
+		id_field.setText(node[selected_node].getObjectId());
+		label_field.setText(node[selected_node].getLabel());
+		priority_field.setText(String.valueOf(node[selected_node].getPriority()));
+		if(node[selected_node].isFuel()==true) fuel_field.setSelectedIndex(1);
 		else fuel_field.setSelectedIndex(0);
-		visible_check.setSelected(vertex[selected_vertex].isVisible());
+		visible_check.setSelected(node[selected_node].isVisible());
 		
-		if(vertex[selected_vertex] instanceof DynamicVertex){
+		if(node[selected_node] instanceof DynamicNode){
 			dynamic_check.setSelected(true);
-			enable_check.setSelected(((DynamicVertex) vertex[selected_vertex]).isEnabled());
+			enable_check.setSelected(((DynamicNode) node[selected_node]).isEnabled());
 			enable_check.setEnabled(true);
 			
-			set_birth_tpd((DynamicVertex) vertex[selected_vertex]);
+			set_birth_tpd((DynamicNode) node[selected_node]);
 			enabtpd_combo.setEnabled(true);
 			
-			set_death_tpd((DynamicVertex) vertex[selected_vertex]);		
+			set_death_tpd((DynamicNode) node[selected_node]);		
 			disabltpd_combo.setEnabled(true);				
 		}	
 		else {
@@ -618,7 +618,7 @@ public class VertexJPanel extends JPanel{
 			disabltpd_combo.setEnabled(false);				
 		}
 		
-		populate_edges(vertex[selected_vertex]);
+		populate_edges(node[selected_node]);
 		
 		this.revalidate();
 		this.repaint();
@@ -632,9 +632,9 @@ public class VertexJPanel extends JPanel{
 	/**
 	 * Sets the combobox for the birth time probability distribution
 	 * 
-	 * @param selected : the vertex selected
+	 * @param selected : the node selected
 	 */
-	private void set_birth_tpd(DynamicVertex selected){
+	private void set_birth_tpd(DynamicNode selected){
 		EventTimeProbabilityDistribution chosen_birth_tpd = selected.getEnablingTPD();		
 		if(chosen_birth_tpd == null) {
 			this.enabtpd_combo.setSelectedIndex(0);
@@ -655,9 +655,9 @@ public class VertexJPanel extends JPanel{
 	/**
 	 * Sets the combobox for the death time probability distribution
 	 * 
-	 * @param selected : the vertex selected
+	 * @param selected : the node selected
 	 */
-	private void set_death_tpd(DynamicVertex selected){
+	private void set_death_tpd(DynamicNode selected){
 		EventTimeProbabilityDistribution chosen_death_tpd = selected.getDisablingTPD();		
 		if(chosen_death_tpd == null) {
 			this.disabltpd_combo.setSelectedIndex(0);
@@ -676,11 +676,11 @@ public class VertexJPanel extends JPanel{
 	}
 	
 	/**
-	 * This function populates the edge table from the selected vertex
+	 * This function populates the edge table from the selected node
 	 * 
-	 * @param selected : the vertex selected
+	 * @param selected : the node selected
 	 */
-	private void populate_edges(Vertex selected){
+	private void populate_edges(Node selected){
     	edges = selected.getEdges();
     	
     	int nrow = ((DefaultTableModel) this.edge_table.getModel()).getRowCount();
@@ -689,10 +689,10 @@ public class VertexJPanel extends JPanel{
     		
     	for(int i = 0; i < edges.length; i++) {
     		String[] content = new String[1];
-    		if(selected.isEmitterOf(edges[i]))
-    			 content[0] = edges[i].getObjectId() + ",<" + selected.getObjectId() + ", " + edges[i].getOtherVertex(selected).getObjectId() + ">";
+    		if(selected.isSourceOf(edges[i]))
+    			 content[0] = edges[i].getObjectId() + ",<" + selected.getObjectId() + ", " + edges[i].getOtherNode(selected).getObjectId() + ">";
     		else 
-    			content[0] = edges[i].getObjectId() + ",<" + edges[i].getOtherVertex(selected).getObjectId() + ", " + selected.getObjectId() + ">";
+    			content[0] = edges[i].getObjectId() + ",<" + edges[i].getOtherNode(selected).getObjectId() + ", " + selected.getObjectId() + ">";
     		((DefaultTableModel) this.edge_table.getModel()).addRow(content);
     	}
 	}
@@ -705,39 +705,39 @@ public class VertexJPanel extends JPanel{
 	 ** * * * * */
 	
 	/**
-	 * Removes a vertex from the list and refreshes the GUI
+	 * Removes a node from the list and refreshes the GUI
 	 * 
 	 * @param e
 	 */
-	protected void removevertex_buttonactionPerformed(ActionEvent e) {
-		int vnum = vertex.length;
-		Vertex[] new_vertex = new Vertex[vnum - 1];
-		for(int i = 0; i < selected_vertex; i ++)
-			new_vertex[i] = vertex[i];
-		for(int i = selected_vertex + 1; i < vnum; i ++)
-			new_vertex[i-1] = vertex[i];
+	protected void removenode_buttonactionPerformed(ActionEvent e) {
+		int vnum = node.length;
+		Node[] new_node = new Node[vnum - 1];
+		for(int i = 0; i < selected_node; i ++)
+			new_node[i] = node[i];
+		for(int i = selected_node + 1; i < vnum; i ++)
+			new_node[i-1] = node[i];
 		
-		vertex = new_vertex;
-		populate_vertex();
+		node = new_node;
+		populate_node();
 		
-		vertex_selected(0);
+		node_selected(0);
 	}
 
 	/**
-	 * Add a vertex to the list and refreshes the GUI
+	 * Add a node to the list and refreshes the GUI
 	 * 
 	 * @param e
 	 */
-	protected void addvertex_buttonactionPerformed(ActionEvent e) {
-		int vnum = vertex.length;
-		Vertex[] new_vertex = new Vertex[vnum + 1];
+	protected void addnode_buttonactionPerformed(ActionEvent e) {
+		int vnum = node.length;
+		Node[] new_node = new Node[vnum + 1];
 		for(int i = 0; i < vnum; i ++)
-			new_vertex[i] = vertex[i];
-		new_vertex[vnum] = new Vertex("v" + (vnum+1));
-		new_vertex[vnum].setObjectId("v" + (vnum+1) + "@" + Long.toHexString(System.currentTimeMillis()));
+			new_node[i] = node[i];
+		new_node[vnum] = new Node("n" + (vnum+1));
+		new_node[vnum].setObjectId("n" + (vnum+1) + "@" + Long.toHexString(System.currentTimeMillis()));
 		
-		vertex = new_vertex;
-		populate_vertex();
+		node = new_node;
+		populate_node();
 		
 		
 	}
@@ -749,13 +749,13 @@ public class VertexJPanel extends JPanel{
 	 * @param e
 	 */
 	protected void removeedge_buttonactionPerformed(ActionEvent evt) {
-		Edge del_edge = vertex[selected_vertex].getEdges()[edge_table.getSelectedRow()];
-		synchronized(vertex[selected_vertex]){
-			del_edge.getOtherVertex(vertex[selected_vertex]).RemoveEdge(del_edge.getObjectId());
-			vertex[selected_vertex].RemoveEdge(del_edge.getObjectId());
+		Edge del_edge = node[selected_node].getEdges()[edge_table.getSelectedRow()];
+		synchronized(node[selected_node]){
+			del_edge.getOtherNode(node[selected_node]).RemoveEdge(del_edge.getObjectId());
+			node[selected_node].RemoveEdge(del_edge.getObjectId());
 		}
 		
-		vertex_selected(selected_vertex);
+		node_selected(selected_node);
 		
 	}
 
@@ -765,7 +765,7 @@ public class VertexJPanel extends JPanel{
 	 * @param e
 	 */
 	protected void modifyedge_buttonactionPerformed(ActionEvent evt) {
-		Edge del_edge = vertex[selected_vertex].getEdges()[edge_table.getSelectedRow()];
+		Edge del_edge = node[selected_node].getEdges()[edge_table.getSelectedRow()];
 		((GraphGUI)owner).mod_edge(del_edge.getObjectId());
 		
 	}
@@ -788,23 +788,23 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void disabltpd_comboactionPerformed(ActionEvent evt) {
-		if(vertex[selected_vertex] instanceof DynamicVertex && change_from_ui){
+		if(node[selected_node] instanceof DynamicNode && change_from_ui){
 			
 			if(disabltpd_combo.getSelectedIndex() == 0){
-				((DynamicVertex)vertex[selected_vertex]).setDisablingTPD(null);
+				((DynamicNode)node[selected_node]).setDisablingTPD(null);
 				return;
 			}
 			
 	    	else if(this.disabltpd_combo.getSelectedIndex() == 1){
-	    		if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof UniformEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getDisablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof UniformEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getDisablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new UniformEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0));
 	    	}
 			
 	    	else if(this.disabltpd_combo.getSelectedIndex() == 2) {
-	    		if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getDisablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getDisablingTPD());
 	    		else{
 	    			double[] distribution = {1};
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new EmpiricalEventTimeProbabilityDistribution((int) System.currentTimeMillis(), distribution));
@@ -812,15 +812,15 @@ public class VertexJPanel extends JPanel{
 	    	}
 			
 	    	else if(this.disabltpd_combo.getSelectedIndex() == 3){
-	    		if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof NormalEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getDisablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof NormalEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getDisablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new NormalEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0, 0));
 	    	}
 	    	
 	    	else {
-	    		if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof SpecificEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getDisablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof SpecificEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getDisablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new SpecificEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0, 0));
 	    	}
@@ -830,16 +830,16 @@ public class VertexJPanel extends JPanel{
 	    	 	
 	    	EventTimeProbabilityDistribution chosen_death_tpd = this.death_gui.getETPD();  
 	    	if(chosen_death_tpd != null){
-	    		((DynamicVertex)vertex[selected_vertex]).setDisablingTPD(chosen_death_tpd);
+	    		((DynamicNode)node[selected_node]).setDisablingTPD(chosen_death_tpd);
 	    	}
     		
-	    	if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() == null) 
+	    	if(((DynamicNode)node[selected_node]).getDisablingTPD() == null) 
 	    		disabltpd_combo.setSelectedIndex(0);
-	    	else if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof UniformEventTimeProbabilityDistribution)
+	    	else if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof UniformEventTimeProbabilityDistribution)
 	    		disabltpd_combo.setSelectedIndex(1);
-    		else if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
+    		else if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
     			disabltpd_combo.setSelectedIndex(2);
-    		else if(((DynamicVertex)vertex[selected_vertex]).getDisablingTPD() instanceof NormalEventTimeProbabilityDistribution)
+    		else if(((DynamicNode)node[selected_node]).getDisablingTPD() instanceof NormalEventTimeProbabilityDistribution)
     			disabltpd_combo.setSelectedIndex(3);
     		else disabltpd_combo.setSelectedIndex(4);
 
@@ -853,23 +853,23 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void enabtpd_comboactionPerformed(ActionEvent evt) {	
-		if(vertex[selected_vertex] instanceof DynamicVertex && change_from_ui){
+		if(node[selected_node] instanceof DynamicNode && change_from_ui){
 			
 			if(enabtpd_combo.getSelectedIndex() == 0){
-				((DynamicVertex)vertex[selected_vertex]).setEnablingTPD(null);
+				((DynamicNode)node[selected_node]).setEnablingTPD(null);
 				return;
 			}
 			
 	    	else if(this.enabtpd_combo.getSelectedIndex() == 1){
-	    		if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof UniformEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getEnablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof UniformEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getEnablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new UniformEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0));
 	    	}
 			
 	    	else if(this.enabtpd_combo.getSelectedIndex() == 2) {
-	    		if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getEnablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getEnablingTPD());
 	    		else{
 	    			double[] distribution = {1};
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new EmpiricalEventTimeProbabilityDistribution((int) System.currentTimeMillis(), distribution));
@@ -877,15 +877,15 @@ public class VertexJPanel extends JPanel{
 	    	}
 			
 	    	else if(this.enabtpd_combo.getSelectedIndex() == 3){
-	    		if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof NormalEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getEnablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof NormalEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getEnablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new NormalEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0, 0));
 	    	}
 	    	
 	    	else {
-	    		if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof SpecificEventTimeProbabilityDistribution)
-	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicVertex)vertex[selected_vertex]).getEnablingTPD());
+	    		if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof SpecificEventTimeProbabilityDistribution)
+	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, ((DynamicNode)node[selected_node]).getEnablingTPD());
 	    		else
 	    			this.death_gui = new EventTimeProbabilityDistributionGUI(this.owner, new SpecificEventTimeProbabilityDistribution((int) System.currentTimeMillis(), 0, 0));
 	    	}
@@ -895,16 +895,16 @@ public class VertexJPanel extends JPanel{
 	    	 	
 	    	EventTimeProbabilityDistribution chosen_death_tpd = this.death_gui.getETPD();  
 	    	if(chosen_death_tpd != null){
-	    		((DynamicVertex)vertex[selected_vertex]).setEnablingTPD(chosen_death_tpd);
+	    		((DynamicNode)node[selected_node]).setEnablingTPD(chosen_death_tpd);
 	    	}
     		
-	    	if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() == null) 
+	    	if(((DynamicNode)node[selected_node]).getEnablingTPD() == null) 
 	    		enabtpd_combo.setSelectedIndex(0);
-	    	else if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof UniformEventTimeProbabilityDistribution)
+	    	else if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof UniformEventTimeProbabilityDistribution)
     			enabtpd_combo.setSelectedIndex(1);
-    		else if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
+    		else if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof EmpiricalEventTimeProbabilityDistribution)
     			enabtpd_combo.setSelectedIndex(2);
-    		else if(((DynamicVertex)vertex[selected_vertex]).getEnablingTPD() instanceof NormalEventTimeProbabilityDistribution)
+    		else if(((DynamicNode)node[selected_node]).getEnablingTPD() instanceof NormalEventTimeProbabilityDistribution)
     			enabtpd_combo.setSelectedIndex(3);
     		else enabtpd_combo.setSelectedIndex(4);
 
@@ -917,51 +917,51 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void enable_checkactionPerformed(ActionEvent evt) {
-		if(vertex[selected_vertex] != null)
-			((DynamicVertex)vertex[selected_vertex]).setIsEnabled(enable_check.isSelected());
+		if(node[selected_node] != null)
+			((DynamicNode)node[selected_node]).setIsEnabled(enable_check.isSelected());
 	}
 
 	/**
-	 * Manages the dynamic properties, and transforms the vertex in DynamicVertex or back
+	 * Manages the dynamic properties, and transforms the node in DynamicNode or back
 	 * 
 	 * @param evt
 	 */
 	protected void dynamic_checkactionPerformed(ActionEvent evt) {
-		if(vertex[selected_vertex] != null){
+		if(node[selected_node] != null){
 			if(dynamic_check.isSelected()){
-				if(!(vertex[selected_vertex] instanceof DynamicVertex)){
-					DynamicVertex answer = new DynamicVertex(vertex[selected_vertex].getLabel(), null, null, true);
-					answer.setObjectId(vertex[selected_vertex].getObjectId());
-					answer.setPriority(vertex[selected_vertex].getPriority());
-					answer.setVisibility(vertex[selected_vertex].isVisible());
-					answer.setFuel(vertex[selected_vertex].isFuel());
+				if(!(node[selected_node] instanceof DynamicNode)){
+					DynamicNode answer = new DynamicNode(node[selected_node].getLabel(), null, null, true);
+					answer.setObjectId(node[selected_node].getObjectId());
+					answer.setPriority(node[selected_node].getPriority());
+					answer.setVisibility(node[selected_node].isVisible());
+					answer.setFuel(node[selected_node].isFuel());
 					
-					Edge[] answer_edge = vertex[selected_vertex].getEdges();			
-					vertex[selected_vertex] = answer.getCopy();
+					Edge[] answer_edge = node[selected_node].getEdges();			
+					node[selected_node] = answer.getCopy();
 					for(int i = 0; i < answer_edge.length; i++)
-						vertex[selected_vertex].addEdge(answer_edge[i]);
+						node[selected_node].addEdge(answer_edge[i]);
 				}
 				enable_check.setEnabled(true);
-				enable_check.setSelected(((DynamicVertex)vertex[selected_vertex]).isEnabled());
+				enable_check.setSelected(((DynamicNode)node[selected_node]).isEnabled());
 				enabtpd_combo.setEnabled(true);
 				disabltpd_combo.setEnabled(true);
 			}
 			
 			else {
-				if(vertex[selected_vertex] instanceof DynamicVertex){
-					Vertex answer = new Vertex(vertex[selected_vertex].getLabel());
-					answer.setObjectId(vertex[selected_vertex].getObjectId());
-					answer.setPriority(vertex[selected_vertex].getPriority());
-					answer.setVisibility(vertex[selected_vertex].isVisible());
-					answer.setFuel(vertex[selected_vertex].isFuel());
+				if(node[selected_node] instanceof DynamicNode){
+					Node answer = new Node(node[selected_node].getLabel());
+					answer.setObjectId(node[selected_node].getObjectId());
+					answer.setPriority(node[selected_node].getPriority());
+					answer.setVisibility(node[selected_node].isVisible());
+					answer.setFuel(node[selected_node].isFuel());
 					
-					Edge[] answer_edge = vertex[selected_vertex].getEdges();			
-					vertex[selected_vertex] = answer.getCopy();
+					Edge[] answer_edge = node[selected_node].getEdges();			
+					node[selected_node] = answer.getCopy();
 					for(int i = 0; i < answer_edge.length; i++)
-						vertex[selected_vertex].addEdge(answer_edge[i]);
+						node[selected_node].addEdge(answer_edge[i]);
 				}
 				enable_check.setEnabled(false);
-				enable_check.setSelected(((DynamicVertex) vertex[selected_vertex]).isEnabled());
+				enable_check.setSelected(((DynamicNode) node[selected_node]).isEnabled());
 				enabtpd_combo.setEnabled(false);
 				disabltpd_combo.setEnabled(false);				
 			}
@@ -979,8 +979,8 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void visible_checkactionPerformed(ActionEvent e) {
-		if(vertex[selected_vertex] != null)
-			((DynamicVertex)vertex[selected_vertex]).setVisibility(visible_check.isSelected());
+		if(node[selected_node] != null)
+			((DynamicNode)node[selected_node]).setVisibility(visible_check.isSelected());
 	}
 	
 	/**
@@ -989,10 +989,10 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void fuel_fieldactionPerformed(ActionEvent evt) {
-		if(vertex[selected_vertex] != null){
+		if(node[selected_node] != null){
 			if(fuel_field.getSelectedIndex() == 0)
-				vertex[selected_vertex].setFuel(false);
-			else vertex[selected_vertex].setFuel(true);
+				node[selected_node].setFuel(false);
+			else node[selected_node].setFuel(true);
 		}
 		
 	}
@@ -1003,8 +1003,8 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void priority_fieldKeyReleased(KeyEvent evt) {
-		if(vertex[selected_vertex] != null)
-			vertex[selected_vertex].setPriority(Integer.valueOf(priority_field.getText()));
+		if(node[selected_node] != null)
+			node[selected_node].setPriority(Integer.valueOf(priority_field.getText()));
 		
 	}
 
@@ -1014,8 +1014,8 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	private void label_fieldKeyReleased(KeyEvent evt) {
-		if(vertex[selected_vertex] != null)
-	        vertex[selected_vertex].setLabel(label_field.getText());
+		if(node[selected_node] != null)
+	        node[selected_node].setLabel(label_field.getText());
 		
 	}
 	
@@ -1026,10 +1026,10 @@ public class VertexJPanel extends JPanel{
 	 * @param evt
 	 */
 	protected void id_fieldKeyReleased(KeyEvent evt) {
-		if(vertex[selected_vertex] != null){
-	        vertex[selected_vertex].setObjectId(id_field.getText());
-	        populate_vertex();
-	        populate_edges(vertex[selected_vertex]);
+		if(node[selected_node] != null){
+	        node[selected_node].setObjectId(id_field.getText());
+	        populate_node();
+	        populate_edges(node[selected_node]);
 		}
 	}
 	
@@ -1039,7 +1039,7 @@ public class VertexJPanel extends JPanel{
 	 * @return the graph
 	 */
 	public Graph getGraph() {
-		return new Graph(graph.getObjectId(), vertex);
+		return new Graph(graph.getObjectId(), node);
 	}
 
 
