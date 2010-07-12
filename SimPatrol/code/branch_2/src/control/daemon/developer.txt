@@ -1,2 +1,0 @@
-* Subclasses of Daemon must use the protected attribute "stop_working" when
-implementing their run() method.

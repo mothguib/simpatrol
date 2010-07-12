@@ -1,2 +1,0 @@
-This package contains the implementation of the objects that can
-count the passage of time.

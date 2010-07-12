@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!-- PERCEPTION -->
-<!ELEMENT perception (graph | agent* | stigma*)>
-<!ATTLIST perception type (0 | 1 | 2 | 3 | 4) #REQUIRED>
-<!ATTLIST perception message CDATA #IMPLIED>
