@@ -1,2 +1,0 @@
-This package contains the implementation of the connection offered by SimPatrol
-in order to connect with the remote actors.

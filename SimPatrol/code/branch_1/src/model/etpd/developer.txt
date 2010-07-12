@@ -1,4 +1,0 @@
-* New etpds must add new classes in this package;
-* New etpds must change the "EventTimeProbabilityDistributionTypes" class.
-* New etpds must change the "control.translator.EventTimeprobabilityDistributionTranslator" class.
-* New etpds subclasses must override some methods of the EventTimeProbabilityDistribution class.

@@ -1,3 +1,0 @@
-This package contains the implementation of the clock object and the clockable
-interface, in order to make it possible to have objects that act in regular
-intervals of time.

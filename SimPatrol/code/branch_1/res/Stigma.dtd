@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!-- STIGMA -->
-<!ELEMENT stigma (EMPTY)>
-<!ATTLIST stigma vertex_id IDREF #IMPLIED>
-<!ATTLIST stigma edge_id IDREF #IMPLIED>

@@ -1,3 +1,0 @@
-* New metrics must add new classes in this package;
-* New metrics must change the "ConfigurationTypes" class.
-* New metrics must change the "control.translator.MetricTranslator" class.
