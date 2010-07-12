@@ -1,0 +1,4 @@
+* New Perception subclasses must add new classes in this package;
+* New Perception subclasses must change the "PerceptionTypes" class.
+* New Perception subclasses must change the "control.translator.PerceptionTranslator" class.
+* New Perception subclasses must change the "control.daemon.PerceptionDaemon" class.

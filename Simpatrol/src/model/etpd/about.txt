@@ -1,0 +1,2 @@
+This package contains the implementations of the probability distributions
+of hapenning an event, based on the time of simulation.
