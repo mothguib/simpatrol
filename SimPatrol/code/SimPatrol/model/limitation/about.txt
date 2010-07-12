@@ -1,0 +1,2 @@
+This package contains the classes related to the implementation of the limitations
+imposed to the abilities of the agents in SimPatrol.

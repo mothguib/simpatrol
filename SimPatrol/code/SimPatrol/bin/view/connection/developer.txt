@@ -1,0 +1,2 @@
+* Subclasses of Connection must use the protected attribute "is_active" when
+implementing their run() method.

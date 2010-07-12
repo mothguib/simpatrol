@@ -1,0 +1,3 @@
+* New Stigma subclasses must add new classes in this package;
+* New Stigma subclasses must change the "control.translator.StigmaTranslator" class.
+* New Stigma subclasses should override some methods of the Stigma class.

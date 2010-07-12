@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ENVIRONMENT -->
+<!ELEMENT environment (graph, society+)>
+
+<!-- GRAPH -->
+<!ELEMENT graph (node+, edge*, stigma*)>
+<!ATTLIST graph label CDATA #REQUIRED>
+
+<!-- NODE -->
+<!ELEMENT node (etpd, etpd)?>
+<!ATTLIST node id ID #REQUIRED>
+<!ATTLIST node label CDATA #REQUIRED>
+<!ATTLIST node priority CDATA "0">
+<!ATTLIST node visibility CDATA "true">
+<!ATTLIST node idleness CDATA "0">
+<!ATTLIST node fuel CDATA "false">
+<!ATTLIST node is_enabled CDATA "true">
+
+<!-- EDGE -->
+<!ELEMENT edge (etpd, etpd)?>
+<!ATTLIST edge id ID #REQUIRED>
+<!ATTLIST edge source IDREF #REQUIRED>
+<!ATTLIST edge target IDREF #REQUIRED>
+<!ATTLIST edge directed CDATA "false">
+<!ATTLIST edge length CDATA #REQUIRED>
+<!ATTLIST edge visibility CDATA "true">
+<!ATTLIST edge is_enabled CDATA "true">
+<!ATTLIST edge is_in_dynamic_emitter_memory CDATA "false">
+<!ATTLIST edge is_in_dynamic_collector_memory CDATA "false">
+
+<!-- SOCIETY  -->
+<!ELEMENT society (agent*)>
+<!ATTLIST society id ID #REQUIRED>
+<!ATTLIST society label CDATA #REQUIRED>
+<!ATTLIST society is_closed CDATA "true">
+
+<!-- AGENT -->
+<!ELEMENT agent (etpd?, allowed_perception*, allowed_action*)>
+<!ATTLIST agent id ID #REQUIRED>
+<!ATTLIST agent label CDATA #REQUIRED>
+<!ATTLIST agent state CDATA "0">
+<!ATTLIST agent vertex_id IDREF #REQUIRED>
+<!ATTLIST agent edge_id IDREF #IMPLIED>
+<!ATTLIST agent elapsed_length CDATA "0">
+<!ATTLIST agent stamina CDATA "1.0">
+<!ATTLIST agent max_stamina CDATA "1.0">
+
+<!-- ALLOWED PERCEPTION -->
+<!ELEMENT allowed_perception (limitation*)>
+<!ATTLIST allowed_perception type (0 | 1 | 2 | 3 | 4) #REQUIRED>
+
+<!-- ALLOWED ACTION -->
+<!ELEMENT allowed_action (limitation*)>
+<!ATTLIST allowed_action type (0 | 1 | 2 | 3 | 4 | 5 | 6) #REQUIRED>
+
+<!-- LIMITATION -->
+<!ELEMENT limitation (lmt_parameter+)>
+<!ATTLIST limitation type (0 | 1 | 2 | 3) #REQUIRED>
+
+<!-- LMT PARAMETER -->
+<!ELEMENT lmt_parameter EMPTY>
+<!ATTLIST lmt_parameter value CDATA #REQUIRED>
