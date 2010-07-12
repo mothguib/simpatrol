@@ -1,0 +1,52 @@
+<environment>
+	<graph label="territorio_teste_1">
+		<vertex id="v1" label="Belem"/>
+		
+		<vertex id="v2" label="Sao Paulo">
+			<etpd seed="100" type="3">
+				<pd_parameter value="1"/>
+				<pd_parameter value="40"/>
+			</etpd>
+			<etpd seed="100" type="3">
+				<pd_parameter value="1"/>
+				<pd_parameter value="20"/>
+			</etpd>
+		</vertex>
+
+		<vertex id="v3" label="Recife"/>
+		<vertex id="v4" label="Maceio"/>
+
+		<edge id="e1" emitter_id="v1" collector_id="v2" length="10">
+			<etpd seed="100" type="3">
+				<pd_parameter value="1"/>
+				<pd_parameter value="45"/>
+			</etpd>
+			<etpd seed="100" type="3">
+				<pd_parameter value="1"/>
+				<pd_parameter value="15"/>
+			</etpd>
+		</edge>
+
+		<edge id="e2" emitter_id="v1" collector_id="v3" length="6"/>
+		<edge id="e3" emitter_id="v3" collector_id="v4" length="2"/>
+		<edge id="e4" emitter_id="v3" collector_id="v2" length="6"/>
+	</graph>
+
+	<society id="s1" label="viajantes" is_closed="false">
+		<agent id="a1" label="Daniel" vertex_id="v1">
+			<etpd seed="100" type="2">
+				<pd_parameter value="30"/>
+				<pd_parameter value="1"/>
+			</etpd>
+		</agent>
+
+		<agent id="a2" label="Josue" vertex_id="v4">
+			<etpd seed="100" type="0">
+				<pd_parameter value="0.35"/>
+			</etpd>
+		</agent>
+
+
+		<agent id="a3" label="Geber" vertex_id="v3"/>
+	</society>
+</environment>
