@@ -146,7 +146,9 @@ public final class DynamicNode extends Node implements Dynamic {
 		buffer.replace(last_valid_index, last_valid_index + 2, ">");
 
 		// adds the time probability distributions
+		if(enabling_tpd != null)
 		buffer.append(this.enabling_tpd.fullToXML(identation + 1));
+		if(disabling_tpd != null)
 		buffer.append(this.disabling_tpd.fullToXML(identation + 1));
 
 		// applies the identation
@@ -159,11 +161,19 @@ public final class DynamicNode extends Node implements Dynamic {
 		// returns the buffer content
 		return buffer.toString();
 	}
+	
+	public void setEnablingTPD(EventTimeProbabilityDistribution tpd) {
+		this.enabling_tpd = tpd;
+	}
 
 	public EventTimeProbabilityDistribution getEnablingTPD() {
 		return this.enabling_tpd;
 	}
 
+	public void setDisablingTPD(EventTimeProbabilityDistribution tpd) {
+		this.disabling_tpd = tpd;
+	}
+	
 	public EventTimeProbabilityDistribution getDisablingTPD() {
 		return this.disabling_tpd;
 	}

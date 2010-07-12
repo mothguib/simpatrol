@@ -26,7 +26,7 @@ public final class MaxIdlenessMetric extends IntegralMetric {
 
 	public void act() {
 		// obtains the nodes from the graph of the environment
-		Node[] nodes = environment.getGraph().getNodees();
+		Node[] nodes = environment.getGraph().getNodes();
 
 		// for each node, checks if its idleness is the biggest one,
 		// if the node is enabled

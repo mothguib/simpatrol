@@ -119,6 +119,27 @@ public class Node implements XMLable, Visible {
 			this.in_edges = new HashSet<Edge>();
 		this.in_edges.add(in_arc);
 	}
+	
+	/**
+	 * Removes the passed edge to the vertex.
+	 * 
+	 * @param edge_i
+	 *            The edge id of the edge to remove from the vertex
+	 */
+	public void RemoveEdge(String edge_id) {
+		for(Edge myedge : in_edges){
+			if(myedge.getObjectId() == edge_id){
+				in_edges.remove(myedge);
+				continue;
+			}
+		}
+		for(Edge myedge : out_edges){
+			if(myedge.getObjectId() == edge_id){
+				out_edges.remove(myedge);
+				continue;
+			}
+		}
+	}
 
 	/**
 	 * Returns the set of edges of the node.
@@ -128,22 +149,37 @@ public class Node implements XMLable, Visible {
 	public Edge[] getEdges() {
 		HashSet<Edge> edges = new HashSet<Edge>();
 
-		if (this.in_edges != null)
-			for (Edge edge : this.in_edges)
-				edges.add(edge);
+		if (this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
 
-		if (this.out_edges != null)
-			for (Edge edge : this.out_edges)
-				edges.add(edge);
-
-		Edge[] answer = new Edge[edges.size()];
-		int i = 0;
-		for (Edge edge : edges) {
-			answer[i] = edge;
-			i++;
+			for (int i = 0; i < in_edges_array.length; i++)
+				edges.add((Edge) in_edges_array[i]);
 		}
+
+		if (this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+
+			for (int i = 0; i < out_edges_array.length; i++)
+				edges.add((Edge) out_edges_array[i]);
+		}
+
+		Object[] edges_array = edges.toArray();
+		Edge[] answer = new Edge[edges_array.length];
+		for (int i = 0; i < answer.length; i++)
+			answer[i] = (Edge) edges_array[i];
+
 		return answer;
 	}
+	
+	/**
+	 * returns the priority of the vertex.
+	 * 
+	 */
+	public int getPriority() {
+		return this.priority;
+	}
+	
+	/**
 
 	/**
 	 * Configures the priority of the node.
@@ -245,7 +281,9 @@ public class Node implements XMLable, Visible {
 	 *            The edge whose target is supposed to be the node.
 	 * @return TRUE if the node is the target of the edge, FALSE if not.
 	 */
-	public boolean isCollectorOf(Edge edge) {
+	public boolean isTargetOf(Edge edge) {
+		if(this.in_edges == null)
+			return false;
 		return this.in_edges.contains(edge);
 	}
 
@@ -256,7 +294,9 @@ public class Node implements XMLable, Visible {
 	 *            The edge whose source is supposed to be the node.
 	 * @return TRUE if the node is the source of the edge, FALSE if not.
 	 */
-	public boolean isEmitterOf(Edge edge) {
+	public boolean isSourceOf(Edge edge) {
+		if(this.out_edges == null)
+			return false;
 		return this.out_edges.contains(edge);
 	}
 
@@ -282,31 +322,41 @@ public class Node implements XMLable, Visible {
 	 * @return The set of Node in the neighbourhood.
 	 */
 	public Node[] getNeighbourhood() {
-		// holds the set of neighbor Node
+		// holds the set of neighbour Nodees
 		Set<Node> neighbourhood = new HashSet<Node>();
 
-		// for each edge whose source is this node
-		if (this.out_edges != null)
-			for (Edge edge : this.out_edges) {
-				// obtains the other node
-				Node other_node = edge.getOtherNode(this);
+		// for each edge whose emitter is this Node
+		if (this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for (int i = 0; i < out_edges_array.length; i++) {
+				// obtains the other Node
+				Node other_Node = ((Edge) out_edges_array[i])
+						.getOtherNode(this);
 
-				// adds it to set of neighbors
-				neighbourhood.add(other_node);
+				// adds it to set of neighbours
+				neighbourhood.add(other_Node);
 			}
+		}
 
-		// for each edge whose target is this node
-		if (this.in_edges != null)
-			for (Edge edge : this.in_edges) {
-				// obtains the other node
-				Node other_node = edge.getOtherNode(this);
+		// for each edge whose collector is this Node
+		if (this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
+			for (int i = 0; i < in_edges_array.length; i++) {
+				// obtains the other Node
+				Node other_Node = ((Edge) in_edges_array[i])
+						.getOtherNode(this);
 
-				// adds it to set of neighbors
-				neighbourhood.add(other_node);
+				// adds it to set of neighbours
+				neighbourhood.add(other_Node);
 			}
+		}
 
-		// returns the answer
-		return neighbourhood.toArray(new Node[0]);
+		// mounts and returns the answer
+		Object[] neighbourhood_array = neighbourhood.toArray();
+		Node[] answer = new Node[neighbourhood_array.length];
+		for (int i = 0; i < neighbourhood_array.length; i++)
+			answer[i] = (Node) neighbourhood_array[i];
+		return answer;
 	}
 
 	/**
@@ -316,21 +366,29 @@ public class Node implements XMLable, Visible {
 	 *         one.
 	 */
 	public Node[] getCollectorNeighbourhood() {
-		// holds the set of neighbor Node
+		// holds the set of neighbour Nodees
 		Set<Node> neighbourhood = new HashSet<Node>();
 
-		// for each edge whose source is this node
-		if (this.out_edges != null)
-			for (Edge edge : this.out_edges) {
-				// obtains the other node
-				Node other_node = edge.getOtherNode(this);
+		// for each edge whose emitter is this Node
+		if (this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for (int i = 0; i < out_edges_array.length; i++) {
+				// obtains the other Node
 
-				// adds it to set of neighbors
-				neighbourhood.add(other_node);
+				Node other_Node = ((Edge) out_edges_array[i])
+						.getOtherNode(this);
+
+				// adds it to set of neighbours
+				neighbourhood.add(other_Node);
 			}
+		}
 
-		// returns the answer
-		return neighbourhood.toArray(new Node[0]);
+		// mounts and returns the answer
+		Object[] neighbourhood_array = neighbourhood.toArray();
+		Node[] answer = new Node[neighbourhood_array.length];
+		for (int i = 0; i < neighbourhood_array.length; i++)
+			answer[i] = (Node) neighbourhood_array[i];
+		return answer;
 	}
 
 	/**
@@ -345,24 +403,40 @@ public class Node implements XMLable, Visible {
 		// holds the answer to the method
 		Set<Edge> shared_edges = new HashSet<Edge>();
 
-		// for each edge whose source is this node
-		if (this.out_edges != null)
-			for (Edge edge : this.out_edges)
-				// if the given node is the target of the current edge,
-				// adds it to the answer
-				if (node.isCollectorOf(edge))
-					shared_edges.add(edge);
+		// for each edge whose emitter is this Node
+		if (this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for (int i = 0; i < out_edges_array.length; i++) {
+				// obtains the current edge
+				Edge current_edge = (Edge) out_edges_array[i];
 
-		// for each edge whose target is this node
-		if (this.in_edges != null)
-			for (Edge edge : this.in_edges)
-				// if the given node is the target of the current edge,
+				// if the given Node is the collector of the current edge,
 				// adds it to the answer
-				if (node.isCollectorOf(edge))
-					shared_edges.add(edge);
+				if (isTargetOf(current_edge))
+					shared_edges.add(current_edge);
+			}
+		}
 
-		// returns the answer
-		return shared_edges.toArray(new Edge[0]);
+		// for each edge whose collector is this Node
+		if (this.in_edges != null) {
+			Object[] in_edges_array = this.in_edges.toArray();
+			for (int i = 0; i < in_edges_array.length; i++) {
+				// obtains the current edge
+				Edge current_edge = (Edge) in_edges_array[i];
+
+				// if the given Node is the source of the current edge,
+				// adds it to the answer
+				if (isSourceOf(current_edge))
+					shared_edges.add(current_edge);
+			}
+		}
+
+		// mounts and returns the answer
+		Object[] shared_edges_array = shared_edges.toArray();
+		Edge[] answer = new Edge[shared_edges_array.length];
+		for (int i = 0; i < shared_edges_array.length; i++)
+			answer[i] = (Edge) shared_edges_array[i];
+		return answer;
 	}
 
 	/**
@@ -379,16 +453,26 @@ public class Node implements XMLable, Visible {
 		// holds the answer to the method
 		Set<Edge> shared_edges = new HashSet<Edge>();
 
-		// for each edge whose source is this node
-		if (this.out_edges != null)
-			for (Edge edge : this.out_edges)
-				// if the given node is the target of the current edge,
-				// adds it to the answer
-				if (node.isCollectorOf(edge))
-					shared_edges.add(edge);
+		// for each edge whose source is this Node
+		if (this.out_edges != null) {
+			Object[] out_edges_array = this.out_edges.toArray();
+			for (int i = 0; i < out_edges_array.length; i++) {
+				// obtains the current edge
+				Edge current_edge = (Edge) out_edges_array[i];
 
-		// returns the answer
-		return shared_edges.toArray(new Edge[0]);
+				// if the given Node is the collector of the current edge,
+				// adds it to the answer
+				if(isTargetOf(current_edge))
+					shared_edges.add(current_edge);
+			}
+		}
+
+		// mounts and returns the answer
+		Object[] shared_edges_array = shared_edges.toArray();
+		Edge[] answer = new Edge[shared_edges_array.length];
+		for (int i = 0; i < shared_edges_array.length; i++)
+			answer[i] = (Edge) shared_edges_array[i];
+		return answer;
 	}
 
 	public String fullToXML(int identation) {
@@ -439,5 +523,13 @@ public class Node implements XMLable, Visible {
 
 	public void setObjectId(String object_id) {
 		this.id = object_id;
+	}
+	
+	public String getLabel() {
+		return this.label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 }

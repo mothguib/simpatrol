@@ -43,7 +43,7 @@ public final class MeanIdlenessMetric extends IntegralMetric {
 		int nodes_count = 0;
 
 		// obtains the nodes from the graph of the environment
-		Node[] nodes = environment.getGraph().getNodees();
+		Node[] nodes = environment.getGraph().getNodes();
 
 		// for each enabled node, adds its idleness to the sum
 		for (int i = 0; i < nodes.length; i++) {

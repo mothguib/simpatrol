@@ -166,7 +166,7 @@ public abstract class ActionTranslator extends Translator {
 		// tries to find the correspondent node from the graph,
 		// given its id
 		Node node = null;
-		Node[] nodes = graph.getNodees();
+		Node[] nodes = graph.getNodes();
 		for (int i = 0; i < nodes.length; i++)
 			if (nodes[i].getObjectId().equals(node_id)) {
 				node = nodes[i];
@@ -244,7 +244,7 @@ public abstract class ActionTranslator extends Translator {
 		// tries to find the correspondent node from the graph,
 		// given its id
 		Node goal_node = null;
-		Node[] nodes = graph.getNodees();
+		Node[] nodes = graph.getNodes();
 		for (int i = 0; i < nodes.length; i++)
 			if (nodes[i].getObjectId().equals(goal_node_id)) {
 				goal_node = nodes[i];

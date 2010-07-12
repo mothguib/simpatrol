@@ -100,6 +100,55 @@ public class Edge implements XMLable, Visible {
 			if (!((DynamicNode) target).isEnabled())
 				this.is_enabled = false;
 	}
+	
+	/**
+	 * Contructor for eventually oriented edges (arcs). The id of the edge is
+	 * needed.
+	 * 
+	 * @param emitter
+	 *            The emitter vertex, if the edge is an arc.
+	 * @param target
+	 *            The target vertex, if the edge is an arc.
+	 * @param oriented
+	 *            TRUE if the edge is an arc.
+	 * @param length
+	 *            The length of the edge.
+	 * @param id
+	 *            The object id of the edge.
+	 */
+	protected Edge(Node emitter, Node target, boolean oriented,
+			double length, String id) {
+		this.id = id;
+		this.source = emitter;
+		this.target = target;
+
+		// if the edge is an arc...
+		if (oriented) {
+			// adds the edge as a way out arc in the source
+			this.source.addOutEdge(this);
+
+			// adds the edge as a way in arc in the target
+			this.target.addInEdge(this);
+		} else {
+			// adds the edge in both source and target vertexes
+			this.source.addEdge(this);
+			this.target.addEdge(this);
+		}
+
+		this.length = length;
+
+		// configures the is_enabled attribute, based on the
+		// source and target vertexes
+		this.is_enabled = true;
+
+		if (emitter instanceof DynamicNode)
+			if (!((DynamicNode) emitter).isEnabled())
+				this.is_enabled = false;
+
+		if (target instanceof DynamicNode)
+			if (!((DynamicNode) target).isEnabled())
+				this.is_enabled = false;
+	}
 
 	/**
 	 * Returns the length of the edge.
@@ -110,6 +159,15 @@ public class Edge implements XMLable, Visible {
 		return this.length;
 	}
 
+	/**
+	 * Returns the length of the edge.
+	 * 
+	 * @return The length of the edge.
+	 */
+	public void setLength(Double len) {
+		this.length = len;
+	}
+	
 	/**
 	 * Configures the visibility of the edge.
 	 * 
@@ -184,6 +242,24 @@ public class Edge implements XMLable, Visible {
 		else
 			return null;
 	}
+	
+	/**
+
+	 * Returns the source of the edge
+	 *
+	 */
+	public Node getSource() {
+			return this.source;
+
+	}
+	
+	/**
+	 * Returns the collector of the edge.
+	 * 
+	 */
+	public Node getTarget() {
+		return this.target;
+	}
 
 	/**
 	 * Obtains a copy of the edge with the given copies of nodes.
@@ -196,7 +272,7 @@ public class Edge implements XMLable, Visible {
 	 */
 	public Edge getCopy(Node source_copy, Node target_copy) {
 		// registers if the original edge is directed
-		boolean directed = !this.source.isCollectorOf(this);
+		boolean directed = !this.source.isTargetOf(this);
 
 		// the copy
 		Edge edge_copy = new Edge(source_copy, target_copy, directed,
@@ -234,7 +310,7 @@ public class Edge implements XMLable, Visible {
 				is_in_dynamic_target_memory = true;
 
 		// registers if the edge is directed
-		boolean directed = !this.source.isCollectorOf(this);
+		boolean directed = !this.source.isTargetOf(this);
 
 		// fills the buffer
 		buffer.append("<edge id=\"" + this.id + "\" source_id=\""
@@ -260,7 +336,7 @@ public class Edge implements XMLable, Visible {
 			buffer.append("\t");
 
 		// registers if the edge is directed
-		boolean directed = !this.source.isCollectorOf(this);
+		boolean directed = !this.source.isTargetOf(this);
 
 		// fills the buffer
 		buffer.append("<edge id=\"" + this.id + "\" source_id=\""

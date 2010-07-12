@@ -94,7 +94,7 @@ public abstract class CompoundActionsParser {
 		Node current_graph_node = agent.getNode();
 		Node current_path_node = null;
 
-		Node[] path_nodes = path.getNodees();
+		Node[] path_nodes = path.getNodes();
 		for (int i = 0; i < path_nodes.length; i++)
 			if (path_nodes[i].equals(current_graph_node)) {
 				current_path_node = path_nodes[i];

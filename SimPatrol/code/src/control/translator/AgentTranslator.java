@@ -41,7 +41,7 @@ public abstract class AgentTranslator extends Translator {
 			boolean are_perpetual_agents, Graph graph)
 			throws NodeNotFoundException, EdgeNotFoundException {
 		// obtains the nodes and edges of the graph
-		Node[] nodes = graph.getNodees();
+		Node[] nodes = graph.getNodes();
 		Edge[] edges = graph.getEdges();
 
 		// obtains the nodes with the "agent" tag

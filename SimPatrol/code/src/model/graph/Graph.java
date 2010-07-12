@@ -71,7 +71,7 @@ public final class Graph implements XMLable {
 	 * 
 	 * @return The nodes of the graph.
 	 */
-	public Node[] getNodees() {
+	public Node[] getNodes() {
 		return this.nodes.toArray(new Node[0]);
 	}
 
@@ -119,7 +119,10 @@ public final class Graph implements XMLable {
 	public String getLabel() {
 		return this.label;
 	}
-
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
 	/**
 	 * Obtains the dynamic objects of the graph.
 	 * 
@@ -604,7 +607,7 @@ public final class Graph implements XMLable {
 
 									// obtains a copy of it
 									Edge edge_copy = null;
-									if (current_node.isEmitterOf(edges[j]))
+									if (current_node.isSourceOf(edges[j]))
 										edge_copy = edges[j].getCopy(
 												current_node_copy,
 												current_neighbour_copy);
@@ -759,7 +762,7 @@ public final class Graph implements XMLable {
 
 									// obtains a copy of it
 									Edge edge_copy = null;
-									if (current_node.isEmitterOf(edges[j]))
+									if (current_node.isSourceOf(edges[j]))
 										edge_copy = edges[j].getCopy(
 												current_node_copy,
 												current_neighbour_copy);
@@ -925,7 +928,7 @@ public final class Graph implements XMLable {
 										// subgraph
 										Edge current_edge_copy = null;
 										if (starting_node
-												.isEmitterOf(edges[j]))
+												.isSourceOf(edges[j]))
 											current_edge_copy = edges[j]
 													.getCopy(
 															starting_node_copy,
@@ -1051,7 +1054,7 @@ public final class Graph implements XMLable {
 										// subgraph
 										Edge current_edge_copy = null;
 										if (starting_node
-												.isEmitterOf(edges[j]))
+												.isSourceOf(edges[j]))
 											current_edge_copy = edges[j]
 													.getCopy(
 															starting_node_copy,

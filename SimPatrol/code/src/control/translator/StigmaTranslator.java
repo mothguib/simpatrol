@@ -57,7 +57,7 @@ public abstract class StigmaTranslator extends Translator {
 				// finds the correspondent node in the graph
 				Node node = null;
 
-				Node[] nodes = graph.getNodees();
+				Node[] nodes = graph.getNodes();
 				for (int j = 0; j < nodes.length; j++)
 					if (nodes[j].getObjectId().equals(node_id)) {
 						node = nodes[j];

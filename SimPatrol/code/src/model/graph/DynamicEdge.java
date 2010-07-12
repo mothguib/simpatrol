@@ -92,7 +92,7 @@ public final class DynamicEdge extends Edge implements Dynamic {
 	 */
 	public DynamicEdge getCopy(Node source_copy, Node target_copy) {
 		// registers if the original edge is directed
-		boolean directed = !this.source.isCollectorOf(this);
+		boolean directed = !this.source.isTargetOf(this);
 
 		// the copy
 		DynamicEdge answer = new DynamicEdge(source_copy, target_copy,
@@ -127,10 +127,18 @@ public final class DynamicEdge extends Edge implements Dynamic {
 		// returns the buffer content
 		return buffer.toString();
 	}
+	
+	public void setEnablingTPD(EventTimeProbabilityDistribution tpd) {
+		this.enabling_tpd = tpd;
+	}
 
 	public EventTimeProbabilityDistribution getEnablingTPD() {
 		return this.enabling_tpd;
 	}
+	
+	public void setDisablingTPD(EventTimeProbabilityDistribution tpd) {
+		this.disabling_tpd = tpd;
+	}	
 
 	public EventTimeProbabilityDistribution getDisablingTPD() {
 		return this.disabling_tpd;

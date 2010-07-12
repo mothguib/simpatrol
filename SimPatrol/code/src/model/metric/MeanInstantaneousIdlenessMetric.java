@@ -21,7 +21,7 @@ public final class MeanInstantaneousIdlenessMetric extends Metric {
 		int nodes_count = 0;
 
 		// obtains the nodes from the graph of the environment
-		Node[] nodes = environment.getGraph().getNodees();
+		Node[] nodes = environment.getGraph().getNodes();
 
 		// for each node, adds its idleness to the sum, if it's enabled
 		for (int i = 0; i < nodes.length; i++) {
