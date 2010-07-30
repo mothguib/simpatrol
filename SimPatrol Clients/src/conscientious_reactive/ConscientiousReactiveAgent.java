@@ -49,18 +49,22 @@ public class ConscientiousReactiveAgent extends Agent {
 				// obtains the id of the current node
 				int node_id_index = current_perception
 						.indexOf("node_id=\"");
+				// CP : changed starting index
 				current_perception = current_perception
-						.substring(node_id_index + 11);
+						.substring(node_id_index + 9);
 				String node_id = current_perception.substring(0,
 						current_perception.indexOf("\""));
 
 				// obtains the elapsed length on the current edge
 				int elapsed_length_index = current_perception
 						.indexOf("elapsed_length=\"");
-				current_perception = current_perception
-						.substring(elapsed_length_index + 16);
-				double elapsed_length = Double.parseDouble(current_perception
-						.substring(0, current_perception.indexOf("\"")));
+				double elapsed_length = 0;
+				if(elapsed_length_index != -1){
+					current_perception = current_perception
+							.substring(elapsed_length_index + 16);
+					elapsed_length = Double.parseDouble(current_perception
+							.substring(0, current_perception.indexOf("\"")));
+				}
 
 				// returs the answer of the method
 				return new StringAndDouble(node_id, elapsed_length);
