@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LogFileParser parser = new LogFileParser();
 		
-		parser.parseFile("simulation_log.txt");
+		parser.parseFile("tmp\\simlog.log");
 	
 		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), 1, 5, parser.getVisitsList());
 		
