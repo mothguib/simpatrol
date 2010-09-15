@@ -1,3 +1,0 @@
-* New Dynamic objects must change the "control.simulator.Simulator" class.
-* New Dynamic objects must change the "model.graph.Graph" class.
-* New Mortal objects must change the "control.simulator.Simulator" class.

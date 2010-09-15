@@ -1,2 +1,0 @@
-This package contains the implementation of the objects related to environment
-where the patrolling task is simulated.

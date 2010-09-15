@@ -1,1 +1,0 @@
-This package contains the implementations of agents and societies of agents.

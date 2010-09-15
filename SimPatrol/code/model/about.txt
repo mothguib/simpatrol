@@ -1,3 +1,0 @@
-"The pieces and the board of the chess game."
-
-This package contains the classes and interfaces of which instances are manipulated during a patrolling simulation.
