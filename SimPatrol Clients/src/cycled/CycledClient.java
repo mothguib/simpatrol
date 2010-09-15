@@ -126,8 +126,7 @@ public final class CycledClient extends Client {
 	/**
 	 * Turns this class into an executable one.
 	 * 
-	 * @param args
-	 *            Arguments: 
+	 * @param args List of command line arguments: 
 	 *              index 0: The IP address of the SimPatrol server.
 	 *              index 1: The number of the socket that the server is supposed
 	 *                       to listen to this client. 
@@ -197,7 +196,7 @@ public final class CycledClient extends Client {
 						"tmp\\sim1_metric4",
 						"1",
 						"tmp\\simulation_log.txt",
-						"20",
+						"50",
 						"false",
 						//"true"
 					};
