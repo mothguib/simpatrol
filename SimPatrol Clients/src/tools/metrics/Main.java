@@ -7,12 +7,15 @@ public class Main {
 		
 		parser.parseFile("tmp\\simlog.log");
 	
-		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), 1, 5, parser.getVisitsList());
+		int startCycle = 0;
+		int finalCycle = 19;
+		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), startCycle, finalCycle, parser.getVisitsList());
 		
+		System.out.println();
 		System.out.println();
 		System.out.println("METRICS:");
 		System.out.println();
-		
+
 		System.out.println(" - Maximum interval: " + metrics.getMaxInterval());
 		System.out.println(" - Average interval: " + metrics.getAverageInterval());
 		System.out.println(" - Standard deviation of the intervals: " + metrics.getStdDevInterval());
