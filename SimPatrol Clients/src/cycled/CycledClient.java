@@ -127,20 +127,22 @@ public final class CycledClient extends Client {
 	 * Turns this class into an executable one.
 	 * 
 	 * @param args
-	 *            Arguments: index 0: The IP address of the SimPatrol server.
-	 *            index 1: The number of the socket that the server is supposed
-	 *            to listen to this client. index 2: The path of the file that
-	 *            contains the environment. index 3. The path of the file that
-	 *            will save the mean instantaneous idlenesses; index 4. The path
-	 *            of the file that will save the max instantaneous idlenesses;
-	 *            index 5. The path of the file that will save the mean
-	 *            idlenesses; index 6. The path of the file that will save the
-	 *            max idlenesses; index 7: The time interval used to collect the
-	 *            metrics; index 8: The path of the file that will save the
-	 *            collected events; index 9: The time of simulation. index 10:
-	 *            false if the simulator is a cycled one, true if not.
+	 *            Arguments: 
+	 *              index 0: The IP address of the SimPatrol server.
+	 *              index 1: The number of the socket that the server is supposed
+	 *                       to listen to this client. 
+	 *              index 2: The path of the file that contains the environment. 
+	 *              index 3. The path of the file that will save the mean instantaneous idlenesses; 
+	 *              index 4: The path of the file that will save the max instantaneous idlenesses;
+	 *              index 5: The path of the file that will save the mean (overall) idlenesses; 
+	 *              index 6. The path of the file that will save the max (overall) idlenesses; 
+	 *              index 7: The time interval used to collect the metrics; 
+	 *              index 8: The path of the file that will save the collected events; 
+	 *              index 9: The time of simulation. 
+	 *              index 10: Indicates whether it is a real time simulation. Use "true" for realtime, 
+	 *                        and "false" to cycled simulation.
 	 */
-	public static void main(String[] args) {
+	public static void execute(String[] args) {
 		System.out.println("Cognitive coordinated agents!");
 
 		try {
@@ -152,26 +154,56 @@ public final class CycledClient extends Client {
 			String log_file_path = args[8];
 			double time_of_simulation = Double.parseDouble(args[9]);
 			boolean is_real_time_simulator = Boolean.parseBoolean(args[10]);
+			
 			CycledClient client;
-			if( args.length == 12 ){
+			
+			if ( args.length == 12 ) {
 					boolean silentMode = Boolean.parseBoolean(args[11]);
 					client = new CycledClient(remote_socket_address,
-					remote_socket_number, environment_file_path,
-					metric_file_paths, metrics_collecting_rate, log_file_path,
-					time_of_simulation, is_real_time_simulator, silentMode );					
+									remote_socket_number, environment_file_path,
+									metric_file_paths, metrics_collecting_rate, log_file_path,
+									time_of_simulation, is_real_time_simulator, silentMode );					
 			} else {
 				client = new CycledClient(remote_socket_address,
-						remote_socket_number, environment_file_path,
-						metric_file_paths, metrics_collecting_rate, log_file_path,
-						time_of_simulation, is_real_time_simulator);	
+									remote_socket_number, environment_file_path,
+									metric_file_paths, metrics_collecting_rate, log_file_path,
+									time_of_simulation, is_real_time_simulator);	
 			}
+
 			client.start();
+
 		} catch (Exception e) {			
 			System.out
-					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedClient\n"
-							+ "<IP address> <Remote socket number> <Environment file path>\n"
-							+ "<Metric file name 1 | \"\"> <Metric file name 2 | \"\"> <Metric file name 3 | \"\"> <Metric file name 4 | \"\">\n"
-							+ "<Metric collecting rate> <Log file name> <Time of simulation> <Is real time simulator? (true | false)>\"");
+					.println("\nUsage:\n  java cognitive_coordinated.CognitiveCoordinatedClient "
+								+ "<IP address> <Remote socket number> <Environment file path> "
+								+ "<Metric file name 1 | \"\"> <Metric file name 2 | \"\"> <Metric file name 3 | \"\"> <Metric file name 4 | \"\"> "
+								+ "<Metric collecting rate> <Log file name> <Time of simulation> <Is real time simulator? (true | false)>\" an\n");
 		}
+		
 	}
+	
+	public static void main(String[] args) {
+		
+		if (args.length == 0) {
+			
+			// default parameters, in case no parameters were provided
+			args = new String[]{
+						"127.0.0.1",
+						"5000",
+						"res\\ambiente.xml",
+						"tmp\\sim1_metric1",
+						"tmp\\sim1_metric2",
+						"tmp\\sim1_metric3",
+						"tmp\\sim1_metric4",
+						"1",
+						"tmp\\simulation_log.txt",
+						"20",
+						"false",
+						//"true"
+					};
+		}
+		
+		execute(args);
+	}
+	
 }
