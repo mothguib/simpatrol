@@ -14,7 +14,11 @@ import model.limitation.StaminaLimitation;
  * @see StaminaLimitation
  */
 public final class VisitAction extends AtomicAction {
-	/* Methods. */
+
+	//TODO: insert node and agent
+	public VisitAction() {		
+	}
+	
 	public String fullToXML(int identation) {
 		// holds the answer for the method
 		StringBuffer buffer = new StringBuffer();
