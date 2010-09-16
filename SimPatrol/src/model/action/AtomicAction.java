@@ -1,8 +1,13 @@
+/* AtomicAction.java */
+
+/* The package of this class. */
 package model.action;
 
 /**
- * @model.uin <code>design:node:::gjlolf17ugxj1-5az2i2</code>
+ * Implements the atomic actions for the agents of SimPatrol.
+ * 
+ * The atomic actions are those ones that have their effect immediately assured
+ * by the simulator.
  */
 public abstract class AtomicAction extends Action {
-
 }

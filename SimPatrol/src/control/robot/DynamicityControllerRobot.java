@@ -7,44 +7,74 @@ package control.robot;
 import control.simulator.RealTimeSimulator;
 import model.interfaces.Dynamic;
 
-/** Implements the robots that assure dynamic behaviour
- *  to the dynamic objects of the simulation.
- *  Used by real time simulators.
- *  @see RealTimeSimulator */
+/**
+ * Implements the robots that assure dynamic behavior to the dynamic objects of
+ * the simulation.
+ * 
+ * Used by real time simulators.
+ * 
+ * @see RealTimeSimulator
+ */
 public final class DynamicityControllerRobot extends Robot {
 	/* Attributes. */
 	/** The dynamic object to be controlled. */
-	private Dynamic object;
-	
+	private final Dynamic OBJECT;
+
 	/* Methods. */
-	/** Constructor.
-	 *  @param clock_thread_name The name of the thread of the clock of this robot.
-	 *  @param object The dynamic object to be controlled. */
+	/**
+	 * Constructor.
+	 * 
+	 * @param clock_thread_name
+	 *            The name of the thread of the clock of this robot.
+	 * @param object
+	 *            The dynamic object to be controlled.
+	 */
 	public DynamicityControllerRobot(String clock_thread_name, Dynamic object) {
 		super(clock_thread_name);
-		this.object = object;
+		this.OBJECT = object;
 	}
-	
-	public void act(int time_gap) {
-		for(int i = 0; i < time_gap; i++) {		
-			// if the dynamic object is appering
-			if(this.object.isAppearing()) {			
-				// atualizes the appearing tpd
-				this.object.getAppearingTPD().nextBoolean();
-			
-				// verifies if the object must disappear now
-				if(this.object.getDisappearingTPD().nextBoolean())
-					this.object.setIsAppearing(false);
+
+	/**
+	 * Returns the dynamic object controlled by this robot.
+	 * 
+	 * @return The dynamic object controlled by this robot.
+	 */
+	public Dynamic getObject() {
+		return OBJECT;
+	}
+
+	public void act() {
+		synchronized (simulator) {
+			simulator.getState(); // synchronization
+
+			// if the dynamic object is enabled
+			if (this.OBJECT.isEnabled()) {
+				// updates the enabling tpd
+				this.OBJECT.getEnablingTPD().nextBoolean();
+
+				// verifies if the object must be disabled now
+				if (this.OBJECT.getDisablingTPD().nextBoolean())
+					this.OBJECT.setIsEnabled(false);
 			}
 			// else
 			else {
-				// verifies if the object must appear now
-				if(this.object.getAppearingTPD().nextBoolean())
-					this.object.setIsAppearing(true);
-				
-				// atualizes the disappearing tpd
-				this.object.getDisappearingTPD().nextBoolean();
+				// verifies if the object must be enabled now
+				if (this.OBJECT.getEnablingTPD().nextBoolean())
+					this.OBJECT.setIsEnabled(true);
+
+				// updates the disabling tpd
+				this.OBJECT.getDisablingTPD().nextBoolean();
 			}
 		}
+	}
+
+	public void start() {
+		// used by AspectJ
+		super.start();
+	}
+
+	public void stopActing() {
+		// used by AspectJ
+		super.stopActing();
 	}
 }

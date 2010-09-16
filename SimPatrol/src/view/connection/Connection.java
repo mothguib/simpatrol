@@ -5,91 +5,75 @@ package view.connection;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.net.SocketException;
-import util.Queue;
-import util.udp.UDPSocket;
+import util.data_structures.Queue;
 
-/** Implements the active connections of SimPatrol. */
-public class Connection extends Thread {
+/**
+ * The connections offered by SimPatrol in order to contact the remote actors.
+ * 
+ * @developer Subclasses of this one must use the attribute "is_active" when
+ *            implementing their run() method.
+ */
+public abstract class Connection extends Thread {
 	/* Attributes. */
-	/** Registers if the agent shall stop working. */
-	protected boolean stop_working;
-	
-	/** The UDP socket of the connection. */
-	protected UDPSocket socket;
-	
-	/** The buffer where the connection writes the received
-	 *  messages. */
-	protected Queue<String> buffer;
-	
+	/** Registers if the connection is active. */
+	protected boolean is_active;
+
+	/** The buffer where the connection writes the received messages. */
+	protected final Queue<String> BUFFER;
+
 	/* Methods. */
-	/** Constructor.
-	 *  @param name The name of the thread of the connection.
-	 *  @param buffer The buffer where the connection writes the received messages. */
-	public Connection(String name, Queue<String> buffer) {
-		super(name);
-		this.stop_working = false;
-		this.socket = null;
-		this.buffer = buffer;
+	/**
+	 * Constructor.
+	 * 
+	 * @param thread_name
+	 *            The name of the thread of the connection.
+	 * @param buffer
+	 *            The buffer where the connection writes the received messages.
+	 */
+	public Connection(String thread_name, Queue<String> buffer) {
+		super(thread_name);
+		this.is_active = true;
+		this.BUFFER = buffer;
 	}
 
-	/** Indicates that the connection must stop working. */
-	public void stopWorking() {
-		this.stop_working = true;
+	/** Indicates that the connection must stop acting. */
+	public void stopActing() {
+		this.is_active = false;
 	}
-	
-	/** Sends a given string message to the last remote contact.
-	 *  @param message The string message to be sent. 
-	 *  @throws IOException */
-	public void send(String message) throws IOException {
-		if(this.socket != null)
-			this.socket.send(message);
-	}
-	
-	/** Sends a given string message.
-	 *  @param message The string message to be sent.
-	 *  @param remote_socket_address The remote IP address of the receiver.
-	 *  @param remote_socket_number The number of the UDP socket of the receiver. 
-	 *  @throws IOException */
-	public void send(String message, String remote_socket_address, int remote_socket_number) throws IOException {
-		if(this.socket != null)
-			this.socket.send(message, remote_socket_address, remote_socket_number);
-	}
-	
-	/** Return the number of UDP socket connection.
-	 *  @return The number of the UDP socket, if previously created; -1 if not. */
-	public int getUDPSocketNumber() {
-		if(this.socket != null)
-			return this.socket.getSocketNumber();
-		else return -1;
-	}
-	
-	/** Starts the work of the connection.
-	 *  @param The number of the UDP socket.
-	 *  @throws SocketException */
-	public void start(int local_socket_number) throws SocketException {
-		this.socket = new UDPSocket(local_socket_number);
+
+	/**
+	 * Sends a given string message and returns the success of the sending.
+	 * 
+	 * @param message
+	 *            The string message to be sent.
+	 * @return TRUE if the message was sent successfully, FALSE if not.
+	 */
+	public abstract boolean send(String message);
+
+	/**
+	 * Returns the number of the socket (TCP or UDP) of the connection.
+	 * 
+	 * @return The number of the socket of the connection.
+	 */
+	public abstract int getSocketNumber();
+
+	/**
+	 * Starts the connection's work.
+	 * 
+	 * @param local_socket_number
+	 *            The number of the socket of the connection.
+	 * @throws IOException
+	 */
+	public void start(int local_socket_number) throws IOException {
 		super.start();
 	}
-	
-	/** Give preference to use this.start(int local_socket_number).
-	 *  @deprecated */
+
+	/**
+	 * Give preference to use this.start(int local_socket_number).
+	 * 
+	 * @deprecated
+	 */
 	public void start() {
 		super.start();
-	}
-	
-	public void run() {
-		while(!this.stop_working) {
-			String message = null;
-			
-			try {
-				message = this.socket.receive();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			this.buffer.insert(message);
-		}
 	}
 }

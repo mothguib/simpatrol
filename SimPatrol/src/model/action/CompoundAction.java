@@ -1,14 +1,15 @@
+/* CompoundAction.java */
+
+/* The package of this class. */
 package model.action;
 
-import java.util.List;
-
 /**
- * @model.uin <code>design:node:::jhafif17ugxj1-buxn34</code>
+ * Implements the compound actions of the agents of SimPatrol.
+ * 
+ * The compound actions are those ones that must be parsed into time chained
+ * atomic actions.
+ * 
+ * @see AtomicAction
  */
 public abstract class CompoundAction extends Action {
-
-	/**
-	 * @model.uin <code>design:node:::gjlolf17ugxj1-5az2i2</code>
-	 */
-	public List atomicAction;
 }

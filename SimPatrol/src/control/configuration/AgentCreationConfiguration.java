@@ -5,65 +5,75 @@ package control.configuration;
 
 /* Imported classes and/or interfaces. */
 import model.agent.Agent;
+import model.agent.Society;
 
-/** Implements objects that express configurations to add
- *  an agent to a simulation.
- *  @see Agent */
+/**
+ * Implements objects that express configurations to add an agent to a
+ * simulation.
+ */
 public final class AgentCreationConfiguration extends Configuration {
 	/* Attributes. */
 	/** The new agent to be added to the simulation. */
-	private Agent agent;
-	
-	/** The id of the society where the new agent must be added. */
-	private String society_id;
-	
+	private final Agent AGENT;
+
+	/**
+	 * The id of the society where the new agent must be added.
+	 * 
+	 * @see Society
+	 */
+	private final String SOCIETY_ID;
+
 	/* Methods. */
-	/** Constructor.
-	 *  @param sender_address The The IP address of the sender of the configuration.
-	 *  @param sender_socket The number of the UDP socket of the sender.
-	 *  @param agent The agent to be added.
-	 *  @param society_id The id of the society where the agent must be added. */
-	public AgentCreationConfiguration(String sender_address, int sender_socket, Agent agent, String society_id) {
-		super(sender_address, sender_socket);
-		this.agent = agent;
-		this.society_id = society_id;
+	/**
+	 * Constructor.
+	 * 
+	 * @param agent
+	 *            The agent to be added.
+	 * @param society_id
+	 *            The id of the society where the agent must be added.
+	 */
+	public AgentCreationConfiguration(Agent agent, String society_id) {
+		this.AGENT = agent;
+		this.SOCIETY_ID = society_id;
 	}
-	
-	/** Returns the agent of the configuration.
-	 *  @return The agent to be added to the simulation. */
+
+	/**
+	 * Returns the agent of the configuration.
+	 * 
+	 * @return The agent of the configuration.
+	 */
 	public Agent getAgent() {
-		return this.agent;
+		return this.AGENT;
 	}
-	
-	/** Returns the id of the soiety where the new agent shall be added.
-	 *  @return The id of the society. */
+
+	/**
+	 * Returns the id of the society where the new agent must be added.
+	 * 
+	 * @return The id of the society where the new agent must be added.
+	 */
 	public String getSociety_id() {
-		return this.society_id;
+		return this.SOCIETY_ID;
 	}
-	
-	protected int getType() {
-		return ConfigurationTypes.AGENT_CREATION; 
-	}
-	
-	public String toXML(int identation) {
+
+	public String fullToXML(int identation) {
 		// holds the answer to the method
 		StringBuffer buffer = new StringBuffer();
-		
+
 		// applies the identation and fills the "configuration" tag
-		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("<configuration type=\"" + this.getType() +
-				      "\" sender_adress=\"" + this.sender_address +
-				      "\" sender_socket=\"" + this.sender_socket +
-				      "\" parameter=\"" + this.society_id +
-				      "\">\n");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("/t");
+		buffer.append("<configuration type=\""
+				+ ConfigurationTypes.AGENT_CREATION + "\" parameter=\""
+				+ this.SOCIETY_ID + "\">\n");
+
 		// puts the agent
-		buffer.append(this.agent.toXML(identation + 1));
-		
+		buffer.append(this.AGENT.fullToXML(identation + 1));
+
 		// closes the tag
-		for(int i = 0; i < identation; i++) buffer.append("/t");
-		buffer.append("</configuration>\n");		
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("/t");
+		buffer.append("</configuration>\n");
+
 		// return the answer to the method
 		return buffer.toString();
 	}

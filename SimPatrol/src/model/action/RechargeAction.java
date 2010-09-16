@@ -1,17 +1,58 @@
+/* RechargeAction.java */
+
+/* The package of this class. */
 package model.action;
 
+/* Imported classes and/or interfaces. */
+import model.limitation.SpeedLimitation;
+import model.limitation.StaminaLimitation;
+
 /**
- * @model.uin <code>design:node:::9y428f17ugxj1lwacpm</code>
+ * Implements the action of recharging the agent's stamina.
+ * 
+ * Its effect can be controlled by stamina and speed limitations.
+ * 
+ * @see StaminaLimitation
+ * @see SpeedLimitation
  */
-public class RechargeAction extends AtomicAction {
+public final class RechargeAction extends CompoundAction {
+	/* Attributes. */
+	/** The value to be added to the agent's stamina. */
+	private double stamina;
+
+	/* Methods. */
+	/**
+	 * Constructor.
+	 * 
+	 * @param stamina
+	 *            The value to be added to the agent's stamina.
+	 */
+	public RechargeAction(double stamina) {
+		this.stamina = stamina;
+	}
 
 	/**
-	 * @model.uin <code>design:node:::9229wf17ugxj1523rx1:9y428f17ugxj1lwacpm</code>
+	 * Returns the value to be added to the agent's stamina.
+	 * 
+	 * @return The value to be added to the agent's stamina.
 	 */
-	private double factor;
+	public double getStamina() {
+		return this.stamina;
+	}
 
-	public String toXML(int identation) {
-		// TODO Auto-generated method stub
-		return null;
+	public String fullToXML(int identation) {
+		// holds the answer for the method
+		StringBuffer buffer = new StringBuffer();
+
+		// applies the identation
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
+		// fills the buffer
+		buffer.append("<action type=\"" + ActionTypes.RECHARGE
+				+ "\" stamina=\"" + this.stamina + "\"/>\n");
+
+		// returns the answer
+		return buffer.toString();
 	}
 }

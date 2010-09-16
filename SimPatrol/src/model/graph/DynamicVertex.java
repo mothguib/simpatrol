@@ -6,162 +6,165 @@ package model.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Dynamic;
-import util.etpd.EventTimeProbabilityDistribution;
 
-/** Implements dynamic vertexes of a Graph object,
- *  that can appear and disappear with a specific event time
- *  probability distribution. */
+/**
+ * Implements dynamic vertexes of a Graph object, that can become disabled or
+ * enabled with a specific event time probability distribution.
+ */
 public final class DynamicVertex extends Vertex implements Dynamic {
 	/* Attributes. */
-	/** Registers if the vertex is appearing. */
-	private boolean is_appearing;
-	
-	/** The time probability distribution for the vertex appearing. */
-	private EventTimeProbabilityDistribution appearing_tpd;
-	
-	/** The time probability distribution for the vertex disappearing. */
-	private EventTimeProbabilityDistribution disappearing_tpd;
-	
-	/** Memorizes which edges were appearing before the vertex eventually disappeared. */
-	private Set<Edge> appearing_edges;
-	
+	/** Registers if the vertex is enabled. */
+	private boolean is_enabled;
+
+	/** The time probability distribution for the vertex enabling. */
+	private EventTimeProbabilityDistribution enabling_tpd;
+
+	/** The time probability distribution for the vertex disabling. */
+	private EventTimeProbabilityDistribution disabling_tpd;
+
+	/** Memorizes which edges were enabled before the vertex became disabled. */
+	private Set<Edge> enabled_edges;
+
 	/* Methods. */
-	/** Constructor.
-	 * @param label The label of the vertex.
-	 * @param appearing_tpd The time probability distribution for the vertex appearing.
-	 * @param diappearing_tpd The time probability distribution for the vertex disappearing.
-	 * @param is_appearing TRUE, if the vertex is appearing, FALSE if not. */
-	public DynamicVertex(String label, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param label
+	 *            The label of the vertex.
+	 * @param enabling_tpd
+	 *            The time probability distribution for the vertex enabling.
+	 * @param disabling_tpd
+	 *            The time probability distribution for the vertex disabling.
+	 * @param is_enabled
+	 *            TRUE, if the vertex is enabled, FALSE if not.
+	 */
+	public DynamicVertex(String label,
+			EventTimeProbabilityDistribution enabling_tpd,
+			EventTimeProbabilityDistribution disabling_tpd, boolean is_enabled) {
 		super(label);
-		this.appearing_tpd = appearing_tpd;
-		this.disappearing_tpd = disappearing_tpd;
-		this.is_appearing = is_appearing;
-		this.appearing_edges = new HashSet<Edge>();
+		this.enabling_tpd = enabling_tpd;
+		this.disabling_tpd = disabling_tpd;
+		this.is_enabled = is_enabled;
+		this.enabled_edges = new HashSet<Edge>();
 	}
-	
-	/** Returns if the vertex is appearing.
-	 *  @return TRUE, if the vertex is appearing, FALSE if not. */
-	public boolean isAppearing() {
-		return this.is_appearing;
+
+	/**
+	 * Verifies if a given edge is in the memory of enabled edges.
+	 * 
+	 * @param edge
+	 *            The edge to be verified.
+	 * @return TRUE, if the edge is in the memory of enabled edges, FALSE if
+	 *         not.
+	 */
+	public boolean isInEnabledEdges(Edge edge) {
+		return this.enabled_edges.contains(edge);
 	}
-	
-	public void setIsAppearing(boolean is_appearing) {
-		this.is_appearing = is_appearing;
-		
-		// screen message
-		System.out.println("[SimPatrol.Event] " + this.getObjectId() + " appearing " + this.is_appearing + ".");
-		
-		// if is_appering is FALSE, memorizes the edges that are appearing
-		// and resets its idleness
-		if(!is_appearing) {
-			this.appearing_edges = new HashSet<Edge>();
-			
+
+	/**
+	 * Adds a given edge to the memory of enabled edges of the vertex.
+	 * 
+	 * @param edge
+	 *            The edge to be added to the memory.
+	 */
+	public void addEnabledEdge(Edge edge) {
+		this.enabled_edges.add(edge);
+	}
+
+	public boolean isEnabled() {
+		return this.is_enabled;
+	}
+
+	public void setIsEnabled(boolean enabled) {
+		this.is_enabled = enabled;
+
+		// if is_enabled is FALSE
+		if (!enabled) {
+			this.enabled_edges = new HashSet<Edge>();
+
 			// memorizes the in_edges and hides them
-			if(this.in_edges != null) {
-				Object[] edges_array = this.in_edges.toArray();
-				for(int i = 0; i < edges_array.length; i++)
-					if(((Edge) edges_array[i]).isAppearing()) {
-						this.appearing_edges.add((Edge) edges_array[i]);
-						((Edge) edges_array[i]).setIsAppearing(false);
+			if (this.in_edges != null)
+				for (Edge edge : this.in_edges)
+					if (edge.isEnabled()) {
+						this.enabled_edges.add(edge);
+						edge.setIsEnabled(false);
 					}
-			}
-			
+
 			// memorizes the out_edges and hides them
-			if(this.out_edges != null) {
-				Object[] edges_array = this.out_edges.toArray();
-				for(int i = 0; i < edges_array.length; i++)
-					if(((Edge) edges_array[i]).isAppearing()) {
-						this.appearing_edges.add((Edge) edges_array[i]);
-						((Edge) edges_array[i]).setIsAppearing(false);
+			if (this.out_edges != null)
+				for (Edge edge : this.out_edges)
+					if (edge.isEnabled()) {
+						this.enabled_edges.add(edge);
+						edge.setIsEnabled(false);
 					}
-			}
 		}
-		// if is_appearing is TRUE...
+		// if is_enabled is TRUE
 		else {
-			// makes appear the memorized appearing edges
-			Object[] edges_array = this.appearing_edges.toArray();
-			for(int i = 0; i < edges_array.length; i++)
-				((Edge) edges_array[i]).setIsAppearing(true);
-			
-			// clears the memorized appearing edges
-			this.appearing_edges.clear();
+			// makes appear the memorized enabled edges
+			for (Edge edge : this.enabled_edges)
+				edge.setIsEnabled(true);
+
+			// clears the memorized enabled edges
+			this.enabled_edges.clear();
+
+			// resets its idleness
+			this.last_visit_time = time_counter.getElapsedTime();
 		}
 	}
-	
-	/** Verifies if a given edge is in the memory of appearing edges.
-	 *  @param edge The edge to be verified.
-	 *  @return TRUE, if the edge is in the memory of appearing edges, FALSE if not. */
-	public boolean isInAppearingEdges(Edge edge) {
-		return this.appearing_edges.contains(edge);
-	}
-	
-	/** Adds a given edge to the memory of appearing edges of the vertex.
-	 *  @param edge The edge to be added to the memory. */
-	public void addAppearingEdge(Edge edge) {
-		this.appearing_edges.add(edge);
-	}
-	
-	/** Returns a copy of the vertex, with no edges.
-	 *  @return The copy of the vertex, without the edges. */
+
+	/**
+	 * Returns a copy of the vertex, with no edges.
+	 * 
+	 * @return The copy of the vertex, without the edges.
+	 */
 	public DynamicVertex getCopy() {
-		DynamicVertex answer = new DynamicVertex(this.label, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
+		DynamicVertex answer = new DynamicVertex(this.label, this.enabling_tpd,
+				this.disabling_tpd, this.is_enabled);
 		answer.id = this.id;
-		answer.stigmas = this.stigmas;
 		answer.priority = this.priority;
 		answer.visibility = this.visibility;
 		answer.fuel = this.fuel;
-		answer.last_visit_time = this.last_visit_time;		
-		
+		answer.last_visit_time = this.last_visit_time;
+
 		return answer;
 	}
-	
-	public String toXML(int identation) {
+
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation));
-		
-		// finds the appearing attribute, atualizing it if necessary
-		if(!this.is_appearing) {
-			int index_appearing_value = buffer.lastIndexOf("is_appearing=\"true\"");
-			if(index_appearing_value > -1) buffer.replace(index_appearing_value + 14, index_appearing_value + 14 + 4, "false");
-			else {
-				int index_bigger = buffer.indexOf(">");
-				buffer.insert(index_bigger, " is_appearing=\"false\"");
-			}
+		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
+
+		// finds the enabled attribute, atualizing it if necessary
+		if (!this.is_enabled) {
+			int index_enabled_value = buffer.lastIndexOf("is_enabled=\"true\"");
+			buffer.replace(index_enabled_value + 12,
+					index_enabled_value + 12 + 4, "false");
 		}
-		
-		// removes the closing of the xml tag
-		int last_valid_index = 0;
-		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else {
-			StringBuffer closing_tag = new StringBuffer();			
-			for(int i = 0; i < identation; i++) closing_tag.append("\t");
-			closing_tag.append("</vertex>");
-			
-			last_valid_index = buffer.indexOf(closing_tag.toString());
-		}
-		
-		buffer.delete(last_valid_index, buffer.length());
+
+		// removes the xml tag closing signals
+		int last_valid_index = buffer.indexOf("/>");
+		buffer.replace(last_valid_index, last_valid_index + 2, ">");
 
 		// adds the time probability distributions
-		buffer.append(this.appearing_tpd.toXML(identation + 1));
-		buffer.append(this.disappearing_tpd.toXML(identation + 1));
-		
+		buffer.append(this.enabling_tpd.fullToXML(identation + 1));
+		buffer.append(this.disabling_tpd.fullToXML(identation + 1));
+
 		// applies the identation
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
 		// closes the tags
 		buffer.append("</vertex>\n");
-		
+
 		// returns the buffer content
 		return buffer.toString();
 	}
-	
-	public EventTimeProbabilityDistribution getAppearingTPD() {
-		return this.appearing_tpd;
+
+	public EventTimeProbabilityDistribution getEnablingTPD() {
+		return this.enabling_tpd;
 	}
-	
-	public EventTimeProbabilityDistribution getDisappearingTPD() {
-		return this.disappearing_tpd;
+
+	public EventTimeProbabilityDistribution getDisablingTPD() {
+		return this.disabling_tpd;
 	}
 }

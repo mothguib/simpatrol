@@ -4,113 +4,135 @@
 package model.graph;
 
 /* Imported classes and/or interfaces. */
+import model.etpd.EventTimeProbabilityDistribution;
 import model.interfaces.Dynamic;
-import util.etpd.EventTimeProbabilityDistribution;
 
-/** Implements dynamic edges of a Graph object,
- *  that can appear and disappear with a specific event time
- *  probability distribution. */
+/**
+ * Implements dynamic edges of a Graph object, that can become disabled or
+ * enabled with a specific event time probability distribution.
+ */
 public final class DynamicEdge extends Edge implements Dynamic {
 	/* Attributes. */
-	/** The time probability distribution for the edge appearing. */
-	private EventTimeProbabilityDistribution appearing_tpd;
+	/** The time probability distribution for the edge enabling. */
+	private EventTimeProbabilityDistribution enabling_tpd;
 
-	/** The time probability distribution for the edge disappearing. */
-	private EventTimeProbabilityDistribution disappearing_tpd;
-	
+	/** The time probability distribution for the edge disabling. */
+	private EventTimeProbabilityDistribution disabling_tpd;
+
 	/* Methods. */
-	/** Contructor for non-oriented dynamic edges (dynamic non-arcs).
-	 *  @param vertex_1 One of the vertexes of the edge.
-	 *  @param vertex_2 Another vertex of the edge.
-	 *  @param length The length of the edge
-	 *  @param appearing_tpd The time probability distribution for the edge appearing.
-	 *  @param diappearing_tpd The time probability distribution for the edge disappearing.
-	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */
-	public DynamicEdge(Vertex vertex_1, Vertex vertex_2, double length, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing) {
-		this(vertex_1, vertex_2, false, length, appearing_tpd, disappearing_tpd, is_appearing);
+	/**
+	 * Constructor for non-oriented dynamic edges (dynamic non-arcs).
+	 * 
+	 * @param vertex_1
+	 *            One of the vertexes of the edge.
+	 * @param vertex_2
+	 *            Another vertex of the edge.
+	 * @param length
+	 *            The length of the edge
+	 * @param enabling_tpd
+	 *            The time probability distribution for the edge enabling.
+	 * @param disabling_tpd
+	 *            The time probability distribution for the edge disabling.
+	 * @param is_enabled
+	 *            TRUE, if the edge is enabled, FALSE if not.
+	 */
+	public DynamicEdge(Vertex vertex_1, Vertex vertex_2, double length,
+			EventTimeProbabilityDistribution enabling_tpd,
+			EventTimeProbabilityDistribution disabling_tpd, boolean is_enabled) {
+		this(vertex_1, vertex_2, false, length, enabling_tpd, disabling_tpd,
+				is_enabled);
 	}
-	
-	/** Contructor for eventually oriented dynamic edges (dynamic arcs).
-	 *  @param emitter The emitter vertex, if the edge is an arc.
-	 *  @param collector The collector vertex, if the edge is an arc.
-	 *  @param oriented TRUE if the edge is an arc.
-	 *  @param length The length of the edge.
-	 *  @param appearing_tpd The time probability distribution for the edge appearing.
-	 *  @param diappearing_tpd The time probability distribution for the edge disappearing.
-	 *  @param is_appearing TRUE, if the edge is appearing, FALSE if not. */	
-	public DynamicEdge(Vertex emitter, Vertex collector, boolean oriented, double length, EventTimeProbabilityDistribution appearing_tpd, EventTimeProbabilityDistribution disappearing_tpd, boolean is_appearing) {
+
+	/**
+	 * Constructor for eventually oriented dynamic edges (dynamic arcs).
+	 * 
+	 * @param emitter
+	 *            The emitter vertex, if the edge is an arc.
+	 * @param collector
+	 *            The collector vertex, if the edge is an arc.
+	 * @param oriented
+	 *            TRUE if the edge is an arc, FALSE if not.
+	 * @param length
+	 *            The length of the edge.
+	 * @param enabling_tpd
+	 *            The time probability distribution for the edge enabling.
+	 * @param disabling_tpd
+	 *            The time probability distribution for the edge disabling.
+	 * @param is_enabled
+	 *            TRUE, if the edge is enabled, FALSE if not.
+	 */
+	public DynamicEdge(Vertex emitter, Vertex collector, boolean oriented,
+			double length, EventTimeProbabilityDistribution enabling_tpd,
+			EventTimeProbabilityDistribution disabling_tpd, boolean is_enabled) {
 		super(emitter, collector, oriented, length);
-		this.appearing_tpd = appearing_tpd;
-		this.disappearing_tpd = disappearing_tpd;
-		
-		// configures the is_appearing attribute, based on
+		this.enabling_tpd = enabling_tpd;
+		this.disabling_tpd = disabling_tpd;
+
+		// configures the is_enabled attribute, based on
 		// emitter and collector vertexes
-		this.is_appearing = is_appearing;
-		
-		if(emitter instanceof DynamicVertex)
-			if(!((DynamicVertex) emitter).isAppearing())
-				this.is_appearing = false;
-		
-		if(collector instanceof DynamicVertex) 
-			if(!((DynamicVertex) collector).isAppearing())
-				this.is_appearing = false;		
+		this.is_enabled = is_enabled;
+
+		if (emitter instanceof DynamicVertex)
+			if (!((DynamicVertex) emitter).isEnabled())
+				this.is_enabled = false;
+
+		if (collector instanceof DynamicVertex)
+			if (!((DynamicVertex) collector).isEnabled())
+				this.is_enabled = false;
 	}
-	
-	/** Obtains a copy of the edge with the given copies of vertexes.
-	 *  @param copy_emitter The copy of the emitter.
-	 *  @param copy_collector The copy of the collector.
-	 *  @return The copy of the edge.*/
-	public DynamicEdge getCopy(Vertex copy_emitter, Vertex copy_collector) {
+
+	/**
+	 * Obtains a copy of the edge with the given copies of vertexes.
+	 * 
+	 * @param emitter_copy
+	 *            The copy of the emitter.
+	 * @param collector_copy
+	 *            The copy of the collector.
+	 * @return The copy of the edge.
+	 */
+	public DynamicEdge getCopy(Vertex emitter_copy, Vertex collector_copy) {
 		// registers if the original edge is oriented
 		boolean oriented = !this.emitter.isCollectorOf(this);
-		
-		// the copy		
-		DynamicEdge answer = new DynamicEdge(copy_emitter, copy_collector, oriented, this.length, this.appearing_tpd, this.disappearing_tpd, this.is_appearing);
+
+		// the copy
+		DynamicEdge answer = new DynamicEdge(emitter_copy, collector_copy,
+				oriented, this.length, this.enabling_tpd, this.disabling_tpd,
+				this.is_enabled);
 		answer.id = this.id;
-		answer.stigmas = this.stigmas;
 		answer.visibility = this.visibility;
-		answer.is_appearing = this.is_appearing;
-		
+
 		// returns the answer
 		return answer;
 	}
-	
-	public String toXML(int identation) {
+
+	public String fullToXML(int identation) {
 		// holds the answer being constructed
-		StringBuffer buffer = new StringBuffer(super.toXML(identation));
-		
-		// removes the closing of the xml tag
-		int last_valid_index = 0;
-		if(this.stigmas == null) last_valid_index = buffer.indexOf("/>");
-		else {
-			StringBuffer closing_tag = new StringBuffer();			
-			for(int i = 0; i < identation; i++) closing_tag.append("\t");
-			closing_tag.append("</edge>");
-			
-			last_valid_index = buffer.indexOf(closing_tag.toString());
-		}
-		
-		buffer.delete(last_valid_index, buffer.length());
-		
+		StringBuffer buffer = new StringBuffer(super.fullToXML(identation));
+
+		// removes the xml closing tag
+		int last_valid_index = buffer.indexOf("/>");
+		buffer.replace(last_valid_index, last_valid_index + 2, ">");
+
 		// adds the time probability distributions
-		buffer.append(this.appearing_tpd.toXML(identation + 1));
-		buffer.append(this.disappearing_tpd.toXML(identation + 1));
-		
+		buffer.append(this.enabling_tpd.fullToXML(identation + 1));
+		buffer.append(this.disabling_tpd.fullToXML(identation + 1));
+
 		// applies the identation
-		for(int i = 0; i < identation; i++) buffer.append("\t");
-		
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
 		// closes the tags
 		buffer.append("</edge>\n");
-		
+
 		// returns the buffer content
 		return buffer.toString();
 	}
-	
-	public EventTimeProbabilityDistribution getAppearingTPD() {
-		return this.appearing_tpd;
+
+	public EventTimeProbabilityDistribution getEnablingTPD() {
+		return this.enabling_tpd;
 	}
-	
-	public EventTimeProbabilityDistribution getDisappearingTPD() {
-		return this.disappearing_tpd;
+
+	public EventTimeProbabilityDistribution getDisablingTPD() {
+		return this.disabling_tpd;
 	}
 }

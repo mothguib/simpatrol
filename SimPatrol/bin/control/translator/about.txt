@@ -1,0 +1,2 @@
+This package contains the translators that obtain
+Java objects from XML sources.
