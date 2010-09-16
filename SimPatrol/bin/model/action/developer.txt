@@ -1,5 +1,0 @@
-* New Action subclasses must add new classes in this package;
-* New Action subclasses must change the "ActionTypes" class.
-* New Action subclasses must change the "control.translator.ActionTranslator" class.
-* New Action subclasses must change the "control.daemon.ActionDaemon" class.
-* New CompoundAction subclasses must change the "control.parser.CompoundActionParser" class.
