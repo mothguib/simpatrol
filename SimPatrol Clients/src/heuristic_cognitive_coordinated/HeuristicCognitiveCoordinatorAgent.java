@@ -286,7 +286,7 @@ final class ComparableVertex implements Comparable {
 			Vertex other_vertex = ((ComparableVertex) object).VERTEX;
 
 			// obtains the bound idlenesses of the graph
-			int[] bound_idlenesses = graph.getSmallestAndBiggestIdlenesses();
+			double[] bound_idlenesses = graph.getSmallestAndBiggestIdlenesses();
 
 			// obtains the bound distances of the graph
 			double[] bound_distances = graph.getSmallestAndBiggestDistances();

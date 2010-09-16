@@ -6,7 +6,6 @@ package util.graph;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.io.StringReader;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,12 +26,11 @@ public abstract class GraphTranslator {
 	 * @param xml_string
 	 *            The string of the XML source containing the objects to be
 	 *            translated.
-	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public static Element parseString(String xml_string)
-			throws ParserConfigurationException, SAXException, IOException {
+	public static Element parseString(String xml_string) throws SAXException,
+			IOException {
 		InputSource is = new InputSource(new StringReader(xml_string));
 
 		DOMParser parser = new DOMParser();
@@ -95,7 +93,7 @@ public abstract class GraphTranslator {
 		// the answer to the method
 		Vertex[] answer = new Vertex[vertex_nodes.getLength()];
 
-		// for each ocurrence
+		// for each occurrence
 		for (int i = 0; i < answer.length; i++) {
 			// obtains the current vertex element
 			Element vertex_element = (Element) vertex_nodes.item(i);
@@ -107,7 +105,7 @@ public abstract class GraphTranslator {
 			String str_idleness = vertex_element.getAttribute("idleness");
 			String str_fuel = vertex_element.getAttribute("fuel");
 
-			// instatiates the new vertex
+			// instantiates the new vertex
 			Vertex current_vertex = new Vertex(label);
 
 			// configures the new vertex...
@@ -121,9 +119,9 @@ public abstract class GraphTranslator {
 			current_vertex.setPriority(priority);
 
 			// idleness configuration
-			int idleness = 0;
+			double idleness = 0;
 			if (str_idleness.length() > 0)
-				idleness = Integer.parseInt(str_idleness);
+				idleness = Double.parseDouble(str_idleness);
 			current_vertex.setIdleness(idleness);
 
 			// fuel configuration
@@ -156,7 +154,7 @@ public abstract class GraphTranslator {
 		// the answer to the method
 		Edge[] answer = new Edge[edge_nodes.getLength()];
 
-		// for each ocurrence
+		// for each occurrence
 		for (int i = 0; i < answer.length; i++) {
 			// obtains the current edge element
 			Element edge_element = (Element) edge_nodes.item(i);

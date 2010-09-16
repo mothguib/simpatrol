@@ -82,8 +82,8 @@ public class MetricFileClient extends Thread {
 	}
 
 	/**
-	 * Turns this class into an executable one. Useful when running this client in
-	 * an individual machine.
+	 * Turns this class into an executable one. Useful when running this client
+	 * in an individual machine.
 	 * 
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.

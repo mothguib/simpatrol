@@ -151,7 +151,7 @@ public class FileReader {
 		int i = 0;
 		int size = line.length();
 		for (i = this.next_token_col; i < size; i++)
-			if (line.charAt(i) == ' ')
+			if (line.charAt(i) == ' ' || line.charAt(i) == '\t')
 				break;
 
 		next_string = line.substring(this.next_token_col, i);
@@ -229,7 +229,7 @@ public class FileReader {
 		if (line != null) {
 			int size = line.length();
 			for (int i = this.next_char; i < size; i++)
-				if (line.charAt(i) != ' ') {
+				if (line.charAt(i) != ' ' && line.charAt(i) != '\t') {
 					this.next_token_col = i;
 					return;
 				}
@@ -241,7 +241,7 @@ public class FileReader {
 		while ((line = this.file_reader.readLine()) != null) {
 			int size = line.length();
 			for (int i = 0; i < size; i++)
-				if (line.charAt(i) != ' ') {
+				if (line.charAt(i) != ' ' && line.charAt(i) != '\t') {
 					this.next_token_col = i;
 					this.next_token_line = this.appendLine(line);
 					return;

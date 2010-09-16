@@ -5,9 +5,7 @@ package cognitive_coordinated;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.LinkedList;
-import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import util.Keyboard;
 import util.graph.Edge;
@@ -25,7 +23,7 @@ import common.Agent;
 public final class CognitiveCoordinatedAgent extends Agent {
 	/* Attributes. */
 	/** The id of this agent. */
-	private final String ID;
+	private String id;
 
 	/** The plan of walking through the graph. */
 	private final LinkedList<String> PLAN;
@@ -39,32 +37,20 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	/** The current position of the agent. */
 	private StringAndDouble position;
 
-	/** Holds if the simulation is a real time one. */
-	private static boolean is_real_time_simulation;
-
 	/**
 	 * The time interval the agent is supposed to wait for a message sent by the
-	 * coordinator. Mesaured in seconds.
+	 * coordinator. Measured in seconds.
 	 */
 	private final int WAITING_TIME = 30; // 30 seconds
 
 	/* Methods. */
-	/**
-	 * Contructor.
-	 * 
-	 * @param id
-	 *            The id of this agent.
-	 * @param is_real_time
-	 *            TRUE if the simulation is a real time one, FALSE if it is a
-	 *            cycled one.
-	 */
-	public CognitiveCoordinatedAgent(String id, boolean is_real_time) {
-		this.ID = id;
+	/** Constructor. */
+	public CognitiveCoordinatedAgent() {
+		this.id = null;
 		this.PLAN = new LinkedList<String>();
 		this.goal = null;
 		this.graph = null;
 		this.position = null;
-		is_real_time_simulation = is_real_time;
 	}
 
 	/**
@@ -76,6 +62,13 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 */
 	private StringAndDouble perceivePosition(String perception) {
 		if (perception.indexOf("<perception type=\"4\"") > -1) {
+			// obtains the id of the agent, if necessary
+			if (this.id == null) {
+				int id_index = perception.indexOf("<agent id=\"");
+				perception = perception.substring(id_index + 11);
+				this.id = perception.substring(0, perception.indexOf("\""));
+			}
+
 			// obtains the id of the current vertex
 			int vertex_id_index = perception.indexOf("vertex_id=\"");
 			perception = perception.substring(vertex_id_index + 11);
@@ -88,7 +81,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			double elapsed_length = Double.parseDouble(perception.substring(0,
 					perception.indexOf("\"")));
 
-			// returs the answer of the method
+			// returns the answer of the method
 			return new StringAndDouble(vertex_id, elapsed_length);
 		}
 
@@ -110,11 +103,11 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			perception = perception.substring(message_index + 9);
 			String message = perception.substring(0, perception.indexOf("\""));
 
-			// if the message has the "###" conventioned mark
+			// if the message has the "###" conventional mark
 			int mark_index = message.indexOf("###");
 			if (mark_index > -1)
 				// if this message was sent to this agent
-				if (message.substring(0, mark_index).equals(this.ID))
+				if (message.substring(0, mark_index).equals(this.id))
 					// returns the id of the goal vertex
 					return message.substring(mark_index + 3);
 		}
@@ -122,17 +115,16 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	}
 
 	/**
-	 * Perceives the graph to be patrolled.
+	 * Perceives the graph to be patroled.
 	 * 
 	 * @param perception
 	 *            The perception sent by SimPatrol server.
 	 * @return The perceived graph.
 	 * @throws IOException
 	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
-	private Graph perceiveGraph(String perception)
-			throws ParserConfigurationException, SAXException, IOException {
+	private Graph perceiveGraph(String perception) throws SAXException,
+			IOException {
 		Graph[] parsed_perception = GraphTranslator.getGraphs(GraphTranslator
 				.parseString(perception));
 		if (parsed_perception.length > 0)
@@ -148,7 +140,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 */
 	private void requestGoal() throws IOException {
 		if (this.position != null)
-			this.connection.send("<action type=\"3\" message=\"" + this.ID
+			this.connection.send("<action type=\"3\" message=\"" + this.id
 					+ "###" + this.position.STRING + "\"/>");
 	}
 
@@ -233,7 +225,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 			while (this.position == null) {
 				// obtains the perceptions sent by SimPatrol server
 				String[] perceptions = this.connection.getBufferAndFlush();
-
+				
 				// for each perception, starting from the most recent one
 				for (int i = perceptions.length - 1; i >= 0; i--) {
 					// tries to obtain the current position
@@ -242,6 +234,12 @@ public final class CognitiveCoordinatedAgent extends Agent {
 					if (this.position != null)
 						break;
 				}
+				/*try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
 			}
 
 			// lets the agent ask for a goal vertex to the coordinator
@@ -253,8 +251,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 
 			// tracks the time the agent has been waiting for a message from the
 			// coordinator
-			int begin_waiting_time = Calendar.getInstance()
-					.get(Calendar.SECOND);
+			long begin_waiting_time = System.nanoTime();
 
 			// while the agent did not perceive its position, its goal vertex
 			// and the graph of the simulation
@@ -286,8 +283,6 @@ public final class CognitiveCoordinatedAgent extends Agent {
 							try {
 								perceived_graph = this
 										.perceiveGraph(perceptions[i]);
-							} catch (ParserConfigurationException e) {
-								e.printStackTrace();
 							} catch (SAXException e) {
 								e.printStackTrace();
 							} catch (IOException e) {
@@ -303,26 +298,22 @@ public final class CognitiveCoordinatedAgent extends Agent {
 					if (goal_vertex != null && current_graph != null)
 						break;
 					// else if the simulation is a real time one
-					else if (is_real_time_simulation) {
+					else if (this.connection instanceof UDPClientConnection) {
 						// counts the time the agent has been waiting for a
 						// message from the coordinator
-						int end_wainting_time = Calendar.getInstance().get(
-								Calendar.SECOND);
-
-						if (end_wainting_time < begin_waiting_time)
-							end_wainting_time = end_wainting_time + 60;
+						long end_wainting_time = System.nanoTime();
 
 						// if the agent waited too long, resends a request for a
 						// new goal vertex
-						if (end_wainting_time - begin_waiting_time >= this.WAITING_TIME) {
+						if (end_wainting_time - begin_waiting_time >= this.WAITING_TIME
+								* Math.pow(10, 9)) {
 							try {
 								this.requestGoal();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
 
-							begin_waiting_time = Calendar.getInstance().get(
-									Calendar.SECOND);
+							begin_waiting_time = System.nanoTime();
 						}
 					}
 					// else, if the perceived graph is not the one previously
@@ -404,18 +395,15 @@ public final class CognitiveCoordinatedAgent extends Agent {
 	 *            Arguments: index 0: The IP address of the SimPatrol server.
 	 *            index 1: The number of the socket that the server is supposed
 	 *            to listen to this client. index 2: "true", if the simulation
-	 *            is a real time one, "false" if not. index 3: The ID of the
-	 *            agent.
+	 *            is a real time one, "false" if not.
 	 */
 	public static void main(String args[]) {
 		try {
 			String server_address = args[0];
 			int server_socket_number = Integer.parseInt(args[1]);
 			boolean is_real_time_simulation = Boolean.parseBoolean(args[2]);
-			String agent_id = args[3];
 
-			CognitiveCoordinatedAgent agent = new CognitiveCoordinatedAgent(
-					agent_id, is_real_time_simulation);
+			CognitiveCoordinatedAgent agent = new CognitiveCoordinatedAgent();
 			if (is_real_time_simulation)
 				agent.setConnection(new UDPClientConnection(server_address,
 						server_socket_number));
@@ -434,7 +422,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 		} catch (Exception e) {
 			System.out
 					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedAgent\n"
-							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
+							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)>\"");
 		}
 	}
 }

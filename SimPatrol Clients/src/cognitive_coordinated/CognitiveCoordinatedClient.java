@@ -49,8 +49,8 @@ public final class CognitiveCoordinatedClient extends Client {
 	 */
 	public CognitiveCoordinatedClient(String remote_socket_address,
 			int remote_socket_number, String environment_file_path,
-			String[] metrics_file_paths, int metrics_collecting_rate,
-			String log_file_path, int time_of_simulation,
+			String[] metrics_file_paths, double metrics_collecting_rate,
+			String log_file_path, double time_of_simulation,
 			boolean is_real_time_simulator) throws UnknownHostException,
 			IOException {
 		super(remote_socket_address, remote_socket_number,
@@ -69,8 +69,7 @@ public final class CognitiveCoordinatedClient extends Client {
 			if (agent_ids[i].equals("coordinator"))
 				agent = new CognitiveCoordinatorAgent();
 			else
-				agent = new CognitiveCoordinatedAgent(agent_ids[i],
-						this.IS_REAL_TIME_SIMULATOR);
+				agent = new CognitiveCoordinatedAgent();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
 				agent.setConnection(new UDPClientConnection(this.CONNECTION
@@ -80,6 +79,7 @@ public final class CognitiveCoordinatedClient extends Client {
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
+			this.agents.add(agent);
 		}
 	}
 
@@ -108,9 +108,9 @@ public final class CognitiveCoordinatedClient extends Client {
 			int remote_socket_number = Integer.parseInt(args[1]);
 			String environment_file_path = args[2];
 			String[] metric_file_paths = { args[3], args[4], args[5], args[6] };
-			int metrics_collecting_rate = Integer.parseInt(args[7]);
+			double metrics_collecting_rate = Double.parseDouble(args[7]);
 			String log_file_path = args[8];
-			int time_of_simulation = Integer.parseInt(args[9]);
+			double time_of_simulation = Double.parseDouble(args[9]);
 			boolean is_real_time_simulator = Boolean.parseBoolean(args[10]);
 
 			CognitiveCoordinatedClient client = new CognitiveCoordinatedClient(

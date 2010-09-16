@@ -35,9 +35,9 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		const char * SERVER_ADDRESS = "127.0.0.1";
 		const u_short SERVER_PORT = 5000;
 		const int BUFFER_SIZE = 1024;
-		const bool IS_REALTIME_SIMULATION = true;
+		const bool IS_REALTIME_SIMULATION = false;
 		const string ENVIRONMENT_CONFIGURATION_MESSAGE = "<configuration type=\"0\" parameter=\"c:/env2.txt\"/>\n";
-		const string START_SIMULATION_MESSAGE = "<configuration type=\"3\" parameter=\"30\"/>\n";
+		const string START_SIMULATION_MESSAGE = "<configuration type=\"3\" parameter=\"600\"/>\n";
 		
 		// initializing WinSock
 		WSADATA wsaData;

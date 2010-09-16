@@ -18,7 +18,7 @@ import common.Agent;
 public class ConscientiousReactiveAgent extends Agent {
 	/* Attributes. */
 	/** Memorizes the last time this agent visited the vertexes. */
-	private LinkedList<StringAndDouble> vertexes_idlenesses;
+	private final LinkedList<StringAndDouble> VERTEXES_IDLENESSES;
 
 	/** Lets the agent count the time. */
 	private int time_counting;
@@ -26,7 +26,7 @@ public class ConscientiousReactiveAgent extends Agent {
 	/* Methods. */
 	/** Constructor. */
 	public ConscientiousReactiveAgent() {
-		this.vertexes_idlenesses = new LinkedList<StringAndDouble>();
+		this.VERTEXES_IDLENESSES = new LinkedList<StringAndDouble>();
 		this.time_counting = 0;
 	}
 
@@ -72,11 +72,11 @@ public class ConscientiousReactiveAgent extends Agent {
 	}
 
 	/**
-	 * Lets the agent perceive the neighbourhood.
+	 * Lets the agent perceive the neighborhood.
 	 * 
 	 * @param perceptions
 	 *            The current perceptions of the agent.
-	 * @return The id of the vertexes in the neighbourhood.
+	 * @return The id of the vertexes in the neighborhood.
 	 */
 	private String[] perceiveNeighbourhood(String[] perceptions) {
 		// tries to obtain the most recent perception of the neighbourhood
@@ -136,7 +136,7 @@ public class ConscientiousReactiveAgent extends Agent {
 	 * @param current_position
 	 *            The current position of the agent.
 	 * @param neighbourhood
-	 *            The neighbourhood of where the agent is.
+	 *            The neighborhood of where the agent is.
 	 * @return The next vertex the agent must take.
 	 */
 	private String decideNextVertex(StringAndDouble current_position,
@@ -149,7 +149,7 @@ public class ConscientiousReactiveAgent extends Agent {
 		String next_vertex = null;
 
 		// holds the smallest visiting time found by the agent
-		double visiting_time = Integer.MAX_VALUE;
+		double visiting_time = Double.MAX_VALUE;
 
 		// for each vertex in the neighbourhood, finds the one
 		// with the smallest visiting time, ignoring the current vertex
@@ -168,8 +168,8 @@ public class ConscientiousReactiveAgent extends Agent {
 
 				// tries to find the visiting time of the obtained vertex
 				// in the memory of the agent
-				for (int j = 0; j < this.vertexes_idlenesses.size(); j++) {
-					StringAndDouble memorized_item = this.vertexes_idlenesses
+				for (int j = 0; j < this.VERTEXES_IDLENESSES.size(); j++) {
+					StringAndDouble memorized_item = this.VERTEXES_IDLENESSES
 							.get(j);
 
 					// if the memorized item is about the obtained vertex
@@ -189,16 +189,16 @@ public class ConscientiousReactiveAgent extends Agent {
 				// if the obtained vertex is not memorized
 				if (!is_memorized)
 					// adds it to the memory of the agent
-					this.vertexes_idlenesses.add(new StringAndDouble(vertex_id,
+					this.VERTEXES_IDLENESSES.add(new StringAndDouble(vertex_id,
 							current_visiting_time));
 
 				// if the current visiting time is smaller than the oficial
 				// visiting time
 				if (current_visiting_time < visiting_time) {
-					// atualizes the next vertex
+					// updates the next vertex
 					next_vertex = vertex_id;
 
-					// atualizes the oficial visiting time
+					// updates the official visiting time
 					visiting_time = current_visiting_time;
 				}
 			}
@@ -217,9 +217,9 @@ public class ConscientiousReactiveAgent extends Agent {
 	 */
 	private void visitCurrentPosition(StringAndDouble current_position)
 			throws IOException {
-		// atualizes the memory of the agent
-		for (int i = 0; i < this.vertexes_idlenesses.size(); i++) {
-			StringAndDouble memorized_item = this.vertexes_idlenesses.get(i);
+		// updates the memory of the agent
+		for (int i = 0; i < this.VERTEXES_IDLENESSES.size(); i++) {
+			StringAndDouble memorized_item = this.VERTEXES_IDLENESSES.get(i);
 
 			if (memorized_item.STRING.equals(current_position.STRING)) {
 				memorized_item.double_value = this.time_counting;
@@ -255,10 +255,10 @@ public class ConscientiousReactiveAgent extends Agent {
 			// the current position of the agent
 			StringAndDouble current_position = null;
 
-			// the neighbourhood of where the agent is
+			// the neighborhood of where the agent is
 			String[] neighbourhood = new String[0];
 
-			// while the current position or neighbourhood are not valid
+			// while the current position or neighborhood is not valid
 			while (current_position == null || neighbourhood.length == 0) {
 				// obtains the perceptions from the server
 				String[] perceptions = this.connection.getBufferAndFlush();
@@ -269,7 +269,7 @@ public class ConscientiousReactiveAgent extends Agent {
 				if (current_current_position != null)
 					current_position = current_current_position;
 
-				// tries to obtain the neighbourhood
+				// tries to obtain the neighborhood
 				String[] current_neighbourhood = this
 						.perceiveNeighbourhood(perceptions);
 				if (current_neighbourhood.length > 0)
@@ -318,8 +318,8 @@ public class ConscientiousReactiveAgent extends Agent {
 	}
 
 	/**
-	 * Turns this class into an executable one. Useful when running this agent in
-	 * an individual machine.
+	 * Turns this class into an executable one. Useful when running this agent
+	 * in an individual machine.
 	 * 
 	 * @param args
 	 *            Arguments: index 0: The IP address of the SimPatrol server.

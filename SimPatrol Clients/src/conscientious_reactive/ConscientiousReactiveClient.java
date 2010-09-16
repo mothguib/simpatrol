@@ -1,4 +1,4 @@
-/* ConscientiousReactiveClient.java */
+/* GrayBoxLearnerClient.java */
 
 /* The package of this class. */
 package conscientious_reactive;
@@ -74,6 +74,7 @@ public final class ConscientiousReactiveClient extends Client {
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
+			this.agents.add(agent);
 		}
 	}
 

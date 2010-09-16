@@ -70,8 +70,7 @@ public final class HeuristicCognitiveCoordinatedClient extends Client {
 			if (agent_ids[i].equals("coordinator"))
 				agent = new HeuristicCognitiveCoordinatorAgent();
 			else
-				agent = new HeuristicCognitiveCoordinatedAgent(agent_ids[i],
-						this.IS_REAL_TIME_SIMULATOR);
+				agent = new HeuristicCognitiveCoordinatedAgent();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
 				agent.setConnection(new UDPClientConnection(this.CONNECTION
@@ -81,6 +80,7 @@ public final class HeuristicCognitiveCoordinatedClient extends Client {
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
+			this.agents.add(agent);
 		}
 	}
 

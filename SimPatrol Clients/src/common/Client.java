@@ -27,13 +27,13 @@ public abstract class Client extends Thread {
 	private final String[] METRICS_FILE_PATHS;
 
 	/** The time interval used to collect the metrics. */
-	private final int METRICS_COLLECTING_RATE;
+	private final double METRICS_COLLECTING_RATE;
 
 	/** The path of the file to store the log of the simulation. */
 	private final String LOG_FILE_PATH;
 
 	/** The time of the simulation. */
-	private final int TIME_OF_SIMULATION;
+	private final double TIME_OF_SIMULATION;
 
 	/** Holds if the simulator is a real time one. */
 	protected final boolean IS_REAL_TIME_SIMULATOR;
@@ -82,8 +82,8 @@ public abstract class Client extends Thread {
 	 */
 	public Client(String remote_socket_address, int remote_socket_number,
 			String environment_file_path, String[] metrics_file_paths,
-			int metrics_collecting_rate, String log_file_path,
-			int time_of_simulation, boolean is_real_time_simulator)
+			double metrics_collecting_rate, String log_file_path,
+			double time_of_simulation, boolean is_real_time_simulator)
 			throws UnknownHostException, IOException {
 		this.ENVIRONMENT_FILE_PATH = environment_file_path;
 		this.METRICS_FILE_PATHS = metrics_file_paths;
@@ -216,6 +216,7 @@ public abstract class Client extends Thread {
 		key = Keyboard.readLine();
 
 		if (key.equalsIgnoreCase("y")) {
+			
 			// the message to create a metric that collects the
 			// max instantaneous idlenesses of the environment
 			String message = "<configuration type=\"2\" parameter=\""
@@ -231,12 +232,13 @@ public abstract class Client extends Thread {
 				server_answer = this.CONNECTION.getBufferAndFlush();
 
 			// adds it to the answer of the method
+			System.out.println(System.currentTimeMillis());
 			int metric_socket_index = server_answer[0].indexOf("message=\"");
 			server_answer[0] = server_answer[0]
 					.substring(metric_socket_index + 9);
 			answer[1] = Integer.parseInt(server_answer[0].substring(0,
 					server_answer[0].indexOf("\"")));
-
+			System.out.println(System.currentTimeMillis());
 			// screen message
 			System.out.println("Metric created.");
 		}
@@ -504,11 +506,9 @@ public abstract class Client extends Thread {
 
 	/** Stops the agents. */
 	private void stopAgents() {
-		if (this.agents != null) {
-			Object[] agents_array = this.agents.toArray();
-			for (int i = 0; i < agents_array.length; i++)
-				((Agent) agents_array[i]).stopWorking();
-		}
+		if (this.agents != null)
+			for (Agent agent : this.agents)
+				agent.stopWorking();
 	}
 
 	public void run() {
@@ -569,15 +569,14 @@ public abstract class Client extends Thread {
 
 		if (key.equalsIgnoreCase("y")) {
 			try {
-				String[] agent_ids = new String[agents_socket_numbers.length];
-				for (int i = 0; i < agent_ids.length; i++)
-					agent_ids[i] = agents_socket_numbers[i].STRING;
-
+				String[] agents_ids = new String[agents_socket_numbers.length];
 				int[] socket_numbers = new int[agents_socket_numbers.length];
-				for (int i = 0; i < socket_numbers.length; i++)
+				for (int i = 0; i < socket_numbers.length; i++) {
+					agents_ids[i] = agents_socket_numbers[i].STRING;
 					socket_numbers[i] = agents_socket_numbers[i].INTEGER;
+				}
 
-				this.createAndStartAgents(agent_ids, socket_numbers);
+				this.createAndStartAgents(agents_ids, socket_numbers);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -599,36 +598,41 @@ public abstract class Client extends Thread {
 		}
 
 		// while the TCP connection is alive, waits...
-		while (this.CONNECTION.getState() != Thread.State.TERMINATED)
-			;
+		while (this.CONNECTION.getState() != Thread.State.TERMINATED){
+			/*try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+		}
 
 		// stops the agents
 		this.stopAgents();
 
 		// stops the metric clients
 		this.stopMetricClients();
-		
+
 		// stops the log client
-		if(this.log_client != null)
+		if (this.log_client != null)
 			this.log_client.stopWorking();
 
 		// screen message
 		System.out.println("Finished working.");
-
-		// system exit
-		System.exit(0);
 	}
 
 	/**
 	 * Creates and starts the agents, given the numbers of the sockets for each
 	 * agent.
 	 * 
+	 * @param agents_ids
+	 *            The ids of the agents to create and start.
 	 * @param socket_numbers
 	 *            The socket numbers offered by the server to connect to the
 	 *            remote agents.
 	 * @throws IOException
 	 */
-	protected abstract void createAndStartAgents(String[] agent_ids,
+	protected abstract void createAndStartAgents(String[] agents_ids,
 			int[] socket_numbers) throws IOException;
 }
 

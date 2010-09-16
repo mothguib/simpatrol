@@ -13,7 +13,7 @@ import java.util.Set;
  * @see Graph
  */
 public final class Vertex {
-	/* Atributes. */
+	/* Attributes. */
 	/** The object id of the vertex. */
 	private String id;
 
@@ -27,7 +27,7 @@ public final class Vertex {
 	private Set<Edge> out_edges;
 
 	/** The idleness of the vertex. */
-	private int idleness;
+	private double idleness;
 
 	/**
 	 * The priority to visit this vertex. Its default value is ZERO.
@@ -73,6 +73,20 @@ public final class Vertex {
 	}
 
 	/**
+	 * Removes a given edge from the vertex.
+	 * 
+	 * @param edge
+	 *            The edge to be removed from the vertex.
+	 */
+	public void removeEdge(Edge edge) {
+		if (this.in_edges != null)
+			this.in_edges.remove(edge);
+
+		if (this.out_edges != null)
+			this.out_edges.remove(edge);
+	}
+
+	/**
 	 * Adds the passed edge as a way out arc to the vertex.
 	 * 
 	 * @param out_arc
@@ -97,6 +111,29 @@ public final class Vertex {
 	}
 
 	/**
+	 * Returns the degree of the vertex.
+	 * 
+	 * @return The degree of the vertex.
+	 */
+	public int getDegree() {
+		int answer = 0;
+
+		if (this.in_edges != null)
+			answer = this.in_edges.size();
+
+		if (this.out_edges != null) {
+			if (this.in_edges == null)
+				answer = this.out_edges.size();
+			else
+				for (Edge edge : this.out_edges)
+					if (!this.in_edges.contains(edge))
+						answer++;
+		}
+
+		return answer;
+	}
+
+	/**
 	 * Returns the set of edges of the vertex.
 	 * 
 	 * @return The edges associated with the vertex.
@@ -104,24 +141,20 @@ public final class Vertex {
 	public Edge[] getEdges() {
 		Set<Edge> edges = new HashSet<Edge>();
 
-		if (this.in_edges != null) {
-			Object[] in_edges_array = this.in_edges.toArray();
+		if (this.in_edges != null)
+			for (Edge edge : this.in_edges)
+				edges.add(edge);
 
-			for (int i = 0; i < in_edges_array.length; i++)
-				edges.add((Edge) in_edges_array[i]);
+		if (this.out_edges != null)
+			for (Edge edge : this.out_edges)
+				edges.add(edge);
+
+		Edge[] answer = new Edge[edges.size()];
+		int i = 0;
+		for (Edge edge : edges) {
+			answer[i] = edge;
+			i++;
 		}
-
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-
-			for (int i = 0; i < out_edges_array.length; i++)
-				edges.add((Edge) out_edges_array[i]);
-		}
-
-		Object[] edges_array = edges.toArray();
-		Edge[] answer = new Edge[edges_array.length];
-		for (int i = 0; i < answer.length; i++)
-			answer[i] = (Edge) edges_array[i];
 
 		return answer;
 	}
@@ -161,7 +194,7 @@ public final class Vertex {
 	 * @param idleness
 	 *            The idleness of the vertex, measured in cycles, or in seconds.
 	 */
-	public void setIdleness(int idleness) {
+	public void setIdleness(double idleness) {
 		this.idleness = idleness;
 	}
 
@@ -170,7 +203,7 @@ public final class Vertex {
 	 * 
 	 * @return The idleness of the vertex.
 	 */
-	public int getIdleness() {
+	public double getIdleness() {
 		return this.idleness;
 	}
 
@@ -212,76 +245,64 @@ public final class Vertex {
 	}
 
 	/**
-	 * Returns all the vertexes in the neighbourhood.
+	 * Returns all the vertexes in the neighborhood.
 	 * 
-	 * @return The set of vertexes in the neighbourhood.
+	 * @return The set of vertexes in the neighborhood.
 	 */
 	public Vertex[] getNeighbourhood() {
-		// holds the set of neighbour vertexes
+		// holds the set of neighbor vertexes
 		Set<Vertex> neighbourhood = new HashSet<Vertex>();
 
 		// for each edge whose emitter is this vertex
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the other vertex
-				Vertex other_vertex = ((Edge) out_edges_array[i])
-						.getOtherVertex(this);
-
-				// adds it to set of neighbours
+		if (this.out_edges != null)
+			for (Edge edge : this.out_edges) {
+				Vertex other_vertex = edge.getOtherVertex(this);
 				neighbourhood.add(other_vertex);
 			}
-		}
 
-		// for each edge whose collector is this vertex
-		if (this.in_edges != null) {
-			Object[] in_edges_array = this.in_edges.toArray();
-			for (int i = 0; i < in_edges_array.length; i++) {
-				// obtains the other vertex
-				Vertex other_vertex = ((Edge) in_edges_array[i])
-						.getOtherVertex(this);
-
-				// adds it to set of neighbours
+		// for each edge whose emitter is this vertex
+		if (this.in_edges != null)
+			for (Edge edge : this.in_edges) {
+				Vertex other_vertex = edge.getOtherVertex(this);
 				neighbourhood.add(other_vertex);
 			}
-		}
 
 		// mounts and returns the answer
-		Object[] neighbourhood_array = neighbourhood.toArray();
-		Vertex[] answer = new Vertex[neighbourhood_array.length];
-		for (int i = 0; i < neighbourhood_array.length; i++)
-			answer[i] = (Vertex) neighbourhood_array[i];
+		Vertex[] answer = new Vertex[neighbourhood.size()];
+		int i = 0;
+		for (Vertex vertex : neighbourhood) {
+			answer[i] = vertex;
+			i++;
+		}
+
 		return answer;
 	}
 
 	/**
-	 * Returns the vertexes in the neighbourhood of which emitter is this one.
+	 * Returns the vertexes in the neighborhood of which emitter is this one.
 	 * 
-	 * @return The set of vertexes in the neighbourhood of which emitter is this
+	 * @return The set of vertexes in the neighborhood of which emitter is this
 	 *         one.
 	 */
 	public Vertex[] getCollectorNeighbourhood() {
-		// holds the set of neighbour vertexes
+		// holds the set of neighbor vertexes
 		Set<Vertex> neighbourhood = new HashSet<Vertex>();
 
 		// for each edge whose emitter is this vertex
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the other vertex
-				Vertex other_vertex = ((Edge) out_edges_array[i])
-						.getOtherVertex(this);
-
-				// adds it to set of neighbours
+		if (this.out_edges != null)
+			for (Edge edge : this.out_edges) {
+				Vertex other_vertex = edge.getOtherVertex(this);
 				neighbourhood.add(other_vertex);
 			}
-		}
 
 		// mounts and returns the answer
-		Object[] neighbourhood_array = neighbourhood.toArray();
-		Vertex[] answer = new Vertex[neighbourhood_array.length];
-		for (int i = 0; i < neighbourhood_array.length; i++)
-			answer[i] = (Vertex) neighbourhood_array[i];
+		Vertex[] answer = new Vertex[neighbourhood.size()];
+		int i = 0;
+		for (Vertex vertex : neighbourhood) {
+			answer[i] = vertex;
+			i++;
+		}
+
 		return answer;
 	}
 
@@ -298,38 +319,25 @@ public final class Vertex {
 		Set<Edge> shared_edges = new HashSet<Edge>();
 
 		// for each edge whose emitter is this vertex
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) out_edges_array[i];
-
-				// if the given vertex is the collector of the current edge,
-				// adds it to the answer
-				if (vertex.isCollectorOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
+		if (this.out_edges != null)
+			for (Edge edge : this.out_edges)
+				if (vertex.isCollectorOf(edge))
+					shared_edges.add(edge);
 
 		// for each edge whose collector is this vertex
-		if (this.in_edges != null) {
-			Object[] in_edges_array = this.in_edges.toArray();
-			for (int i = 0; i < in_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) in_edges_array[i];
-
-				// if the given vertex is the emitter of the current edge,
-				// adds it to the answer
-				if (vertex.isEmitterOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
+		if (this.in_edges != null)
+			for (Edge edge : this.in_edges)
+				if (vertex.isEmitterOf(edge))
+					shared_edges.add(edge);
 
 		// mounts and returns the answer
-		Object[] shared_edges_array = shared_edges.toArray();
-		Edge[] answer = new Edge[shared_edges_array.length];
-		for (int i = 0; i < shared_edges_array.length; i++)
-			answer[i] = (Edge) shared_edges_array[i];
+		Edge[] answer = new Edge[shared_edges.size()];
+		int i = 0;
+		for (Edge edge : shared_edges) {
+			answer[i] = edge;
+			i++;
+		}
+
 		return answer;
 	}
 
@@ -348,25 +356,24 @@ public final class Vertex {
 		Set<Edge> shared_edges = new HashSet<Edge>();
 
 		// for each edge whose emitter is this vertex
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) out_edges_array[i];
-
-				// if the given vertex is the collector of the current edge,
-				// adds it to the answer
-				if (vertex.isCollectorOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
+		if (this.out_edges != null)
+			for (Edge edge : this.out_edges)
+				if (vertex.isCollectorOf(edge))
+					shared_edges.add(edge);
 
 		// mounts and returns the answer
-		Object[] shared_edges_array = shared_edges.toArray();
-		Edge[] answer = new Edge[shared_edges_array.length];
-		for (int i = 0; i < shared_edges_array.length; i++)
-			answer[i] = (Edge) shared_edges_array[i];
+		Edge[] answer = new Edge[shared_edges.size()];
+		int i = 0;
+		for (Edge edge : shared_edges) {
+			answer[i] = edge;
+			i++;
+		}
+
 		return answer;
+	}
+
+	public String getLabel() {
+		return this.label;
 	}
 
 	public boolean equals(Object object) {

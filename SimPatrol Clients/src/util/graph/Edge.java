@@ -3,12 +3,14 @@
 /* The package of this class. */
 package util.graph;
 
+import util.heap.Comparable;
+
 /**
  * Implements the edges of a Graph object.
  * 
  * @see Graph
  */
-public final class Edge {
+public final class Edge implements Comparable {
 	/* Attributes. */
 	/** The object id of the edge. */
 	private String id;
@@ -19,12 +21,12 @@ public final class Edge {
 	/** The collector of this edge, if it is an arc. */
 	private Vertex collector;
 
-	/** The lenght of the edge. */
+	/** The length of the edge. */
 	private double length;
 
 	/* Methods. */
 	/**
-	 * Contructor for non-oriented edges (non-arcs).
+	 * Constructor for non-oriented edges (non-arcs).
 	 * 
 	 * @param vertex_1
 	 *            One of the vertexes of the edge.
@@ -38,7 +40,7 @@ public final class Edge {
 	}
 
 	/**
-	 * Contructor for eventually oriented edges (arcs).
+	 * Constructor for eventually oriented edges (arcs).
 	 * 
 	 * @param emitter
 	 *            The emitter vertex, if the edge is an arc.
@@ -70,41 +72,21 @@ public final class Edge {
 		this.length = length;
 	}
 
+	/** Disconnects the edge, updating the emitter and collector references. */
+	public void disconnect() {
+		this.emitter.removeEdge(this);
+		this.collector.removeEdge(this);
+	}
+
 	/**
-	 * Contructor for eventually oriented edges (arcs). The id of the edge is
-	 * needed.
+	 * Returns the vertexes of this edge (1st the emitter, 2nd the collector, if
+	 * the edge is oriented).
 	 * 
-	 * @param emitter
-	 *            The emitter vertex, if the edge is an arc.
-	 * @param collector
-	 *            The collector vertex, if the edge is an arc.
-	 * @param oriented
-	 *            TRUE if the edge is an arc.
-	 * @param length
-	 *            The length of the edge.
-	 * @param id
-	 *            The object id of the edge.
+	 * @return The vertexes connected by this edge.
 	 */
-	private Edge(Vertex emitter, Vertex collector, boolean oriented,
-			double length, String id) {
-		this.id = id;
-		this.emitter = emitter;
-		this.collector = collector;
-
-		// if the edge is an arc...
-		if (oriented) {
-			// adds the edge as a way out arc in the emitter
-			this.emitter.addOutEdge(this);
-
-			// adds the edge as a way in arc in the collector
-			this.collector.addInEdge(this);
-		} else {
-			// adds the edge in both emitter and collector vertexes
-			this.emitter.addEdge(this);
-			this.collector.addEdge(this);
-		}
-
-		this.length = length;
+	public Vertex[] getVertexes() {
+		Vertex[] answer = { this.emitter, this.collector };
+		return answer;
 	}
 
 	/**
@@ -145,7 +127,8 @@ public final class Edge {
 
 		// the copy
 		Edge copy_edge = new Edge(copy_emitter, copy_collector, oriented,
-				this.length, this.id);
+				this.length);
+		copy_edge.id = this.id;
 
 		// returns the answer
 		return copy_edge;
@@ -164,5 +147,19 @@ public final class Edge {
 
 	public void setObjectId(String object_id) {
 		this.id = object_id;
+	}
+
+	/**
+	 * Compares a given edge to this one, based on their lengths.
+	 * 
+	 * @param object
+	 *            The object to be compared to this one.
+	 */
+	public boolean isSmallerThan(Comparable object) {
+		if (object instanceof Edge)
+			if (this.length < ((Edge) object).length)
+				return true;
+
+		return false;
 	}
 }

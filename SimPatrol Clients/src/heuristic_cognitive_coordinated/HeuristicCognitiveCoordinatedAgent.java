@@ -25,7 +25,7 @@ import common.Agent;
 public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	/* Attributes. */
 	/** The id of this agent. */
-	private final String ID;
+	private String id;
 
 	/** The plan of walking through the graph. */
 	private final LinkedList<String> PLAN;
@@ -39,32 +39,20 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	/** The current position of the agent. */
 	private StringAndDouble position;
 
-	/** Holds if the simulation is a real time one. */
-	private static boolean is_real_time_simulation;
-
 	/**
 	 * The time interval the agent is supposed to wait for a message sent by the
-	 * coordinator. Mesaured in seconds.
+	 * coordinator. Measured in seconds.
 	 */
 	private final int WAITING_TIME = 30; // 30 seconds
 
 	/* Methods. */
-	/**
-	 * Contructor.
-	 * 
-	 * @param id
-	 *            The id of this agent.
-	 * @param is_real_time
-	 *            TRUE if the simulation is a real time one, FALSE if it is a
-	 *            cycled one.
-	 */
-	public HeuristicCognitiveCoordinatedAgent(String id, boolean is_real_time) {
-		this.ID = id;
+	/** Constructor. */
+	public HeuristicCognitiveCoordinatedAgent() {
+		this.id = null;
 		this.PLAN = new LinkedList<String>();
 		this.goal = null;
 		this.graph = null;
 		this.position = null;
-		is_real_time_simulation = is_real_time;
 	}
 
 	/**
@@ -76,6 +64,13 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 */
 	private StringAndDouble perceivePosition(String perception) {
 		if (perception.indexOf("<perception type=\"4\"") > -1) {
+			// obtains the id of the agent, if necessary
+			if (this.id == null) {
+				int id_index = perception.indexOf("<agent id=\"");
+				perception = perception.substring(id_index + 11);
+				this.id = perception.substring(0, perception.indexOf("\""));
+			}
+
 			// obtains the id of the current vertex
 			int vertex_id_index = perception.indexOf("vertex_id=\"");
 			perception = perception.substring(vertex_id_index + 11);
@@ -110,11 +105,11 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 			perception = perception.substring(message_index + 9);
 			String message = perception.substring(0, perception.indexOf("\""));
 
-			// if the message has the "###" conventioned mark
+			// if the message has the "###" convention mark
 			int mark_index = message.indexOf("###");
 			if (mark_index > -1)
 				// if this message was sent to this agent
-				if (message.substring(0, mark_index).equals(this.ID))
+				if (message.substring(0, mark_index).equals(this.id))
 					// returns the id of the goal vertex
 					return message.substring(mark_index + 3);
 		}
@@ -129,7 +124,6 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 * @return The perceived graph.
 	 * @throws IOException
 	 * @throws SAXException
-	 * @throws ParserConfigurationException
 	 */
 	private Graph perceiveGraph(String perception)
 			throws ParserConfigurationException, SAXException, IOException {
@@ -148,7 +142,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 */
 	private void requestGoal() throws IOException {
 		if (this.position != null)
-			this.connection.send("<action type=\"3\" message=\"" + this.ID
+			this.connection.send("<action type=\"3\" message=\"" + this.id
 					+ "###" + this.position.STRING + "\"/>");
 	}
 
@@ -303,7 +297,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 					if (goal_vertex != null && current_graph != null)
 						break;
 					// else if the simulation is a real time one
-					else if (is_real_time_simulation) {
+					else if (this.connection instanceof UDPClientConnection) {
 						// counts the time the agent has been waiting for a
 						// message from the coordinator
 						int end_wainting_time = Calendar.getInstance().get(
@@ -354,7 +348,8 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 			}
 
 			// while the goal was not achieved
-			while (!this.position.STRING.equals(this.goal) && !this.stop_working) {
+			while (!this.position.STRING.equals(this.goal)
+					&& !this.stop_working) {
 				// perceives the current position of the agent
 				StringAndDouble current_position = null;
 				while (current_position == null && !this.stop_working) {
@@ -403,18 +398,15 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 *            Arguments: index 0: The IP address of the SimPatrol server.
 	 *            index 1: The number of the socket that the server is supposed
 	 *            to listen to this client. index 2: "true", if the simulation
-	 *            is a real time one, "false" if not. index 3: The ID of the
-	 *            agent.
+	 *            is a real time one, "false" if not.
 	 */
 	public static void main(String args[]) {
 		try {
 			String server_address = args[0];
 			int server_socket_number = Integer.parseInt(args[1]);
 			boolean is_real_time_simulation = Boolean.parseBoolean(args[2]);
-			String agent_id = args[3];
 
-			HeuristicCognitiveCoordinatedAgent agent = new HeuristicCognitiveCoordinatedAgent(
-					agent_id, is_real_time_simulation);
+			HeuristicCognitiveCoordinatedAgent agent = new HeuristicCognitiveCoordinatedAgent();
 			if (is_real_time_simulation)
 				agent.setConnection(new UDPClientConnection(server_address,
 						server_socket_number));
@@ -433,7 +425,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 		} catch (Exception e) {
 			System.out
 					.println("Usage \"java heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedAgent\n"
-							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
+							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)>\"");
 		}
 	}
 }

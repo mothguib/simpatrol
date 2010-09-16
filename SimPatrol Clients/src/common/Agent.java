@@ -7,7 +7,7 @@ package common;
 import util.net.ClientConnection;
 
 /**
- * The remote agents that connect to SimPatrol and implmenet a patrolling
+ * The remote agents that connect to SimPatrol and implement a patrolling
  * strategy.
  */
 public abstract class Agent extends Thread {

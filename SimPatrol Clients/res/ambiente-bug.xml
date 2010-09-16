@@ -1,0 +1,26 @@
+<environment>
+<graph label="graph_perceived">
+<vertex id="a" label="a" idleness="0" visibility="true" priority="0" fuel="false" is_enabled="true"/>
+<vertex id="b" label="b" idleness="8" visibility="true" priority="0" fuel="false" is_enabled="true"/>
+<vertex id="c" label="c" idleness="17" visibility="true" priority="0" fuel="false" is_enabled="true"/>
+<edge id="ab" emitter_id="a" collector_id="b" oriented="false" length="6" visibility="true" is_enabled="true" is_in_dynamic_emitter_memory="false" is_in_dynamic_collector_memory="false"/>
+<edge id="bc" emitter_id="b" collector_id="c" oriented="false" length="4" visibility="true" is_enabled="true" is_in_dynamic_emitter_memory="false" is_in_dynamic_collector_memory="false"/>
+<edge id="ca" emitter_id="c" collector_id="a" oriented="false" length="8" visibility="true" is_enabled="true" is_in_dynamic_emitter_memory="false" is_in_dynamic_collector_memory="false"/>
+</graph>
+<society id="soc1" label="soc1">
+<agent id="ag1" label="ag1" vertex_id="a" state="1" stamina="1.0" max_stamina="1.0">
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="3"/>
+			<allowed_action type="1"/>
+			<allowed_action type="2"/>
+</agent>
+<agent label="coordinator" id="coordinator" vertex_id="b"  state="1" stamina="1.0" max_stamina="1.0">
+	<allowed_perception type="0"/>
+	<allowed_perception type="1"/>
+	<allowed_perception type="3"/>
+	<allowed_action type="3"/>
+</agent>
+</society>
+</environment>

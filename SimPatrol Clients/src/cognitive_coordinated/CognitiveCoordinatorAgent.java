@@ -150,7 +150,7 @@ public final class CognitiveCoordinatorAgent extends Agent {
 						this.AGENTS_GOALS.add(vertex_id);
 					}
 
-					// sends a message containig the chosen vertex
+					// sends a message containing the chosen vertex
 					String action = "<action type=\"3\" message=\"" + agent_id
 							+ "###" + vertex_id + "\"/>";
 					this.connection.send(action);

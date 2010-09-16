@@ -32,9 +32,9 @@ public class TCPClientConnection extends ClientConnection {
 	 * Constructor.
 	 * 
 	 * @param remote_socket_address
-	 *            The address of the remote contatc (in IP format).
+	 *            The address of the remote contact (in IP format).
 	 * @param remote_socket_number
-	 *            The number of the socket of the remote contatc.
+	 *            The number of the socket of the remote contact.
 	 * @throws IOException
 	 * @throws UnknownHostException
 	 */
