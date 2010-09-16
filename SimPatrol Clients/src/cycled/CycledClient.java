@@ -142,7 +142,7 @@ public final class CycledClient extends Client {
 	 *                        and "false" to cycled simulation.
 	 */
 	public static void execute(String[] args) {
-		System.out.println("Cognitive coordinated agents!");
+		System.out.println("Cycled agents!");
 
 		try {
 			String remote_socket_address = args[0];
@@ -173,7 +173,7 @@ public final class CycledClient extends Client {
 
 		} catch (Exception e) {			
 			System.out
-					.println("\nUsage:\n  java cognitive_coordinated.CognitiveCoordinatedClient "
+					.println("\nUsage:\n  java cycled.CycledClient "
 								+ "<IP address> <Remote socket number> <Environment file path> "
 								+ "<Metric file name 1 | \"\"> <Metric file name 2 | \"\"> <Metric file name 3 | \"\"> <Metric file name 4 | \"\"> "
 								+ "<Metric collecting rate> <Log file name> <Time of simulation> <Is real time simulator? (true | false)>\" an\n");
