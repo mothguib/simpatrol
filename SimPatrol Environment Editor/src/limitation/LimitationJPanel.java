@@ -7,10 +7,11 @@ package limitation;
 import javax.swing.JPanel;
 import model.limitation.Limitation;
 
-/** Implements the GUI panel able to configure
- *  Limitation objects.
- *  
- *  @see Limitation */
+/**
+ * Implements the GUI panel able to configure Limitation objects.
+ * 
+ * @see Limitation
+ */
 public abstract class LimitationJPanel extends JPanel {
 	/** Returns the configured Limitation object. */
 	public abstract Limitation getLimitation();
