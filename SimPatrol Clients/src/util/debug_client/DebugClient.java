@@ -16,11 +16,10 @@ import cycled.CycledAgent;
 import cycled.CycledCoordinatorAgent;
 
 
-// TODO: create simple agents (instead of using CycledAgent)
 public class DebugClient implements IMessageObserver {
 	private TcpConnection connection;
 	private int totalCycles;
-	private List<Agent> agentsList;
+	private List<DebugAgent> agentsList;
 	private LogFileClient logClient;
 	private int numAgents;
 	
@@ -37,11 +36,10 @@ public class DebugClient implements IMessageObserver {
 		
 		try {
 
-			this.connection.addObserver(this);		
 			this.connection.start();		
 
 			// 1. sends the environment and connects agents
-			
+
 			System.out.print("1. Sending the environment... ");
 			
 			String graph = 
@@ -49,26 +47,25 @@ public class DebugClient implements IMessageObserver {
 				+ "  <node id=\"a\" label=\"a\" idleness=\"0\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
 				+ "  <node id=\"b\" label=\"b\" idleness=\"8\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
 				+ "  <node id=\"c\" label=\"c\" idleness=\"17\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
-				+ "  <edge id=\"ab\" source=\"a\" target=\"b\" directed=\"false\" length=\"6\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_emitter_memory=\"false\" is_in_dynamic_collector_memory=\"false\"/>"
-				+ "  <edge id=\"bc\" source=\"b\" target=\"c\" directed=\"false\" length=\"4\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_emitter_memory=\"false\" is_in_dynamic_collector_memory=\"false\"/>"
-				+ "  <edge id=\"ca\" source=\"c\" target=\"a\" directed=\"false\" length=\"8\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_emitter_memory=\"false\" is_in_dynamic_collector_memory=\"false\"/>"
+				+ "  <edge id=\"ab\" source=\"a\" target=\"b\" directed=\"false\" length=\"6\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
+				+ "  <edge id=\"bc\" source=\"b\" target=\"c\" directed=\"false\" length=\"4\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
+				+ "  <edge id=\"ca\" source=\"c\" target=\"a\" directed=\"false\" length=\"8\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
 				+ "</graph>";
 			
-			String society = "<society id=\"soc1\" label=\"soc1\">"
-				+ "<agent label=\"coordinator\" id=\"coordinator\" node_id=\"b\"  state=\"1\" stamina=\"1.0\" max_stamina=\"1.0\">"
-				+ "  <allowed_perception type=\"0\"/> <allowed_perception type=\"1\"/> <allowed_perception type=\"3\"/>"
-				+ "  <allowed_action type=\"3\"/><allowed_action type=\"7\"/>" 
-				+ "</agent>";
-			
-				for (int id = 0; id < numAgents; id++) {
-					society = society
-						+ "<agent id=\"agent" + id + "\" label=\"ag" + id + "\" node_id=\"" + (char)('a' + (id % 3)) + "\" state=\"1\" stamina=\"1.0\" max_stamina=\"1.0\">"
-						+ "  <allowed_perception type=\"4\"/> <allowed_perception type=\"3\"/> <allowed_perception type=\"1\"/> <allowed_perception type=\"0\"/>"
-						+ "  <allowed_action type=\"3\"/> <allowed_action type=\"1\"/> <allowed_action type=\"2\"/>"
-						+ "</agent>";
-				}
-			
-				society += "</society>"; 
+			String society = "<society id=\"soc1\" label=\"soc1\">";
+
+			//TODO: tirar percepção de agentes...
+			char startNode; 
+			for (int index = 0; index < numAgents; index++) {
+				startNode = (char)('a' + (index % 3));
+				society = society
+					+ "<agent id=\"agent" + index + "\" label=\"ag" + index + "\" node_id=\"" + startNode + "\" state=\"1\" stamina=\"1.0\" max_stamina=\"1.0\">"
+					+ "  <allowed_perception type=\"4\"/> <allowed_perception type=\"3\"/> <allowed_perception type=\"1\"/> <allowed_perception type=\"0\"/>"
+					+ "  <allowed_action type=\"3\"/> <allowed_action type=\"1\"/> <allowed_action type=\"2\"/>"
+					+ "</agent>";
+			}
+		
+			society += "</society>"; 
 
 			//System.out.println(society);
 			
@@ -82,11 +79,11 @@ public class DebugClient implements IMessageObserver {
 
 			this.connection.send(message1);
 			
-			System.out.print("receiving agent's connection information... ");
+			System.out.print("waiting for information about agent's connection... ");
 			AgentInfo[] agentsInfo = receiveAgentsConnectionInfo();
 
-			System.out.print("establishing agents' connections... ");
-			createAndStartAgents(agentsInfo);
+			System.out.print("creating agents... ");
+			createAgents(agentsInfo);
 			
 			System.out.println("ok!");
 			
@@ -100,21 +97,30 @@ public class DebugClient implements IMessageObserver {
 			System.out.print("receiving connection information... ");
 			int logClientPort = receiveLogConnectionInfo();
 			
-			System.out.print("stablishing connection... ");
+			System.out.print("creating... ");
 			
 			this.logClient = new LogFileClient(connection.getRemoteSocketAdress(), logClientPort, "tmp\\simlog.log");
-			this.logClient.start();
 
 			System.out.println("ok!");
 
 			// 3. starts up the simulation
 
-			System.out.print("3. Starting up the simulation... ");
+			System.out.print("3. Starting up the agents and the log... ");
+			
+			for (DebugAgent agent : agentsList) {
+				agent.startWorking();
+			}
+			logClient.start();
+			
+			System.out.print(" sending message to start the simulation... ");
 			
 			String message3 = "<configuration type=\"3\" parameter=\"" + this.totalCycles + "\"/>";
 			this.connection.send(message3);
 
-			System.out.println("simulation started!");
+			System.out.println("ok, simulation started!");
+			
+			// necessary to be notified about incoming messages  
+			this.connection.addObserver(this);
 		
 		} catch (IOException e) {
 
@@ -125,7 +131,7 @@ public class DebugClient implements IMessageObserver {
 	
 	private int receiveLogConnectionInfo() {
 		String[] serverAnswer = this.connection.getBufferAndFlush();
-		while (serverAnswer.length == 0) {
+		while (serverAnswer == null) {
 			serverAnswer = this.connection.getBufferAndFlush();
 		}
 
@@ -140,9 +146,12 @@ public class DebugClient implements IMessageObserver {
 	private AgentInfo[] receiveAgentsConnectionInfo() {
 		// obtains the answer from the server
 		String[] serverAnswer = this.connection.getBufferAndFlush();
-		while (serverAnswer.length == 0) {
+		while (serverAnswer == null) {
 			serverAnswer = this.connection.getBufferAndFlush();
+			Thread.yield();
 		}
+		
+		System.out.print("processing answer... ");
 
 		// reads the sockets activated for each agent, as well as agent's IDs
 		LinkedList<AgentInfo> agentsInfo = new LinkedList<AgentInfo>();
@@ -174,21 +183,22 @@ public class DebugClient implements IMessageObserver {
 		return answer;
 	}
 
-	protected void createAndStartAgents(AgentInfo[] agentsInfo) throws IOException {
-		Agent agent = null;
+	private void createAgents(AgentInfo[] agentsInfo) throws IOException {
+		DebugAgent agent;
+		TcpConnection agentConnection;
+		String startNode, nextNode;
 		
-		this.agentsList = new LinkedList<Agent>();
+		String serverAddres = this.connection.getRemoteSocketAdress();
+		
+		this.agentsList = new LinkedList<DebugAgent>();
 
-		for (int i = 0; i < agentsInfo.length; i++) {
-			if (agentsInfo[i].id.equals("coordinator")) {
-				agent = new CycledCoordinatorAgent();
-			} else {
-				agent = new CycledAgent();
-			}
-
-			agent.setConnection(new TCPClientConnection(this.connection.getRemoteSocketAdress(), agentsInfo[i].port));
-			agent.start();
+		for (int index = 0; index < agentsInfo.length; index++) {
+			agentConnection = new TcpConnection(serverAddres, agentsInfo[index].port);
+			startNode = "" + (char)('a' + (index % 3));
+			nextNode  = "" + (char)('a' + ((index+1) % 3));
 			
+			agent = new DebugAgent(agentsInfo[index].id, agentConnection, startNode, nextNode);
+
 			this.agentsList.add(agent);
 		}
 	}
@@ -197,7 +207,7 @@ public class DebugClient implements IMessageObserver {
 	public void update(){
 		if (this.connection.getState() == Thread.State.TERMINATED){
 
-			for (Agent agent : this.agentsList) {
+			for (DebugAgent agent : this.agentsList) {
 				agent.stopWorking();
 			}
 
@@ -213,7 +223,7 @@ public class DebugClient implements IMessageObserver {
 	}
 	
 	
-	// auxiliar inner class
+	// auxiliary inner class
 	final class AgentInfo {
 		public final String id;
 		public final int port;
@@ -226,7 +236,7 @@ public class DebugClient implements IMessageObserver {
 	
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		DebugClient client = new DebugClient(1, 20, "127.0.0.1", 5000);
+		DebugClient client = new DebugClient(2, 20, "127.0.0.1", 5000);
 		
 		client.start();
 	}

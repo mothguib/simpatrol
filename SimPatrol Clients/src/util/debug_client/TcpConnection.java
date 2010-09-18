@@ -34,7 +34,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	protected boolean stopWorking;
 
 	/** Buffer of received messages. */
-	protected LinkedList<String> buffer;
+	protected LinkedList<String> messagesReceived;
 
 	/** List of observers to be notified when there is data */
 	protected ArrayList<IMessageObserver> observers;
@@ -63,8 +63,10 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		this.serverOutput.flush();
 		
 		this.stopWorking = false;
-		this.buffer = new LinkedList<String>();
+		this.messagesReceived = new LinkedList<String>();
 		this.observers = new ArrayList<IMessageObserver>();
+		
+		super.setDaemon(true);
 	}
 	
 	
@@ -88,11 +90,15 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	/**
 	 * Returns the content of the buffer of the connection and clears it.
 	 */
-	public String[] getBufferAndFlush() {
-		String[] answer = new String[this.buffer.size()];
+	public synchronized String[] getBufferAndFlush() {
+		if (messagesReceived.size() == 0) {
+			return null;
+		}
+		
+		String[] answer = new String[this.messagesReceived.size()];
 
 		for (int i = 0; i < answer.length; i++) {
-			answer[i] = this.buffer.removeFirst();
+			answer[i] = this.messagesReceived.removeFirst();
 		}
 
 		return answer;
@@ -153,6 +159,8 @@ public class TcpConnection extends Thread implements IMessageSubject {
 					} else if (buffer.indexOf("<perception ") > -1 
 								&& buffer.indexOf("message=\"") > -1 && buffer.indexOf("/>") > -1) {
 						break;
+					} else if (buffer.toString().trim().equals("")) {
+						break;
 					}
 					
 				} else {
@@ -169,9 +177,12 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		} while (true);
 
 		if (buffer.length() > 0) {
-			this.buffer.add(buffer.toString());
-			this.updateObservers();
+			synchronized (this) {
+				this.messagesReceived.add(buffer.toString());
+				this.updateObservers();
+			}
 		}
+		
 	}
 
 	public void run() {
