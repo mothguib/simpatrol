@@ -2,6 +2,7 @@ package util.debug_client;
 
 import java.io.IOException;
 
+
 /**
  * A simple agent that just goes back and forth between two nodes. 
  * This is the threaded version. (TODO: listener version).
@@ -19,7 +20,7 @@ public class DebugAgent extends Thread {
 	
 	// variables to control messages synchronously printed in the console
 	private long timeToPrint; 
-	private static final long PRINT_INTERVAL = 1000; //2s
+	private static final long PRINT_INTERVAL = 1000; //1 sec
 	
 	
 	/**
@@ -56,12 +57,13 @@ public class DebugAgent extends Thread {
 			}
 
 		} catch (Exception exc) {
-			desyncPrint("Error!");
+			asyncPrint("Error");
 			working = false;
 			exc.printStackTrace();
 			
 		}
 		
+		System.out.println("Agent client finished.");
 	}
 	
 	
@@ -71,23 +73,22 @@ public class DebugAgent extends Thread {
 	 */
 	private void waitForAgentArrival() {
 		String[] messages;
-		boolean arrived = false;
+		boolean agentArrived = false;
 		int i;
+		
+		messages = connection.getBufferAndFlush();
 
-		while (true) {
-			messages = syncReceiveMessages();
+		while (!agentArrived && this.working) {
+			syncPrint("Waiting agent to arrive at node \"" + nodes[nextNode] + "\"");
+			
+			messages = connection.getBufferAndFlush();
 			
 			i = 0;
-			while (i < messages.length && !arrived) {
-				arrived = arrivalPerceived(messages[i]);
+			while (i < messages.length && !agentArrived) {
+				agentArrived = agentArrivalPerceived(messages[i]);
 				i ++;
-			}
-			
-			if (arrived) {
-				break;
-			}
-			
-			syncPrint("Waiting agent to arrive at node \"" + nodes[nextNode] + "\"");
+			}			
+
 		}
 		
 	}
@@ -97,7 +98,7 @@ public class DebugAgent extends Thread {
 	 * Checks if the given message is a perception and if it indicates
 	 * that the agent has arrived at the node planned. 
 	 */
-	private boolean arrivalPerceived(String message) {
+	private boolean agentArrivalPerceived(String message) {
 
 		if (message.indexOf("<perception type=\"4\"") > -1) {
 			int nodeIndex = message.indexOf("node_id=\"");
@@ -126,35 +127,15 @@ public class DebugAgent extends Thread {
 		
 		// send message to go to the next node
 		this.connection.send("<action type=\"1\" node_id=\"" + nodes[nextNode] + "\"/>");
-		desyncPrint("Going to node \"" + nodes[nextNode] + "\"");
+		asyncPrint("Going to node \"" + nodes[nextNode] + "\"");
 
-	}
-
-	
-	/**
-	 * Synchronously waits for messages. Only returns when at least one 
-	 * message is received.
-	 */
-	public String[] syncReceiveMessages() {
-		String[] msgs;
-		
-		msgs = connection.getBufferAndFlush();
-		
-		while (msgs == null)  {
-			syncPrint("Waiting message");
-			Thread.yield();
-			
-			msgs = connection.getBufferAndFlush();
-		} 
-		
-		return msgs;
 	}
 	
 	
 	/**
 	 * Prints the message in the console, if the time interval since the last
 	 * is not lower than PRINT_INTERVAL. Useful to avoid printing too much 
-	 * messages in loop.
+	 * similar messages (e.g. inside a loop).
 	 */
 	private void syncPrint(String message) {
 		if (System.currentTimeMillis() >= timeToPrint) {
@@ -168,7 +149,7 @@ public class DebugAgent extends Thread {
 	 * Prints the message in the console (doesn't have to respect the minimum
 	 * time interval since last message) 
 	 */
-	private void desyncPrint(String message) {
+	private void asyncPrint(String message) {
 		System.out.printf("[%s]: %s.\n", identifier, message);
 		timeToPrint = System.currentTimeMillis() + PRINT_INTERVAL;
 	}

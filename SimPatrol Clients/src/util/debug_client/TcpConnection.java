@@ -17,26 +17,26 @@ import common.IMessageSubject;
 
 /**
  *  Implements a TCP client connection.
- *   
- *  TODO: Merge with (or replace) "util.net.TCPClientConnection".
+ *  It is a simplified version of class "util.net.TCPClientConnection".
+ *  @author Pablo
  */
 public class TcpConnection extends Thread implements IMessageSubject {
 
-	/** Waiting time to read some data from the input stream. */
-	private static final int READING_TIME_TOLERANCE = 4000; // 4 sec
+	// Waiting time to read some data from the input stream
+	private static final int READING_TIME_TOLERANCE = 10; // 0.01 sec
 
 	private final Socket serverSocket;
 
-	/** Streams to receive/send data */
+	// Streams to receive/send data
 	private final BufferedReader serverInput;
 	private final PrintStream serverOutput;
 
-	protected boolean stopWorking;
+	protected boolean working;
 
-	/** Buffer of received messages. */
+	// Buffer of received messages
 	protected LinkedList<String> messagesReceived;
 
-	/** List of observers to be notified when there is data */
+	// List of observers to be notified when there is data
 	protected ArrayList<IMessageObserver> observers;
 	
 
@@ -56,13 +56,13 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		this.serverSocket = new Socket(remoteSocketAddress, remoteSocketNumber);
 		this.serverSocket.setSoTimeout(READING_TIME_TOLERANCE);
 
-		this.serverInput = new BufferedReader(new InputStreamReader(this.serverSocket
-				.getInputStream()));
+		this.serverInput = new BufferedReader(
+								new InputStreamReader(this.serverSocket.getInputStream()));
 
 		this.serverOutput = new PrintStream(this.serverSocket.getOutputStream());
 		this.serverOutput.flush();
 		
-		this.stopWorking = false;
+		this.working = true;
 		this.messagesReceived = new LinkedList<String>();
 		this.observers = new ArrayList<IMessageObserver>();
 		
@@ -86,21 +86,38 @@ public class TcpConnection extends Thread implements IMessageSubject {
 			observers.get(i).update();
 		}
 	}
+	
+	public boolean isWorking() {
+		return working;
+	}
 
 	/**
-	 * Returns the content of the buffer of the connection and clears it.
+	 * Returns the list of the message and clears it.
 	 */
 	public synchronized String[] getBufferAndFlush() {
-		if (messagesReceived.size() == 0) {
-			return null;
-		}
-		
 		String[] answer = new String[this.messagesReceived.size()];
 
 		for (int i = 0; i < answer.length; i++) {
 			answer[i] = this.messagesReceived.removeFirst();
 		}
 
+		return answer;
+	}
+	
+	/**
+	 * Synchronously waits for messages. Only returns when at least one 
+	 * message is received.
+	 */
+	public String[] syncReceiveMessages() {
+		String[] answer;
+		
+		answer = getBufferAndFlush();
+		
+		while (answer.length == 0 && this.working)  {
+			Thread.yield();			
+			answer = getBufferAndFlush();
+		} 
+		
 		return answer;
 	}
 
@@ -118,7 +135,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	 * @throws IOException
 	 */
 	public void stopWorking() throws IOException {
-		this.stopWorking = true;
+		this.working = false;
 
 		this.serverOutput.close();
 		this.serverInput.close();
@@ -186,14 +203,20 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	}
 
 	public void run() {
-		while (!this.stopWorking) {
+		while (this.working) {
+			
 			try {
 				this.receive();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 		}
-		System.out.println("Connection stopped!");
+		
+		this.working = false;
+		System.out.println("Connection thread stopped!");
+		
 		this.updateObservers();
 	}
+	
 }

@@ -7,16 +7,10 @@ import java.util.List;
 
 import log_clients.LogFileClient;
 
-import util.net.TCPClientConnection;
-
-import common.Agent;
 import common.IMessageObserver;
 
-import cycled.CycledAgent;
-import cycled.CycledCoordinatorAgent;
 
-
-public class DebugClient implements IMessageObserver {
+public class DebugMainClient implements IMessageObserver {
 	private TcpConnection connection;
 	private int totalCycles;
 	private List<DebugAgent> agentsList;
@@ -24,7 +18,7 @@ public class DebugClient implements IMessageObserver {
 	private int numAgents;
 	
 	
-	public DebugClient(int agents, int cycles, String serverIp, int serverPort) throws UnknownHostException, IOException {
+	public DebugMainClient(int agents, int cycles, String serverIp, int serverPort) throws UnknownHostException, IOException {
 		numAgents = agents;
 		totalCycles = cycles;
 		connection = new TcpConnection(serverIp, serverPort);
@@ -131,7 +125,7 @@ public class DebugClient implements IMessageObserver {
 	
 	private int receiveLogConnectionInfo() {
 		String[] serverAnswer = this.connection.getBufferAndFlush();
-		while (serverAnswer == null) {
+		while (serverAnswer.length == 0) {
 			serverAnswer = this.connection.getBufferAndFlush();
 		}
 
@@ -146,7 +140,7 @@ public class DebugClient implements IMessageObserver {
 	private AgentInfo[] receiveAgentsConnectionInfo() {
 		// obtains the answer from the server
 		String[] serverAnswer = this.connection.getBufferAndFlush();
-		while (serverAnswer == null) {
+		while (serverAnswer.length == 0) {
 			serverAnswer = this.connection.getBufferAndFlush();
 			Thread.yield();
 		}
@@ -174,10 +168,12 @@ public class DebugClient implements IMessageObserver {
 			nextAgentIndex = receivedMessage.indexOf("agent_id=\"");
 		}
 
-		// mounts the answer of the method
+		// mounts the answer of the method: the agents are ordered by their id
+		int agentIndex;
 		AgentInfo[] answer = new AgentInfo[agentsInfo.size()];
 		for (int i = 0; i < answer.length; i++) {
-			answer[i] = agentsInfo.get(i);
+			agentIndex = Integer.parseInt( agentsInfo.get(i).identifier.substring(5) );
+			answer[agentIndex] = agentsInfo.get(i);
 		}
 		
 		return answer;
@@ -192,20 +188,21 @@ public class DebugClient implements IMessageObserver {
 		
 		this.agentsList = new LinkedList<DebugAgent>();
 
-		for (int index = 0; index < agentsInfo.length; index++) {
-			agentConnection = new TcpConnection(serverAddres, agentsInfo[index].port);
-			startNode = "" + (char)('a' + (index % 3));
-			nextNode  = "" + (char)('a' + ((index+1) % 3));
+		for (int i = 0; i < agentsInfo.length; i++) {
+			agentConnection = new TcpConnection(serverAddres, agentsInfo[i].port);
+			startNode = "" + (char)('a' + (i % 3));
+			nextNode  = "" + (char)('a' + ((i+1) % 3));
 			
-			agent = new DebugAgent(agentsInfo[index].id, agentConnection, startNode, nextNode);
+			agent = new DebugAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
 
 			this.agentsList.add(agent);
 		}
 	}
 	
-	// called by the the connection (observer)
+	// called by the the connection (observer) when a message is 
+	// received or when the connection is closed
 	public void update(){
-		if (this.connection.getState() == Thread.State.TERMINATED){
+		if (! this.connection.isWorking()){
 
 			for (DebugAgent agent : this.agentsList) {
 				agent.stopWorking();
@@ -213,10 +210,12 @@ public class DebugClient implements IMessageObserver {
 
 			this.logClient.stopWorking();
 
-			System.out.println("Clients finished.");
+			System.out.println("Main client finished.");
 		
 		} else {
-			//System.out.println("Update: nothing to do.");
+			// shouldn't receive anything
+			System.out.print("Main client received: ");
+			System.out.println(this.connection.getBufferAndFlush()[0]);
 			
 		}
 		
@@ -225,18 +224,23 @@ public class DebugClient implements IMessageObserver {
 	
 	// auxiliary inner class
 	final class AgentInfo {
-		public final String id;
+		public final String identifier;
 		public final int port;
 
 		public AgentInfo(String string, int integer) {
-			this.id = string;
+			this.identifier = string;
 			this.port = integer;
 		}
 	}
 	
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		DebugClient client = new DebugClient(2, 20, "127.0.0.1", 5000);
+		int AGENTS        = 2;
+		int CYCLES        = 20;
+		String SERVER_URL = "127.0.0.1";
+		int SERVER_PORT   = 5000;
+		
+		DebugMainClient client = new DebugMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT);
 		
 		client.start();
 	}
