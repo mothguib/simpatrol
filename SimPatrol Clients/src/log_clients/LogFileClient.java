@@ -44,7 +44,12 @@ public class LogFileClient extends Thread {
 
 	/** Indicates that the client must stop working. */
 	public void stopWorking() {
-		this.stopWorking = true;
+		try {
+			this.stopWorking = true;
+			this.connection.stopWorking();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void run() {
@@ -60,12 +65,6 @@ public class LogFileClient extends Thread {
 				event = event.substring(0, event.lastIndexOf("\n"));
 				this.fileWriter.println(event);
 			}
-		}
-
-		try {
-			this.connection.stopWorking();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		this.fileWriter.println("</simulation_log>");
