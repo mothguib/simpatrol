@@ -18,7 +18,8 @@ import common.IMessageSubject;
 /**
  *  Implements a TCP client connection.
  *  It is a simplified version of class "util.net.TCPClientConnection".
- *  @author Pablo
+ *  
+ * @author Pablo Sampaio
  */
 public class TcpConnection extends Thread implements IMessageSubject {
 
@@ -43,16 +44,14 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	/**
 	 * Constructor.
 	 * 
-	 * @param remoteSocketAddress
+	 * @param remoteSocketAddress 
 	 *            The address of the remote contact (in IP format).
 	 * @param remoteSocketNumber
 	 *            The number of the socket of the remote contact.
-	 * @throws IOException
-	 * @throws UnknownHostException
 	 */
 	public TcpConnection(String remoteSocketAddress,
 			int remoteSocketNumber) throws UnknownHostException, IOException {
-		
+
 		this.serverSocket = new Socket(remoteSocketAddress, remoteSocketNumber);
 		this.serverSocket.setSoTimeout(READING_TIME_TOLERANCE);
 
@@ -71,7 +70,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	
 	
 	/**
-	 * Set the observers that will be called when receive a message;
+	 * Set the observers that will be called when receive a message.
 	 */
 	public void addObserver(IMessageObserver observer){
 		this.observers.add(observer);
@@ -79,7 +78,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	
 	
 	/**
-	 * Update the observers, when a new packet arrives
+	 * Update the observers, when a new packet arrives.
 	 */
 	public void updateObservers(){
 		for(int i=0; i < observers.size();i++){
@@ -92,7 +91,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	}
 
 	/**
-	 * Returns the list of the message and clears it.
+	 * Returns and clears the list of unread messages.
 	 */
 	public synchronized String[] getBufferAndFlush() {
 		String[] answer = new String[this.messagesReceived.size()];
@@ -105,8 +104,8 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	}
 	
 	/**
-	 * Synchronously waits for messages. Only returns when at least one 
-	 * message is received.
+	 * Synchronously waits for messages. Only returns when at 
+	 * least one message is received.
 	 */
 	public String[] syncReceiveMessages() {
 		String[] answer;
@@ -121,7 +120,9 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		return answer;
 	}
 
-	/** Returns the socket address of the remote contact (in IP format). */
+	/**
+	 * Returns the socket address of the remote contact (in IP format). 
+	 */
 	public String getRemoteSocketAdress() {
 		String completeAddress = this.serverSocket.getRemoteSocketAddress().toString();
 		int socketIndex = completeAddress.indexOf(":");
@@ -130,24 +131,22 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	}
 
 	/**
-	 * Indicates that the connection must stop working.
-	 * 
-	 * @throws IOException
+	 * Indicates that the connection must be closed.
 	 */
-	public void stopWorking() throws IOException {
+	public void stopWorking() {
 		this.working = false;
 
-		this.serverOutput.close();
-		this.serverInput.close();
-		this.serverSocket.close();
+		try {
+			this.serverOutput.close();
+			this.serverInput.close();
+			this.serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Sends a given string message to the remote contact.
-	 * 
-	 * @param message
-	 *            The string message to be sent.
-	 * @throws IOException
 	 */
 	public void send(String message) throws IOException {
 		this.serverOutput.println(message);
@@ -155,9 +154,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	}
 
 	/**
-	 * Implements the receiving of a message.
-	 * 
-	 * @throws IOException
+	 * Reads complete XML message from the socket and stores them.
 	 */
 	protected void receive() throws IOException {
 		StringBuffer buffer = new StringBuffer();
@@ -182,6 +179,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 					
 				} else {
 					this.stopWorking();
+					
 				}
 				
 			} catch (InterruptedIOException e) {
@@ -196,8 +194,8 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		if (buffer.length() > 0) {
 			synchronized (this) {
 				this.messagesReceived.add(buffer.toString());
-				this.updateObservers();
 			}
+			this.updateObservers();			
 		}
 		
 	}
@@ -206,7 +204,9 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		while (this.working) {
 			
 			try {
+				
 				this.receive();
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -214,7 +214,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		}
 		
 		this.working = false;
-		System.out.println("Connection thread stopped!");
+		System.out.println("Connection's thread stopped!");
 		
 		this.updateObservers();
 	}

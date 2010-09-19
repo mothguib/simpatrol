@@ -2,25 +2,29 @@ package util.debug_client;
 
 import java.io.IOException;
 
+import common.IMessageObserver;
+
 
 /**
  * A simple agent that just goes back and forth between two nodes. 
- * This is the threaded version. (TODO: listener version).
+ * This is the listener version: the behavior of the agent is implemented
+ * in methods called by the connection when a message is received (the 
+ * agent is not a thread).
  *  
- * @author Pablo
+ * @author Pablo Sampaio
  */
-public class DebugAgent extends Thread {
-	private String identifier;
-	private TcpConnection connection;
-	boolean working;
+public class DebugAgent implements IMessageObserver {
+	protected String identifier;
+	protected TcpConnection connection;
+	protected boolean working;
 	
 	// nodes that the agent will visit
-	private String[] nodes;
-	private int nextNode;
+	protected String[] nodes;
+	protected int nextNode;
 	
 	// variables to control messages synchronously printed in the console
-	private long timeToPrint; 
-	private static final long PRINT_INTERVAL = 1000; //1 sec
+	protected long timeToPrint; 
+	protected static final long PRINT_INTERVAL = 1000; //1 sec
 	
 	
 	/**
@@ -29,68 +33,75 @@ public class DebugAgent extends Thread {
 	public DebugAgent(String agentId, TcpConnection con, String currentNode, String neighborNode) {
 		identifier = agentId;
 		connection = con;
+		working = false;
 		
 		nodes = new String[]{ currentNode, neighborNode }; // current must be the first
 		nextNode = 0;
+
+		timeToPrint = 0;
 	}
 	
 	public void startWorking() {
+		connection.addObserver(this);
 		connection.start();	
 		working = true;
-		super.start();
 	}	
 
 	public void stopWorking() {
 		working = false;
+		connection.stopWorking();
+		asyncPrint("Agent client finished");
 	}
 	
 	@Override
-	public void run() {
-	
-		try {
-
-			while (working) {
-
-				visitAndGoToNextNode();
-				waitForAgentArrival();
-				
-			}
-
-		} catch (Exception exc) {
-			asyncPrint("Error");
-			working = false;
-			exc.printStackTrace();
-			
-		}
-		
-		System.out.println("Agent client finished.");
+	public void start() {
+		//not used
 	}
 	
 	
 	/**
-	 * Waits the agent to arrive at his destiny node. Only returns when
-	 * the agent arrives. 
+	 * Main method of this agent, where his behavior is implemented.
 	 */
-	private void waitForAgentArrival() {
+	@Override
+	public void update() {
+		if (!working) {
+			return;
+		}
+	
+		if (lookForArrivalMessage()) {
+			try {
+				
+				visitAndGoToNextNode();
+
+			} catch (Exception e) {
+				asyncPrint("Error");
+				e.printStackTrace();
+
+			}		
+		}
+
+	}
+	
+	
+	/**
+	 * Checks if a message was received to inform that the agent 
+	 * has arrived at his destiny node. 
+	 */
+	private boolean lookForArrivalMessage() {
 		String[] messages;
-		boolean agentArrived = false;
-		int i;
+		boolean arrived = false;
 		
 		messages = connection.getBufferAndFlush();
 
-		while (!agentArrived && this.working) {
-			syncPrint("Waiting agent to arrive at node \"" + nodes[nextNode] + "\"");
-			
-			messages = connection.getBufferAndFlush();
-			
-			i = 0;
-			while (i < messages.length && !agentArrived) {
-				agentArrived = agentArrivalPerceived(messages[i]);
-				i ++;
-			}			
-
+		for (int i = 0; i < messages.length; i++) {
+			arrived = isArrivalMessage(messages[i]);
+			if (arrived) {
+				return true;
+			}
 		}
-		
+
+		syncPrint("Waiting agent to arrive at node \"" + nodes[nextNode] + "\"");
+		return false;		
 	}
 	
 	
@@ -98,7 +109,7 @@ public class DebugAgent extends Thread {
 	 * Checks if the given message is a perception and if it indicates
 	 * that the agent has arrived at the node planned. 
 	 */
-	private boolean agentArrivalPerceived(String message) {
+	protected boolean isArrivalMessage(String message) {
 
 		if (message.indexOf("<perception type=\"4\"") > -1) {
 			int nodeIndex = message.indexOf("node_id=\"");
@@ -119,7 +130,7 @@ public class DebugAgent extends Thread {
 	/**
 	 * Send messages to visit the current node and to goe to the next node. 
 	 */
-	private void visitAndGoToNextNode() throws IOException {
+	protected void visitAndGoToNextNode() throws IOException {
 		// send message to visit current node
 		this.connection.send("<action type=\"2\"/>");
 
@@ -137,7 +148,7 @@ public class DebugAgent extends Thread {
 	 * is not lower than PRINT_INTERVAL. Useful to avoid printing too much 
 	 * similar messages (e.g. inside a loop).
 	 */
-	private void syncPrint(String message) {
+	protected void syncPrint(String message) {
 		if (System.currentTimeMillis() >= timeToPrint) {
 			System.out.printf("[%s]: %s.\n", identifier, message);
 			timeToPrint = System.currentTimeMillis() + PRINT_INTERVAL;
@@ -149,7 +160,7 @@ public class DebugAgent extends Thread {
 	 * Prints the message in the console (doesn't have to respect the minimum
 	 * time interval since last message) 
 	 */
-	private void asyncPrint(String message) {
+	protected void asyncPrint(String message) {
 		System.out.printf("[%s]: %s.\n", identifier, message);
 		timeToPrint = System.currentTimeMillis() + PRINT_INTERVAL;
 	}

@@ -10,18 +10,29 @@ import log_clients.LogFileClient;
 import common.IMessageObserver;
 
 
+/**
+ * This is the main client, which is responsible for starting the log client 
+ * and all agents clients. It also starts the simulation.
+ *  
+ * @author Pablo Sampaio
+ */
 public class DebugMainClient implements IMessageObserver {
 	private TcpConnection connection;
+
 	private int totalCycles;
-	private List<DebugAgent> agentsList;
-	private LogFileClient logClient;
 	private int numAgents;
+
+	private LogFileClient logClient;
+	private List<DebugAgent> agentsList;
+	boolean threadedAgents;
 	
 	
-	public DebugMainClient(int agents, int cycles, String serverIp, int serverPort) throws UnknownHostException, IOException {
+	public DebugMainClient(int agents, int cycles, String serverIp, int serverPort, boolean threaded) throws UnknownHostException, IOException {
 		numAgents = agents;
 		totalCycles = cycles;
 		connection = new TcpConnection(serverIp, serverPort);
+		threadedAgents = threaded;
+		logClient = null;
 		agentsList = null;
 	}
 	
@@ -48,14 +59,13 @@ public class DebugMainClient implements IMessageObserver {
 			
 			String society = "<society id=\"soc1\" label=\"soc1\">";
 
-			//TODO: tirar percepção de agentes...
 			char startNode; 
 			for (int index = 0; index < numAgents; index++) {
 				startNode = (char)('a' + (index % 3));
 				society = society
 					+ "<agent id=\"agent" + index + "\" label=\"ag" + index + "\" node_id=\"" + startNode + "\" state=\"1\" stamina=\"1.0\" max_stamina=\"1.0\">"
-					+ "  <allowed_perception type=\"4\"/> <allowed_perception type=\"3\"/> <allowed_perception type=\"1\"/> <allowed_perception type=\"0\"/>"
-					+ "  <allowed_action type=\"3\"/> <allowed_action type=\"1\"/> <allowed_action type=\"2\"/>"
+					+ "  <allowed_perception type=\"4\"/>" //only perceives itself
+					+ "  <allowed_action type=\"1\"/> <allowed_action type=\"2\"/>" // can only do actions: "goto" and "visit"
 					+ "</agent>";
 			}
 		
@@ -99,7 +109,7 @@ public class DebugMainClient implements IMessageObserver {
 
 			// 3. starts up the simulation
 
-			System.out.print("3. Starting up the agents and the log... ");
+			System.out.print("3. Starting all clients up... ");
 			
 			for (DebugAgent agent : agentsList) {
 				agent.startWorking();
@@ -192,8 +202,12 @@ public class DebugMainClient implements IMessageObserver {
 			agentConnection = new TcpConnection(serverAddres, agentsInfo[i].port);
 			startNode = "" + (char)('a' + (i % 3));
 			nextNode  = "" + (char)('a' + ((i+1) % 3));
-			
-			agent = new DebugAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
+
+			if (threadedAgents) {
+				agent = new DebugAgentThreaded(agentsInfo[i].identifier, agentConnection, startNode, nextNode);	
+			} else {
+				agent = new DebugAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
+			}
 
 			this.agentsList.add(agent);
 		}
@@ -213,7 +227,7 @@ public class DebugMainClient implements IMessageObserver {
 			System.out.println("Main client finished.");
 		
 		} else {
-			// shouldn't receive anything
+			// should receive anything ?
 			System.out.print("Main client received: ");
 			System.out.println(this.connection.getBufferAndFlush()[0]);
 			
@@ -239,8 +253,9 @@ public class DebugMainClient implements IMessageObserver {
 		int CYCLES        = 20;
 		String SERVER_URL = "127.0.0.1";
 		int SERVER_PORT   = 5000;
+		boolean THREADED  = false;
 		
-		DebugMainClient client = new DebugMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT);
+		DebugMainClient client = new DebugMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT, THREADED);
 		
 		client.start();
 	}
