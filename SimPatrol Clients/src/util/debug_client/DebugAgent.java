@@ -69,8 +69,7 @@ public class DebugAgent implements IMessageObserver {
 		}
 	
 		if (lookForArrivalMessage()) {
-			try {
-				
+			try {				
 				visitAndGoToNextNode();
 
 			} catch (Exception e) {

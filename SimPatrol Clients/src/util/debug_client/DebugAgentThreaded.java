@@ -1,22 +1,20 @@
 package util.debug_client;
 
-import java.io.IOException;
-
 
 /**
  * A simple agent that just goes back and forth between two nodes. 
- * This is the threaded version: each agent is a thread. 
+ * This is the "threaded version": each agent is a thread. It is implemented
+ * as a subclass of the "listener version" only to reuse code.
  *  
  * @author Pablo Sampaio
  */
 public class DebugAgentThreaded extends DebugAgent implements Runnable {
 	
-	/**
-	 * The agent will walk to nodes "currentNode" and "neighborNode", alternately. 
-	 */
+
 	public DebugAgentThreaded(String agentId, TcpConnection con, String currentNode, String neighborNode) {
 		super(agentId, con, currentNode, neighborNode);
 	}
+	
 	
 	@Override
 	public void startWorking() {
