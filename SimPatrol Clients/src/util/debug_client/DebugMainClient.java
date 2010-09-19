@@ -70,8 +70,6 @@ public class DebugMainClient implements IMessageObserver {
 			}
 		
 			society += "</society>"; 
-
-			//System.out.println(society);
 			
 			String message1 = 
 				"<configuration type=\"0\">" 
@@ -82,8 +80,11 @@ public class DebugMainClient implements IMessageObserver {
 				+ "</configuration>";
 
 			this.connection.send(message1);
-			
-			System.out.print("waiting for information about agent's connection... ");
+			System.out.println("ok!");
+
+			// 2. configures the agents
+
+			System.out.print("2. Waiting for information about agent's connection... ");
 			AgentInfo[] agentsInfo = receiveAgentsConnectionInfo();
 
 			System.out.print("creating agents... ");
@@ -91,9 +92,9 @@ public class DebugMainClient implements IMessageObserver {
 			
 			System.out.println("ok!");
 			
-			// 2. starts the log client
+			// 3. configures the log client
 			
-			System.out.print("2. Configuring log client... ");
+			System.out.print("3. Configuring log client... ");
 			
 			String message2 = "<configuration type=\"5\"/>";
 			this.connection.send(message2);
@@ -107,9 +108,9 @@ public class DebugMainClient implements IMessageObserver {
 
 			System.out.println("ok!");
 
-			// 3. starts up the simulation
+			// 4. starts up the simulation
 
-			System.out.print("3. Starting all clients up... ");
+			System.out.print("4. Starting all clients up... ");
 			
 			for (DebugAgent agent : agentsList) {
 				agent.startWorking();
@@ -121,7 +122,7 @@ public class DebugMainClient implements IMessageObserver {
 			String message3 = "<configuration type=\"3\" parameter=\"" + this.totalCycles + "\"/>";
 			this.connection.send(message3);
 
-			System.out.println("ok, simulation started!");
+			System.out.println("ok, simulation started!\n");
 			
 			// necessary to be notified about incoming messages  
 			this.connection.addObserver(this);
@@ -250,7 +251,7 @@ public class DebugMainClient implements IMessageObserver {
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		int AGENTS        = 2;
-		int CYCLES        = 20;
+		int CYCLES        = 30;
 		String SERVER_URL = "127.0.0.1";
 		int SERVER_PORT   = 5000;
 		boolean THREADED  = false;
