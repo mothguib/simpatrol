@@ -1,4 +1,4 @@
-package util.debug_client;
+package dummy_agent;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -16,18 +16,18 @@ import common.IMessageObserver;
  *  
  * @author Pablo Sampaio
  */
-public class DebugMainClient implements IMessageObserver {
+public class DummyMainClient implements IMessageObserver {
 	private TcpConnection connection;
 
 	private int totalCycles;
 	private int numAgents;
 
 	private LogFileClient logClient;
-	private List<DebugAgent> agentsList;
-	boolean threadedAgents;
+	private List<DummyAgent> agentsList;
+	private boolean threadedAgents;
 	
 	
-	public DebugMainClient(int agents, int cycles, String serverIp, int serverPort, boolean threaded) throws UnknownHostException, IOException {
+	public DummyMainClient(int agents, int cycles, String serverIp, int serverPort, boolean threaded) throws UnknownHostException, IOException {
 		numAgents = agents;
 		totalCycles = cycles;
 		connection = new TcpConnection(serverIp, serverPort);
@@ -112,7 +112,7 @@ public class DebugMainClient implements IMessageObserver {
 
 			System.out.print("4. Starting all clients up... ");
 			
-			for (DebugAgent agent : agentsList) {
+			for (DummyAgent agent : agentsList) {
 				agent.startWorking();
 			}
 			logClient.start();
@@ -191,13 +191,13 @@ public class DebugMainClient implements IMessageObserver {
 	}
 
 	private void createAgents(AgentInfo[] agentsInfo) throws IOException {
-		DebugAgent agent;
+		DummyAgent agent;
 		TcpConnection agentConnection;
 		String startNode, nextNode;
 		
 		String serverAddres = this.connection.getRemoteSocketAdress();
 		
-		this.agentsList = new LinkedList<DebugAgent>();
+		this.agentsList = new LinkedList<DummyAgent>();
 
 		for (int i = 0; i < agentsInfo.length; i++) {
 			agentConnection = new TcpConnection(serverAddres, agentsInfo[i].port);
@@ -205,9 +205,9 @@ public class DebugMainClient implements IMessageObserver {
 			nextNode  = "" + (char)('a' + ((i+1) % 3));
 
 			if (threadedAgents) {
-				agent = new DebugAgentThreaded(agentsInfo[i].identifier, agentConnection, startNode, nextNode);	
+				agent = new DummyAgentThreaded(agentsInfo[i].identifier, agentConnection, startNode, nextNode);	
 			} else {
-				agent = new DebugAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
+				agent = new DummyAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
 			}
 
 			this.agentsList.add(agent);
@@ -219,7 +219,7 @@ public class DebugMainClient implements IMessageObserver {
 	public void update(){
 		if (! this.connection.isWorking()){
 
-			for (DebugAgent agent : this.agentsList) {
+			for (DummyAgent agent : this.agentsList) {
 				agent.stopWorking();
 			}
 
@@ -256,7 +256,7 @@ public class DebugMainClient implements IMessageObserver {
 		int SERVER_PORT   = 5000;
 		boolean THREADED  = false;
 		
-		DebugMainClient client = new DebugMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT, THREADED);
+		DummyMainClient client = new DummyMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT, THREADED);
 		
 		client.start();
 	}

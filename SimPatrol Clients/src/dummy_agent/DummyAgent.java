@@ -1,4 +1,4 @@
-package util.debug_client;
+package dummy_agent;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import common.IMessageObserver;
  *  
  * @author Pablo Sampaio
  */
-public class DebugAgent implements IMessageObserver {
+public class DummyAgent implements IMessageObserver {
 	protected String identifier;
 	protected TcpConnection connection;
 	protected boolean working;
@@ -30,7 +30,7 @@ public class DebugAgent implements IMessageObserver {
 	/**
 	 * The agent will walk to nodes "currentNode" and "neighborNode", alternately. 
 	 */
-	public DebugAgent(String agentId, TcpConnection con, String currentNode, String neighborNode) {
+	public DummyAgent(String agentId, TcpConnection con, String currentNode, String neighborNode) {
 		identifier = agentId;
 		connection = con;
 		working = false;
@@ -50,7 +50,7 @@ public class DebugAgent implements IMessageObserver {
 	public void stopWorking() {
 		working = false;
 		connection.stopWorking();
-		asyncPrint("Agent client finished");
+		asyncPrint("Agent finished");
 	}
 	
 	@Override

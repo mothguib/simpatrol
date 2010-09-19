@@ -1,5 +1,5 @@
 
-package util.debug_client;
+package dummy_agent;
 
 import java.io.BufferedReader;
 import java.io.IOException;

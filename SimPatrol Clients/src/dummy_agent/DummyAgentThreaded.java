@@ -1,4 +1,4 @@
-package util.debug_client;
+package dummy_agent;
 
 
 /**
@@ -8,10 +8,10 @@ package util.debug_client;
  *  
  * @author Pablo Sampaio
  */
-public class DebugAgentThreaded extends DebugAgent implements Runnable {
+public class DummyAgentThreaded extends DummyAgent implements Runnable {
 	
 
-	public DebugAgentThreaded(String agentId, TcpConnection con, String currentNode, String neighborNode) {
+	public DummyAgentThreaded(String agentId, TcpConnection con, String currentNode, String neighborNode) {
 		super(agentId, con, currentNode, neighborNode);
 	}
 	
@@ -62,7 +62,7 @@ public class DebugAgentThreaded extends DebugAgent implements Runnable {
 			
 		}
 		
-		asyncPrint("Agent client finished");
+		asyncPrint("Agent's thread finished");
 	}
 	
 	
