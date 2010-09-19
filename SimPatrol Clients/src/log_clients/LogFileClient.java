@@ -12,15 +12,13 @@ import util.net.UDPClientConnection;
  */
 public class LogFileClient extends Thread {
 
-	/** Registers if the log client shall stop working. */
+	// Registers if the log client shall stop working
 	private boolean stopWorking;
 
-	/** The UDP connection of the log client. */
+	// The UDP connection of the log client
 	private UDPClientConnection connection;
 
-	/**
-	 * The object that writes on the output file the obtained events.
-	 */
+	// The object that writes on the output file the obtained events.
 	private FileWriter fileWriter;
 
 	/**
@@ -33,7 +31,6 @@ public class LogFileClient extends Thread {
 	 *            this client.
 	 * @param filePath
 	 *            The path of the file where the events will be saved.
-	 * @throws IOException
 	 */
 	public LogFileClient(String remoteSocketAddress,
 			int remoteSocketNumber, String filePath) throws IOException {
@@ -42,7 +39,9 @@ public class LogFileClient extends Thread {
 		this.fileWriter = new FileWriter(filePath);
 	}
 
-	/** Indicates that the client must stop working. */
+	/** 
+	 * Indicates that the client must stop working. 
+	 */
 	public void stopWorking() {
 		try {
 			this.stopWorking = true;
