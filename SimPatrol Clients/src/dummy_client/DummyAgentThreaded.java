@@ -71,24 +71,15 @@ public class DummyAgentThreaded extends DummyAgent implements Runnable {
 	 * the agent arrives. 
 	 */
 	private void waitForArrivalMessage() {
-		String[] messages;
 		boolean agentArrived = false;
-		int i;
 		
-		messages = connection.getBufferAndFlush();
-
+		agentArrived = lookForArrivalMessage();
+		
 		while (!agentArrived && this.working) {
-			syncPrint("Waiting agent to arrive at node \"" + nodes[nextNode] + "\"");
-			
-			messages = connection.getBufferAndFlush();
-			
-			i = 0;
-			while (i < messages.length && !agentArrived) {
-				agentArrived = isArrivalMessage(messages[i]);
-				i ++;
-			}
-		}
-		
+			Thread.yield();
+			agentArrived = lookForArrivalMessage();
+		}		
 	}
 	
 }
+

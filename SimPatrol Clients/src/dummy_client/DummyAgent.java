@@ -35,7 +35,7 @@ public class DummyAgent implements IMessageObserver {
 		connection = con;
 		working = false;
 		
-		nodes = new String[]{ currentNode, neighborNode }; // current must be the first
+		nodes = new String[]{ currentNode, neighborNode }; // "current" must be the first
 		nextNode = 0;
 
 		timeToPrint = 0;
@@ -83,10 +83,10 @@ public class DummyAgent implements IMessageObserver {
 	
 	
 	/**
-	 * Checks if a message was received to inform that the agent 
+	 * Checks if a message was received informing that the agent 
 	 * has arrived at his destiny node. 
 	 */
-	private boolean lookForArrivalMessage() {
+	protected boolean lookForArrivalMessage() {
 		String[] messages;
 		boolean arrived = false;
 		
