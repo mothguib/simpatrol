@@ -161,8 +161,8 @@ public abstract class GraphTranslator {
 
 			// obtains its data
 			String id = edge_element.getAttribute("id");
-			String source_id = edge_element.getAttribute("source_id");
-			String target_id = edge_element.getAttribute("target_id");
+			String source_id = edge_element.getAttribute("source");
+			String target_id = edge_element.getAttribute("target");
 			String str_directed = edge_element.getAttribute("directed");
 			double length = Double.parseDouble(edge_element
 					.getAttribute("length"));

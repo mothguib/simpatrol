@@ -165,4 +165,292 @@ public class MetricsReport {
 		return nodesVisitsCount.standardDeviation();
 	}
 	
+	
+	/***** Metrics for curb representation *****/
+	
+	/**
+	 * Average idleness as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The average idleness is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getAverageIdleness_curb(int freq) {
+		int[] intervals = new int[numNodes];		
+		Double[] values = new Double[(endTime - startTime)/freq + 1];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			for(int j = 0; j < numNodes; j++)
+				intervals[j]++;
+			while(visit.time == i){
+				intervals[visit.vertex] = 0;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				double sum = 0.0;
+				for(int interval : intervals)
+					sum += interval;
+				
+				values[i/freq] = sum/numNodes;
+			}			
+		}
+		
+		return values;
+	}
+	
+	
+	/**
+	 * Maximum idleness as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The maximum idleness is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getMaxIdleness_curb(int freq) {
+		int[] intervals = new int[numNodes];		
+		Double[] values = new Double[(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			for(int j = 0; j < numNodes; j++)
+				intervals[j]++;
+			while(visit.time == i){
+				intervals[visit.vertex] = 0;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				double max = intervals[0];
+				for(int interval : intervals)
+					if(interval > max)
+						max = interval;
+				
+				values[i/freq] = max;
+			}			
+		}
+		
+		return values;
+	}
+	
+	/**
+	 * Standart Deviation as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The standart deviation in idleness is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getStdDev_curb(int freq) {
+		int[] intervals = new int[numNodes];		
+		Double[] values = new Double[(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			for(int j = 0; j < numNodes; j++)
+				intervals[j]++;
+			while(visit.time == i){
+				intervals[visit.vertex] = 0;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				double sum = 0.0;
+				for(int interval : intervals)
+					sum += interval;
+				
+				double stddev = 0;
+				double diff = 0;
+				for(int interval : intervals){
+					diff = (interval - sum/numNodes);
+					stddev += diff*diff;
+				}
+					
+				
+				values[i/freq] = Math.sqrt(stddev);
+			}			
+		}
+		
+		return values;
+	}
+	
+	/**
+	 * Number of visits as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The number of visits so far is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getVisitsNum_curb(int freq) {		
+		Double[] values = new Double[(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			while(visit.time == i){
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				values[i/freq] = numVis/1.0;
+			}			
+		}
+		
+		return values;
+	}
+	
+	/**
+	 * Average Number of visits as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The average number of visits so far is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getVisitsAvg_curb(int freq) {	
+		int[] visitnums = new int[numNodes];
+		Double[] values = new Double[(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			while(visit.time == i){
+				visitnums[visit.vertex]++;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				Double sum = 0.0;
+				for(int visitnum : visitnums)
+					sum += visitnum;
+				values[i/freq] = sum/numNodes;
+					
+			}			
+		}
+		
+		return values;
+	}
+	
+	/**
+	 * Standard Deviation of the Number of visits as a function of time, considering all nodes.
+	 * @param freq 
+	 * 			The stdDev of the number of visits so far is given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[] getVisitStdDev_curb(int freq) {	
+		int[] visitnums = new int[numNodes];
+		Double[] values = new Double[(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			while(visit.time == i){
+				visitnums[visit.vertex]++;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				double sum = 0.0;
+				for(int visitnum : visitnums)
+					sum += visitnum;
+				
+				double stddev = 0;
+				double diff = 0;
+				for(int visitnum : visitnums){
+					diff = (visitnum - sum/numNodes);
+					stddev += diff*diff;
+				}
+				
+				
+				values[i/freq] = Math.sqrt(stddev);
+					
+			}			
+		}
+		
+		return values;
+	}
+	
+	/**
+	 * Number of visits as a function of time, node by node
+	 * @param freq 
+	 * 			The numbers of visits per node are given every freq turn/seconds 
+	 * 			(depending on type of simulation)
+	 * 
+	 * @return Double[][] 
+	 * 			first dim : nodes
+	 * 			second dim : visits by time on considered node
+	 * 
+	 * @author Cyril Poulet
+	 */
+	public Double[][] getVisitsNum_bynode_curb(int freq) {	
+		int[] visitnums = new int[numNodes];
+		Double[][] values = new Double[numNodes][(endTime - startTime)/freq + 
+		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
+		
+		int numVis = 0;
+		Visit visit = visits.getVisit(numVis);
+		
+		for(int i = startTime; i<= endTime; i++){
+			while(visit.time == i){
+				visitnums[visit.vertex]++;
+				numVis++;
+				if(numVis < visits.getNumVisits())
+					visit = visits.getVisit(numVis);
+				else
+					break;
+			}
+			
+			if(i % freq == 0){
+				for(int j = 0; j < numNodes; j++)
+					values[j][i/freq] = visitnums[j]/1.0;
+			}			
+		}
+		
+		return values;
+	}
+	
 }
