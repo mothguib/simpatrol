@@ -31,7 +31,10 @@ public class Main {
 		System.out.println(" - Total number of visits: " + metrics.getTotalVisits());
 		System.out.println(" - Average number of visits per node: " + metrics.getAverageVisits());
 		System.out.println(" - Standard deviation of the number of visits per node: " + metrics.getStdDevVists());
-	
+		System.out.println(" - Exploration time of the graph: " + metrics.getExplorationTime());
+		System.out.println(" - Normalized exploration time of the graph: " + metrics.getNormExplorationTime(parser.getNumAgents()));
+		
+		
 		int freq = 1;
 		Double[] myvalues = metrics.getAverageIdleness_curb(freq);
 		Double[] mymaxvalues = metrics.getMaxIdleness_curb(freq);

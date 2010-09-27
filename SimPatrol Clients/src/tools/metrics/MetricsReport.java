@@ -166,6 +166,49 @@ public class MetricsReport {
 	}
 	
 	
+	/**
+	 * Exploration time (time at which each node has been visited at least once)
+	 * 
+	 *  returns -1 if the graph is not explored at the end of the simulation
+	 */
+	public double getExplorationTime() {
+		boolean[] explored = new boolean[numNodes];
+		for(boolean exp : explored)
+			exp = false;
+		
+		int numVis = 0;
+		Visit visit ;
+		boolean test = true;
+		
+		while(numVis < visits.getNumVisits()){
+			visit = visits.getVisit(numVis);
+			if(!explored[visit.vertex]){
+				explored[visit.vertex] = true;
+				test = true;
+				for(boolean exp : explored)
+					test &= exp;
+				if(test)
+					return visit.time;			
+			}
+			numVis++;
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 *  Normalized Exploration time ( exp_time * nbAgents/nbNodes)
+	 * 
+	 */
+	public double getNormExplorationTime(int numAgents) {
+		double exp_time = getExplorationTime();
+		if(exp_time == -1)
+			return -1;
+		
+		return exp_time * numAgents / numNodes;
+	}
+	
+	
 	/***** Metrics for curb representation *****/
 	
 	/**
