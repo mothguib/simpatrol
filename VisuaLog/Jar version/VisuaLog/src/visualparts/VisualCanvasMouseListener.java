@@ -66,11 +66,13 @@ public class VisualCanvasMouseListener extends MouseAdapter implements MouseMoti
 	 * redraws the canvas 
 	 */
 	public void mouseReleased(MouseEvent e) {
-		drawable.moveTo(e.getPoint());
-		((NodeCircle)drawable).setModified(true);
-		drawable = null;
-		canvas.updateDrawables();
-		canvas.repaint();
+		if(drawable != null){
+			drawable.moveTo(e.getPoint());
+			((NodeCircle)drawable).setModified(true);
+			drawable = null;
+			canvas.updateDrawables();
+			canvas.repaint();
+		}
 	}
 
 	

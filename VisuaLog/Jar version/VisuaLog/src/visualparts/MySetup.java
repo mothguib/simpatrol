@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,6 +90,30 @@ public class MySetup extends JDialog implements ActionListener {
 		container.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
+		
+		KeyListener textlistener = new KeyListener(){
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				PageComplete();
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
+		
 		JLabel instructions = new JLabel("This wizard allows you to choose and configure the type of viewer you want to use.");
 		instructions.setMinimumSize(new Dimension(1000, 200));
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -112,6 +138,7 @@ public class MySetup extends JDialog implements ActionListener {
 		String view_types[] = {"Connected Turn-by-Turn viewer", "Replay Turn-by-Turn viewer", "Replay Real-Time viewer"};
 		logger_type = new JComboBox(view_types);
 		//logger_type.setMaximumSize(new Dimension(400, 25));
+		logger_type.setSelectedIndex(0);
 		logger_type.addActionListener(this);
 		c.gridx = 1;
 		c.gridy = 1;
@@ -125,7 +152,7 @@ public class MySetup extends JDialog implements ActionListener {
 		file_path = new JTextField();
 		file_path.setMaximumSize(new Dimension(400, 25));
 		file_path.setText("");
-		file_path.addActionListener(this);
+		file_path.addKeyListener(textlistener);
 		c.gridwidth = 2;
 		c.gridx = 0;
 		c.gridy = 3;
@@ -148,7 +175,7 @@ public class MySetup extends JDialog implements ActionListener {
 		container.add(ip_adress_lbl, c);
 		ip_adress = new JTextField();
 		ip_adress.setMaximumSize(new Dimension(200,25));
-		ip_adress.addActionListener(this);
+		ip_adress.addKeyListener(textlistener);
 		c.gridx = 1;
 		c.gridy = 4;
 		container.add(ip_adress, c);
@@ -162,7 +189,7 @@ public class MySetup extends JDialog implements ActionListener {
 		container.add(port_lbl, c);
 		port = new JTextField();
 		port.setMaximumSize(new Dimension(100,25));
-		port.addActionListener(this);
+		port.addKeyListener(textlistener);
 		
 		c.gridx = 1;
 		c.gridy = 5;
@@ -323,9 +350,6 @@ public class MySetup extends JDialog implements ActionListener {
 			}
 		}
 		
-		if(e.getSource() == file_path){
-			PageComplete();
-		}
 		if(e.getSource() == file_path_btn){
 			JFileChooser fd = new JFileChooser();
 			int validate = fd.showOpenDialog(this);
@@ -335,12 +359,6 @@ public class MySetup extends JDialog implements ActionListener {
 				file_path.setText(file.getPath());
 				PageComplete();
 			}
-		}
-		if(e.getSource() == ip_adress){
-			PageComplete();
-		}
-		if(e.getSource() == port){
-			PageComplete();
 		}
 		if(e.getSource() == cancel){
 			dispose();
