@@ -158,7 +158,13 @@ public abstract class AbstractLog extends Thread {
 	 * @throws Exception : parser exception
 	 */
 	protected Element manage_event(String event) throws Exception{
-		Element my_event = Translator.parseString(event);
+		Element my_event;
+		try{
+			my_event = Translator.parseString(event);
+		}
+		catch (Exception e){
+			return null;
+		}
 		
 		String agent_id = my_event.getAttribute("agent_id");
 		Agent current_agent = null;

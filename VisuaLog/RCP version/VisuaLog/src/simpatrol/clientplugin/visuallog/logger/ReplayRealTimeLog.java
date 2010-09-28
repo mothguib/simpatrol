@@ -75,6 +75,10 @@ public class ReplayRealTimeLog extends AbstractRealTimeLog implements ReplayLog 
 	 */
 	public String getNextLine() throws IOException{
 		String next_line = logfile.readLine();
+		
+		if(next_line == null)
+			return "";
+		
 		if(next_line.contains("graph")){
 			String continue_line = logfile.readLine();
 			while(!continue_line.contains("graph")){
@@ -130,12 +134,13 @@ public class ReplayRealTimeLog extends AbstractRealTimeLog implements ReplayLog 
 				try {
 					line = getNextLine();
 				} catch (IOException e1) {
-					e1.printStackTrace();
+					this.stopWorking();
+					break;
 				}
 				
 				String[] events = { line };
 				
-				if(canvas_configured){
+				if(canvas_configured && !line.equals("")){
 					try {
 						manage_events(events);
 						mycanvas.updateDrawables();

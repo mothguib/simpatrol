@@ -53,6 +53,8 @@ public class ReplayTurnLog extends AbstractTurnLog implements ReplayLog {
 	 */
 	public String getNextLine() throws IOException{
 		String next_line = logfile.readLine();
+		if(next_line == null)
+			return "";
 		if(next_line.contains("graph")){
 			String continue_line = logfile.readLine();
 			while(!continue_line.contains("graph")){
@@ -90,13 +92,13 @@ public class ReplayTurnLog extends AbstractTurnLog implements ReplayLog {
 				try {
 					line = getNextLine();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					this.stopWorking();
+					break;
 				}
 				
 				String[] events = { line };
 				
-				if(canvas_configured){
+				if(canvas_configured && !line.equals("")){
 					try {
 						boolean skip = manage_events(events);
 						if(incoming_turn != turn){
