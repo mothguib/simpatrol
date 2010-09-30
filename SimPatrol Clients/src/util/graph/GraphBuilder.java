@@ -71,19 +71,30 @@ public class GraphBuilder {
 	}
 
 	/**
-	 * Tests if there is an arc (directed edge) from "source" to "target".
+	 * If the graph is directed, tests if there is an edge going from "source" 
+	 * to "target". 
+	 * If the graph is undirected, tests if there is any edge with these two
+	 * endpoints (in any order). 
 	 */
-	public boolean hasArc(int source, int target) {
+	public boolean hasEdge(int source, int target) {
 		Node sourceNode = allNodes.get(source);
 		Node targetNode = allNodes.get(target);
 		Node[] endNodes;
 		
-		for (Edge edge : sourceNode.getOutEdges()) {
+		Edge[] edgesToSearch;
+		
+		if (directedEdges) {
+			edgesToSearch = sourceNode.getOutEdges(); 
+		} else {
+			edgesToSearch = sourceNode.getEdges();
+		}
+		
+		for (Edge edge : edgesToSearch) {
 			endNodes = edge.getNodees();
 			if (endNodes[1].equals(targetNode)) {
 				return true;
 			}
-		}
+		}		
 		
 		return false;
 	}

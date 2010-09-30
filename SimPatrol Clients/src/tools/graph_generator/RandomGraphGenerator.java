@@ -1,5 +1,6 @@
 package tools.graph_generator;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import util.graph.Graph;
@@ -53,7 +54,7 @@ public class RandomGraphGenerator {
 				added = false;
 				
 				for (int x = neighbor; x < numVertices; x++) {
-					if (degree[x] < maxDegree && !g.hasArc(v, x)) {
+					if (degree[x] < maxDegree && !g.hasEdge(v, x)) {
 						g.addEdge(v, x, weight);
 						degree[v] ++;
 						degree[x] ++;
@@ -111,7 +112,7 @@ public class RandomGraphGenerator {
 				for (int inc = 0; inc < numVertices; inc++) {
 					neighborInc = (neighbor + inc) % numVertices;
 					
-					if (v != neighborInc && !g.hasArc(v,neighborInc)) {
+					if (v != neighborInc && !g.hasEdge(v,neighborInc)) {
 						g.addEdge(v, neighborInc, weight);
 						outdegree[v] ++;
 						added = true;
@@ -156,89 +157,6 @@ public class RandomGraphGenerator {
 		return graph.toGraph("random-complete");
 	}
 
-	/**
-	 * Generates an undirected Eulerian graph (i.e. a graph with undirected edges in which 
-	 * it is possible to find a cycle which uses each edge exactly once) with the given 
-	 * number of nodes/vertices. Each node of the graph has an even number of neighbors 
-	 * (to assure Eulerianity) randomly chosen from the interval [2; 2*(avgDegree-1)]. 
-	 * The neighbors are randomly chosen from the set of all nodes. All edges have unitary
-	 * weights. 
-	 */
-	public Graph generateUndirectedEulerian(int numVertices, int avgDegree) {
-		return generateUndirectedEulerian(numVertices, avgDegree, 1, 1);
-	}
-
-	/**
-	 * Generates an undirected Eulerian graph (i.e. a graph with undirected edges in which 
-	 * it is possible to find a cycle which uses each edge exactly once) with the given 
-	 * number of nodes/vertices. Each node of the graph has an even number of neighbors 
-	 * (to assure Eulerianity) randomly chosen from the interval [2; 2*(avgDegree-1)]. 
-	 * The neighbors are randomly chosen from the set of all nodes. The edges are weighted 
-	 * with values (costs) randomly chosen from the interval [minWeight; maxWeight].
-	 */
-	public Graph generateUndirectedEulerian(int numVertices, int avgDegree, int minWeight, int maxWeight) {
-		GraphBuilder g = new GraphBuilder(numVertices, false);
-		
-		int minDegree = 2;
-		int maxDegree = avgDegree + (avgDegree - 2);
-		
-		int[] degree = new int[numVertices];
-		
-		int randomDegree;
-		int neighbor, weight;
-		boolean added;
-				
-		for (int v = 0; v < numVertices; v++) {
-			randomDegree = intRandom(minDegree, maxDegree);
-
-			// v may already have a higher degree
-			if (degree[v] > randomDegree) {
-				
-				// if degree is odd, turns randomDegree an even number
-				if ((degree[v] % 2) == 1) {
-					randomDegree = degree[v] + 1;
-				} else {
-					randomDegree = degree[v];
-				}
-			
-			} else if ((randomDegree % 2) == 1) {
-				
-				// turns randomDegree an even number
-				if (randomDegree < maxDegree) {
-					randomDegree ++;
-				} else {
-					randomDegree --;
-				}
-				
-			}
-
-			//System.out.printf("RandomDeg[%s] = %s\n", v, randomDegree);
-			
-			while (degree[v] < randomDegree) {
-				neighbor = intRandom(v+1, numVertices-1);
-				weight = intRandom(minWeight, maxWeight);
-		
-				added = false;
-				
-				for (int x = neighbor; x < numVertices; x++) {
-					if (degree[x] < maxDegree && !g.hasArc(v, x)) {
-						g.addEdge(v, x, weight);
-						degree[v] ++;
-						degree[x] ++;
-						added = true;
-						break;
-					}
-				}
-				
-				if (!added) {
-					randomDegree -= 2;
-				}
-			}
-		}
-		
-		return g.toGraph("random-eulerian");
-	}
-
 	// auxiliary function
 	private int intRandom(int from, int to) {
 		if (from > to) {
@@ -252,7 +170,11 @@ public class RandomGraphGenerator {
 	public static void main(String[] args) {
 		RandomGraphGenerator generator = new RandomGraphGenerator();
 		
-		Graph graph = generator.generateUndirected(5, 1, 3, 10, 20);
+		Graph graph = generator.generateUndirected(7, 1, 3, 10, 20);
+		
+//		for (Node n : graph.getNodees()) {
+//			System.out.printf("Degree[%s] = %s\n", n.getLabel(), n.getDegree());
+//		}
 
 		System.out.print (graph.fullToXML(0));
 	}
