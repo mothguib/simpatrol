@@ -6,6 +6,8 @@ package util.graph;
 /* Imported classes and/or interfaces. */
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Vector;
+
 
 /**
  * Implements the nodes of a Graph object.
@@ -153,6 +155,40 @@ public final class Node {
 		int i = 0;
 		for (Edge edge : edges) {
 			answer[i] = edge;
+			i++;
+		}
+
+		return answer;
+	}
+	
+	public Edge[] getOutEdges() {
+		Vector<Edge> edges = new Vector<Edge>();
+
+		if (this.out_edges != null) {
+			edges.addAll(this.out_edges);
+		}
+		
+		Edge[] answer = new Edge[edges.size()];
+		int i = 0;
+		for (Edge e : edges) {
+			answer[i] = e;
+			i++;
+		}
+
+		return answer;
+	}
+	
+	public Edge[] getInEdges() {
+		Vector<Edge> edges = new Vector<Edge>();
+
+		if (this.in_edges != null) {
+			edges.addAll(this.in_edges);
+		}
+		
+		Edge[] answer = new Edge[edges.size()];
+		int i = 0;
+		for (Edge e : edges) {
+			answer[i] = e;
 			i++;
 		}
 
@@ -375,6 +411,24 @@ public final class Node {
 	public String getLabel() {
 		return this.label;
 	}
+	
+	/**
+	 * Verifies if the node is the target of a given edge.
+	 */
+	public boolean isTargetOf(Edge edge) {
+		if (this.in_edges == null)
+			return false;
+		return this.in_edges.contains(edge);
+	}
+
+	/**
+	 * Verifies if the node is the source of a given edge.
+	 */
+	public boolean isSourceOf(Edge edge) {
+		if (this.out_edges == null)
+			return false;
+		return this.out_edges.contains(edge);
+	}
 
 	public boolean equals(Object object) {
 		if (this.id != null && object instanceof Node)
@@ -390,4 +444,26 @@ public final class Node {
 	public void setObjectId(String object_id) {
 		this.id = object_id;
 	}
+	
+	public String fullToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+
+		// applies the identation
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
+		// fills the buffer
+		buffer.append("<node id=\"" + this.id + "\"" 
+						+ " label=\"" + this.label + "\"" 
+						+ " priority=\"" + this.priority + "\"" 
+						+ " visibility=\"true\""
+						+ " idleness=\"0\"" 
+						+ " fuel=\"" + this.fuel + "\"" 
+						+ " is_enabled=\"true\"/>\n");
+
+		// returns the buffer content
+		return buffer.toString();
+	}
+	
 }

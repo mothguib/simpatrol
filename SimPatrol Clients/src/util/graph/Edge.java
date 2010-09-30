@@ -5,6 +5,7 @@ package util.graph;
 
 import util.heap.Comparable;
 
+
 /**
  * Implements the edges of a Graph object.
  * 
@@ -161,5 +162,31 @@ public final class Edge implements Comparable {
 				return true;
 
 		return false;
+	}
+	
+	public String fullToXML(int identation) {
+		// holds the answer being constructed
+		StringBuffer buffer = new StringBuffer();
+
+		// applies the identation
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
+		// registers if the edge is directed
+		boolean directed = !this.source.isTargetOf(this);
+
+		// fills the buffer
+		buffer.append("<edge id=\"" + this.id + "\"" 
+				+ " source=\"" + this.source.getObjectId() + "\"" 
+				+ " target=\"" + this.target.getObjectId() + "\"" 
+				+ " directed=\"" + directed + "\""
+				+ " length=\"" + this.length + "\"" 
+				+ " visibility=\"true\"" 
+				+ " is_enabled=\"true\""
+				+ " is_in_dynamic_source_memory=\"false\"" + "\"" 
+				+ " is_in_dynamic_target_memory=\"false\"/>\n");
+
+		// returns the buffer content
+		return buffer.toString();
 	}
 }

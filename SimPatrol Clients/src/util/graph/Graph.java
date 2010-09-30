@@ -1611,6 +1611,33 @@ public final class Graph {
 
 		return false;
 	}
+	
+	public String fullToXML(int identation) {
+		StringBuffer buffer = new StringBuffer();
+
+		// applies the identation
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+
+		buffer.append("<graph label=\"" + this.label + "\">\n");
+
+		// inserts the nodes
+		for (Node node : this.nodes) {
+			buffer.append(node.fullToXML(identation + 1));
+		}
+
+		// inserts the edges
+		for (Edge edge : this.edges)
+			buffer.append(edge.fullToXML(identation + 1));
+
+		// applies the identation
+		for (int i = 0; i < identation; i++)
+			buffer.append("\t");
+		buffer.append("</graph>\n");
+
+		return buffer.toString();
+	}
+	
 }
 
 /**
