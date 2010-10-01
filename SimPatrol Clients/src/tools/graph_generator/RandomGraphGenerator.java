@@ -1,12 +1,9 @@
 package tools.graph_generator;
 
-import java.util.Iterator;
 import java.util.Random;
 
 import util.graph.Graph;
 import util.graph.GraphBuilder;
-import util.graph.GraphTranslator;
-import util.graph.Node;
 
 
 public class RandomGraphGenerator {
