@@ -39,6 +39,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 
 	/** The SimPatrol's simulator. */
 	private Simulator simulator;
+	
 
 	/* GUI components. */
 	// configuration panel
@@ -53,6 +54,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	private JPanel update_rate_panel;
 
 	private JLabel update_rate_label;
+		
 
 	// output panel
 	private JPanel output_panel;
@@ -71,10 +73,22 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	private JButton reset_button;
 
 	private JButton exit_button;
-
+	
+	//Primitive atributes
+	
+	private double updateRate = 0;	
+	
+	private boolean realTimeMode = false;
+	
 	/* Methods. */
 	/** Constructor. */
 	public SimPatrolGUI() {
+		// initializes this window
+		this.initWindow();
+	}
+	public SimPatrolGUI(double updateRate, boolean realTimeMode) {
+		this.updateRate = updateRate;
+		this.realTimeMode = realTimeMode;
 		// initializes this window
 		this.initWindow();
 	}
@@ -183,8 +197,10 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	public void setVisible(boolean visibility) {
 		super.setVisible(visibility);
 
-		if (visibility)
-			new SimulationConfigurationGUI(this).setVisible(true);
+		if (visibility){
+			if( updateRate == 0) new SimulationConfigurationGUI(this).setVisible(true);
+			else configureSimulation(realTimeMode, 5000, updateRate);
+		}
 	}
 
 	/**
@@ -271,6 +287,13 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 
 	/** Turns this class into an executable one. */
 	public static void main(String args[]) {
-		new SimPatrolGUI().setVisible(true);
+		double updateRate;
+		boolean realTimeMode = false;
+		if( args.length >= 1){
+			updateRate = Double.parseDouble(args[0]);
+			if( args.length == 2) realTimeMode = Boolean.parseBoolean(args[1]);
+			new SimPatrolGUI(updateRate, realTimeMode).setVisible(true);
+			
+		} else new SimPatrolGUI().setVisible(true);
 	}
 }
