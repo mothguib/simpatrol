@@ -39,7 +39,6 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 
 	/** The SimPatrol's simulator. */
 	private Simulator simulator;
-	
 
 	/* GUI components. */
 	// configuration panel
@@ -54,7 +53,6 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	private JPanel update_rate_panel;
 
 	private JLabel update_rate_label;
-		
 
 	// output panel
 	private JPanel output_panel;
@@ -86,6 +84,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 		// initializes this window
 		this.initWindow();
 	}
+	
 	public SimPatrolGUI(double updateRate, boolean realTimeMode) {
 		this.updateRate = updateRate;
 		this.realTimeMode = realTimeMode;
@@ -105,7 +104,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 		}
 
 		// configures this window
-		this.setTitle("SimPatrol v1.0");
+		this.setTitle("SimPatrol v1.2 alfa");
 		this.setIconImage(ImagesList.ICON_2.getImage());
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
