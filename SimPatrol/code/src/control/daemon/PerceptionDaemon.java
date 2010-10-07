@@ -467,9 +467,10 @@ public final class PerceptionDaemon extends AgentDaemon {
 			// if the daemon can produce perceptions at the moment and the
 			// simulator is already simulating
 			if (simulator.getState() == SimulatorStates.SIMULATING
-					&& !this.is_blocked) {
+					&& !this.is_blocked
+					&& !(this.AGENT.getAgentState() == AgentStates.JUST_PERCEIVED)) {
 				// registers if some perception was successfully sent
-				boolean sent_succesfully = false;
+				boolean sent_succesfully = true;
 
 				// obtains all the perceptions the agent is supposed to have at
 				// the moment
@@ -477,21 +478,22 @@ public final class PerceptionDaemon extends AgentDaemon {
 
 				// for each perception, sends it to the remote agent
 				for (int i = 0; i < perceptions.length; i++) {
-					sent_succesfully = this.connection.send(perceptions[i]
-							.fullToXML(0));
-					if (perceptions[i] instanceof AgentsPerception) {
+					sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
+					while(!sent_succesfully)
+						sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
+					
+					/*if (perceptions[i] instanceof AgentsPerception) {
 						this.connection.send(perceptions[i].fullToXML(0));
 						this.connection.send(perceptions[i].fullToXML(0));
 						this.connection.send(perceptions[i].fullToXML(0));
 						this.connection.send(perceptions[i].fullToXML(0));
 						this.connection.send(perceptions[i].fullToXML(0));
-					}
+//					}*/
 				}
 
 				// if the perceptions were successfully sent,
 				// changes the agent's state to JUST_PERCEIVED
-				if (sent_succesfully)
-					this.AGENT.setState(AgentStates.JUST_PERCEIVED);
+				this.AGENT.setState(AgentStates.JUST_PERCEIVED);
 			}
 		}
 	}

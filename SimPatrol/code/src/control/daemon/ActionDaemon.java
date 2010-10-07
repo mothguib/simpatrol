@@ -757,12 +757,14 @@ public final class ActionDaemon extends AgentDaemon {
 		while (this.is_active)
 			synchronized (simulator) {
 				if (simulator.getState() == SimulatorStates.SIMULATING
-						&& !this.is_blocked) {
+						&& !this.is_blocked 
+						&& !(this.AGENT.getAgentState() == AgentStates.JUST_ACTED)) {
 					// registers if some action was attended
 					boolean attended_actions = false;
 					
 					// while the buffer has messages to be attended
-					while (this.BUFFER.getSize() > 0) {
+					while (this.BUFFER.getSize() > 0
+							&& !(this.AGENT.getAgentState() == AgentStates.JUST_ACTED)) {
 						
 						if( cyclesVisited < numCyclesByVisit && cyclesVisited !=0 )	{
 							cyclesVisited++;
@@ -829,8 +831,6 @@ public final class ActionDaemon extends AgentDaemon {
 
 						// if the obtained action is a visiting one
 						if (action instanceof VisitAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " visiting");
 
 							// verifies if the agent has permission to visit
 							// nodes
@@ -839,20 +839,20 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.VISIT) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " visiting");
 									// attends the action
 									this.attendVisitAction(
 											(VisitAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a broadcasting one
 						else if (action instanceof BroadcastAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " broadcasting");
 
 							// verifies if the agent has permission to broadcast
 							// messages
@@ -861,20 +861,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.BROADCAST) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " broadcasting");
 									// attends the action
 									this.attendBroadcastAction(
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a broadcasting society one
 						else if (action instanceof BroadcastSocietyAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " broadcasting to your society");
 
 							// verifies if the agent has permission to broadcast
 							// messages
@@ -883,20 +884,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " broadcasting to your society");
 									// attends the action
 									this.attendBroadcastSocietyAction(
 											(BroadcastSocietyAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a stigmatize one
 						else if (action instanceof StigmatizeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " stigmatizing");
 
 							// verifies if the agent has permission to deposit
 							// stigmas
@@ -905,20 +907,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " stigmatizing");
 									// attends the action
 									this.attendStigmatizeAction(
 											(StigmatizeAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is an atomic recharge one
 						else if (action instanceof AtomicRechargeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " atomic recharging");
 
 							// verifies if the agent has permission to
 							// immediately recharge
@@ -927,19 +930,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " atomic recharging");
 									// attends the action
 									this.attendAtomicRechargeAction(
 											(AtomicRechargeAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a recharge one
 						else if (action instanceof RechargeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " recharging");
 
 							// verifies if the agent has permission to recharge
 							ActionPermission[] permissions = this.AGENT
@@ -947,6 +952,8 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.RECHARGE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " recharging");
 									// attends the action
 									this.attendRechargeAction(
 											(RechargeAction) action,
@@ -957,16 +964,13 @@ public final class ActionDaemon extends AgentDaemon {
 									if (simulator instanceof CycledSimulator)
 										this.act();
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the action is a teleport action
 						else if (action instanceof TeleportAction) {
-							System.err
-									.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " teleporting");
 
 							// verifies if the agent has permission to teleport
 							ActionPermission[] permissions = this.AGENT
@@ -974,19 +978,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.TELEPORT) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " teleporting");
 									// attends the intention of action
 									this.attendTeleportAction(
 											(TeleportAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the action is a goto action
 						else if (action instanceof GoToAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " going");
 
 							// verifies if the agent has permission to move
 							ActionPermission[] permissions = this.AGENT
@@ -994,6 +1000,8 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.GOTO) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " going");
 									// attends the intention of action
 									this.attendGoToAction((GoToAction) action,
 											permissions[i].getLimitations());
@@ -1003,21 +1011,18 @@ public final class ActionDaemon extends AgentDaemon {
 									if (simulator instanceof CycledSimulator)
 										this.act();
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// developer: new action types must add code here
 
-						// registers that the intentions of actions were
-						// attended
-						attended_actions = true;
+						// registers that the agent just acted,
+						// if some action was attended
+						if (attended_actions)
+							this.AGENT.setState(AgentStates.JUST_ACTED);
 					}
-
-					// registers that the agent just acted,
-					// if some action was attended
-					if (attended_actions)
-						this.AGENT.setState(AgentStates.JUST_ACTED);
 				}
 				/*try {
 					Thread.sleep(1);
@@ -1035,7 +1040,8 @@ public final class ActionDaemon extends AgentDaemon {
 	 */
 	public void act() {
 		synchronized (simulator) {
-			if (simulator.getState() == SimulatorStates.SIMULATING) {				
+			if ((simulator.getState() == SimulatorStates.SIMULATING)
+					&& !(this.AGENT.getAgentState() == AgentStates.JUST_ACTED)){				
 				// if the planning is not empty
 				if (this.PLANNING.getSize() > 0) {
 					// executes the current atomic action
@@ -1090,12 +1096,14 @@ public final class ActionDaemon extends AgentDaemon {
 		if (this.is_active)
 			synchronized (simulator) {
 				if (simulator.getState() == SimulatorStates.SIMULATING
-						&& !this.is_blocked) {
+						&& !this.is_blocked
+						&& !(this.AGENT.getAgentState() == AgentStates.JUST_ACTED)) {
 					// registers if some action was attended
 					boolean attended_actions = false;
 					
 					// while the buffer has messages to be attended
-					while (this.BUFFER.getSize() > 0) {
+					while (this.BUFFER.getSize() > 0 
+							&& !(this.AGENT.getAgentState() == AgentStates.JUST_ACTED)) {
 						
 						
 						if( cyclesVisited < numCyclesByVisit && cyclesVisited !=0 ){
@@ -1161,9 +1169,6 @@ public final class ActionDaemon extends AgentDaemon {
 
 						// if the obtained action is a visiting one
 						if (action instanceof VisitAction) {
-							cyclesVisited =1;
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " visiting");
 
 							// verifies if the agent has permission to visit
 							// nodes
@@ -1172,20 +1177,20 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.VISIT) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " visiting");
 									// attends the action
 									this.attendVisitAction(
 											(VisitAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a broadcasting one
 						else if (action instanceof BroadcastAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " broadcasting");
 
 							// verifies if the agent has permission to broadcast
 							// messages
@@ -1194,20 +1199,44 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.BROADCAST) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " broadcasting");
 									// attends the action
 									this.attendBroadcastAction(
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
+									// quits the loop
+									break;
+								}
+						}
+						// else if the obtained action is a broadcasting society one
+						else if (action instanceof BroadcastSocietyAction) {
+
+							// verifies if the agent has permission to broadcast
+							// messages
+							ActionPermission[] permissions = this.AGENT
+									.getAllowedActions();
+
+							for (int i = 0; i < permissions.length; i++)
+								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " broadcasting to your society");
+									// attends the action
+									this.attendBroadcastSocietyAction(
+											(BroadcastSocietyAction) action,
+											permissions[i].getLimitations());
+
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a stigmatize one
 						else if (action instanceof StigmatizeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " stigmatizing");
 
 							// verifies if the agent has permission to deposit
 							// stigmas
@@ -1216,20 +1245,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " stigmatizing");
 									// attends the action
 									this.attendStigmatizeAction(
 											(StigmatizeAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is an atomic recharge one
 						else if (action instanceof AtomicRechargeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId()
-									+ " atomic recharging");
 
 							// verifies if the agent has permission to
 							// immediately recharge
@@ -1238,19 +1268,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " atomic recharging");
 									// attends the action
 									this.attendAtomicRechargeAction(
 											(AtomicRechargeAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the obtained action is a recharge one
 						else if (action instanceof RechargeAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " recharging");
 
 							// verifies if the agent has permission to recharge
 							ActionPermission[] permissions = this.AGENT
@@ -1258,6 +1290,8 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.RECHARGE) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " recharging");
 									// attends the action
 									this.attendRechargeAction(
 											(RechargeAction) action,
@@ -1268,16 +1302,13 @@ public final class ActionDaemon extends AgentDaemon {
 									if (simulator instanceof CycledSimulator)
 										this.act();
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the action is a teleport action
 						else if (action instanceof TeleportAction) {
-							System.err
-									.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " teleporting");
 
 							// verifies if the agent has permission to teleport
 							ActionPermission[] permissions = this.AGENT
@@ -1285,19 +1316,21 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.TELEPORT) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId()
+											+ " teleporting");
 									// attends the intention of action
 									this.attendTeleportAction(
 											(TeleportAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
 						}
 						// else if the action is a goto action
 						else if (action instanceof GoToAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " going");
 
 							// verifies if the agent has permission to move
 							ActionPermission[] permissions = this.AGENT
@@ -1305,6 +1338,8 @@ public final class ActionDaemon extends AgentDaemon {
 
 							for (int i = 0; i < permissions.length; i++)
 								if (permissions[i].getAction_type() == ActionTypes.GOTO) {
+									System.err.println("Agent "
+											+ this.AGENT.getObjectId() + " going");
 									// attends the intention of action
 									this.attendGoToAction((GoToAction) action,
 											permissions[i].getLimitations());
@@ -1314,6 +1349,7 @@ public final class ActionDaemon extends AgentDaemon {
 									if (simulator instanceof CycledSimulator)
 										this.act();
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
@@ -1322,13 +1358,11 @@ public final class ActionDaemon extends AgentDaemon {
 
 						// registers that the intentions of actions were
 						// attended
-						attended_actions = true;
+						// registers that the agent just acted,
+						// if some action was attended
+						if (attended_actions)
+							this.AGENT.setState(AgentStates.JUST_ACTED);
 					}
-
-					// registers that the agent just acted,
-					// if some action was attended
-					if (attended_actions)
-						this.AGENT.setState(AgentStates.JUST_ACTED);
 				}
 				
 			}		
