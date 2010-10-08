@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LogFileParser parser = new LogFileParser();
 		
-		parser.parseFile("/home/pouletc/workspace_brezil/test_sim/events_RT2.txt");
+		parser.parseFile("/home/pouletc/workspace_brezil/test_sim/RandReact.txt");
 	
 		int startCycle = 0;
 		int finalCycle = 100;
@@ -30,7 +30,7 @@ public class Main {
 		System.out.println();
 		System.out.println(" - Total number of visits: " + metrics.getTotalVisits());
 		System.out.println(" - Average number of visits per node: " + metrics.getAverageVisits());
-		System.out.println(" - Standard deviation of the number of visits per node: " + metrics.getStdDevVists());
+		System.out.println(" - Standard deviation of the number of visits per node: " + metrics.getStdDevVisits());
 		System.out.println(" - Exploration time of the graph: " + metrics.getExplorationTime());
 		System.out.println(" - Normalized exploration time of the graph: " + metrics.getNormExplorationTime(parser.getNumAgents()));
 		
@@ -71,11 +71,6 @@ public class Main {
 		CurveViewer myviewer3 = new CurveViewer("Visits");
 		myviewer3.addCurve(myfreq, visitsbynode[0], Color.blue);
 		myviewer3.addCurve(myfreq, visitsbynode[1], Color.black);
-		myviewer3.addCurve(myfreq, visitsbynode[2], Color.green);
-		myviewer3.addCurve(myfreq, visitsbynode[3], Color.red);
-		myviewer3.addCurve(myfreq, visitsbynode[4], Color.orange);
-		myviewer3.addCurve(myfreq, visitsbynode[5], Color.pink);
-		myviewer3.addCurve(myfreq, visitsbynode[6], Color.cyan);
 		
 		myviewer3.setXdivision(10);
 		myviewer3.setYdivision(5);
