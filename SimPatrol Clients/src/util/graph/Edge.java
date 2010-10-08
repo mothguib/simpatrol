@@ -183,7 +183,7 @@ public final class Edge implements Comparable {
 				+ " length=\"" + this.length + "\"" 
 				+ " visibility=\"true\"" 
 				+ " is_enabled=\"true\""
-				+ " is_in_dynamic_source_memory=\"false\"" + "\"" 
+				+ " is_in_dynamic_source_memory=\"false\"" 
 				+ " is_in_dynamic_target_memory=\"false\"/>\n");
 
 		// returns the buffer content
