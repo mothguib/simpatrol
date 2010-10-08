@@ -70,8 +70,8 @@ public final class ServerSideAgentTCPConnection extends ServerSideTCPConnection 
 							this.ACTION_BUFFER.insert(message);
 						else
 							this.PERCEPTION_BUFFER.insert(message);
-						
-						this.updateObservers();
+						//Temporaly disabled
+						//this.updateObservers();
 					}
 				} catch (IOException e) {
 					// the client probably disconnected
