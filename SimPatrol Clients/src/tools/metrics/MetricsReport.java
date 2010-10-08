@@ -161,7 +161,7 @@ public class MetricsReport {
 	/**
 	 * Standard deviation of the numbers of visits per node. 
 	 */
-	public double getStdDevVists() {
+	public double getStdDevVisits() {
 		return nodesVisitsCount.standardDeviation();
 	}
 	
@@ -172,9 +172,7 @@ public class MetricsReport {
 	 *  returns -1 if the graph is not explored at the end of the simulation
 	 */
 	public double getExplorationTime() {
-		boolean[] explored = new boolean[numNodes];
-		for(boolean exp : explored)
-			exp = false;
+		boolean[] explored = new boolean[numNodes]; //all false, initially
 		
 		int numVis = 0;
 		Visit visit ;
