@@ -80,19 +80,18 @@ public final class ConscientiousReactiveClient_OLD extends Client_OLD {
 	/**
 	 * Turns this class into an executable one.
 	 * 
-	 * @param args
-	 *            Arguments: index 0: The IP address of the SimPatrol server.
-	 *            index 1: The number of the socket that the server is supposed
-	 *            to listen to this client. index 2: The path of the file that
-	 *            contains the environment. index 3. The path of the file that
-	 *            will save the mean instantaneous idlenesses; index 4. The path
-	 *            of the file that will save the max instantaneous idlenesses;
-	 *            index 5. The path of the file that will save the mean
-	 *            idlenesses; index 6. The path of the file that will save the
-	 *            max idlenesses; index 7: The time interval used to collect the
-	 *            metrics; index 8: The path of the file that will save the
-	 *            collected events; index 9: The time of simulation. index 10:
-	 *            false if the simulator is a cycled one, true if not.
+	 * @param args Arguments: 
+	 *             index 0: The IP address of the SimPatrol server.
+	 *             index 1: The number of the socket that the server is supposed to listen to this client. 
+	 *             index 2: The path of the file that contains the environment. 
+	 *             index 3. The path of the file that will save the mean instantaneous idlenesses; 
+	 *             index 4. The path of the file that will save the max instantaneous idlenesses.
+	 *             index 5. The path of the file that will save the meanidlenesses.
+	 *             index 6. The path of the file that will save the max idlenesses.
+	 *             index 7: The time interval used to collect the metrics.
+	 *             index 8: The path of the file that will save the collected events.
+	 *             index 9: The time of simulation. 
+	 *             index 10: false if the simulator is a cycled one, true if not.
 	 */
 	public static void main(String[] args) {
 		System.out.println("Conscientious reactive agents!");
