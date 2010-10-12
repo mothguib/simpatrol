@@ -331,7 +331,7 @@ public class MetricsReport {
 				}
 					
 				
-				values[i/freq] = Math.sqrt(stddev);
+				values[i/freq] = Math.sqrt(stddev/numNodes);
 			}			
 		}
 		
@@ -447,7 +447,7 @@ public class MetricsReport {
 				}
 				
 				
-				values[i/freq] = Math.sqrt(stddev);
+				values[i/freq] = Math.sqrt(stddev/numNodes);
 					
 			}			
 		}
