@@ -151,7 +151,7 @@ public class RandomReactiveAgent_OLD extends Agent_OLD {
 			String[] neighbourhood = new String[0];
 
 			// while the current position or neighborhood is not valid
-			while (!this.stop_working && current_position == null || neighbourhood.length == 0) {
+			while (!this.stop_working && (current_position == null || neighbourhood.length == 0)) {
 				// obtains the perceptions from the server
 				String[] perceptions = this.connection.getBufferAndFlush();
 
