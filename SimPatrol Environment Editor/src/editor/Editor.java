@@ -3,9 +3,12 @@ package editor;
 import graph.GraphGUI;
 
 import java.awt.Dimension;
+import java.awt.Event;
+
 import javax.swing.JPanel;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -14,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -32,6 +36,7 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import java.awt.ComponentOrientation;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.SwingConstants;
 
@@ -55,6 +60,7 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	private JMenu FileMenu = null;
 	private JMenuItem OpenFile = null;
 	private JMenuItem SaveFile = null;
+	private JMenuItem SaveAsFile = null;
 	private JMenuItem CloseFile = null;
 	private JPanel ButtonsPane = null;
 	private JButton GraphButton = null;
@@ -106,7 +112,9 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 			FileMenu.setText("Environment");
 			FileMenu.add(getOpenFile());
 			FileMenu.add(getSaveFile());
+			FileMenu.add(getSaveAsFile());
 			FileMenu.add(getCloseFile());
+			
 		}
 		return FileMenu;
 	}
@@ -118,8 +126,8 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 */
 	private JMenuItem getOpenFile() {
 		if (OpenFile == null) {
-			OpenFile = new JMenuItem();
-			OpenFile.setText("Open");
+			OpenFile = new JMenuItem("Open", 'O');
+			OpenFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
 			OpenFile.addActionListener(this);
 		}
 		return OpenFile;
@@ -132,11 +140,24 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 */
 	private JMenuItem getSaveFile() {
 		if (SaveFile == null) {
-			SaveFile = new JMenuItem();
-			SaveFile.setText("Save");
+			SaveFile = new JMenuItem("Save", 'S');
+			SaveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
 			SaveFile.addActionListener(this);
 		}
 		return SaveFile;
+	}
+	
+	/**
+	 * This method initializes SaveFile	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getSaveAsFile() {
+		if (SaveAsFile == null) {
+			SaveAsFile = new JMenuItem("Save As...");
+			SaveAsFile.addActionListener(this);
+		}
+		return SaveAsFile;
 	}
 
 	/**
@@ -277,6 +298,20 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
+			if(source == "Save As..."){
+				try {
+					SaveFileAs();
+				} catch (ParserConfigurationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SAXException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 			if(source == "Save"){
 				try {
 					SaveFile();
@@ -320,6 +355,8 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 */
 	private void OpenFile() throws ParserConfigurationException, SAXException, IOException, NodeNotFoundException, EdgeNotFoundException{
 		JFileChooser fc = new JFileChooser();
+		if(environment_file != null)
+			fc.setCurrentDirectory(new File(environment_file));
 		int returnVal = fc.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -348,6 +385,8 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 		if(environment_file == null){
 			//Create a file chooser
 			final JFileChooser fc = new JFileChooser();
+			if(environment_file != null)
+				fc.setCurrentDirectory(new File(environment_file));
 			int returnVal = fc.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				environment_file = fc.getSelectedFile().getPath();
@@ -369,6 +408,14 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 
 		}
 
+	}
+	
+	private void SaveFileAs() throws ParserConfigurationException, SAXException, IOException{
+		String old_env = environment_file;
+		environment_file = null;
+		SaveFile();
+		if(!saved)
+			environment_file = old_env;
 	}
 	
 	
