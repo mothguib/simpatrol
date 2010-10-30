@@ -104,6 +104,16 @@ public class DoubleList {
 	public double standardDeviation() {
 		return Math.sqrt(variance());		
 	}
+	
+	public double quadraticMean() {
+		double sumSquares = 0.0d;
+		
+		for (double n : numbers) {
+			sumSquares += n*n;
+		}
+		
+		return Math.sqrt(sumSquares/(size() - 1));
+	}
 
 	public String toString() {
 		return numbers.toString();

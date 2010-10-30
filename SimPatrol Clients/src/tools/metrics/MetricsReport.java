@@ -21,11 +21,15 @@ public class MetricsReport {
 	private DoubleList nodesVisitsCount;
 	private DoubleList nodesIdlenesses;
 	
+	private DoubleList nodePriorities;
 	
-	public MetricsReport(int nodes, int initialTime, int finalTime, VisitsList list) {
+	
+	public MetricsReport(int nodes, int initialTime, int finalTime, VisitsList list,
+			DoubleList nodePriorities) {
 		numNodes = nodes;
 		startTime = initialTime;
 		endTime = finalTime;
+		this.nodePriorities = nodePriorities;
 		
 		visits = list.filterByTime(startTime, endTime);
 		
@@ -50,9 +54,10 @@ public class MetricsReport {
 		DoubleList intervals = new DoubleList();
 		
 		VisitsList nodeVisits = visits.filterByVertex(node);
+		double nodePriority = this.nodePriorities.get(node);
 		
 		int lastVisitTime = startTime;
-		int interval;
+		double interval;
 		
 		Visit v;
 		
@@ -61,13 +66,13 @@ public class MetricsReport {
 		for (int i = 0; i < nodeVisits.getNumVisits(); i ++) {
 			v = nodeVisits.getVisit(i);
 			
-			interval = v.time - lastVisitTime;
+			interval = (v.time - lastVisitTime)*nodePriority;
 			intervals.add(interval);
 			
 			lastVisitTime = v.time;
 		}
 		
-		interval = endTime + 1 - lastVisitTime;
+		interval = (endTime + 1 - lastVisitTime)*nodePriority;
 		intervals.add(interval);
 		
 		return intervals;
@@ -120,6 +125,15 @@ public class MetricsReport {
 	 */
 	public double getStdDevInterval() {
 		return allIntervals.standardDeviation();
+	}
+	
+	/**
+	 * Quadratic mean of the intervals between conescutive visits,
+	 * considering all intervals from all nodes.
+	 * @return
+	 */
+	public double getQuadraticMean() {
+		return allIntervals.quadraticMean();
 	}
 	
 	

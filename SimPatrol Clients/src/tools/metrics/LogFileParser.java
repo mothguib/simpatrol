@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.DoubleList;
+
 import com.twicom.qdparser.DocHandler;
 import com.twicom.qdparser.QDParser;
 import com.twicom.qdparser.XMLParseException;
@@ -27,6 +29,7 @@ public class LogFileParser implements DocHandler {
 	private int numAgents;
 	private int numNodes;
 	private VisitsList visits;
+	private DoubleList nodePriorities;
 	
 	
 	public LogFileParser() {
@@ -37,6 +40,8 @@ public class LogFileParser implements DocHandler {
 		agentsNumbers = new HashMap<String, Integer>();
 		nodesNumbers = new HashMap<String,Integer>();
 		agentsNodes  = new HashMap<String,Integer>();
+		
+		this.nodePriorities = new DoubleList();
 		
 		numAgents = 0;
 		numNodes = 0;
@@ -63,6 +68,9 @@ public class LogFileParser implements DocHandler {
 			// associates the node to an unique number
 			nodesNumbers.put(node, numNodes);
 			numNodes ++;
+			
+			// Stores each node's priority value
+			this.nodePriorities.add(Double.parseDouble(attributes.get("priority")));
 			
 			System.out.printf("Node %s is number %d.\n", node, numNodes-1);
 
@@ -144,5 +152,7 @@ public class LogFileParser implements DocHandler {
 		return numNodes;
 	}
 
-
+	public DoubleList getNodePriorities() {
+		return nodePriorities;
+	}
 }

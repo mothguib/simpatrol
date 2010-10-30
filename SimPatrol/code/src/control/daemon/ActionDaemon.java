@@ -1015,6 +1015,8 @@ public final class ActionDaemon extends AgentDaemon {
 									// quits the loop
 									break;
 								}
+						} else { // Do nothing action
+							attended_actions = true;
 						}
 						// developer: new action types must add code here
 

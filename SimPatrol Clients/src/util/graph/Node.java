@@ -32,9 +32,9 @@ public final class Node {
 	private double idleness;
 
 	/**
-	 * The priority to visit this node. Its default value is ZERO.
+	 * The priority to visit this node. Its default value is ONE.
 	 */
-	private int priority = 0;
+	private double priority = 1;
 
 	/**
 	 * Expresses if this node is a point of recharging the energy of the
@@ -201,7 +201,7 @@ public final class Node {
 	 * @param priority
 	 *            The priority.
 	 */
-	public void setPriority(int priority) {
+	public void setPriority(double priority) {
 		this.priority = priority;
 	}
 

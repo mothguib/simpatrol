@@ -10,11 +10,12 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LogFileParser parser = new LogFileParser();
 		
-		parser.parseFile("/home/pouletc/workspace_brezil/test_sim/RandReact.txt");
+		parser.parseFile("res/log_cc.txt");
 	
 		int startCycle = 0;
 		int finalCycle = 100;
-		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), startCycle, finalCycle, parser.getVisitsList());
+		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), startCycle, finalCycle,
+				parser.getVisitsList(), parser.getNodePriorities());
 		
 		System.out.println();
 		System.out.println();
@@ -24,6 +25,7 @@ public class Main {
 		System.out.println(" - Maximum interval: " + metrics.getMaxInterval());
 		System.out.println(" - Average interval: " + metrics.getAverageInterval());
 		System.out.println(" - Standard deviation of the intervals: " + metrics.getStdDevInterval());
+		System.out.println(" - Quadratic mean of the intervals: " + metrics.getQuadraticMean());
 		System.out.println();
 		System.out.println(" - Maximum instantaneous idleness: " + metrics.getMaxInstantaeousIdleness());
 		System.out.println(" - Average idleness: " + metrics.getAverageIdleness());

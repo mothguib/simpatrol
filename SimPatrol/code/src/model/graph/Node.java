@@ -33,9 +33,9 @@ public class Node implements XMLable, Visible {
 	protected Set<Edge> out_edges;
 
 	/**
-	 * The priority to visit this node. Its default value is ZERO.
+	 * The priority to visit this node. Its default value is ONE.
 	 */
-	protected int priority = 0;
+	protected double priority = 1;
 
 	/**
 	 * Expresses if this node is visible in the graph. Its default value is
@@ -175,7 +175,7 @@ public class Node implements XMLable, Visible {
 	 * returns the priority of the vertex.
 	 * 
 	 */
-	public int getPriority() {
+	public double getPriority() {
 		return this.priority;
 	}
 	
@@ -187,7 +187,7 @@ public class Node implements XMLable, Visible {
 	 * @param priority
 	 *            The priority.
 	 */
-	public void setPriority(int priority) {
+	public void setPriority(double priority) {
 		this.priority = priority;
 	}
 

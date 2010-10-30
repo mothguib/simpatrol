@@ -113,9 +113,9 @@ public abstract class GraphTranslator {
 			current_node.setObjectId(id);
 
 			// priority configuration
-			int priority = 0;
+			double priority = 0;
 			if (str_priority.length() > 0)
-				priority = Integer.parseInt(str_priority);
+				priority = Double.parseDouble(str_priority);
 			current_node.setPriority(priority);
 
 			// idleness configuration
