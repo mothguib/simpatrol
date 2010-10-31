@@ -5,6 +5,14 @@ import java.io.IOException;
 import util.file.FileReader;
 import util.file.FileWriter;
 
+/**
+ * Transforms an environment file from the old version (SimPatrol 1.0 and older) 
+ * to the new one (SimPatrol 1.2). Changes include using "node" instead of
+ * "vertex", for example)
+ * 
+ * @author Maira
+ *
+ */
 public class EnvironmentTransformer {
 	
 	private String currentMap;
@@ -27,7 +35,7 @@ public class EnvironmentTransformer {
 	}
 	
 	/**
-	 * Converts the environment file from the old to the new format.
+	 * Converts the environment file from the old (1.0) to the new format (1.2).
 	 * This function assumes that in the file the nodes are given first, then the edges,
 	 * then the societies of agents.
 	 */

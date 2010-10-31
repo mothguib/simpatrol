@@ -14,6 +14,12 @@ import tools.test.client_types.SCClientType;
 import util.file.FileReader;
 import util.file.FileWriter;
 
+/**
+ * Generates environment files with random priorities and random agents' positions, 
+ * to help on the preparation of experiments.
+ * 
+ * @author Maira
+ */
 public class TestConfigurationsGenerator {
 	
 	/** The path of the map files */
