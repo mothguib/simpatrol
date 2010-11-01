@@ -25,7 +25,7 @@ public class Main {
 		System.out.println(" - Maximum interval: " + metrics.getMaxInterval());
 		System.out.println(" - Average interval: " + metrics.getAverageInterval());
 		System.out.println(" - Standard deviation of the intervals: " + metrics.getStdDevInterval());
-		System.out.println(" - Quadratic mean of the intervals: " + metrics.getQuadraticMean());
+		System.out.println(" - Quadratic mean of the intervals: " + metrics.getGeneralizedMean(2.0));
 		System.out.println();
 		System.out.println(" - Maximum instantaneous idleness: " + metrics.getMaxInstantaeousIdleness());
 		System.out.println(" - Average idleness: " + metrics.getAverageIdleness());

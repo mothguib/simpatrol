@@ -77,14 +77,20 @@ public class DoubleList {
 		return sum() / size();		
 	}
 
-	public double generalizedMean(double p) {
+	public double generalizedMean(double p, DoubleList weights) {
 		double sum = 0.0d;
+		double weightsSum = 0.0d;
+		int currentIndex = 0;
+		double weight;
 		
 		for (double x : numbers) {
-			sum += Math.pow(x, p);
+			weight = weights.get(currentIndex++);
+			
+			sum += Math.pow(x, p)*weight;
+			weightsSum += weight;
 		}
 		
-		return Math.pow(sum / size(), 1.0d / p);
+		return Math.pow(sum / weightsSum, 1.0d / p);
 	}
 
 	public double variance() {
@@ -103,16 +109,6 @@ public class DoubleList {
 
 	public double standardDeviation() {
 		return Math.sqrt(variance());		
-	}
-	
-	public double quadraticMean() {
-		double sumSquares = 0.0d;
-		
-		for (double n : numbers) {
-			sumSquares += n*n;
-		}
-		
-		return Math.sqrt(sumSquares/(size() - 1));
 	}
 
 	public String toString() {

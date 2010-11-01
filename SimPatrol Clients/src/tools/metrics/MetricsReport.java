@@ -17,11 +17,10 @@ public class MetricsReport {
 	
 	private DoubleList[] intervalsByNode; // each list has the intervals of a node
 	private DoubleList   allIntervals;
+	private DoubleList   allWeights; 
 
 	private DoubleList nodesVisitsCount;
 	private DoubleList nodesIdlenesses;
-	
-	private DoubleList nodePriorities;
 	
 	
 	public MetricsReport(int nodes, int initialTime, int finalTime, VisitsList list,
@@ -29,7 +28,6 @@ public class MetricsReport {
 		numNodes = nodes;
 		startTime = initialTime;
 		endTime = finalTime;
-		this.nodePriorities = nodePriorities;
 		
 		visits = list.filterByTime(startTime, endTime);
 		
@@ -37,14 +35,20 @@ public class MetricsReport {
 		nodesVisitsCount = new DoubleList(nodes);
 		
 		int sumSize = 0;
+		
 		for (int v = 0; v < numNodes; v++) {
 			intervalsByNode[v] = calculateIntervals(v);
 			sumSize += intervalsByNode[v].size();
 		}
 
 		allIntervals = new DoubleList(sumSize);
+		this.allWeights = new DoubleList(sumSize);
 		for (int v = 0; v < numNodes; v++) {
 			allIntervals.addAll(intervalsByNode[v]);
+			
+			for (int i = 0; i < intervalsByNode.length; i++) {
+				this.allWeights.add(nodePriorities.get(v));
+			}
 		}
 
 		nodesIdlenesses = calculateNodeIdlenesses();
@@ -54,7 +58,6 @@ public class MetricsReport {
 		DoubleList intervals = new DoubleList();
 		
 		VisitsList nodeVisits = visits.filterByVertex(node);
-		double nodePriority = this.nodePriorities.get(node);
 		
 		int lastVisitTime = startTime;
 		double interval;
@@ -66,13 +69,13 @@ public class MetricsReport {
 		for (int i = 0; i < nodeVisits.getNumVisits(); i ++) {
 			v = nodeVisits.getVisit(i);
 			
-			interval = (v.time - lastVisitTime)*nodePriority;
+			interval = (v.time - lastVisitTime);
 			intervals.add(interval);
 			
 			lastVisitTime = v.time;
 		}
 		
-		interval = (endTime + 1 - lastVisitTime)*nodePriority;
+		interval = (endTime + 1 - lastVisitTime);
 		intervals.add(interval);
 		
 		return intervals;
@@ -128,12 +131,13 @@ public class MetricsReport {
 	}
 	
 	/**
-	 * Quadratic mean of the intervals between conescutive visits,
+	 * Generalized mean of the intervals between consecutive visits,
 	 * considering all intervals from all nodes.
+	 * The priorities of the nodes are used as weights for each interval.
 	 * @return
 	 */
-	public double getQuadraticMean() {
-		return allIntervals.quadraticMean();
+	public double getGeneralizedMean(double p) {
+		return allIntervals.generalizedMean(p, this.allWeights);
 	}
 	
 	
