@@ -21,9 +21,22 @@ public class MetricsReport {
 
 	private DoubleList nodesVisitsCount;
 	private DoubleList nodesIdlenesses;
-	
-	
+
+
 	public MetricsReport(int nodes, int initialTime, int finalTime, VisitsList list,
+			DoubleList nodePriorities) {
+		init(nodes, initialTime, finalTime, list, nodePriorities);
+	}
+
+	public MetricsReport(int nodes, int initialTime, int finalTime, VisitsList list) {
+		DoubleList priorities = new DoubleList();
+		for (int v = 0; v < nodes; v++) {
+			priorities.add(1.0d);
+		}
+		init(nodes, initialTime, finalTime, list, priorities);
+	}
+	
+	private void init(int nodes, int initialTime, int finalTime, VisitsList list,
 			DoubleList nodePriorities) {
 		numNodes = nodes;
 		startTime = initialTime;
@@ -42,17 +55,19 @@ public class MetricsReport {
 		}
 
 		allIntervals = new DoubleList(sumSize);
-		this.allWeights = new DoubleList(sumSize);
+		allWeights = new DoubleList(sumSize);
+		
 		for (int v = 0; v < numNodes; v++) {
 			allIntervals.addAll(intervalsByNode[v]);
 			
-			for (int i = 0; i < intervalsByNode.length; i++) {
-				this.allWeights.add(nodePriorities.get(v));
+			for (int i = 0; i < intervalsByNode[v].size(); i++) {
+				allWeights.add(nodePriorities.get(v));
 			}
 		}
 
 		nodesIdlenesses = calculateNodeIdlenesses();
 	}
+
 	
 	private DoubleList calculateIntervals(int node) {
 		DoubleList intervals = new DoubleList();
@@ -126,17 +141,25 @@ public class MetricsReport {
 	 * Standard deviation of the intervals between consecutive visits, 
 	 * considering all intervals from all nodes.
 	 */
-	public double getStdDevInterval() {
+	public double getStdDevOfIntervals() {
 		return allIntervals.standardDeviation();
 	}
+	
+	/**
+	 * Quadratic mean of the intervals between consecutive visits,
+	 * considering all intervals from all nodes.
+	 */
+	public double getQuadraticMeanOfIntervals() {
+		return allIntervals.generalizedMean(2.0d, this.allWeights);
+	}
+	
 	
 	/**
 	 * Generalized mean of the intervals between consecutive visits,
 	 * considering all intervals from all nodes.
 	 * The priorities of the nodes are used as weights for each interval.
-	 * @return
 	 */
-	public double getGeneralizedMean(double p) {
+	public double getGeneralizedMeanOfIntervals(double p) {
 		return allIntervals.generalizedMean(p, this.allWeights);
 	}
 	

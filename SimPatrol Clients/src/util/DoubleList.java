@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * A list of double values implemented along with basic 
- * statical operations.
+ * statistical operations.
  * 
  * @author Pablo A. Sampaio
  */
@@ -79,18 +79,12 @@ public class DoubleList {
 
 	public double generalizedMean(double p, DoubleList weights) {
 		double sum = 0.0d;
-		double weightsSum = 0.0d;
-		int currentIndex = 0;
-		double weight;
 		
-		for (double x : numbers) {
-			weight = weights.get(currentIndex++);
-			
-			sum += Math.pow(x, p)*weight;
-			weightsSum += weight;
+		for (int i = 0; i < numbers.size(); i ++) {
+			sum += Math.pow(numbers.get(i),p) * weights.get(i);
 		}
 		
-		return Math.pow(sum / weightsSum, 1.0d / p);
+		return Math.pow(sum / weights.sum(), 1.0d / p);
 	}
 
 	public double variance() {
