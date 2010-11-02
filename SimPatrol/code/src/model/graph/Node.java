@@ -268,10 +268,12 @@ public class Node implements XMLable, Visible {
 	 * @return The idleness of the node.
 	 */
 	public double getIdleness() {
+		double idleness;
 		if (Node.time_counter != null)
-			return Node.time_counter.getElapsedTime() - this.last_visit_time;
+			idleness = Node.time_counter.getElapsedTime() - this.last_visit_time;
 		else
-			return Math.abs(this.last_visit_time);
+			idleness =  Math.abs(this.last_visit_time);
+		return idleness*this.getPriority();
 	}
 
 	/**
