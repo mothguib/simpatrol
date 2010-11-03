@@ -1,82 +1,83 @@
-package dummy_client;
+package gravitational;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
-import log_clients.LogFileClient;
-
 import common.IMessageObserver;
+
+import util.file.FileReader;
+
+import log_clients.LogFileClient;
+import dummy_client.TcpConnection;
 
 
 /**
- * This is the main client, which is responsible for starting the log client 
- * and all agents clients. It also starts the simulation.
+ * Configures the gravitational agents described in SAMPAIO [2010]. To use them, 
+ * run the main method with appropriate parameters. 
+ * 
+ * Some remarks when creating the environment files: 
+ * - simple agents needs perceptions of BROADCAST and SELF 
+ * - coordinator needs perception of BROADCAST and GRAPH 
  *  
  * @author Pablo Sampaio
  */
-public class DummyMainClient implements IMessageObserver {
+public class GravitationalMainClient implements IMessageObserver {
+	private String serverAddress;
+	private int    serverPort;
 	private TcpConnection connection;
 
+	private String environmentPath;
 	private int totalCycles;
-	private int numAgents;
 
+	private String logFilePath;        
 	private LogFileClient logClient;
-	private List<DummyAgent> agentsList;
-	private boolean threadedAgents;
 	
-	
-	public DummyMainClient(int agents, int cycles, String serverIp, int serverPort, boolean threaded) throws UnknownHostException, IOException {
-		numAgents = agents;
-		totalCycles = cycles;
-		connection = new TcpConnection(serverIp, serverPort);
-		threadedAgents = threaded;
-		logClient = null;
-		agentsList = null;
+	// parameters for the coordinator
+	private GravitiesCombinator gravCombinator;
+	private double distanceExponent;
+	private MassGrowth massGrowth;
+
+	private GravitationalCoordinatorAgent coordinator;
+	private List<GravitationalAgent> agentsList;
+
+
+	public GravitationalMainClient(String serverIpAddress, int serverPortNumber,
+			String environmentFilePath, String logPath, int cyclesOfSimulation,
+			MassGrowth growth, double exponent, GravitiesCombinator combinator)
+			throws UnknownHostException, IOException {
+		
+		this.serverAddress = serverIpAddress;
+		this.serverPort = serverPortNumber;
+		
+		this.environmentPath = environmentFilePath;
+		this.totalCycles = cyclesOfSimulation;
+		
+		this.logFilePath = logPath;
+		
+		this.massGrowth = growth;
+		this.distanceExponent = exponent;
+		this.gravCombinator = combinator;
 	}
-	
-	
+
 	public void start() {
 		
 		try {
-
+			
+			this.connection = new TcpConnection(serverAddress, serverPort);
 			this.connection.start();		
 
 			// 1. sends the environment 
 
 			System.out.print("1. Sending the environment... ");
 			
-			String graph = 
-				"<graph label=\"graph_perceived\">" 
-				+ "  <node id=\"a\" label=\"a\" idleness=\"0\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
-				+ "  <node id=\"b\" label=\"b\" idleness=\"8\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
-				+ "  <node id=\"c\" label=\"c\" idleness=\"17\" visibility=\"true\" priority=\"0\" fuel=\"false\" is_enabled=\"true\"/>"
-				+ "  <edge id=\"ab\" source=\"a\" target=\"b\" directed=\"false\" length=\"6\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
-				+ "  <edge id=\"bc\" source=\"b\" target=\"c\" directed=\"false\" length=\"4\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
-				+ "  <edge id=\"ca\" source=\"c\" target=\"a\" directed=\"false\" length=\"8\" visibility=\"true\" is_enabled=\"true\" is_in_dynamic_source_memory=\"false\" is_in_dynamic_target_memory=\"false\"/>"
-				+ "</graph>";
-			
-			String society = "<society id=\"soc1\" label=\"soc1\">";
-
-			char startNode; 
-			for (int index = 0; index < numAgents; index++) {
-				startNode = (char)('a' + (index % 3));
-				society = society
-					+ "<agent id=\"agent" + index + "\" label=\"ag" + index + "\" node_id=\"" + startNode + "\" state=\"1\" stamina=\"1.0\" max_stamina=\"1.0\">"
-					+ "  <allowed_perception type=\"4\"/>" //only perceives itself
-					+ "  <allowed_action type=\"1\"/> <allowed_action type=\"2\"/>" // can only do actions: "goto" and "visit"
-					+ "</agent>";
-			}
-		
-			society += "</society>"; 
+			FileReader file = new FileReader(this.environmentPath);
+			String environment = file.readWholeFile();			
 			
 			String message1 = 
 				"<configuration type=\"0\">" 
-				+ "<environment>"
-				+ graph
-				+ society
-				+ "</environment>" 
+				+ environment 
 				+ "</configuration>";
 
 			this.connection.send(message1);
@@ -104,7 +105,7 @@ public class DummyMainClient implements IMessageObserver {
 			
 			System.out.print("creating... ");
 			
-			this.logClient = new LogFileClient(connection.getRemoteSocketAdress(), logClientPort, "tmp\\simlog.log");
+			this.logClient = new LogFileClient(connection.getRemoteSocketAdress(), logClientPort, logFilePath);
 
 			System.out.println("ok!");
 
@@ -112,9 +113,10 @@ public class DummyMainClient implements IMessageObserver {
 
 			System.out.print("4. Starting all clients up... ");
 			
-			for (DummyAgent agent : agentsList) {
+			for (GravitationalAgent agent : agentsList) {
 				agent.startWorking();
 			}
+			coordinator.startWorking();
 			logClient.start();
 			
 			System.out.print(" sending message to start the simulation... ");
@@ -179,38 +181,30 @@ public class DummyMainClient implements IMessageObserver {
 			nextAgentIndex = receivedMessage.indexOf("agent_id=\"");
 		}
 
-		// mounts the answer of the method: the agents are ordered by their id
-		int agentIndex;
 		AgentInfo[] answer = new AgentInfo[agentsInfo.size()];
-		for (int i = 0; i < answer.length; i++) {
-			agentIndex = Integer.parseInt( agentsInfo.get(i).identifier.substring(5) );
-			answer[agentIndex] = agentsInfo.get(i);
-		}
+		agentsInfo.toArray(answer);
 		
 		return answer;
 	}
 
 	private void createAgents(AgentInfo[] agentsInfo) throws IOException {
-		DummyAgent agent;
+		GravitationalAgent agent;
 		TcpConnection agentConnection;
-		String startNode, nextNode;
 		
 		String serverAddres = this.connection.getRemoteSocketAdress();
 		
-		this.agentsList = new LinkedList<DummyAgent>();
+		this.agentsList = new LinkedList<GravitationalAgent>();
 
 		for (int i = 0; i < agentsInfo.length; i++) {
 			agentConnection = new TcpConnection(serverAddres, agentsInfo[i].port);
-			startNode = "" + (char)('a' + (i % 3));
-			nextNode  = "" + (char)('a' + ((i+1) % 3));
-
-			if (threadedAgents) {
-				agent = new DummyAgentThreaded(agentsInfo[i].identifier, agentConnection, startNode, nextNode);	
+			
+			if (agentsInfo[i].identifier.startsWith("coordinator")) { 
+				coordinator = new GravitationalCoordinatorAgent(agentsInfo[i].identifier, agentConnection,
+																massGrowth, distanceExponent, gravCombinator);
 			} else {
-				agent = new DummyAgent(agentsInfo[i].identifier, agentConnection, startNode, nextNode);
+				agent = new GravitationalAgent(agentsInfo[i].identifier, agentConnection);	
+				this.agentsList.add(agent);
 			}
-
-			this.agentsList.add(agent);
 		}
 	}
 	
@@ -219,7 +213,7 @@ public class DummyMainClient implements IMessageObserver {
 	public void update(){
 		if (! this.connection.isWorking()){
 
-			for (DummyAgent agent : this.agentsList) {
+			for (GravitationalAgent agent : this.agentsList) {
 				agent.stopWorking();
 			}
 
@@ -248,18 +242,66 @@ public class DummyMainClient implements IMessageObserver {
 		}
 	}
 	
-	
-	public static void main(String[] args) throws UnknownHostException, IOException {
-		int AGENTS        = 2;
-		int CYCLES        = 30;
-		String SERVER_URL = "127.0.0.1";
-		int SERVER_PORT   = 5000;
-		boolean THREADED  = false;
-		
-		DummyMainClient client = new DummyMainClient(AGENTS, CYCLES, SERVER_URL, SERVER_PORT, THREADED);
-		
-		client.start();
-	}
+	/**
+	 * @param args List of command line arguments: 
+	 * 
+	 *    index 0: The IP address of the SimPatrol server.
+	 *    index 1: The number of the port that the server is listening. 
+	 *    index 2: The path of the file that contains the environment (graph + society). 
+	 *    index 3: The path of the file that will save the collected events; 
+	 *    index 4: The time of simulation.
+	 *    index 5: Mass growth function: "A" (for arithmetic) or "G" (for geometric)
+	 *    index 6: Distance exponent
+	 *    index 7: Gravities combination method: "max" or "sum"
+	 */
+	public static void execute(String[] args) {
+		System.out.println("Gravitational agents!");
 
+		try {
+			String serverAddress       = args[0];
+			int serverPortNumber       = Integer.parseInt(args[1]);
+			String environmentFilePath = args[2];
+			String logFilePath         = args[3];
+			int cyclesOfSimulation     = Integer.parseInt(args[4]);
+			MassGrowth growth          = args[5].toString().equals("G")? MassGrowth.GEOMETRIC : MassGrowth.ARITHMETIC;
+			double distanceExponent    = Double.parseDouble(args[6]); 
+			GravitiesCombinator combinator = GravitiesCombinator.valueOf(args[7].toUpperCase());
+			
+			GravitationalMainClient client;			
+			
+			client = new GravitationalMainClient(serverAddress, serverPortNumber, environmentFilePath, 
+							logFilePath, cyclesOfSimulation, growth, distanceExponent, combinator);	
+
+			client.start();
+
+		} catch (Exception e) {			
+			System.out.println("\nUsage:\n\n> java gravitational.GravitationalMainClient "
+								+ "<Server's IP> <Server's port number> <Environment file path> <Log file> " 
+								+ "<Cycles of simulation> <Mass growth> <Exponent> <Gravity combinator>\n\n");
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		
+		if (args.length == 0) {
+			
+			// default parameters, in case no parameters are provided
+			args = new String[]{
+						"127.0.0.1",
+						"5000",
+						"res\\environment_files\\grav_test.xml",
+						"tmp\\grav_teste_log.txt",
+						"50",
+						"A",
+						"1.0",
+						"max"
+					};
+		}
+		
+		execute(args);
+	}
 	
 }
+

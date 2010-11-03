@@ -90,7 +90,7 @@ public class DummyAgent implements IMessageObserver {
 		String[] messages;
 		boolean arrived = false;
 		
-		messages = connection.getBufferAndFlush();
+		messages = connection.retrieveMessages();
 
 		for (int i = 0; i < messages.length; i++) {
 			arrived = isArrivalMessage(messages[i]);
@@ -127,7 +127,7 @@ public class DummyAgent implements IMessageObserver {
 
 	
 	/**
-	 * Send messages to visit the current node and to goe to the next node. 
+	 * Send messages to visit the current node and to go to the next node. 
 	 */
 	protected void visitAndGoToNextNode() throws IOException {
 		// send message to visit current node

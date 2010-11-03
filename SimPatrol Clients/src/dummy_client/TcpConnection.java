@@ -93,7 +93,7 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	/**
 	 * Returns and clears the list of unread messages.
 	 */
-	public synchronized String[] getBufferAndFlush() {
+	public synchronized String[] retrieveMessages() {
 		String[] answer = new String[this.messagesReceived.size()];
 
 		for (int i = 0; i < answer.length; i++) {
@@ -107,14 +107,14 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	 * Synchronously waits for messages. Only returns when at 
 	 * least one message is received.
 	 */
-	public String[] syncReceiveMessages() {
+	public String[] syncRetrieveMessages() {
 		String[] answer;
 		
-		answer = getBufferAndFlush();
+		answer = retrieveMessages();
 		
 		while (answer.length == 0 && this.working)  {
 			Thread.yield();			
-			answer = getBufferAndFlush();
+			answer = retrieveMessages();
 		} 
 		
 		return answer;
@@ -153,13 +153,33 @@ public class TcpConnection extends Thread implements IMessageSubject {
 		this.serverOutput.flush();
 	}
 
+
 	/**
-	 * Reads complete XML message from the socket and stores them.
+	 * Actively receives messages from the socket and stores them.
 	 */
+	public void run() {
+		while (this.working) {
+			
+			try {				
+				this.receive();
+			} catch (IOException e) {
+				e.printStackTrace();
+				this.working = false;
+			}
+			
+			Thread.yield();			
+		}
+		
+		this.working = false;
+		System.out.println("Connection's thread stopped!");
+		
+		this.updateObservers();
+	}
+	
 	protected void receive() throws IOException {
 		StringBuffer buffer = new StringBuffer();
-
 		String messageLine = null;
+
 		do {
 			try {
 				
@@ -184,9 +204,6 @@ public class TcpConnection extends Thread implements IMessageSubject {
 				
 			} catch (InterruptedIOException e) {
 				break;
-			
-			} catch (IOException e) {
-				break;
 			}
 			
 		} while (true);
@@ -196,27 +213,8 @@ public class TcpConnection extends Thread implements IMessageSubject {
 				this.messagesReceived.add(buffer.toString());
 			}
 			this.updateObservers();			
-		}
-		
+		}		
 	}
 
-	public void run() {
-		while (this.working) {
-			
-			try {
-				
-				this.receive();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		this.working = false;
-		System.out.println("Connection's thread stopped!");
-		
-		this.updateObservers();
-	}
 	
 }

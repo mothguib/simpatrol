@@ -184,6 +184,22 @@ public class FileReader {
 	}
 
 	/**
+	 * Reads the whole file and returns an only string with its content.
+	 * @throws IOException 
+	 */
+	public String readWholeFile() throws IOException {
+		StringBuffer buffer = new StringBuffer();
+		
+		while (!this.isEndOfFile()) {
+			buffer.append(this.readLine());
+		}
+
+		file_reader.close();
+		
+		return buffer.toString();
+	}
+
+	/**
 	 * Forces the file closing, when the garbage target is called.
 	 * 
 	 * @throws IOException
