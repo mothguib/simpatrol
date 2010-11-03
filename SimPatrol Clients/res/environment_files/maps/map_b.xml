@@ -1,4 +1,4 @@
-<graph label="mapa_b">
+<graph label="map_b">
 	<node id="v23" label="v23" visibility="true" idleness="0.0" fuel="false" is_enabled="true"/>
 	<node id="v25" label="v25" visibility="true" idleness="0.0" fuel="false" is_enabled="true"/>
 	<node id="v30" label="v30" visibility="true" idleness="0.0" fuel="false" is_enabled="true"/>
