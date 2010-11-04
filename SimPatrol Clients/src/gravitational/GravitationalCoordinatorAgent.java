@@ -57,15 +57,11 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		
 		try {
 			 
-			//pode dar problema, se receber pedidos antes do grafo
 			waitForGraph();        
-			PRINT("graph perceived, setting up...");	
-			
-			//do nothing for the rest of this cycle
-			connection.send("<action type=\"-1\"/>");
+			_PRINT("graph perceived, setting up...");	
 			
 			setupGravityManager(); 
-			PRINT("ok, starting to attend requests...");
+			_PRINT("starting to attend requests...");
 
 			while (working) {
 				perceiveAndAct();				
@@ -78,14 +74,14 @@ public class GravitationalCoordinatorAgent implements Runnable {
 			
 		}
 		
-		PRINT("finished");	
+		_PRINT("finished");	
 	}
 	
 	private void waitForGraph() {
 		boolean received = false;
 		String[] messages;
 		
-		PRINT("awaiting graph");
+		_PRINT("awaiting graph");
 		
 		while (graph == null && this.working) {
 			//syncPrint("Waiting for perception of the graph...");
@@ -95,7 +91,6 @@ public class GravitationalCoordinatorAgent implements Runnable {
 
 			for (int i = 0; i < messages.length; i++) {
 				received = perceiveGraph(messages[i]);
-				PRINT("received: " + messages[i]);
 				if (received) {
 					break;
 				}
@@ -119,12 +114,18 @@ public class GravitationalCoordinatorAgent implements Runnable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void setupGravityManager() {
+	private void setupGravityManager() throws IOException {
 		gravityManager = gravityCombinator.createGravityManager(graph, distanceExponent);		
+
 		visitsScheduledPerNode = new List[graph.getNumVertices()];
 		for (int i = 0; i < visitsScheduledPerNode.length; i++) {
 			visitsScheduledPerNode[i] = new LinkedList<String>();
 		}
+
+		recalculateGravities();
+		
+		//do nothing for the rest of this cycle
+		connection.send("<action type=\"-1\"/>");
 	}
 	
 	private void perceiveAndAct() throws IOException {
@@ -132,11 +133,11 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		boolean perceived;
 		
 		for (int i = 0; i < messages.length; i++) {
-			PRINT("received: " + messages[i]);
+			_PRINT("received: " + messages[i]);
 
 			perceived = perceiveGraph(messages[i]);
 			if (perceived) {
-				PRINT("graph perceived, updating gravities");
+				_PRINT("graph perceived, updating gravities");
 				recalculateGravities();
 				connection.send("<action type=\"-1\"/>");
 			}
@@ -168,7 +169,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 			goalNode = selectGoalNode(agentId, currentNode);
 			connection.send("<action type=\"3\" message=\"ANS##" + agentId + "###" + goalNode + "\"/>");
 
-			PRINT("sending goal node - <action type=\"3\" message=\"ANS##" + agentId + "###" + goalNode + "\"/>");
+			_PRINT("sending goal node - <action type=\"3\" message=\"ANS##" + agentId + "###" + goalNode + "\"/>");
 		}
 
 	}	
@@ -176,13 +177,13 @@ public class GravitationalCoordinatorAgent implements Runnable {
 	private String selectGoalNode(String agentId, String currNodeId) {
 		int currNode = graph.getNode(currNodeId).getIndex();
 		
-		int    goalNode    = currNode;
+		int goalNode = currNode;
 		double goalGravity = -1.0d;
 		
 		// chooses the neighbor with higher gravity 
 		for (Integer neighbor : graph.getSuccessors(currNode)) {
 			if (gravityManager.getGravity(currNode,neighbor) > goalGravity) {
-				goalNode    = neighbor;
+				goalNode = neighbor;
 				goalGravity = gravityManager.getGravity(currNode,neighbor);
 			}
 		}
@@ -190,9 +191,9 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		visitsScheduledPerNode[currNode].remove(agentId);
 		visitsScheduledPerNode[goalNode].add(agentId); 
 
-		// se for o primeiro agendamento, desfaz a gravidade do vertice selecionado
+		// if it is the only agent going to the node, undo the gravity (mass is zeroed)
 		if (visitsScheduledPerNode[goalNode].size() == 1) {
-			System.out.println(" >> Coordinator undoing gravity from " + graph.getNode(goalNode));
+			_PRINT("undoing gravity from " + graph.getNode(goalNode));
 			gravityManager.undoGravity(goalNode);
 		}
 		
@@ -221,7 +222,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		
 	}
 
-	private void PRINT(String message) {
+	private void _PRINT(String message) {
 		System.out.println(identifier.toUpperCase() + ": " + message);
 	}
 	

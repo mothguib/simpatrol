@@ -3,21 +3,21 @@ package gravitational;
 
 public enum MassGrowth {
 	
-	ARITHMETIC  ("A") {
+	ARITHMETIC ("A") {
 		@Override
 		public double getVertexMass(double baseMass, double idleness) {
 			return baseMass * idleness;
 		}
 	},
 	
-	GEOMETRIC ("G") {
+	GEOMETRIC  ("G") {
 		@Override
 		public double getVertexMass(double baseMass, double idleness) {
 			return geometricGrowth(baseMass, GROWTH_RATE, idleness - 1);
 		}
 	},
 	
-	NO_GROWTH   ("N") {
+	NO_GROWTH  ("N") {
 		@Override
 		public double getVertexMass(double baseMass, double idleness) {
 			return baseMass;

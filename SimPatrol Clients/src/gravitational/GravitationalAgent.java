@@ -90,7 +90,6 @@ public class GravitationalAgent implements Runnable {
 		PRINT("awaiting goal node...");
 		
 		while (goal == null && this.working) {
-			//syncPrint("Waiting message about goal node...");
 			Thread.yield();
 			
 			messages = connection.retrieveMessages();
@@ -121,7 +120,8 @@ public class GravitationalAgent implements Runnable {
 		
 		// perceives a message from coordinator
 		if (markIndex > -1) {			
-			perception = perception.substring(markIndex + 14, perception.indexOf("\""));
+			perception = perception.substring(markIndex + 14);
+			perception = perception.substring(0, perception.indexOf("\""));
 
 			markIndex = perception.indexOf("###");
 
@@ -145,15 +145,18 @@ public class GravitationalAgent implements Runnable {
 		boolean agentArrived = false;
 		String[] messages;
 		
+		PRINT("awaiting arrival message");
+		
 		while (!agentArrived && this.working) {
-			//syncPrint("Waiting agent to arrive at node \"" + goalNode + "\"");
 			Thread.yield();
 			
 			messages = connection.retrieveMessages();
 
 			for (int i = 0; i < messages.length; i++) {
+				//PRINT("received - " + messages[i]);
 				agentArrived = perceiveArrivalMessage(messages[i]);
 				if (agentArrived) {
+					PRINT("agent arrived: " + goalNode);
 					break;
 				}
 			}
