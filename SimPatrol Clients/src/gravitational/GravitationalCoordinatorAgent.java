@@ -56,10 +56,13 @@ public class GravitationalCoordinatorAgent implements Runnable {
 	public void run() {		
 		
 		try {
-			
+			 
 			//pode dar problema, se receber pedidos antes do grafo
 			waitForGraph();        
-			PRINT("graph perceived, setting up...");			
+			PRINT("graph perceived, setting up...");	
+			
+			//do nothing for the rest of this cycle
+			connection.send("<action type=\"-1\"/>");
 			
 			setupGravityManager(); 
 			PRINT("ok, starting to attend requests...");
@@ -127,7 +130,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 	private void perceiveAndAct() throws IOException {
 		String[] messages = connection.retrieveMessages();
 		boolean perceived;
-
+		
 		for (int i = 0; i < messages.length; i++) {
 			PRINT("received: " + messages[i]);
 
@@ -153,7 +156,8 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		int markIndex = perception.indexOf("message=\"REQ##");
 
 		if (markIndex > -1) {
-			perception = perception.substring(markIndex + 14, perception.indexOf("\""));
+			perception = perception.substring(markIndex + 14);
+			perception = perception.substring(0, perception.indexOf("\""));			
 
 			markIndex = perception.indexOf("###");
 			
