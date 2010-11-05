@@ -17,9 +17,11 @@ import dummy_client.TcpConnection;
  * Configures the gravitational agents described in SAMPAIO [2010]. To use them, 
  * run the main method with appropriate parameters. 
  * 
- * Some remarks when creating the environment files: 
- * - simple agents needs perceptions of BROADCAST and SELF 
- * - coordinator needs perception of BROADCAST and GRAPH 
+ * Some remarks when creating the environment files:
+ *  
+ * - Perceptions: one agents needs perceptions of SELF and GRAPH, 
+ *                while the others only need perception of SELF                
+ * - Actions    : all of them need actions VISIT and GOTO 
  *  
  * @author Pablo Sampaio
  */

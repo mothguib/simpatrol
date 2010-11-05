@@ -10,16 +10,12 @@
 <society id="soc1" label="soc1">
 <agent id="ag1" label="ag1" node_id="c" state="1" stamina="1.0" max_stamina="1.0">
 	<allowed_perception type="0"/>
-	<allowed_perception type="3"/>
 	<allowed_perception type="4"/>
-	<allowed_action type="3"/>
 	<allowed_action type="1"/>
 	<allowed_action type="2"/>			
 </agent>
 <agent id="ag2" label="ag2" node_id="b" state="1" stamina="1.0" max_stamina="1.0">
-	<allowed_perception type="3"/>
 	<allowed_perception type="4"/>
-	<allowed_action type="3"/>
 	<allowed_action type="1"/>
 	<allowed_action type="2"/>			
 </agent>
