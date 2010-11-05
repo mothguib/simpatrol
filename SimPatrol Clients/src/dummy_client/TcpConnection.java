@@ -44,10 +44,8 @@ public class TcpConnection extends Thread implements IMessageSubject {
 	/**
 	 * Constructor.
 	 * 
-	 * @param remoteSocketAddress 
-	 *            The address of the remote contact (in IP format).
-	 * @param remoteSocketNumber
-	 *            The number of the socket of the remote contact.
+	 * @param remoteSocketAddress The address of the remote contact (in IP format).
+	 * @param remoteSocketNumber The number of the port that the server is listening.
 	 */
 	public TcpConnection(String remoteSocketAddress,
 			int remoteSocketNumber) throws UnknownHostException, IOException {
@@ -163,14 +161,13 @@ public class TcpConnection extends Thread implements IMessageSubject {
 			try {				
 				this.receive();
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				this.working = false;
 			}
 			
 			Thread.yield();			
 		}
 		
-		this.working = false;
 		System.out.println("Connection's thread stopped!");
 		
 		this.updateObservers();

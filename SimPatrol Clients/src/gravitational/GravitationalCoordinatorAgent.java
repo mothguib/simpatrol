@@ -25,7 +25,9 @@ public class GravitationalCoordinatorAgent implements Runnable {
 
 	private List<String>[] visitsScheduledPerNode; //for each node, a list of agents' identifiers
 
+	//TODO: fazer listas de mensagens (ver cognitive-coordinated)
 
+	
 	public GravitationalCoordinatorAgent(String agentId, TcpConnection tcpConnection,
 			MassGrowth growthType, double distExponent, GravitiesCombinator combinator) {
 		this.identifier = agentId;
@@ -64,7 +66,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 			_PRINT("starting to attend requests...");
 
 			while (working) {
-				perceiveAndAct();				
+				perceiveAndAct(); //TODO: separar perceive de act (ver cognitive-coordinated)			
 				Thread.yield();
 			}
 
@@ -124,7 +126,8 @@ public class GravitationalCoordinatorAgent implements Runnable {
 
 		recalculateGravities();
 		
-		//do nothing for the rest of this cycle
+		// atenção: talvez tenha que remover!
+		// action "do nothing" to unblock the simulator
 		connection.send("<action type=\"-1\"/>");
 	}
 	
@@ -133,7 +136,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		boolean perceived;
 		
 		for (int i = 0; i < messages.length; i++) {
-			_PRINT("received: " + messages[i]);
+			//_PRINT("received: " + messages[i]);
 
 			perceived = perceiveGraph(messages[i]);
 			if (perceived) {
@@ -157,6 +160,8 @@ public class GravitationalCoordinatorAgent implements Runnable {
 		int markIndex = perception.indexOf("message=\"REQ##");
 
 		if (markIndex > -1) {
+			_PRINT("request received - " + perception);
+			
 			perception = perception.substring(markIndex + 14);
 			perception = perception.substring(0, perception.indexOf("\""));			
 
@@ -193,7 +198,7 @@ public class GravitationalCoordinatorAgent implements Runnable {
 
 		// if it is the only agent going to the node, undo the gravity (mass is zeroed)
 		if (visitsScheduledPerNode[goalNode].size() == 1) {
-			_PRINT("undoing gravity from " + graph.getNode(goalNode));
+			//_PRINT("undoing gravity from " + graph.getNode(goalNode));
 			gravityManager.undoGravity(goalNode);
 		}
 		

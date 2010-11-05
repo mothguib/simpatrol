@@ -184,8 +184,8 @@ public class FileReader {
 	}
 
 	/**
-	 * Reads the whole file and returns an only string with its content.
-	 * @throws IOException 
+	 * Reads the whole file removing line breaks and returns an only 
+	 * string with its content.
 	 */
 	public String readWholeFile() throws IOException {
 		StringBuffer buffer = new StringBuffer();

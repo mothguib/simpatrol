@@ -63,7 +63,7 @@ public class GravitationalAgent implements Runnable {
 		// sends a message with the identifier of this agent and its current node (last goal)
 		this.connection.send("<action type=\"3\" message=\"REQ##" + this.identifier + "###" + goalNode + "\"/>");
 		
-		PRINT("requesting goal node - <action type=\"3\" message=\"REQ##" + this.identifier + "###" + goalNode + "\"/>");
+		_PRINT("requesting goal node - <action type=\"3\" message=\"REQ##" + this.identifier + "###" + goalNode + "\"/>");
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class GravitationalAgent implements Runnable {
 		// go to the goal node
 		this.connection.send("<action type=\"1\" node_id=\"" + goalNode + "\"/>");
 		
-		PRINT("visiting and going to goal...");
+		_PRINT("visiting and going to goal...");
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class GravitationalAgent implements Runnable {
 		String goal = null;
 		String[] messages;
 		
-		PRINT("awaiting goal node...");
+		_PRINT("awaiting goal node...");
 		
 		while (goal == null && this.working) {
 			Thread.yield();
@@ -95,12 +95,12 @@ public class GravitationalAgent implements Runnable {
 			messages = connection.retrieveMessages();
 
 			for (int i = 0; i < messages.length; i++) {
-				PRINT("received - " + messages[i]);
+				//_PRINT("received - " + messages[i]);
 				goal = perceiveGoalNode(messages[i]);
 				
 				if (goal != null) {
 					goalNode = goal;
-					PRINT("goal node received - " + goal);
+					_PRINT("goal node received - " + goal);
 					break;
 				}
 			}
@@ -145,7 +145,7 @@ public class GravitationalAgent implements Runnable {
 		boolean agentArrived = false;
 		String[] messages;
 		
-		PRINT("awaiting arrival message");
+		_PRINT("awaiting arrival message");
 		
 		while (!agentArrived && this.working) {
 			Thread.yield();
@@ -156,7 +156,7 @@ public class GravitationalAgent implements Runnable {
 				//PRINT("received - " + messages[i]);
 				agentArrived = perceiveArrivalMessage(messages[i]);
 				if (agentArrived) {
-					PRINT("agent arrived: " + goalNode);
+					_PRINT("agent arrived: " + goalNode);
 					break;
 				}
 			}
@@ -172,8 +172,10 @@ public class GravitationalAgent implements Runnable {
 
 		if (message.indexOf("<perception type=\"4\"") > -1) {
 			int nodeIndex = message.indexOf("node_id=\"");
+			//int nodeIndex = message.indexOf("vertex_id=\""); //para rodar na 1.0
 			
 			message = message.substring(nodeIndex + 9);
+			//message = message.substring(nodeIndex + 11); //para rodar na 1.0
 			
 			String nodeId = message.substring(0, message.indexOf("\""));
 
@@ -189,7 +191,7 @@ public class GravitationalAgent implements Runnable {
 		return false;
 	}
 	
-	private void PRINT(String message) {
+	private void _PRINT(String message) {
 		System.out.println(identifier.toUpperCase() + ": " + message);
 	}
 	
