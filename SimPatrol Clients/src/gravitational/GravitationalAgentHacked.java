@@ -79,9 +79,10 @@ public class GravitationalAgentHacked implements Runnable {
 		this.connection.send("<action type=\"2\"/>");
 		
 		// chooses the new goal, considering that the agent arrived at the last goal
+		String currNodeId = this.goalNode;
 		do {
 			Thread.yield();
-			this.goalNode = blackboard.selectGoalNode(this.identifier, this.goalNode);
+			this.goalNode = blackboard.selectGoalNode(this.identifier, currNodeId);
 		} while (this.goalNode == null);
 
 		// go to the goal node
