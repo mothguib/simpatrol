@@ -19,6 +19,7 @@ import model.action.RechargeAction;
 import model.action.StigmatizeAction;
 import model.action.TeleportAction;
 import model.action.VisitAction;
+import model.action.WaitAction;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
@@ -61,6 +62,12 @@ public abstract class ActionTranslator extends Translator {
 
 		// switches the action type
 		switch (action_type) {
+		
+		//if it is a wait action, returns it
+		case ActionTypes.WAIT: {
+			return new WaitAction();
+		}
+		
 		// if it is a visit action, returns it
 		case ActionTypes.VISIT: {
 			return new VisitAction();

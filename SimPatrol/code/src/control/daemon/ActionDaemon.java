@@ -27,6 +27,7 @@ import model.action.RechargeAction;
 import model.action.StigmatizeAction;
 import model.action.TeleportAction;
 import model.action.VisitAction;
+import model.action.WaitAction;
 import model.agent.Agent;
 import model.agent.AgentStates;
 import model.agent.Society;
@@ -99,6 +100,20 @@ public final class ActionDaemon extends AgentDaemon {
 			this.clock.setStep(simulator.getUpdate_time_rate());
 		} else
 			this.clock = null;
+	}
+	
+	
+	
+	/**
+	 * Attends a Wait action
+	 * 
+	 * Does nothing, used by the logger
+	 * 
+	 * @param action
+	 * 			The action of visiting a node intended by the agent.
+	 */
+	private void attendWaitAction(WaitAction action) {
+		return;
 	}
 
 	/**
@@ -828,9 +843,21 @@ public final class ActionDaemon extends AgentDaemon {
 								e.printStackTrace(); // Node XML error
 							}
 						}
+						
+						
+						// if the obtained action is a waiting one
+						if (action instanceof WaitAction) {
+							System.err.println("Agent "
+									+ this.AGENT.getObjectId() + " waiting");
+							// attends the action
+							attendWaitAction((WaitAction) action);
+	
+							attended_actions = true;
+							// quits the loop
+						}
 
 						// if the obtained action is a visiting one
-						if (action instanceof VisitAction) {
+						else if (action instanceof VisitAction) {
 
 							// verifies if the agent has permission to visit
 							// nodes
@@ -869,7 +896,6 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
-									attended_actions = true;
 									// quits the loop
 									break;
 								}
@@ -892,7 +918,6 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastSocietyAction) action,
 											permissions[i].getLimitations());
 
-									attended_actions = true;
 									// quits the loop
 									break;
 								}
@@ -1015,8 +1040,7 @@ public final class ActionDaemon extends AgentDaemon {
 									// quits the loop
 									break;
 								}
-						} else { // Do nothing action
-							attended_actions = true;
+
 						}
 						// developer: new action types must add code here
 
@@ -1209,7 +1233,6 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
-									attended_actions = true;
 									// quits the loop
 									break;
 								}
@@ -1232,7 +1255,6 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastSocietyAction) action,
 											permissions[i].getLimitations());
 
-									attended_actions = true;
 									// quits the loop
 									break;
 								}

@@ -11,6 +11,13 @@ package model.action;
  */
 public abstract class ActionTypes {
 	/**
+	 * The actions of doing nothing.
+	 * 
+	 * @see WaitAction
+	 */
+	public static final int WAIT = -1;
+	
+	/**
 	 * The actions of teleporting through the graph.
 	 * 
 	 * @see TeleportAction

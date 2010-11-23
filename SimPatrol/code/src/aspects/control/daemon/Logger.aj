@@ -19,6 +19,7 @@ import model.action.TeleportAction;
  */
 public aspect Logger {
 
+	
 	/**
 	 * Logs a visit of an agent
 	 */
