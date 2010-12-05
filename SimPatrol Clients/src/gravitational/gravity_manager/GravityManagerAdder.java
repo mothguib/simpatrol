@@ -35,6 +35,10 @@ public class GravityManagerAdder extends GravityManager {
 		masses[origin] = -1.0d;
 	}
 	
+	//TODO: criar versão especializada?
+	//@Override
+	//public void undoAllGravities() {
+	
 	private void applyGravitiesInternal(int origin, double originMass) {
 		int numVertices = gravities.length;
 

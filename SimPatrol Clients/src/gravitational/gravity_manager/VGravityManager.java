@@ -4,50 +4,55 @@ import util.graph2.Graph;
 import util.graph2.algorithms.AllPairsShortestPaths;
 
 
-public abstract class VGravityManager {
-	protected AllPairsShortestPaths shortestPaths;
+// TODO: talvez criar uma interface única
+public abstract class VGravityManager extends GravityManager {
+	//protected AllPairsShortestPaths shortestPaths;
 	
-	protected double distanceExponent;
-	protected double[][] propagationFactor;
+	//protected double distanceExponent;
+	//protected double[][] propagationFactor;
 	
-	protected double[] masses; // fica com -1, se desfizer a massa
+	//protected double[] masses; // fica com -1, se desfizer a massa
 	protected double[] vertexGravities;
 
 	
 	VGravityManager(Graph graph, double exponent) {
-		int numVertices = graph.getNumVertices();
-		
-		shortestPaths = new AllPairsShortestPaths();
-		shortestPaths.findShortestPaths(graph);
+		super(graph, exponent);
 
-		distanceExponent = exponent;
-		propagationFactor = new double[numVertices][numVertices];
-		
-		for (int v = 0; v < numVertices; v++) {
-			for (int x = 0; x < numVertices; x++) {
-				if (v == x) {
-					propagationFactor[v][x] = 1.0d;  // to prevent floating-point errors in Math.pow()
-				} else {
-					propagationFactor[v][x] = 1.0d / Math.pow(shortestPaths.getDistance(v,x), exponent);
-				}
-			}
-		}
-		
-		masses = new double[numVertices];
-		
-		// negative mass indicates an unset gravities
-		for (int v = 0; v < numVertices; v++) {
-			masses[v] = -1.0d; 
-		}
+		int numVertices = graph.getNumVertices();
+		gravities = null; //apaga o objeto criado na superClasse
+//		
+//		shortestPaths = new AllPairsShortestPaths();
+//		shortestPaths.findShortestPaths(graph);
+//
+//		distanceExponent = exponent;
+//		propagationFactor = new double[numVertices][numVertices];
+//		
+//		for (int v = 0; v < numVertices; v++) {
+//			for (int x = 0; x < numVertices; x++) {
+//				if (v == x) {
+//					propagationFactor[v][x] = 1.0d;  // to prevent floating-point errors in Math.pow()
+//				} else {
+//					propagationFactor[v][x] = 1.0d / Math.pow(shortestPaths.getDistance(v,x), exponent);
+//				}
+//			}
+//		}
+//		
+//		masses = new double[numVertices];
+//		
+//		// negative mass indicates an unset gravities
+//		for (int v = 0; v < numVertices; v++) {
+//			masses[v] = -1.0d; 
+//		}
 		
 		vertexGravities = new double[numVertices];
 	}
 	
 	/**
 	 * Retorna a força da gravidade (combinada) que atrai para o vértice
-	 * "vertex" agentes posicionados em qualquer dos vértices vizinhos desse. 
+	 * "vertex" agentes posicionados em "from" ou em qualquer outro vértice 
+	 * vizinho de "vertex". 
 	 */
-	public double getGravity(int vertex) {
+	public double getGravity(int from, int vertex) {
 		return vertexGravities[vertex];
 	}
 	
@@ -55,9 +60,9 @@ public abstract class VGravityManager {
 	 *  Retorna a última massa atribuída ao vértice "v" por meio
 	 *  de uma chamada a "applyGravity()".
 	 */
-	public double getMass(int v) {
-		return masses[v];
-	}
+//	public double getMass(int v) {
+//		return masses[v];
+//	}
 	
 	/**
 	 * Calcula a contribuição dada pelo vértice "origin" para a força de
@@ -78,34 +83,34 @@ public abstract class VGravityManager {
 	 * considerando que eles tem a mesma massa "generalMass".
 	 */
 	public void applyAllGravities(double generalMass) {
-		assert (generalMass >= 0.0d);
-
-		for (int origin = 0; origin < getNumVertices(); origin++) {
-			applyGravity(origin, generalMass);
-		}
+//		assert (generalMass >= 0.0d);
+//
+//		for (int origin = 0; origin < getNumVertices(); origin++) {
+//			applyGravity(origin, generalMass);
+//		}
 	}
 
 	/**
 	 * Desfaz (zera) todas as gravidades.
 	 */
-	public void undoAllGravities() {
-		int numVertices = vertexGravities.length;
-		
-		for (int origin = 0; origin < numVertices; origin++) {
-			if (masses[origin] != -1) {
-				undoGravity(origin);
-			}
-		}
-
-	}
+//	public void undoAllGravities() {
+//		int numVertices = vertexGravities.length;
+//		
+//		for (int origin = 0; origin < numVertices; origin++) {
+//			if (masses[origin] != -1) {
+//				undoGravity(origin);
+//			}
+//		}
+//
+//	}
 	
 	/**
 	 * Retorna o número de vértices do grafo.
 	 */
-	public int getNumVertices() {
-		return vertexGravities.length; 
-	}
-	
+//	public int getNumVertices() {
+//		return vertexGravities.length; 
+//	}
+//	
 	
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
