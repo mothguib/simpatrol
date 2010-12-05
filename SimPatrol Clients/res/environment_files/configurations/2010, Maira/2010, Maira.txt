@@ -1,0 +1,6 @@
+Extra remark:
+
+The standard version of the gravitational approach was used: (Edge,Ar,2,SUM).
+
+Only configurations with 5 agents (half of the available) were presented in the paper. (There was no time to simulate with 10 agents).
+ 
