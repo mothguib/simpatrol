@@ -1,0 +1,39 @@
+<society id="soc_1_4" label="soc_1_4" is_closed="true">
+	<agent id="coordinator" label="coordinator" state="1" node_id="v22" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="0"/>
+		<allowed_perception type="3"/>
+		<allowed_action type="3"/>
+	</agent>
+	<agent id="a4" label="a4" state="1" node_id="v40" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="3"/>
+		<allowed_perception type="4"/>
+		<allowed_perception type="0"/>
+		<allowed_action type="1"/>
+		<allowed_action type="3"/>
+		<allowed_action type="2"/>
+	</agent>
+	<agent id="a1" label="a1" state="1" node_id="v26" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="3"/>
+		<allowed_perception type="0"/>
+		<allowed_action type="2"/>
+		<allowed_action type="1"/>
+		<allowed_action type="3"/>
+	</agent>
+	<agent id="a3" label="a3" state="1" node_id="v50" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="0"/>
+		<allowed_perception type="3"/>
+		<allowed_action type="2"/>
+		<allowed_action type="3"/>
+		<allowed_action type="1"/>
+	</agent>
+	<agent id="a2" label="a2" state="1" node_id="v18" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="0"/>
+		<allowed_perception type="4"/>
+		<allowed_perception type="3"/>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>
+		<allowed_action type="3"/>
+	</agent>
+</society>

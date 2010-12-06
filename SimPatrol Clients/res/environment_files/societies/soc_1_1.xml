@@ -1,0 +1,18 @@
+<society id="soc_1_1" label="soc_1_1">
+	<agent id="ag1" label="ag1" node_id="c" state="1" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="3"/>
+		<allowed_perception type="1"/>			
+		<allowed_perception type="0"/>
+		<allowed_action type="3"/>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>			
+	</agent>
+	<agent label="coordinator" id="coordinator" node_id="b"  state="1" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="0"/>
+		<allowed_perception type="1"/>
+		<allowed_perception type="3"/>
+		<allowed_action type="3"/>
+		<allowed_action type="7"/>
+	</agent>
+</society>
