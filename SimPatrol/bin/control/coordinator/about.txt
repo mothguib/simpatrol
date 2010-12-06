@@ -1,0 +1,3 @@
+This package contains the Coordinator class, responsible for
+coordinating the cycled simulations (i.e. it assures the correct
+order of the "agents perceive - agents think - agents act - update model" cycle).

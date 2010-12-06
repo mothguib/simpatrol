@@ -1,0 +1,3 @@
+This package contains the classes related to the implementation of the limitations
+to the permissions that control the perceptions and the actions of the agents
+of SimPatrol.
