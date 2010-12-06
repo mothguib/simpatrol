@@ -104,6 +104,8 @@ public class MetricsReport {
 			
 		for (int node = 0; node < numNodes; node++) {
 			
+			vertexSumIdlenesses= 0.0d;
+			
 			for (int i = 0; i < intervalsByNode[node].size(); i ++) {
 				interval = (int)intervalsByNode[node].get(i);
 					
@@ -260,6 +262,8 @@ public class MetricsReport {
 	 */
 	public Double[] getAverageIdleness_curb(int freq) {
 		int[] intervals = new int[numNodes];		
+		for(int i = 0; i < numNodes; i++)
+			intervals[i] = -1;
 		Double[] values = new Double[(endTime - startTime)/freq + 1];
 		
 		int numVis = 0;
@@ -282,7 +286,7 @@ public class MetricsReport {
 				for(int interval : intervals)
 					sum += interval;
 				
-				values[i/freq] = sum/numNodes;
+				values[(i - startTime)/freq] = sum/numNodes;
 			}			
 		}
 		
@@ -300,7 +304,9 @@ public class MetricsReport {
 	 */
 	public Double[] getMaxIdleness_curb(int freq) {
 		int[] intervals = new int[numNodes];		
-		Double[] values = new Double[(endTime - startTime)/freq + 
+		for(int i = 0; i < numNodes; i++)
+			intervals[i] = -1;
+		Double[] values = new Double[(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -324,7 +330,7 @@ public class MetricsReport {
 					if(interval > max)
 						max = interval;
 				
-				values[i/freq] = max;
+				values[(i - startTime)/freq] = max;
 			}			
 		}
 		
@@ -340,8 +346,10 @@ public class MetricsReport {
 	 * @author Cyril Poulet
 	 */
 	public Double[] getStdDev_curb(int freq) {
-		int[] intervals = new int[numNodes];		
-		Double[] values = new Double[(endTime - startTime)/freq + 
+		int[] intervals = new int[numNodes];	
+		for(int i = 0; i < numNodes; i++)
+			intervals[i] = -1;
+		Double[] values = new Double[(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -372,7 +380,7 @@ public class MetricsReport {
 				}
 					
 				
-				values[i/freq] = Math.sqrt(stddev/numNodes);
+				values[(i - startTime)/freq] = Math.sqrt(stddev/numNodes);
 			}			
 		}
 		
@@ -388,7 +396,7 @@ public class MetricsReport {
 	 * @author Cyril Poulet
 	 */
 	public Double[] getVisitsNum_curb(int freq) {		
-		Double[] values = new Double[(endTime - startTime)/freq + 
+		Double[] values = new Double[(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -404,7 +412,7 @@ public class MetricsReport {
 			}
 			
 			if(i % freq == 0){
-				values[i/freq] = numVis/1.0;
+				values[(i - startTime)/freq] = numVis/1.0;
 			}			
 		}
 		
@@ -421,7 +429,7 @@ public class MetricsReport {
 	 */
 	public Double[] getVisitsAvg_curb(int freq) {	
 		int[] visitnums = new int[numNodes];
-		Double[] values = new Double[(endTime - startTime)/freq + 
+		Double[] values = new Double[(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -441,7 +449,7 @@ public class MetricsReport {
 				Double sum = 0.0;
 				for(int visitnum : visitnums)
 					sum += visitnum;
-				values[i/freq] = sum/numNodes;
+				values[(i-startTime)/freq] = sum/numNodes;
 					
 			}			
 		}
@@ -459,7 +467,7 @@ public class MetricsReport {
 	 */
 	public Double[] getVisitStdDev_curb(int freq) {	
 		int[] visitnums = new int[numNodes];
-		Double[] values = new Double[(endTime - startTime)/freq + 
+		Double[] values = new Double[(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -488,7 +496,7 @@ public class MetricsReport {
 				}
 				
 				
-				values[i/freq] = Math.sqrt(stddev/numNodes);
+				values[(i - startTime)/freq] = Math.sqrt(stddev/numNodes);
 					
 			}			
 		}
@@ -510,7 +518,7 @@ public class MetricsReport {
 	 */
 	public Double[][] getVisitsNum_bynode_curb(int freq) {	
 		int[] visitnums = new int[numNodes];
-		Double[][] values = new Double[numNodes][(endTime - startTime)/freq + 
+		Double[][] values = new Double[numNodes][(endTime - startTime)/freq + 1 +
 		                             (((endTime - startTime) % freq ==0)? 1 : 0)];
 		
 		int numVis = 0;
@@ -528,7 +536,7 @@ public class MetricsReport {
 			
 			if(i % freq == 0){
 				for(int j = 0; j < numNodes; j++)
-					values[j][i/freq] = visitnums[j]/1.0;
+					values[j][(i - startTime)/freq] = visitnums[j]/1.0;
 			}			
 		}
 		

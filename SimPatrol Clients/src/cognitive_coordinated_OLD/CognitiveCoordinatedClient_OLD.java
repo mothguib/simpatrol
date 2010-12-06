@@ -7,10 +7,8 @@ package cognitive_coordinated_OLD;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import util.net.TCPClientConnection;
-import util.net.UDPClientConnection;
-import common.Agent;
-import common.Client;
+import util.net_OLD.TCPClientConnection_OLD;
+import util.net_OLD.UDPClientConnection_OLD;
 import common_OLD.Agent_OLD;
 import common_OLD.Client_OLD;
 
@@ -51,8 +49,8 @@ public final class CognitiveCoordinatedClient_OLD extends Client_OLD {
 	 */
 	public CognitiveCoordinatedClient_OLD(String remote_socket_address,
 			int remote_socket_number, String environment_file_path,
-			String[] metrics_file_paths, double metrics_collecting_rate,
-			String log_file_path, double time_of_simulation,
+			String[] metrics_file_paths, int metrics_collecting_rate,
+			String log_file_path, int time_of_simulation,
 			boolean is_real_time_simulator) throws UnknownHostException,
 			IOException {
 		super(remote_socket_address, remote_socket_number,
@@ -69,15 +67,16 @@ public final class CognitiveCoordinatedClient_OLD extends Client_OLD {
 			Agent_OLD agent = null;
 
 			if (agent_ids[i].equals("coordinator"))
-				agent = new CognitiveCoordinatorAgent_OLD();
+				agent = new CognitiveCoordinatorAgent_OLD(agent_ids.length - 1);
 			else
-				agent = new CognitiveCoordinatedAgent_OLD();
+				agent = new CognitiveCoordinatedAgent_OLD(agent_ids[i],
+						this.IS_REAL_TIME_SIMULATOR);
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection(this.CONNECTION
+				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection(this.CONNECTION
+				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
@@ -110,9 +109,9 @@ public final class CognitiveCoordinatedClient_OLD extends Client_OLD {
 			int remote_socket_number = Integer.parseInt(args[1]);
 			String environment_file_path = args[2];
 			String[] metric_file_paths = { args[3], args[4], args[5], args[6] };
-			double metrics_collecting_rate = Double.parseDouble(args[7]);
+			int metrics_collecting_rate = Integer.parseInt(args[7]);
 			String log_file_path = args[8];
-			double time_of_simulation = Double.parseDouble(args[9]);
+			int time_of_simulation = Integer.parseInt(args[9]);
 			boolean is_real_time_simulator = Boolean.parseBoolean(args[10]);
 
 			CognitiveCoordinatedClient_OLD client = new CognitiveCoordinatedClient_OLD(
@@ -122,6 +121,7 @@ public final class CognitiveCoordinatedClient_OLD extends Client_OLD {
 					is_real_time_simulator);
 			client.start();
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			System.out
 					.println("Usage \"java cognitive_coordinated.CognitiveCoordinatedClient\n"
 							+ "<IP address> <Remote socket number> <Environment file path>\n"

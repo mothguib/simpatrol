@@ -5,9 +5,10 @@ package metric_clients;
 
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
+
 import util.Keyboard;
 import util.file.FileWriter;
-import util.net.UDPClientConnection;
+import util.net_OLD.UDPClientConnection_OLD;
 
 /**
  * Implements a client object that collects an specific metric and saves it in a
@@ -19,7 +20,7 @@ public class MetricFileClient extends Thread {
 	private boolean stop_working;
 
 	/** The UDP connection of the metric. */
-	private UDPClientConnection connection;
+	private UDPClientConnection_OLD connection;
 
 	/**
 	 * The object that writes on the output file the obtained values for the
@@ -46,7 +47,7 @@ public class MetricFileClient extends Thread {
 			int remote_socket_number, String file_path, String metric_name)
 			throws IOException {
 		this.stop_working = false;
-		this.connection = new UDPClientConnection(remote_socket_address,
+		this.connection = new UDPClientConnection_OLD(remote_socket_address,
 				remote_socket_number);
 		this.file_writer = new FileWriter(file_path);
 		this.file_writer.println(metric_name);

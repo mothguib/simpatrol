@@ -4,7 +4,7 @@
 package common_OLD;
 
 /* Imported classes and/or interfaces. */
-import util.net.ClientConnection;
+import util.net_OLD.ClientConnection_OLD;
 
 /**
  * The remote agents that connect to SimPatrol and implement a patrolling
@@ -16,7 +16,7 @@ public abstract class Agent_OLD extends Thread {
 	protected boolean stop_working;
 
 	/** The connection of the agent. */
-	protected ClientConnection connection;
+	protected ClientConnection_OLD connection;
 
 	/* Methods. */
 	/** Constructor. */
@@ -30,7 +30,7 @@ public abstract class Agent_OLD extends Thread {
 	}
 
 	/** Configures the connection of the agent. */
-	public void setConnection(ClientConnection connection) {
+	public void setConnection(ClientConnection_OLD connection) {
 		this.connection = connection;
 	}
 }

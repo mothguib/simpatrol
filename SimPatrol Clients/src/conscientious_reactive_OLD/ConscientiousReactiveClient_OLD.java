@@ -7,8 +7,10 @@ package conscientious_reactive_OLD;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import util.net.TCPClientConnection;
-import util.net.UDPClientConnection;
+
+import util.net_OLD.TCPClientConnection_OLD;
+import util.net_OLD.UDPClientConnection_OLD;
+
 import common_OLD.Agent_OLD;
 import common_OLD.Client_OLD;
 
@@ -67,10 +69,10 @@ public final class ConscientiousReactiveClient_OLD extends Client_OLD {
 			ConscientiousReactiveAgent_OLD agent = new ConscientiousReactiveAgent_OLD();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection(this.CONNECTION
+				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection(this.CONNECTION
+				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();

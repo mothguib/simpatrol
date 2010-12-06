@@ -12,7 +12,7 @@ import log_clients.LogFileClient;
 import metric_clients.MetricFileClient;
 import util.Keyboard;
 import util.file.FileReader;
-import util.net.TCPClientConnection;
+import util.net_OLD.TCPClientConnection_OLD;
 
 /**
  * Implements a client that connects to the SimPatrol server and configures it,
@@ -39,7 +39,7 @@ public abstract class Client_OLD extends Thread {
 	protected final boolean IS_REAL_TIME_SIMULATOR;
 
 	/** The TCP connection with the server. */
-	protected final TCPClientConnection CONNECTION;
+	protected final TCPClientConnection_OLD CONNECTION;
 
 	/** The set of agents acting in the simulation. */
 	protected Set<Agent_OLD> agents;
@@ -91,7 +91,7 @@ public abstract class Client_OLD extends Thread {
 		this.LOG_FILE_PATH = log_file_path;
 		this.TIME_OF_SIMULATION = time_of_simulation;
 		this.IS_REAL_TIME_SIMULATOR = is_real_time_simulator;
-		this.CONNECTION = new TCPClientConnection(remote_socket_address,
+		this.CONNECTION = new TCPClientConnection_OLD(remote_socket_address,
 				remote_socket_number);
 		this.metric_clients = null;
 		this.agents = null;

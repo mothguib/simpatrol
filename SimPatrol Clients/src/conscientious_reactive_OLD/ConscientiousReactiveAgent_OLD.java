@@ -6,9 +6,11 @@ package conscientious_reactive_OLD;
 /* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.LinkedList;
+
 import util.Keyboard;
-import util.net.TCPClientConnection;
-import util.net.UDPClientConnection;
+import util.net_OLD.TCPClientConnection_OLD;
+import util.net_OLD.UDPClientConnection_OLD;
+
 import common_OLD.Agent_OLD;
 
 /**
@@ -38,33 +40,24 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 	 * @return The current position of the agent, as a pair "current vertex id -
 	 *         elapsed length on the current edge".
 	 */
-	private StringAndDouble perceiveCurrentPosition(String[] perceptions) {
+	private StringAndDouble perceiveCurrentPosition(String perception) {
 		// tries to obtain the most recent self perception of the agent
-		int perceptions_count = perceptions.length;
 
-		for (int i = perceptions_count - 1; i > -1; i--) {
-			String current_perception = perceptions[i];
+		if (perception.indexOf("<perception type=\"4\"") > -1) {
+			// obtains the id of the current vertex
+			int vertex_id_index = perception.indexOf("node_id=\"");
+			perception = perception.substring(vertex_id_index + 9);
+			String vertex_id = perception.substring(0, perception.indexOf("\""));
 
-			if (current_perception.indexOf("<perception type=\"4\"") > -1) {
-				// obtains the id of the current vertex
-				int vertex_id_index = current_perception
-						.indexOf("node_id=\"");
-				current_perception = current_perception
-						.substring(vertex_id_index + 9);
-				String vertex_id = current_perception.substring(0,
-						current_perception.indexOf("\""));
-
-				// obtains the elapsed length on the current edge
-				double elapsed_length = 0;
-				int elapsed_length_index = current_perception
-						.indexOf("elapsed_length=\"");
-				if(elapsed_length_index != -1){
-					current_perception = current_perception.substring(elapsed_length_index + 16);
-					elapsed_length = Double.parseDouble(current_perception.substring(0, current_perception.indexOf("\"")));
-				}
-				// returs the answer of the method
-				return new StringAndDouble(vertex_id, elapsed_length);
+			// obtains the elapsed length on the current edge
+			double elapsed_length = 0;
+			int elapsed_length_index = perception.indexOf("elapsed_length=\"");
+			if(elapsed_length_index != -1){
+				perception = perception.substring(elapsed_length_index + 16);
+				elapsed_length = Double.parseDouble(perception.substring(0, perception.indexOf("\"")));
 			}
+			// returns the answer of the method
+			return new StringAndDouble(vertex_id, elapsed_length);
 		}
 
 		// default answer
@@ -78,49 +71,39 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 	 *            The current perceptions of the agent.
 	 * @return The id of the vertexes in the neighbourhood.
 	 */
-	private String[] perceiveNeighbourhood(String[] perceptions) {
+	private String[] perceiveNeighbourhood(String perception) {
 		// tries to obtain the most recent perception of the neighbourhood
-		int perceptions_count = perceptions.length;
+		if (perception.indexOf("<perception type=\"0\"") > -1) {
+			// holds the answer for the method
+			LinkedList<String> vertexes = new LinkedList<String>();
 
-		for (int i = perceptions_count - 1; i > -1; i--) {
-			String current_perception = perceptions[i];
+			// holds the index of the next vertex
+			int next_vertex_index = perception.indexOf("<node ");
 
-			if (current_perception.indexOf("<perception type=\"0\"") > -1) {
-				// holds the answer for the method
-				LinkedList<String> vertexes = new LinkedList<String>();
+			// while there are vertexes to be read
+			while (next_vertex_index > -1) {
+				// updates the current perception
+				perception = perception.substring(next_vertex_index);
 
-				// holds the index of the next vertex
-				int next_vertex_index = current_perception.indexOf("<node ");
+				// obtains the id of the current vertex
+				int current_vertex_id_index = perception.indexOf("id=\"");
+				perception = perception.substring(current_vertex_id_index + 4);
+				String vertex_id = perception.substring(0, perception.indexOf("\""));
 
-				// while there are vertexes to be read
-				while (next_vertex_index > -1) {
-					// updates the current perception
-					current_perception = current_perception
-							.substring(next_vertex_index);
+				// adds the id of the vertex to the list of obtained
+				// vertexes
+				vertexes.add(vertex_id);
 
-					// obtains the id of the current vertex
-					int current_vertex_id_index = current_perception
-							.indexOf("id=\"");
-					current_perception = current_perception
-							.substring(current_vertex_id_index + 4);
-					String vertex_id = current_perception.substring(0,
-							current_perception.indexOf("\""));
-
-					// adds the id of the vertex to the list of obtained
-					// vertexes
-					vertexes.add(vertex_id);
-
-					// obtains the index of the next vertex
-					next_vertex_index = current_perception.indexOf("<node ");
-				}
-
-				// mounts and returns the answer of the method
-				String[] answer = new String[vertexes.size()];
-				for (int j = 0; j < answer.length; j++)
-					answer[j] = vertexes.get(j);
-
-				return answer;
+				// obtains the index of the next vertex
+				next_vertex_index = perception.indexOf("<node ");
 			}
+
+			// mounts and returns the answer of the method
+			String[] answer = new String[vertexes.size()];
+			for (int j = 0; j < answer.length; j++)
+				answer[j] = vertexes.get(j);
+
+			return answer;
 		}
 
 		// default answer
@@ -204,6 +187,20 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 			}
 		}
 
+		// this chooses randomly between the smallest neighbours
+		LinkedList<StringAndDouble> smallest = new LinkedList<StringAndDouble>();
+		for (StringAndDouble node : vertexes_idlenesses) {
+			if(!node.STRING.equals(current_position.STRING))
+				for( String node_name : neighbourhood)
+					if((node.STRING.equals(node_name)) && (node.double_value == visiting_time)){
+						smallest.add(node);
+						break;
+					}
+		}
+		
+		int rand = (int) (Math.random() * smallest.size());
+		next_vertex = smallest.get(rand).STRING;
+		
 		// returns the answer of the method
 		return next_vertex;
 	}
@@ -218,13 +215,19 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 	private void visitCurrentPosition(StringAndDouble current_position)
 			throws IOException {
 		// atualizes the memory of the agent
+		boolean memorized = false;
 		for (int i = 0; i < this.vertexes_idlenesses.size(); i++) {
 			StringAndDouble memorized_item = this.vertexes_idlenesses.get(i);
 
 			if (memorized_item.STRING.equals(current_position.STRING)) {
 				memorized_item.double_value = this.time_counting;
+				memorized = true;
 				break;
 			}
+		}
+		
+		if(!memorized){
+			vertexes_idlenesses.add(new StringAndDouble(current_position.STRING, this.time_counting));
 		}
 
 		// send the order to the server to visit the current position
@@ -248,32 +251,43 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 	public void run() {
 		// starts its connection
 		this.connection.start();
+		
+		// the current position of the agent
+		StringAndDouble current_position = null;
 
 		// while the agent is supposed to work
 		while (!this.stop_working) {
 			// 1st. lets the agent perceive...
-			// the current position of the agent
-			StringAndDouble current_position = null;
 
 			// the neighbourhood of where the agent is
 			String[] neighbourhood = new String[0];
-
+			boolean pos_actualized = false;
+			
 			// while the current position or neighbourhood are not valid
-			while (current_position == null || neighbourhood.length == 0) {
+			while (!pos_actualized || neighbourhood.length == 0) {
 				// obtains the perceptions from the server
 				String[] perceptions = this.connection.getBufferAndFlush();
+				
 
-				// tries to obtain the current position
-				StringAndDouble current_current_position = this
-						.perceiveCurrentPosition(perceptions);
-				if (current_current_position != null)
-					current_position = current_current_position;
-
-				// tries to obtain the neighbourhood
-				String[] current_neighbourhood = this
-						.perceiveNeighbourhood(perceptions);
-				if (current_neighbourhood.length > 0)
-					neighbourhood = current_neighbourhood;
+				for(int i = perceptions.length - 1; i > -1; i--){
+					// tries to obtain the current position
+					StringAndDouble current_current_position = this.perceiveCurrentPosition(perceptions[i]);
+					if (current_current_position != null && 
+							(current_position == null || !current_current_position.STRING.equals(current_position.STRING))){
+						current_position = current_current_position;
+						pos_actualized = true;
+					}
+					else {
+	
+						// tries to obtain the neighbourhood
+						String[] current_neighbourhood = this.perceiveNeighbourhood(perceptions[i]);
+						if (current_neighbourhood.length > 0)
+							neighbourhood = current_neighbourhood;
+					}
+					
+					if(pos_actualized && neighbourhood.length != 0)
+						break;
+				}
 			}
 
 			// 2nd. lets the agent think
@@ -335,10 +349,10 @@ public class ConscientiousReactiveAgent_OLD extends Agent_OLD {
 
 			ConscientiousReactiveAgent_OLD agent = new ConscientiousReactiveAgent_OLD();
 			if (is_real_time_simulation)
-				agent.setConnection(new UDPClientConnection(server_address,
+				agent.setConnection(new UDPClientConnection_OLD(server_address,
 						server_socket_number));
 			else
-				agent.setConnection(new TCPClientConnection(server_address,
+				agent.setConnection(new TCPClientConnection_OLD(server_address,
 						server_socket_number));
 
 			agent.start();

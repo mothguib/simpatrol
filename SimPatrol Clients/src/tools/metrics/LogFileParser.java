@@ -102,7 +102,7 @@ public class LogFileParser implements DocHandler {
 				
 				visits.addVisit(new Visit(time, agent, node));
 				
-				System.out.printf(">> Agent %d visited node %d in time %d!\n", agent, node, time);
+				//System.out.printf(">> Agent %d visited node %d in time %d!\n", agent, node, time);
 			
 			} else if (attributes.get("type").equals("5")) {
 				// REMOVE THIS by including the node directly in event 6
@@ -112,7 +112,7 @@ public class LogFileParser implements DocHandler {
 				Integer nodeNumber = nodesNumbers.get(node);
 					
 				agentsNodes.put(agent, nodeNumber);
-				System.out.printf("Agent %s is in node %d (%s).\n", agent, nodeNumber, node);
+				//System.out.printf("Agent %s is in node %d (%s).\n", agent, nodeNumber, node);
 
 			} 
 			

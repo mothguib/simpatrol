@@ -10,10 +10,11 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LogFileParser parser = new LogFileParser();
 		
-		parser.parseFile("tmp/simlog.log");
+		parser.parseFile("/home/pouletc/experimentation/Simulations/mapA_1_5_4/logs_CognCoord/log_0.txt");
+
 	
 		int startCycle = 0;
-		int finalCycle = 100;
+		int finalCycle = 2999;
 		MetricsReport metrics = new MetricsReport(parser.getNumNodes(), startCycle, finalCycle,
 				parser.getVisitsList(), parser.getNodePriorities());
 
@@ -37,16 +38,18 @@ public class Main {
 		System.out.println(" - Normalized exploration time of the graph: " + metrics.getNormExplorationTime(parser.getNumAgents()));
 		
 		
-		int freq = 1;
+		
+		int freq = 25;
 		Double[] myvalues = metrics.getAverageIdleness_curb(freq);
 		Double[] mymaxvalues = metrics.getMaxIdleness_curb(freq);
 		Double[] mystdvalues = metrics.getStdDev_curb(freq);
 		Double[] myfreq = new Double[(finalCycle-startCycle)/freq +1];
 		
+		/*
 		Double[] myNumVis = metrics.getVisitsNum_curb(freq);
 		Double[] myvisitavg = metrics.getVisitsAvg_curb(freq);
 		Double[] myvisitstddev = metrics.getVisitStdDev_curb(freq);
-		
+		*/
 		Double[][] visitsbynode = metrics.getVisitsNum_bynode_curb(freq);
 		
 		for(int i = 0; i < myfreq.length; i++)
@@ -56,11 +59,11 @@ public class Main {
 		myviewer.addCurve(myfreq, myvalues, Color.blue);
 		myviewer.addCurve(myfreq, mymaxvalues, Color.red, DrawStyle.LONG_DOTS);
 		myviewer.addCurve(myfreq, mystdvalues, Color.orange, DrawStyle.SHORT_DOTS);
-		myviewer.setXdivision(10);
-		myviewer.setYdivision(5);
+		myviewer.setXdivision(250);
+		myviewer.setYdivision(25);
 		myviewer.setVisible(true);
 		
-		
+		/*
 		CurveViewer myviewer2 = new CurveViewer("Visits");
 		myviewer2.addCurve(myfreq, myNumVis, Color.black, DrawStyle.ALTERNATE_DOTS);
 		myviewer2.addCurve(myfreq, myvisitavg, Color.green, DrawStyle.POINT_CROSS);
@@ -70,13 +73,16 @@ public class Main {
 		myviewer2.setYdivision(5);
 		myviewer2.setVisible(true);
 		
-		CurveViewer myviewer3 = new CurveViewer("Visits");
-		myviewer3.addCurve(myfreq, visitsbynode[0], Color.blue);
-		myviewer3.addCurve(myfreq, visitsbynode[1], Color.black);
+		CurveViewer myviewer3;
+		for(int i = 0; i < 50; i++){
+			myviewer3 = new CurveViewer(Integer.toString(i));
+			myviewer3.addCurve(myfreq, visitsbynode[i], Color.blue);
 		
-		myviewer3.setXdivision(10);
-		myviewer3.setYdivision(5);
-		myviewer3.setVisible(true);
+			myviewer3.setXdivision(250);
+			myviewer3.setYdivision(10);
+			myviewer3.setVisible(true);
+		}
+		*/
 		
 		
 	}

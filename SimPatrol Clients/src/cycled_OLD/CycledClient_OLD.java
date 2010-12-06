@@ -7,10 +7,10 @@ package cycled_OLD;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import util.net.TCPClientConnection;
-import util.net.UDPClientConnection;
-import common.Agent;
-import common.Client;
+
+import util.net_OLD.TCPClientConnection_OLD;
+import util.net_OLD.UDPClientConnection_OLD;
+
 import common_OLD.Agent_OLD;
 import common_OLD.Client_OLD;
 
@@ -59,6 +59,47 @@ public final class CycledClient_OLD extends Client_OLD {
 				metrics_collecting_rate, log_file_path, time_of_simulation,
 				is_real_time_simulator);
 	}
+
+	/**
+	 * Constructor.
+	 * 
+	 * @param remote_socket_address
+	 *            The IP address of the SimPatrol server.
+	 * @param remote_socket_number
+	 *            The number of the socket that the server is supposed to listen
+	 *            to this client.
+	 * @param environment_file_path
+	 *            The path of the file that contains the environment.
+	 * @param metrics_file_paths
+	 *            The paths of the files that will save the collected metrics:
+	 *            index 0: The file that will save the mean instantaneous
+	 *            idlenesses; index 1: The file that will save the max
+	 *            instantaneous idlenesses; index 2: The file that will save the
+	 *            mean idlenesses; index 3: The file that will save the max
+	 *            idlenesses;
+	 * @param metrics_collection_rate
+	 *            The time interval used to collect the metrics.
+	 * @param log_file_path
+	 *            The path of the file to log the simulation.
+	 * @param time_of_simulation
+	 *            The time of simulation.
+	 * @param is_real_time_simulator
+	 *            TRUE if the simulator is a real time one, FALSE if not.
+	 * @param silentMode
+	 * 				TRUE if the Client must start in the silentMode 
+	 * @throws IOException
+	 * @throws UnknownHostException
+	 */
+	/*public CycledClient(String remote_socket_address, int remote_socket_number,
+			String environment_file_path, String[] metrics_file_paths,
+			double metrics_collecting_rate, String log_file_path,
+			double time_of_simulation, boolean is_real_time_simulator, boolean silentMode)
+			throws UnknownHostException, IOException {
+		super(remote_socket_address, remote_socket_number,
+				environment_file_path, metrics_file_paths,
+				metrics_collecting_rate, log_file_path, time_of_simulation,
+				is_real_time_simulator, silentMode);
+	}*/
 	
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 			throws IOException {
@@ -70,13 +111,13 @@ public final class CycledClient_OLD extends Client_OLD {
 			if (agent_ids[i].equals("coordinator"))
 				agent = new CycledCoordinatorAgent_OLD();
 			else
-				agent = new CycledAgent_OLD();
+				agent = new CycledAgent_OLD(agent_ids[i]);
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection(this.CONNECTION
+				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection(this.CONNECTION
+				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
@@ -117,11 +158,19 @@ public final class CycledClient_OLD extends Client_OLD {
 			
 			CycledClient_OLD client;
 			
-			
-			client = new CycledClient_OLD(remote_socket_address,
-								remote_socket_number, environment_file_path,
-								metric_file_paths, metrics_collecting_rate, log_file_path,
-								time_of_simulation, is_real_time_simulator);	
+			/*
+			if ( args.length == 12 ) {
+					boolean silentMode = Boolean.parseBoolean(args[11]);
+					client = new CycledClient(remote_socket_address,
+									remote_socket_number, environment_file_path,
+									metric_file_paths, metrics_collecting_rate, log_file_path,
+									time_of_simulation, is_real_time_simulator, silentMode );					
+			} else {*/
+				client = new CycledClient_OLD(remote_socket_address,
+									remote_socket_number, environment_file_path,
+									metric_file_paths, metrics_collecting_rate, log_file_path,
+									time_of_simulation, is_real_time_simulator);	
+			//}
 
 			client.start();
 

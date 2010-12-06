@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.util.LinkedList;
 import org.xml.sax.SAXException;
 import util.Keyboard;
+import util.graph.Edge;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
 import util.graph.Node;
-import util.net.TCPClientConnection;
-import util.net.UDPClientConnection;
-import common.Agent;
-import common.IMessageObserver;
+import util.net_OLD.TCPClientConnection_OLD;
+import util.net_OLD.UDPClientConnection_OLD;
 import common_OLD.Agent_OLD;
 
 /**
@@ -30,6 +29,7 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 	 * loss).
 	 */
 	private final static int NETWORK_QUALITY = 9;
+	private final static int NB_AGENTS_PER_MESS = 5;
 
 	/**
 	 * The sequence of nodes to be visited by the agents. Actually a TSP
@@ -58,6 +58,8 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 
 	// registers if the agent perceived the other agents
 	boolean perceived_other_agents = false;
+	
+	LinkedList<String> oriented_agents;
 
 	/* Methods. */
 	/** Constructor. */
@@ -66,6 +68,7 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 		this.solution_length = 0;
 		this.AGENTS_POSITIONS = new LinkedList<String>();
 		this.graph = null;
+		this.oriented_agents = new LinkedList<String>();
 	}
 
 	/**
@@ -90,21 +93,40 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 			this.graph = graph_perception[0];
 
 			// obtains the TSP solution
-			Node[] tsp_solution = this.graph.getTSPSolution();
+			Node[] tsp_solution = null;
+			double best_solution_length = Double.MAX_VALUE;
 
-			// adds the solution to the plan of the agent and calculates the
-			// total length of such solution
+			for (int i = 0; i < 200; i++) {
+				//System.out.println("i " + i);
+				Node[] solution = graph.getTSPSolution();
+				double solution_length = 0;
+
+				for (int j = 1; j < solution.length; j++){
+					Edge[] edges = graph.getDijkstraPath(solution[j - 1], solution[j]).getEdges();
+					double length = 0;
+					for(Edge edge : edges)
+						length += Math.ceil(edge.getLength());
+					solution_length += length;
+				}
+				
+				//System.out.println("solution length " + solution_length);
+				
+				// we take into account the fact that the agents are taking 1 cycle to visit a node
+				solution_length += solution.length - 1;
+
+				if (solution_length < best_solution_length) {
+					tsp_solution = solution;
+					best_solution_length = solution_length;
+				}
+			}
+			
 			for (int i = 0; i < tsp_solution.length; i++) {
 				if (i < tsp_solution.length - 1)
 					this.PLAN.add(tsp_solution[i].getObjectId());
-
-				if (i > 0)
-					this.solution_length = this.solution_length
-							+ Math.ceil(this.graph.getDijkstraPath(
-									tsp_solution[i - 1], tsp_solution[i])
-									.getEdges()[0].getLength());
 			}
-
+			this.solution_length = best_solution_length;
+			
+			
 			System.err.println("Solution length: " + this.solution_length);
 
 			// returns the success of such perception
@@ -161,15 +183,34 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 		// sorts the agents based on their positions and the TSP calculated
 		// solution
 		LinkedList<String> sorted_agents = new LinkedList<String>();
-
-		for (String solution_step : this.PLAN) {
+		
+		for (String plan : this.PLAN) {
 			for (int i = 0; i < this.AGENTS_POSITIONS.size(); i = i + 2)
-				if (this.AGENTS_POSITIONS.get(i + 1).equals(solution_step))
+				if (this.AGENTS_POSITIONS.get(i + 1).equals(plan) 
+						&& !sorted_agents.contains(this.AGENTS_POSITIONS.get(i))){
 					sorted_agents.add(this.AGENTS_POSITIONS.get(i));
+				}
 
 			// if all the agents were sorted, quits the loop
-			if (sorted_agents.size() == this.AGENTS_POSITIONS.size() / 2)
+			if (sorted_agents.size() >= this.AGENTS_POSITIONS.size() / 2)
 				break;
+		}
+		
+		if(sorted_agents.size() / 2 > 2){
+			while(sorted_agents.get(0).equals(sorted_agents.get(1))){
+				sorted_agents = new LinkedList<String>();
+				this.PLAN.add(this.PLAN.pop());
+				for (String plan : this.PLAN) {
+					for (int i = 0; i < this.AGENTS_POSITIONS.size(); i = i + 2)
+						if (this.AGENTS_POSITIONS.get(i + 1).equals(plan) 
+								&& !sorted_agents.contains(this.AGENTS_POSITIONS.get(i))){
+							sorted_agents.add(this.AGENTS_POSITIONS.get(i));
+						}
+					
+					if (sorted_agents.size() >= this.AGENTS_POSITIONS.size() / 2)
+						break;
+				}
+			}
 		}
 
 		// holds the distance that must exist between two consecutive agents
@@ -177,51 +218,64 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 				* Math.pow(sorted_agents.size(), -1));
 
 		// holds how many agents must pass the current one
-		int let_pass = sorted_agents.size() - 1;
+		int let_pass = sorted_agents.size() - 1 - oriented_agents.size();
+		int sent = 0;
 
-		// for each agent, in the reverse order
+		StringBuffer orientation = new StringBuffer();
+		for (String solution_step : this.PLAN)
+			orientation.append(solution_step + ",");
+		orientation.deleteCharAt(orientation.lastIndexOf(","));
+		
 		for (int i = sorted_agents.size() - 1; i >= 0; i--) {
-			// mounts an orientation message
-			StringBuffer orientation = new StringBuffer();
-			orientation.append(sorted_agents.get(i) + "###");
-
-			for (String solution_step : this.PLAN)
-				orientation.append(solution_step + ",");
-
-			orientation.deleteCharAt(orientation.lastIndexOf(","));
+			if(sent >= NB_AGENTS_PER_MESS)
+				break;
+			if(oriented_agents.contains(sorted_agents.get(i)))
+				continue;
+			
 			orientation.append("###");
-			orientation.append(let_pass + ";");
-
+			orientation.append(sorted_agents.get(i) + ";");
+			// let pass : 0 if it's the first, one for the others
+			if(i==0)
+				orientation.append(0 + ";");
+			else
+				orientation.append(1 + ";");
+			// time to wait : 0 for the first, the let_pass * distance after the first agent has passed
 			if (i == 0)
 				orientation.append(0);
 			else
-				orientation.append(distance);
-
+				orientation.append(let_pass * distance);
+			
 			// decrements the let pass value
 			let_pass--;
-
-			// sends a message with the orientation
-			//TODO changed 3 to 7			
-			this.connection.send("<action type=\"3\" message=\""
-					+ orientation.toString() + "\"/>");
-
+			sent++;	
+			oriented_agents.add(sorted_agents.get(i));
+		}
+				
+		this.connection.send("<action type=\"3\" message=\"" + orientation.toString() + "\"/>");
+		try {
+			sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 			// if the simulation is a real time one, sends the message more 4
 			// times
-			if (this.connection instanceof UDPClientConnection)
-				for (int j = 0; j < CycledCoordinatorAgent_OLD.NETWORK_QUALITY; j++) {
-					/*try {
-						this.sleep(5000);
-					} catch (InterruptedException ie) {
-						// do nothing
-					}*/
+		if (this.connection instanceof UDPClientConnection_OLD)
+			for (int j = 0; j < CycledCoordinatorAgent_OLD.NETWORK_QUALITY; j++) {
+				/*try {
+					this.sleep(5000);
+				} catch (InterruptedException ie) {
+					// do nothing
+				}*/
 
-					// sends a message with the orientation
-					this.connection.send("<action type=\"3\" message=\""
-							+ orientation.toString() + "\"/>");
-				}
+				// sends a message with the orientation
+				this.connection.send("<action type=\"3\" message=\""
+						+ orientation.toString() + "\"/>");
+			}
 			
-			System.err.println("Sent orientation.");
-		}
+		System.err.println("Sent orientation.");
+
 	}
 	
 	public void run() {
@@ -248,8 +302,7 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 				if (!perceived_tsp_solution)
 					for (int i = 0; i < perceptions.length; i++) {
 						try {
-							perceived_tsp_solution = this
-									.perceiveTSPSolution(perceptions[i]);
+							perceived_tsp_solution = this.perceiveTSPSolution(perceptions[i]);
 						} catch (SAXException e) {
 							e.printStackTrace();
 						} catch (IOException e) {
@@ -281,7 +334,8 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 					}
 
 					// registers such action
-					sent_orientation = true;
+					if(oriented_agents.size() ==  this.AGENTS_POSITIONS.size() / 2)
+						sent_orientation = true;
 				}
 			}
 			// else, lets the agent do nothing
@@ -333,7 +387,7 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 		}
 	}
 	
-	public void update2(){
+	public void update(){
 
 		if(!this.stop_working) {
 		if (!sent_orientation) {
@@ -449,10 +503,10 @@ public class CycledCoordinatorAgent_OLD extends Agent_OLD {
 
 			CycledCoordinatorAgent_OLD coordinator = new CycledCoordinatorAgent_OLD();
 			if (is_real_time_simulation)
-				coordinator.setConnection(new UDPClientConnection(
+				coordinator.setConnection(new UDPClientConnection_OLD(
 						server_address, server_socket_number));
 			else
-				coordinator.setConnection(new TCPClientConnection(
+				coordinator.setConnection(new TCPClientConnection_OLD(
 						server_address, server_socket_number));
 
 			coordinator.start();

@@ -55,6 +55,8 @@ public class CurveViewer extends JFrame implements ActionListener{
 	
 	private int x_division;
 	private int y_division;
+	private int x_center_value;
+	private int y_center_value;
 	
 	// number of pixel for 1 division
 	private int x_pix;
@@ -107,6 +109,8 @@ public class CurveViewer extends JFrame implements ActionListener{
         
         x_division = 1;
         y_division = 1;
+        x_center_value = 0;
+        y_center_value = 0;
         
 	}
 	
@@ -129,17 +133,25 @@ public class CurveViewer extends JFrame implements ActionListener{
 			return;
 		}
 		
+		
 		Curve c = new Curve(x, y, col, d);
 		curbs.add(c);
 		
-		if(c.max_x() > max_x)
+		if(curbs.size() == 1){
 			max_x = c.max_x();
-		if(c.min_x() < min_x)
 			min_x = c.min_x();
-		if(c.max_y() > max_y)
 			max_y = c.max_y();
-		if(c.min_y() < min_y)
-			min_y = c.min_y();	
+			min_y = c.min_y();
+		} else {
+			if(c.max_x() > max_x)
+				max_x = c.max_x();
+			if(c.min_x() < min_x)
+				min_x = c.min_x();
+			if(c.max_y() > max_y)
+				max_y = c.max_y();
+			if(c.min_y() < min_y)
+				min_y = c.min_y();	
+		}
 			
 	}
 	
@@ -177,6 +189,24 @@ public class CurveViewer extends JFrame implements ActionListener{
 	 */
 	public int getYdivision(){
 		return y_division;
+	}
+	
+	/**
+	 * set the X axis center value
+	 * @param x
+	 * 			X center value
+	 */
+	public void setXcenter(int x){
+		x_center_value = x;
+	}
+	
+	/**
+	 * set the Y axis center value
+	 * @param y
+	 * 			Y center value
+	 */
+	public void setYcenter(int y){
+		y_center_value = y;
 	}
 	
 	
@@ -250,21 +280,21 @@ public class CurveViewer extends JFrame implements ActionListener{
 		y_pix = (h - 2 * margin)/(y_max_div - y_min_div);
 		
 		Zero_x = margin + x_pix * (-x_min_div);
-		Zero_y = margin + y_pix * y_max_div;
+		Zero_y = margin + y_pix * (y_max_div);
 		
-		g.drawLine(Zero_x, margin, Zero_x, h-margin - 1);
-		g.drawLine(margin, Zero_y, w-margin + 1, Zero_y);
+		g.drawLine(Zero_x + x_pix * x_center_value / x_division, margin, Zero_x + x_pix * x_center_value / x_division, h-margin - 1);
+		g.drawLine(margin, Zero_y - y_pix * y_center_value / y_division, w-margin + 1, Zero_y  - y_pix * y_center_value / y_division);
 	
 		
 		for(int i = x_min_div; i <= x_max_div; i++){
-			g.drawLine(Zero_x + i * x_pix, Zero_y - 5, Zero_x + i * x_pix, Zero_y + 5);
-			g.drawString(String.valueOf(i * x_division), Zero_x + i * x_pix - 5, Zero_y + 20);
+			g.drawLine(Zero_x + i * x_pix, Zero_y - 5  - y_pix * y_center_value / y_division, Zero_x + i * x_pix, Zero_y + 5  - y_pix * y_center_value / y_division);
+			g.drawString(String.valueOf(i * x_division), Zero_x + i * x_pix - 5, Zero_y + 20  - y_pix * y_center_value / y_division);
 		}
 		
 		for(int i = y_min_div; i <= y_max_div; i++){
-			g.drawLine(Zero_x - 5, Zero_y - i * y_pix, Zero_x + 5, Zero_y - i * y_pix);
+			g.drawLine(Zero_x - 5 + x_pix * x_center_value / x_division , Zero_y - i * y_pix, Zero_x + 5 + x_pix * x_center_value / x_division, Zero_y - i * y_pix);
 			String val = String.valueOf(i * y_division);
-			g.drawString(val, Zero_x - 10 * val.length() , Zero_y - i * y_pix + 5);
+			g.drawString(val, Zero_x + x_pix * x_center_value / x_division - 10 * val.length() , Zero_y - i * y_pix + 5);
 		}
 		
 	}
