@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import common_OLD.Agent_OLD;
-import control.simulator.CycledSimulator;
-import control.simulator.Simulator;
 
 import log_clients.LogFileClient;
 import util.file.FileReader;
@@ -23,9 +21,6 @@ import util.net_OLD.TCPClientConnection_OLD;
  */
 public abstract class Launcher extends Thread {
 	/* Attributes. */
-	
-	private Simulator simulator;
-	
 	
 	private final String ENVIRONMENT_DIR_PATH;
 	
@@ -97,15 +92,6 @@ public abstract class Launcher extends Thread {
 		this.log_client = null;
 	}
 	
-	
-	private void createAndStartSimulator(){
-		try {
-			simulator = new CycledSimulator(5000, 0.005);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Obtains the environment from the referred file and configures it into the
