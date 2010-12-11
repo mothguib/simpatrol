@@ -1,9 +1,5 @@
-/* CycledAgent.java */
-
-/* The package of this class. */
 package cycled;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,14 +12,15 @@ import util.graph.Graph;
 import util.graph.GraphTranslator;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common.Agent;
+import common_OLD.Agent_OLD;
+
 
 /**
  * Implements cycled agents, as it is described in the work of Chevaleyre
  * [2005].
  */
-public final class CycledAgent extends Agent {
-	/* Attributes. */
+public final class CycledAgent extends Agent_OLD {
+
 	/** The id of this agent. */
 	private String id;
 
@@ -75,7 +72,6 @@ public final class CycledAgent extends Agent {
 	Graph current_graph = null;
 
 	
-	/* Methods. */
 	/** Constructor. */
 	public CycledAgent() {
 		this.id = null;
@@ -376,6 +372,12 @@ public final class CycledAgent extends Agent {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			} else if (perceptions.length > 0) {
+				try {
+					this.connection.send("<action type=\"-1\"/>");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -409,11 +411,10 @@ public final class CycledAgent extends Agent {
 	 * Turns this class into an executable one. Useful when running this agent
 	 * in an individual machine.
 	 * 
-	 * @param args
-	 *            Arguments: index 0: The IP address of the SimPatrol server.
-	 *            index 1: The number of the socket that the server is supposed
-	 *            to listen to this client. index 2: "true", if the simulation
-	 *            is a real time one, "false" if not.
+	 * @param args Arguments: 
+	 *            index 0: The IP address of the SimPatrol server.
+	 *            index 1: The number of the socket that the server is supposed to listen to this client. 
+	 *            index 2: "true", if the simulation is a real time one, "false" if not.
 	 */
 	public static void main(String args[]) {
 		try {
@@ -439,130 +440,9 @@ public final class CycledAgent extends Agent {
 			agent.stopWorking();
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedAgent\n"
+					.println("Usage:\n  \"java cycled.CycledAgent "
 							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
 		}
 	}
 
-	@Override
-	public void update() {
-		if(!this.stop_working){
-			if( !this.walk ) {
-				// obtains the current perceptions of the agent
-				String[] perceptions = this.connection.getBufferAndFlush();
-	
-				// tries to perceive the coordinator's orientation, if necessary
-				if (!received_orientation)
-					for (int i = 0; i < perceptions.length; i++) {
-						received_orientation = this
-								.perceiveOrientation(perceptions[i]);
-	
-						if (received_orientation)
-							break;
-					}
-	
-				// tries to perceive the current position of the agent
-				for (int i = 0; i < perceptions.length; i++)
-					if (this.perceivePosition(perceptions[i]))
-						break;
-	
-				// if the agent perceived the coordinator's orientation
-				if (received_orientation)
-					// tries to perceive the other agents
-					for (int i = 0; i < perceptions.length; i++)
-						if (this.perceivePassingAgents(perceptions[i]))
-							break;
-	
-				// verifies if it is time to start walking
-				if (this.start_time > -1) {
-					if (this.connection instanceof TCPClientConnection) {
-						if (this.cycles_count - this.start_time > this.wait_time) {
-							// lets the agent walk and quits this loop
-							try {
-								this.visitAndGoToNextStep();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-	
-							walk = true;
-						}
-					} else {
-						// obtains the current time of the system
-						double current_time = System.nanoTime();
-	
-						// if enough time has passed
-						if (current_time - this.start_time > (this.wait_time * Math
-								.pow(10, 9))) {
-							// lets the agent walk and quits this loop
-							try {
-								this.visitAndGoToNextStep();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-	
-							walk = true;
-						}
-					}
-	
-				}
-	
-				// tries to perceive the current graph
-				Graph[] next_graph = new Graph[0];
-				for (int i = 0; i < perceptions.length; i++) {
-					try {
-						next_graph = GraphTranslator.getGraphs(GraphTranslator
-								.parseString(perceptions[i]));
-					} catch (SAXException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	
-					// if obtained a graph, quits the loop
-					if (next_graph.length > 0)
-						break;
-				}
-	
-				// if such graph is different from the current one
-				if (next_graph.length > 0 && !next_graph[0].equals(current_graph)) {
-					// updates the current graph
-					current_graph = next_graph[0];
-	
-					// increments the cycles count
-					this.cycles_count++;
-	
-					// do nothing
-					try {
-						this.connection.send("<action type=\"-1\"/>");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-					//Walk
-					// obtains the current perceptions
-					String[] perceptions = this.connection.getBufferAndFlush();
-		
-					// if the agent changed its position
-					for (int i = 0; i < perceptions.length; i++)
-						if (this.perceivePosition(perceptions[i])) {
-							// lets the agent visit the current position and execute the
-							// next step of it plan
-							try {
-								this.visitAndGoToNextStep();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-		}
-		
-	   } else{
-		// stops the connection of the agent
-			try {
-				this.connection.stopWorking();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	   }
-	}
 }

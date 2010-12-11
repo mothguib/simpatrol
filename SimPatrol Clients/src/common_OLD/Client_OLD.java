@@ -1,15 +1,10 @@
-/* Client.java */
-
-/* The package of this class. */
 package common_OLD;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Set;
 import log_clients.LogFileClient;
-import metric_clients.MetricFileClient;
 import util.Keyboard;
 import util.file.FileReader;
 import util.net.TCPClientConnection;
@@ -22,12 +17,6 @@ public abstract class Client_OLD extends Thread {
 	/* Attributes. */
 	/** The path of the file that contains the environment. */
 	private final String ENVIRONMENT_FILE_PATH;
-
-	/** The paths of the files that will save the collected metrics. */
-	private final String[] METRICS_FILE_PATHS;
-
-	/** The time interval used to collect the metrics. */
-	private final double METRICS_COLLECTING_RATE;
 
 	/** The path of the file to store the log of the simulation. */
 	private final String LOG_FILE_PATH;
@@ -43,9 +32,6 @@ public abstract class Client_OLD extends Thread {
 
 	/** The set of agents acting in the simulation. */
 	protected Set<Agent_OLD> agents;
-
-	/** The metric collector clients added to the simulation. */
-	private LinkedList<MetricFileClient> metric_clients;
 
 	/** The client added to log the simulation. */
 	private LogFileClient log_client;
@@ -81,19 +67,15 @@ public abstract class Client_OLD extends Thread {
 	 * @throws UnknownHostException
 	 */
 	public Client_OLD(String remote_socket_address, int remote_socket_number,
-			String environment_file_path, String[] metrics_file_paths,
-			double metrics_collecting_rate, String log_file_path,
+			String environment_file_path, String log_file_path,
 			double time_of_simulation, boolean is_real_time_simulator)
 			throws UnknownHostException, IOException {
 		this.ENVIRONMENT_FILE_PATH = environment_file_path;
-		this.METRICS_FILE_PATHS = metrics_file_paths;
-		this.METRICS_COLLECTING_RATE = metrics_collecting_rate;
 		this.LOG_FILE_PATH = log_file_path;
 		this.TIME_OF_SIMULATION = time_of_simulation;
 		this.IS_REAL_TIME_SIMULATOR = is_real_time_simulator;
 		this.CONNECTION = new TCPClientConnection(remote_socket_address,
 				remote_socket_number);
-		this.metric_clients = null;
 		this.agents = null;
 		this.log_client = null;
 	}
@@ -166,233 +148,6 @@ public abstract class Client_OLD extends Thread {
 
 		// returns the answer
 		return answer;
-	}
-
-	/**
-	 * Configures the metrics to be collected during the simulation into the
-	 * server.
-	 * 
-	 * @return The socket numbers for the metric clients be connected.
-	 * @throws IOException
-	 */
-	private int[] configureMetrics() throws IOException {
-		// the answer for the method
-		int[] answer = { -1, -1, -1, -1 };
-
-		// asks if a mean instantaneous idlenesses metric shall be created
-		System.out
-				.println("Should I create a \"mean instantaneous idlenesses metric\"? [y]es or [n]o?");
-		String key = Keyboard.readLine();
-
-		if (key.equalsIgnoreCase("y")) {
-			// the message to create a metric that collects the
-			// mean instantaneous idlenesses of the environment
-			String message = "<configuration type=\"2\" parameter=\""
-					+ String.valueOf(this.METRICS_COLLECTING_RATE)
-					+ "\"><metric type=\"0\"/></configuration>";
-
-			// sends it to the server
-			this.CONNECTION.send(message);
-
-			// obtains the answer from the server
-			String[] server_answer = this.CONNECTION.getBufferAndFlush();
-			while (server_answer.length == 0)
-				server_answer = this.CONNECTION.getBufferAndFlush();
-
-			// adds it to the answer of the method
-			int metric_socket_index = server_answer[0].indexOf("message=\"");
-			server_answer[0] = server_answer[0]
-					.substring(metric_socket_index + 9);
-			answer[0] = Integer.parseInt(server_answer[0].substring(0,
-					server_answer[0].indexOf("\"")));
-
-			// screen message
-			System.out.println("Metric created.");
-		}
-
-		// asks if a max instantaneous idlenesses metric shall be created
-		System.out
-				.println("Should I create a \"max instantaneous idlenesses metric\"? [y]es or [n]o?");
-		key = Keyboard.readLine();
-
-		if (key.equalsIgnoreCase("y")) {
-			
-			// the message to create a metric that collects the
-			// max instantaneous idlenesses of the environment
-			String message = "<configuration type=\"2\" parameter=\""
-					+ String.valueOf(this.METRICS_COLLECTING_RATE)
-					+ "\"><metric type=\"1\"/></configuration>";
-
-			// sends it to the server
-			this.CONNECTION.send(message);
-
-			// obtains the answer from the server
-			String[] server_answer = this.CONNECTION.getBufferAndFlush();
-			while (server_answer.length == 0)
-				server_answer = this.CONNECTION.getBufferAndFlush();
-
-			// adds it to the answer of the method
-			System.out.println(System.currentTimeMillis());
-			int metric_socket_index = server_answer[0].indexOf("message=\"");
-			server_answer[0] = server_answer[0]
-					.substring(metric_socket_index + 9);
-			answer[1] = Integer.parseInt(server_answer[0].substring(0,
-					server_answer[0].indexOf("\"")));
-			System.out.println(System.currentTimeMillis());
-			// screen message
-			System.out.println("Metric created.");
-		}
-
-		// asks if a mean idlenesses metric shall be created
-		System.out
-				.println("Should I create a \"mean idlenesses metric\"? [y]es or [n]o?");
-		key = Keyboard.readLine();
-
-		if (key.equalsIgnoreCase("y")) {
-
-			// the message to create a metric that collects the
-			// mean idleness of the environment
-			String message = "<configuration type=\"2\" parameter=\""
-					+ String.valueOf(this.METRICS_COLLECTING_RATE)
-					+ "\"><metric type=\"2\"/></configuration>";
-
-			// sends it to the server
-			this.CONNECTION.send(message);
-
-			// obtains the answer from the server
-			String[] server_answer = this.CONNECTION.getBufferAndFlush();
-			while (server_answer.length == 0)
-				server_answer = this.CONNECTION.getBufferAndFlush();
-
-			// adds it to the answer of the method
-			int metric_socket_index = server_answer[0].indexOf("message=\"");
-			server_answer[0] = server_answer[0]
-					.substring(metric_socket_index + 9);
-			answer[2] = Integer.parseInt(server_answer[0].substring(0,
-					server_answer[0].indexOf("\"")));
-
-			// screen message
-			System.out.println("Metric created.");
-		}
-
-		// asks if a max idlenesses metric shall be created
-		System.out
-				.println("Should I create a \"max idlenesses metric\"? [y]es or [n]o?");
-		key = Keyboard.readLine();
-
-		if (key.equalsIgnoreCase("y")) {
-			// the message to create a metric that collects the
-			// max idleness of the environment
-			String message = "<configuration type=\"2\" parameter=\""
-					+ String.valueOf(this.METRICS_COLLECTING_RATE)
-					+ "\"><metric type=\"3\"/></configuration>";
-
-			// sends it to the server
-			this.CONNECTION.send(message);
-
-			// obtains the answer from the server
-			String[] server_answer = this.CONNECTION.getBufferAndFlush();
-			while (server_answer.length == 0)
-				server_answer = this.CONNECTION.getBufferAndFlush();
-
-			// adds it to the answer of the method
-			int metric_socket_index = server_answer[0].indexOf("message=\"");
-			server_answer[0] = server_answer[0]
-					.substring(metric_socket_index + 9);
-			answer[3] = Integer.parseInt(server_answer[0].substring(0,
-					server_answer[0].indexOf("\"")));
-
-			// screen message
-			System.out.println("Metric created.");
-		}
-
-		// returns the answer
-		return answer;
-	}
-
-	/**
-	 * Creates and starts the metric clients, given the numbers of the sockets
-	 * for each client.
-	 * 
-	 * @param socket_numbers
-	 *            The socket numbers offered by the server to connect to the
-	 *            remote clients.
-	 * @throws IOException
-	 */
-	private void createAndStartMetricClients(int[] socket_numbers)
-			throws IOException {
-		// verifies if there is any metric to be collected
-		boolean there_is_metric = false;
-		for (int i = 0; i < socket_numbers.length; i++)
-			if (socket_numbers[i] > -1) {
-				there_is_metric = true;
-				break;
-			}
-
-		if (there_is_metric) {
-			// asks if the client shall itself start the metric clients
-			System.out
-					.println("Should I myself create and start the metric clients? [y]es or [n]o?");
-			String key = Keyboard.readLine();
-
-			if (key.equalsIgnoreCase("y")) {
-				// screen message
-				System.out.print("Creating and starting metric clients... ");
-
-				for (int i = 0; i < socket_numbers.length; i++)
-					if (socket_numbers[i] > -1) {
-						if (this.metric_clients == null)
-							this.metric_clients = new LinkedList<MetricFileClient>();
-
-						switch (i) {
-						case 0: {
-							this.metric_clients.add(new MetricFileClient(
-									this.CONNECTION.getRemoteSocketAdress(),
-									socket_numbers[0],
-									this.METRICS_FILE_PATHS[0],
-									"Mean instantaneous idlenesses"));
-							break;
-						}
-						case 1: {
-							this.metric_clients.add(new MetricFileClient(
-									this.CONNECTION.getRemoteSocketAdress(),
-									socket_numbers[1],
-									this.METRICS_FILE_PATHS[1],
-									"Max instantaneous idlenesses"));
-							break;
-						}
-						case 2: {
-							this.metric_clients.add(new MetricFileClient(
-									this.CONNECTION.getRemoteSocketAdress(),
-									socket_numbers[2],
-									this.METRICS_FILE_PATHS[2],
-									"Mean idlenesses"));
-							break;
-						}
-						case 3: {
-							this.metric_clients.add(new MetricFileClient(
-									this.CONNECTION.getRemoteSocketAdress(),
-									socket_numbers[3],
-									this.METRICS_FILE_PATHS[3],
-									"Max idlenesses"));
-							break;
-						}
-						}
-					}
-
-				// starts the metric clients
-				for (int i = 0; i < this.metric_clients.size(); i++)
-					this.metric_clients.get(i).start();
-
-				// screen message
-				System.out.println("Finished.");
-			} else
-				for (int i = 0; i < socket_numbers.length; i++)
-					if (socket_numbers[i] > -1)
-						System.out
-								.println("Port offered by SimPatrol to attend metric client: "
-										+ socket_numbers[i]);
-		}
 	}
 
 	/**
@@ -497,13 +252,6 @@ public abstract class Client_OLD extends Thread {
 		System.out.println("Simulation started.");
 	}
 
-	/** Stops the metric clients. */
-	private void stopMetricClients() {
-		if (this.metric_clients != null)
-			for (int i = 0; i < this.metric_clients.size(); i++)
-				this.metric_clients.get(i).stopWorking();
-	}
-
 	/** Stops the agents. */
 	private void stopAgents() {
 		if (this.agents != null)
@@ -520,22 +268,6 @@ public abstract class Client_OLD extends Thread {
 		StringAndInt[] agents_socket_numbers = new StringAndInt[0];
 		try {
 			agents_socket_numbers = this.configureEnvironment();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// configures the metrics of the simulation
-		// and obtains the socket numbers for each metric client
-		int[] metrics_socket_numbers = new int[0];
-		try {
-			metrics_socket_numbers = this.configureMetrics();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// creates, connects and starts the metric clients
-		try {
-			this.createAndStartMetricClients(metrics_socket_numbers);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -609,9 +341,6 @@ public abstract class Client_OLD extends Thread {
 
 		// stops the agents
 		this.stopAgents();
-
-		// stops the metric clients
-		this.stopMetricClients();
 
 		// stops the log client
 		if (this.log_client != null)

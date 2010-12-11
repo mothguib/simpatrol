@@ -1,9 +1,5 @@
-/* HeuristicCognitiveCoordinatedAgent.java */
-
-/* The package of this class. */
 package heuristic_cognitive_coordinated;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -16,14 +12,15 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common.Agent;
+import common_OLD.Agent_OLD;
+
 
 /**
  * Implements heuristic cognitive coordinated agents, as it is described in the
  * work of Almeida [2003].
  */
-public final class HeuristicCognitiveCoordinatedAgent extends Agent {
-	/* Attributes. */
+public final class HeuristicCognitiveCoordinatedAgent extends Agent_OLD {
+
 	/** The id of this agent. */
 	private String id;
 
@@ -45,7 +42,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	 */
 	private final int WAITING_TIME = 30; // 30 seconds
 
-	/* Methods. */
+
 	/** Constructor. */
 	public HeuristicCognitiveCoordinatedAgent() {
 		this.id = null;
@@ -73,15 +70,18 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 
 			// obtains the id of the current node
 			int node_id_index = perception.indexOf("node_id=\"");
-			perception = perception.substring(node_id_index + 11);
+			perception = perception.substring(node_id_index + 9);
 			String node_id = perception
 					.substring(0, perception.indexOf("\""));
 
 			// obtains the elapsed length on the current edge
 			int elapsed_length_index = perception.indexOf("elapsed_length=\"");
-			perception = perception.substring(elapsed_length_index + 16);
-			double elapsed_length = Double.parseDouble(perception.substring(0,
-					perception.indexOf("\"")));
+			double elapsed_length = 0.0;
+			if (elapsed_length_index > -1) {
+				perception = perception.substring(elapsed_length_index + 16);
+				elapsed_length = Double.parseDouble(perception.substring(0,
+						perception.indexOf("\"")));
+			}
 
 			// returs the answer of the method
 			return new StringAndDouble(node_id, elapsed_length);
@@ -93,7 +93,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 	/**
 	 * Perceives a message sent by the coordinator with the goal node.
 	 * 
-	 * @see HeuristicCognitiveCoordinatorAgent
+	 * @see HeuristicCognitiveCoordinatorAgent_OLD
 	 * @param perception
 	 *            The perception sent by SimPatrol server.
 	 * @return The id of the goal node.
@@ -430,177 +430,6 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 		}
 	}
 
-	@Override
-	public void update() {
-		if (!this.stop_working) {
-			// lets the agent perceive its current position
-			while (this.position == null) {
-				// obtains the perceptions sent by SimPatrol server
-				String[] perceptions = this.connection.getBufferAndFlush();
-
-				// for each perception, starting from the most recent one
-				for (int i = perceptions.length - 1; i >= 0; i--) {
-					// tries to obtain the current position
-					this.position = this.perceivePosition(perceptions[i]);
-
-					if (this.position != null)
-						break;
-				}
-			}
-
-			// lets the agent ask for a goal node to the coordinator
-			try {
-				this.requestGoal();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// tracks the time the agent has been waiting for a message from the
-			// coordinator
-			int begin_waiting_time = Calendar.getInstance()
-					.get(Calendar.SECOND);
-
-			// while the agent did not perceive its goal node
-			// and the graph of the simulation
-			String goal_node = null;
-			Graph current_graph = null;
-
-			while ((goal_node == null || current_graph == null)
-					&& !this.stop_working) {
-				// obtains the perceptions sent by SimPatrol server
-				String[] perceptions = this.connection.getBufferAndFlush();
-
-				// for each perception, starting from the most recent one
-				for (int i = perceptions.length - 1; i >= 0; i--) {
-					// tries to update the current position
-					StringAndDouble perceived_position = this
-							.perceivePosition(perceptions[i]);
-					if (perceived_position != null)
-						this.position = perceived_position;
-					else {
-						// tries to obtain the goal node
-						String perceived_goal_node = this
-								.perceiveGoalNode(perceptions[i]);
-						if (perceived_goal_node != null) {
-							goal_node = perceived_goal_node;
-							this.goal = goal_node;
-						} else {
-							// tries to obtain the graph of the simulation
-							Graph perceived_graph = null;
-							try {
-								perceived_graph = this
-										.perceiveGraph(perceptions[i]);
-							} catch (ParserConfigurationException e) {
-								e.printStackTrace();
-							} catch (SAXException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-							if (perceived_graph != null)
-								current_graph = perceived_graph;
-						}
-					}
-
-					// if the needed perceptions were obtained, breaks the loop
-					if (goal_node != null && current_graph != null)
-						break;
-					// else if the simulation is a real time one
-					else if (this.connection instanceof UDPClientConnection) {
-						// counts the time the agent has been waiting for a
-						// message from the coordinator
-						int end_wainting_time = Calendar.getInstance().get(
-								Calendar.SECOND);
-
-						if (end_wainting_time < begin_waiting_time)
-							end_wainting_time = end_wainting_time + 60;
-
-						// if the agent waited too long, resends a request for a
-						// new goal node
-						if (end_wainting_time - begin_waiting_time >= this.WAITING_TIME) {
-							try {
-								this.requestGoal();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-							begin_waiting_time = Calendar.getInstance().get(
-									Calendar.SECOND);
-						}
-					}
-					// else, if the perceived graph is not the one previously
-					// perceived
-					else if (current_graph != null
-							&& !current_graph.equals(this.graph)) {
-						// memorizes the perceived graph
-						this.graph = current_graph;
-
-						// sends a message of "do nothing" due to
-						// synchronization reasons
-						try {
-							this.connection.send("<action type=\"-1\"/>");
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-			// lets the agent plan its actions
-			this.plan(this.position.STRING, goal_node, current_graph);
-
-			// executes next step of the planning
-			try {
-				this.executeNextStep();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// while the goal was not achieved
-			while (!this.position.STRING.equals(this.goal)
-					&& !this.stop_working) {
-				// perceives the current position of the agent
-				StringAndDouble current_position = null;
-				while (current_position == null && !this.stop_working) {
-					// obtains the perceptions sent by SimPatrol server
-					String[] perceptions = this.connection.getBufferAndFlush();
-
-					// for each perception, starting from the most recent one
-					for (int i = perceptions.length - 1; i >= 0; i--)
-						// tries to obtain the current position
-						if ((current_position = this
-								.perceivePosition(perceptions[i])) != null)
-							break;
-				}
-
-				// if the the current perceived position is different from the
-				// previous one
-				if (!current_position.equals(this.position)) {
-					// updates the position of the agent
-					this.position = current_position;
-
-					// if the agent trespassed an edge entirely, executes next
-					// step of the plan
-					if (this.position.DOUBLE == 0)
-						try {
-							this.executeNextStep();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-				}
-			}
-		} else {
-
-			// stops the connection of the agent
-			try {
-				this.connection.stopWorking();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
 }
 
 /** Internal class that holds together a string and a double value. */

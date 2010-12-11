@@ -1,9 +1,5 @@
-/* CycledCoordinatorAgent.java */
-
-/* The package of this class. */
 package cycled;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.LinkedList;
 import org.xml.sax.SAXException;
@@ -13,16 +9,16 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common.Agent;
-import common.IMessageObserver;
+import common_OLD.Agent_OLD;
+
 
 /**
  * Implements a coordinator that solves the TSP problem for a perceived graph,
  * in order to send the solution to the cycled agents in the environment, as
  * well synchronize them. Based in the work of [Chevaleyre, 2005].
  */
-public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
-	/* Attributes. */
+public class CycledCoordinatorAgent extends Agent_OLD {
+	
 	/**
 	 * Expresses the quality of the network (i.e. the number of times the
 	 * coordinator must send orientations to the other agents, due to UDP packet
@@ -58,7 +54,7 @@ public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
 	// registers if the agent perceived the other agents
 	boolean perceived_other_agents = false;
 
-	/* Methods. */
+
 	/** Constructor. */
 	public CycledCoordinatorAgent() {
 		this.PLAN = new LinkedList<String>();
@@ -201,7 +197,7 @@ public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
 
 			// sends a message with the orientation
 			//TODO changed 3 to 7			
-			this.connection.send("<action type=\"7\" message=\""
+			this.connection.send("<action type=\"3\" message=\""
 					+ orientation.toString() + "\"/>");
 
 			// if the simulation is a real time one, sends the message more 4
@@ -332,7 +328,7 @@ public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
 		}
 	}
 	
-	public void update(){
+	public void update2(){
 
 		if(!this.stop_working) {
 		if (!sent_orientation) {
@@ -434,11 +430,10 @@ public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
 	 * Turns this class into an executable one. Useful when running this agent
 	 * in an individual machine.
 	 * 
-	 * @param args
-	 *            Arguments: index 0: The IP address of the SimPatrol server.
-	 *            index 1: The number of the socket that the server is supposed
-	 *            to listen to this client. index 2: "true", if the simulation
-	 *            is a real time one, "false" if not.
+	 * @param args Arguments: 
+	 *             index 0: The IP address of the SimPatrol server.
+	 *             index 1: The number of the socket that the server is supposed to listen to this client. 
+	 *             index 2: "true", if the simulation is a real time one, "false" if not.
 	 */
 	public static void main(String args[]) {
 		try {
@@ -464,7 +459,7 @@ public class CycledCoordinatorAgent extends Agent implements IMessageObserver {
 			coordinator.stopWorking();
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatorAgent\n"
+					.println("Usage:\n  \"java cycled.CycledCoordinatorAgent "
 							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)>\"");
 		}
 	}	

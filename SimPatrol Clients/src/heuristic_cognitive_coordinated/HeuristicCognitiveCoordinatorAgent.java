@@ -1,9 +1,5 @@
-/* HeuristicCognitiveCoordinatorAgent.java */
-
-/* The package of this class. */
 package heuristic_cognitive_coordinated;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,14 +14,16 @@ import util.heap.MinimumHeap;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
 import common.Agent;
+import common_OLD.Agent_OLD;
+
 
 /**
  * Implements a coordinator that decides, for each heuristic cognitive
  * coordinated agent contacting it, what is the next node to be visited, as it
  * is described in the work of [Almeida, 2003].
  */
-public final class HeuristicCognitiveCoordinatorAgent extends Agent {
-	/* Attributes. */
+public final class HeuristicCognitiveCoordinatorAgent extends Agent_OLD {
+
 	/** The graph perceived by the coordinator. */
 	private Graph graph;
 
@@ -38,7 +36,7 @@ public final class HeuristicCognitiveCoordinatorAgent extends Agent {
 	 */
 	private final LinkedList<String> AGENTS_GOALS;
 
-	/* Methods. */
+
 	/** Constructor. */
 	public HeuristicCognitiveCoordinatorAgent() {
 		this.graph = null;
@@ -255,42 +253,9 @@ public final class HeuristicCognitiveCoordinatorAgent extends Agent {
 		}
 	}
 
-	@Override
-	public void update() {
-		if (!this.stop_working) {
-			// registers if the perceptions of the agent changed
-			boolean changed_perception = false;
 
-			// lets the agent perceive
-			try {
-				changed_perception = this.perceive();
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// lets the agent act
-			// if the perceptions changed
-			if (changed_perception)
-				try {
-					this.act();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		} else {
-
-			// stops the connection of the agent
-			try {
-				this.connection.stopWorking();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }
+
 
 /**
  * Internal class that extends a node, letting it be compared to another

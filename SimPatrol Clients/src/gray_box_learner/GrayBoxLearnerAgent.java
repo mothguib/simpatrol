@@ -1,25 +1,28 @@
-/* GrayBoxLearnerAgent.java */
-
-/* The package of this class. */
 package gray_box_learner;
 
-/* Imported classes and/or interfaces. */
 import gray_box_learner.q_learning_engine.QLearningEngine;
+
 import java.io.IOException;
 import java.util.LinkedList;
+
 import org.xml.sax.SAXException;
+
 import util.Keyboard;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common.Agent;
+
+import common_OLD.Agent_OLD;
+
 
 /**
  * Implements gray box learner agents, with selfish utility, as it is described
  * in the work of SANTANA [2004].
  */
-public class GrayBoxLearnerAgent extends Agent {
-	/* Attributes. */
+public class GrayBoxLearnerAgent extends Agent_OLD {
+
 	// holds the current perceptions of the agent
+	public static boolean GENERALIZED;
+	
 	LinkedList<String> perceptions;
 	
 	// tries to find the ua and mo values
@@ -66,8 +69,10 @@ public class GrayBoxLearnerAgent extends Agent {
 	
 	// tries to perceive the nid attribute
 	boolean perceived_nid = false;
+	
+	private boolean stopped = false;
 
-	/* Methods. */
+
 	/** Constructor. */
 	public GrayBoxLearnerAgent() {
 		this.learning_engine = null;
@@ -81,6 +86,10 @@ public class GrayBoxLearnerAgent extends Agent {
 		this.ua = 0;
 		this.mo = 0;
 		this.na = 0;
+	}
+	
+	public boolean isStopped() {
+		return this.stopped;
 	}
 
 	/**
@@ -147,7 +156,7 @@ public class GrayBoxLearnerAgent extends Agent {
 
 			// obtains the id of the current node
 			int node_id_index = perception.indexOf("node_id=\"");
-			perception = perception.substring(node_id_index + 11);
+			perception = perception.substring(node_id_index + 9);
 			String node_id = perception
 					.substring(0, perception.indexOf("\""));
 
@@ -233,7 +242,7 @@ public class GrayBoxLearnerAgent extends Agent {
 			// while there are nodes to be read
 			while (next_node_index > -1) {
 				// updates the perception
-				perception = perception.substring(next_node_index + 12);
+				perception = perception.substring(next_node_index + 10);
 
 				// obtains the id of the current node
 				String node_id = perception.substring(0, perception
@@ -427,6 +436,23 @@ public class GrayBoxLearnerAgent extends Agent {
 		String message = "<action type=\"2\"/>";
 		this.connection.send(message);
 	}
+	
+	private int[] getStateItemValues() {
+		int[] stateItemValues;
+		int nextIndex = 0;
+		if (GrayBoxLearnerAgent.GENERALIZED) {
+			stateItemValues = new int[3];
+		} else {
+			stateItemValues = new int[4];
+			stateItemValues[nextIndex++] = this.nid;
+		}
+		
+		stateItemValues[nextIndex++] = this.ua;
+		stateItemValues[nextIndex++] = this.mo;
+		stateItemValues[nextIndex++] = this.na;
+		
+		return stateItemValues;
+	}
 
 	public void run() {
 		// starts its connection
@@ -500,7 +526,7 @@ public class GrayBoxLearnerAgent extends Agent {
 			this.na = 1;
 
 		// mounts the array with the current state item values
-		int[] state_item_values = { this.nid, this.ua, this.mo, this.na };
+		int[] state_item_values = this.getStateItemValues();
 
 		// initializes the q-learning engine
 		this.learning_engine = new QLearningEngine(state_item_values,
@@ -615,12 +641,14 @@ public class GrayBoxLearnerAgent extends Agent {
 
 			// mounts the array with the next state item values and configures
 			// it into the engine
-			int[] next_item_values = { this.nid, this.ua, this.mo, this.na };
+			int[] next_item_values = this.getStateItemValues();
 			this.learning_engine.setNextState(next_item_values);
 		}
 
 		// stops the q-learning engine
 		this.learning_engine.stopWorking();
+		
+		this.stopped = true;
 
 		// stops the connection of the agent
 		try {
@@ -699,10 +727,7 @@ public class GrayBoxLearnerAgent extends Agent {
 		}
 	}
 
-	@Override
-	public void update() {
-		//TODO Convert the run method to update
-	}
+
 }
 
 /** Internal class that holds together a string and a double value. */
