@@ -196,7 +196,6 @@ public class CycledCoordinatorAgent extends Agent_OLD {
 			let_pass--;
 
 			// sends a message with the orientation
-			//TODO changed 3 to 7			
 			this.connection.send("<action type=\"3\" message=\""
 					+ orientation.toString() + "\"/>");
 
@@ -327,104 +326,6 @@ public class CycledCoordinatorAgent extends Agent_OLD {
 			e.printStackTrace();
 		}
 	}
-	
-	public void update2(){
-
-		if(!this.stop_working) {
-		if (!sent_orientation) {
-			// obtains the current perceptions
-			String[] perceptions = this.connection.getBufferAndFlush();
-
-			// if the tsp solution was not perceived yet, tries to perceive
-			// it
-			if (!perceived_tsp_solution)
-				for (int i = 0; i < perceptions.length; i++) {
-					try {
-						perceived_tsp_solution = this
-								.perceiveTSPSolution(perceptions[i]);
-					} catch (SAXException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-					if (perceived_tsp_solution)
-						break;
-				}
-
-			// if the other agents were not perceived yet, tries to perceive
-			// them
-			if (!perceived_other_agents)
-				for (int i = 0; i < perceptions.length; i++) {
-					perceived_other_agents = this
-							.perceiveAgentsPositions(perceptions[i]);
-
-					if (perceived_other_agents)
-						break;
-				}
-
-			// if the coordinator perceived everything
-			if (perceived_tsp_solution && perceived_other_agents) {
-				// sends a proper orientation
-				try {
-					this.sendOrientation();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				// registers such action
-				sent_orientation = true;
-			}
-		}
-		// else, lets the agent do nothing
-		else {
-			// obtains the current perceptions
-			String[] perceptions = this.connection.getBufferAndFlush();
-
-			// for each one, tries to obtain the currently perceived graph
-			Graph[] current_graph = new Graph[0];
-			for (int i = 0; i < perceptions.length; i++) {
-				try {
-					current_graph = GraphTranslator
-							.getGraphs(GraphTranslator
-									.parseString(perceptions[i]));
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				// if obtained a graph
-				if (current_graph.length > 0) {
-					// if the obtained graph is different from the current
-					// one
-					if (!current_graph[0].equals(this.graph)) {
-						// updates the current graph
-						this.graph = current_graph[0];
-
-						// lets the agent do nothing
-						try {
-							this.connection.send("<action type=\"-1\"/>");
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-
-					// quits the loop
-					break;
-				}
-			}
-		}
-	} else{
-		// stops the connection of the agent
-		try {
-			this.connection.stopWorking();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-}
-	
 	
 	/**
 	 * Turns this class into an executable one. Useful when running this agent

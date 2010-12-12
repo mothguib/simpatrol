@@ -42,7 +42,7 @@ public final class ConscientiousReactiveClient extends Client_OLD {
 	 */
 	public ConscientiousReactiveClient(String remote_socket_address,
 			int remote_socket_number, String environment_file_path,
-			String log_file_path, int time_of_simulation,
+			String log_file_path, double time_of_simulation,
 			boolean is_real_time_simulator) throws UnknownHostException,
 			IOException {
 		super(remote_socket_address, remote_socket_number, environment_file_path, 
@@ -91,7 +91,7 @@ public final class ConscientiousReactiveClient extends Client_OLD {
 			double time_of_simulation = Double.parseDouble(args[4]);
 			boolean is_real_time_simulator = Boolean.parseBoolean(args[5]);
 
-			CognitiveCoordinatedClient client = new CognitiveCoordinatedClient(
+			ConscientiousReactiveClient client = new ConscientiousReactiveClient(
 					remote_socket_address, remote_socket_number,
 					environment_file_path, log_file_path, time_of_simulation,
 					is_real_time_simulator);

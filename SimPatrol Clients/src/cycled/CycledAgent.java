@@ -39,11 +39,6 @@ public final class CycledAgent extends Agent_OLD {
 	 */
 	private double wait_time;
 	
-	/*
-	 * Set if the agent must walk
-	 */
-	private boolean walk = false; 
-
 	/**
 	 * Registers the time the agent started counting up until the moment to
 	 * start walking on the graph.
