@@ -31,9 +31,11 @@ class GravManager {
 
 	
 	void setGraph(Graph g) {
-		this.graph = g;
 		if (this.graph == null) {
+			this.graph = g;
 			setupGravityManager();
+		} else {
+			this.graph = g;
 		}
 	}
 	

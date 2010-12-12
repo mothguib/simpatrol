@@ -257,7 +257,7 @@ public class GravitationalMainClient2 implements IMessageObserver {
 	 *    index 7: Distance exponent
 	 *    index 8: Gravities combination method: "max" or "sum"
 	 */
-	public static void execute(String[] args) {
+	public static void main(String[] args) {
 		System.out.println("Gravitational agents!");
 
 		try {
@@ -286,27 +286,6 @@ public class GravitationalMainClient2 implements IMessageObserver {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	public static void main(String[] args) {
-		
-		if (args.length == 0) {
-			
-			// default parameters, in case no parameters are provided
-			args = new String[]{
-						"127.0.0.1",
-						"5000",
-						"res\\environment_files\\grav_test.xml",
-						"tmp\\grav2_100.txt",
-						"100",
-						"Edge",
-						"A",
-						"1.0",
-						"max"
-					};
-		}
-		
-		execute(args);
 	}
 	
 }

@@ -244,11 +244,12 @@ public class GravitationalMainClient1 implements IMessageObserver {
 	 *    index 2: The path of the file that contains the environment (graph + society). 
 	 *    index 3: The path of the file that will save the collected events; 
 	 *    index 4: The time of simulation.
-	 *    index 5: Mass growth function: "A" (for arithmetic) or "G" (for geometric)
-	 *    index 6: Distance exponent
-	 *    index 7: Gravities combination method: "max" or "sum"
+	 *    index 5: Propagation: "Node" (by node), "Edge" (by edge)
+	 *    index 6: Mass growth function: "A" (for arithmetic) or "G" (for geometric)
+	 *    index 7: Distance exponent
+	 *    index 8: Gravities combination method: "max" or "sum"
 	 */
-	public static void execute(String[] args) {
+	public static void main(String[] args) {
 		System.out.println("Gravitational agents!");
 
 		try {
@@ -257,12 +258,14 @@ public class GravitationalMainClient1 implements IMessageObserver {
 			String environmentFilePath = args[2];
 			String logFilePath         = args[3];
 			int cyclesOfSimulation     = Integer.parseInt(args[4]);
-			MassGrowth growth          = args[5].toString().equals("G")? MassGrowth.GEOMETRIC : MassGrowth.ARITHMETIC;
-			double distanceExponent    = Double.parseDouble(args[6]); 
-			GravitiesCombinator combinator = GravitiesCombinator.valueOf(args[7].toUpperCase());
+			boolean propagateEdge      = args[5].toString().equals("Node")? false : true;
+			MassGrowth growth          = args[6].toString().equals("G")? MassGrowth.GEOMETRIC : MassGrowth.ARITHMETIC;
+			double distanceExponent    = Double.parseDouble(args[7]); 
+			GravitiesCombinator combinator = GravitiesCombinator.valueOf(args[8].toUpperCase());
 			
 			GravitationalMainClient1 client;			
 			
+			//TODO: add support to node-propagated version...
 			client = new GravitationalMainClient1(serverAddress, serverPortNumber, environmentFilePath, 
 							logFilePath, cyclesOfSimulation, growth, distanceExponent, combinator);	
 
@@ -276,26 +279,7 @@ public class GravitationalMainClient1 implements IMessageObserver {
 		}
 		
 	}
-	
-	public static void main(String[] args) {
-		
-		if (args.length == 0) {
-			
-			// default parameters, in case no parameters are provided
-			args = new String[]{
-						"127.0.0.1",
-						"5000",
-						"res\\environment_files\\grav_test_hacked.xml",
-						"tmp\\grav_test_hacked.txt",
-						"50",
-						"A",
-						"1.0",
-						"max"
-					};
-		}
-		
-		execute(args);
-	}
+
 	
 }
 
