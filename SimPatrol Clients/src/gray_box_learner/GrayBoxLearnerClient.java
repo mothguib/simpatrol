@@ -37,7 +37,7 @@ public final class GrayBoxLearnerClient extends Client_OLD {
 	 *            The rate of the decaying of the alpha value in the q-learning
 	 *            algorithm.
 	 * @param gama
-	 *            The discount factor in the q-learning algorithm. *
+	 *            The discount factor in the q-learning algorithm.
 	 * @param q_table_dir
 	 *            The directory to record the q-table values learned by the
 	 *            agent.
