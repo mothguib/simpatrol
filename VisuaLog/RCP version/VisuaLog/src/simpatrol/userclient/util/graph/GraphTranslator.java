@@ -90,9 +90,9 @@ public abstract class GraphTranslator extends Translator {
 			current_vertex.setObjectId(id);
 
 			// priority configuration
-			int priority = 0;
+			double priority = 1.0d;
 			if (str_priority.length() > 0)
-				priority = Integer.parseInt(str_priority);
+				priority = Double.parseDouble(str_priority);
 			current_vertex.setPriority(priority);
 
 			// idleness configuration
