@@ -1,19 +1,13 @@
-/* ClientConnection.java */
-
-/* The package of this class. */
 package util.net;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import util.Queue;
-import common.IMessageObserver;
-import common.IMessageSubject;
 
-/** Implements a client of a remote connection. */
-public abstract class ClientConnection extends Thread implements IMessageSubject {
+
+/** 
+ * Implements a client of a remote connection. 
+ */
+public abstract class ClientConnection extends Thread {
 	/* Attributes. */
 	/** Registers if the connection shall stop working. */
 	protected boolean stop_working;
@@ -25,33 +19,11 @@ public abstract class ClientConnection extends Thread implements IMessageSubject
 
 	/* Methods. */
 	/** Constructor. */
-	
-	
-	protected ArrayList<IMessageObserver> observers;
-	
-	
 	public ClientConnection() {
 		this.stop_working = false;
 		this.BUFFER = new Queue<String>();
-		this.observers = new ArrayList<IMessageObserver>();
 	}
 
-	/*
-	 * Set the observers that will be called when receive a message;
-	 */
-	public void addObserver(IMessageObserver observer){
-		this.observers.add(observer);
-	}
-	
-	
-	/*
-	 * Update the observers, when a new packet arrives
-	 */
-	public void updateObservers(){
-		for(int i=0; i<observers.size();i++){
-			observers.get(i).update();
-		}
-	}
 	/**
 	 * Returns the content of the buffer of the connection and clears it.
 	 */

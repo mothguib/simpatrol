@@ -14,7 +14,6 @@ import util.heap.MinimumHeap;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
 import common.Agent;
-import common_OLD.Agent_OLD;
 
 
 /**
@@ -22,7 +21,7 @@ import common_OLD.Agent_OLD;
  * coordinated agent contacting it, what is the next node to be visited, as it
  * is described in the work of [Almeida, 2003].
  */
-public final class HeuristicCognitiveCoordinatorAgent extends Agent_OLD {
+public final class HeuristicCognitiveCoordinatorAgent extends Agent {
 
 	/** The graph perceived by the coordinator. */
 	private Graph graph;

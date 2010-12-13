@@ -12,14 +12,14 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
  * Implements heuristic cognitive coordinated agents, as it is described in the
  * work of Almeida [2003].
  */
-public final class HeuristicCognitiveCoordinatedAgent extends Agent_OLD {
+public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 
 	/** The id of this agent. */
 	private String id;

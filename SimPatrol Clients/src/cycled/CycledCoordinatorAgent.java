@@ -9,7 +9,7 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
@@ -17,7 +17,7 @@ import common_OLD.Agent_OLD;
  * in order to send the solution to the cycled agents in the environment, as
  * well synchronize them. Based in the work of [Chevaleyre, 2005].
  */
-public class CycledCoordinatorAgent extends Agent_OLD {
+public class CycledCoordinatorAgent extends Agent {
 	
 	/**
 	 * Expresses the quality of the network (i.e. the number of times the

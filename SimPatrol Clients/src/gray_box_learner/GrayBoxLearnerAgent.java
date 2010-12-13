@@ -11,14 +11,14 @@ import util.Keyboard;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
 
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
  * Implements gray box learner agents, with selfish utility, as it is described
  * in the work of SANTANA [2004].
  */
-public class GrayBoxLearnerAgent extends Agent_OLD {
+public class GrayBoxLearnerAgent extends Agent {
 
 	// holds the current perceptions of the agent
 	public static boolean GENERALIZED;

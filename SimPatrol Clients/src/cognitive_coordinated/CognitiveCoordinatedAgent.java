@@ -10,14 +10,14 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
  * Implements cognitive coordinated agents, as it is described in the work of
  * MACHADO [2002].
  */
-public final class CognitiveCoordinatedAgent extends Agent_OLD {
+public final class CognitiveCoordinatedAgent extends Agent {
 	
 	/** The id of this agent. */
 	private String id;

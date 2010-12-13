@@ -9,13 +9,13 @@ import java.util.LinkedList;
 import util.Keyboard;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 /**
  * Implements the conscientious reactive agents, as it is described in the work
  * of [MACHADO, 2002].
  */
-public class ConscientiousReactiveAgent extends Agent_OLD {
+public class ConscientiousReactiveAgent extends Agent {
 	/* Attributes. */
 	/** Memorizes the last time this agent visited the vertexes. */
 	private LinkedList<StringAndDouble> vertexes_idlenesses;

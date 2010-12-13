@@ -5,15 +5,15 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
-import common_OLD.Client_OLD;
+import common.Agent;
+import common.Client;
 
 
 /**
  * Implements a client that connects to the SimPatrol server and configures it,
  * letting gray box learner agent clients connect to it, in the sequence.
  */
-public final class GrayBoxLearnerClient extends Client_OLD {
+public final class GrayBoxLearnerClient extends Client {
 
 	/**
 	 * Constructor.
@@ -73,7 +73,7 @@ public final class GrayBoxLearnerClient extends Client_OLD {
 
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 			throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 
 		for (int i = 0; i < agent_ids.length; i++) {
 			GrayBoxLearnerAgent agent = new GrayBoxLearnerAgent();

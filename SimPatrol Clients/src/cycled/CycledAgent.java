@@ -12,14 +12,14 @@ import util.graph.Graph;
 import util.graph.GraphTranslator;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
  * Implements cycled agents, as it is described in the work of Chevaleyre
  * [2005].
  */
-public final class CycledAgent extends Agent_OLD {
+public final class CycledAgent extends Agent {
 
 	/** The id of this agent. */
 	private String id;

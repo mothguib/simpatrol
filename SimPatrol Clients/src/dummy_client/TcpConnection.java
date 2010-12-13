@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import common.IMessageObserver;
-import common.IMessageSubject;
 
 
 /**
@@ -21,7 +20,7 @@ import common.IMessageSubject;
  *  
  * @author Pablo Sampaio
  */
-public class TcpConnection extends Thread implements IMessageSubject {
+public class TcpConnection extends Thread {
 
 	// Waiting time to read some data from the input stream
 	private static final int READING_TIME_TOLERANCE = 10; // 0.01 sec

@@ -1,15 +1,12 @@
-/* UDPClientConnection.java */
-
-/* The package of this class. */
 package util.net;
 
-/* Imported classes and/or interfaces. */
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+
 
 /**
  * Implements a passive UDP connection, used mainly to receive remotely produced
@@ -74,8 +71,8 @@ public class UDPClientConnection extends ClientConnection {
 		byte[] buffer = new byte[BUFFER_SIZE];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		this.SOCKET.receive(packet);
+
 		this.BUFFER.insert(new String(packet.getData(), 0, packet.getLength()));
-		this.updateObservers();
 	}
 
 	public void run() {

@@ -3,23 +3,19 @@ package random_reactive;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import common_OLD.Agent_OLD;
+import common.Agent;
 
-public class RandomReactiveAgent_OLD extends Agent_OLD {
 
+public class RandomReactiveAgent_OLD extends Agent {
 	
-	protected
-		int port_number;
-		String server_address;
+	protected int port_number;
+	protected String server_address;
 	
 	
 	public RandomReactiveAgent_OLD() {
 		super();
 	}
 	
-	public static void main(String[] args){
-		System.out.println("compilé");
-	}
 
 	/**
 	 * Lets the agent perceive the neighborhood.
@@ -206,14 +202,13 @@ public class RandomReactiveAgent_OLD extends Agent_OLD {
 	
 	/** Internal class that holds together a string and a double value. */
 final class StringAndDouble {
-	/* Attributes */
+
 	/** The string value. */
 	public final String STRING;
 
 	/** The double value. */
 	public double double_value;
 
-	/* Methods. */
 	/**
 	 * Constructor.
 	 * 

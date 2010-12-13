@@ -13,7 +13,7 @@ import util.heap.Comparable;
 import util.heap.MinimumHeap;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 
 /**
@@ -22,7 +22,7 @@ import common_OLD.Agent_OLD;
  * the work of [MACHADO, 2002].
  * 
  */
-public final class CognitiveCoordinatorAgent extends Agent_OLD {
+public final class CognitiveCoordinatorAgent extends Agent {
 
 	/** The graph perceived by the coordinator. */
 	private Graph graph;

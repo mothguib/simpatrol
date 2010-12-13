@@ -1,9 +1,5 @@
-/* TCPClientConnection.java */
-
-/* The package of this class. */
 package util.net;
 
-/* Imported classes and/or interfaces. */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +8,10 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/** Implements a TCP client connection. */
+
+/** 
+ * Implements a TCP client connection. 
+ */
 public class TCPClientConnection extends ClientConnection {
 	/* Attributes. */
 	/** The java 2 native TCP socket. */
@@ -25,7 +24,7 @@ public class TCPClientConnection extends ClientConnection {
 	private final PrintStream OUTPUT;
 
 	/** Waiting time to read some data from the input stream. */
-	private static final int READING_TIME_TOLERANCE = 5000; // 5 sec
+	private static final int READING_TIME_TOLERANCE = 100; // 5 sec
 
 	/* Methods. */
 	/**
@@ -115,10 +114,8 @@ public class TCPClientConnection extends ClientConnection {
 			}
 		} while (true);
 
-		if (buffer.length() > 0){
+		if (buffer.length() > 0)
 			this.BUFFER.insert(buffer.toString());
-			this.updateObservers();
-		}
 	}
 
 	public void run() {
