@@ -13,7 +13,6 @@ import model.action.Action;
 import model.action.ActionTypes;
 import model.action.AtomicRechargeAction;
 import model.action.BroadcastAction;
-import model.action.BroadcastSocietyAction;
 import model.action.GoToAction;
 import model.action.RechargeAction;
 import model.action.StigmatizeAction;
@@ -87,21 +86,6 @@ public abstract class ActionTranslator extends Translator {
 
 			// returns the action
 			return new BroadcastAction(message, message_depth);
-		}
-		// if it is a broadcast action
-		case ActionTypes.BROADCAST_SOCIETY: {
-			// obtains the message
-			String message = action_element.getAttribute("message");
-
-			// obtains the depth of the message
-			int message_depth = -1;
-			String str_message_depth = action_element
-					.getAttribute("message_depth");
-			if (str_message_depth.length() > 0)
-				message_depth = Integer.parseInt(str_message_depth);
-
-			// returns the action
-			return new BroadcastSocietyAction(message, message_depth);
 		}
 
 			// if it is a stigmatize action, returns it

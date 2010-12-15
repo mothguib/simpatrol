@@ -66,9 +66,4 @@ public abstract class ActionTypes {
 	 */
 	public static final int ATOMIC_RECHARGE = 6;
 	
-	/**
-	 * The actions of broadcasting messages to your society members through the graph.
-	 * see BroadcastSocietyAction 
-	 */
-	public static final int BROADCAST_SOCIETY = 7;
 }

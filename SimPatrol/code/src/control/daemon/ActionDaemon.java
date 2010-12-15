@@ -21,7 +21,6 @@ import model.action.ActionTypes;
 import model.action.AtomicAction;
 import model.action.AtomicRechargeAction;
 import model.action.BroadcastAction;
-import model.action.BroadcastSocietyAction;
 import model.action.GoToAction;
 import model.action.RechargeAction;
 import model.action.StigmatizeAction;
@@ -290,54 +289,6 @@ public final class ActionDaemon extends AgentDaemon {
 			// broadcasts the message
 			this.action_message = action.getMessage();
 			this.broadcastMessage(this.action_message, message_depth);
-		}
-	}
-	/**
-	 * Attends an intention of broadcasting a message.
-	 * 
-	 * @param action
-	 *            The action of broadcasting a message.
-	 * @param limitations
-	 *            The limitations imposed to the action.
-	 * @developer New Limitation classes can change this method.
-	 */
-	private void attendBroadcastSocietyAction(BroadcastSocietyAction action,
-			Limitation[] limitations) {
-		// holds an eventual depth limitation
-		int depth = -1;
-
-		// holds an eventual stamina limitation
-		double stamina = 0;
-
-		// for each limitation, tries to set the depth and stamina limitations
-		for (int i = 0; i < limitations.length; i++) {
-			if (limitations[i] instanceof DepthLimitation) {
-				depth = ((DepthLimitation) limitations[i]).getDepth();
-			} else if (limitations[i] instanceof StaminaLimitation) {
-				stamina = ((StaminaLimitation) limitations[i]).getCost();
-				// developer: new limitations must add code here
-			}
-		}
-
-		// if there's enough stamina to act
-		if (this.AGENT.getStamina() > stamina) {
-			// decrements the agent's stamina
-			if (stamina > 0) {
-				this.AGENT.decStamina(stamina);
-			}
-
-			// obtains the depth of the broadcasted message
-			int message_depth = action.getMessage_depth();
-
-			// if the depth of the message is bigger than the
-			// depth limitation, replace it by the depth limitation
-			if (depth > -1 && (message_depth > depth || message_depth < 0)) {
-				message_depth = depth;
-			}
-
-			// broadcasts the message
-			this.action_message = action.getMessage();
-			this.broadcastSocietyMessage(this.action_message, message_depth);
 		}
 	}
 
@@ -900,28 +851,6 @@ public final class ActionDaemon extends AgentDaemon {
 									break;
 								}
 						}
-						// else if the obtained action is a broadcasting society one
-						else if (action instanceof BroadcastSocietyAction) {
-
-							// verifies if the agent has permission to broadcast
-							// messages
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " broadcasting to your society");
-									// attends the action
-									this.attendBroadcastSocietyAction(
-											(BroadcastSocietyAction) action,
-											permissions[i].getLimitations());
-
-									// quits the loop
-									break;
-								}
-						}
 						// else if the obtained action is a stigmatize one
 						else if (action instanceof StigmatizeAction) {
 
@@ -1231,28 +1160,6 @@ public final class ActionDaemon extends AgentDaemon {
 									// attends the action
 									this.attendBroadcastAction(
 											(BroadcastAction) action,
-											permissions[i].getLimitations());
-
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is a broadcasting society one
-						else if (action instanceof BroadcastSocietyAction) {
-
-							// verifies if the agent has permission to broadcast
-							// messages
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " broadcasting to your society");
-									// attends the action
-									this.attendBroadcastSocietyAction(
-											(BroadcastSocietyAction) action,
 											permissions[i].getLimitations());
 
 									// quits the loop
