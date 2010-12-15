@@ -57,24 +57,11 @@ public final class CycledSimulator extends Simulator {
 			// for each agent
 			Agent[] agents = societies[i].getAgents();
 			for (int j = 0; j < agents.length; j++)
-				// hack for coordinated agents
-				// TODO : ?
-				if (!(agents[j].getLabel().equals("coordinator")) && agents[j].getAgentState() != AgentStates.JUST_ACTED)
+				if (agents[j].getAgentState() != AgentStates.JUST_ACTED)
 					return false;
 		}
 
-		
-		// end of hack : set coordinator to 0 for next turn perception
-		for (int i = 0; i < societies.length; i++){
-			Agent[] agents = societies[i].getAgents();
-			for (int j = 0; j < agents.length; j++)
-				if (agents[j].getLabel().equals("coordinator")){
-					agents[j].setAgentState(AgentStates.JUST_ACTED);
-					break;
-				}
-					       
-		}
-
+		// default answer
 		return true;
 	}
 

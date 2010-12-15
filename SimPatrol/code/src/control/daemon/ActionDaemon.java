@@ -847,6 +847,7 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
@@ -1162,6 +1163,7 @@ public final class ActionDaemon extends AgentDaemon {
 											(BroadcastAction) action,
 											permissions[i].getLimitations());
 
+									attended_actions = true;
 									// quits the loop
 									break;
 								}
