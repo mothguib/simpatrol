@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
-import common.IMessageObserver;
+import dummy_client.TcpConnectionObserver;
 
 import util.file.FileReader;
 
@@ -30,7 +30,7 @@ import dummy_client.TcpConnection;
  *  
  * @author Pablo Sampaio
  */
-public class GravitationalMainClient1 implements IMessageObserver {
+public class GravitationalMainClient1 implements TcpConnectionObserver {
 	private String serverAddress;
 	private int    serverPort;
 	private TcpConnection connection;

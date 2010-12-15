@@ -2,8 +2,6 @@ package dummy_client;
 
 import java.io.IOException;
 
-import common.IMessageObserver;
-
 
 /**
  * A simple agent that just goes back and forth between two nodes. 
@@ -13,7 +11,7 @@ import common.IMessageObserver;
  *  
  * @author Pablo Sampaio
  */
-public class DummyAgent implements IMessageObserver {
+public class DummyAgent implements TcpConnectionObserver {
 	protected String identifier;
 	protected TcpConnection connection;
 	protected boolean working;

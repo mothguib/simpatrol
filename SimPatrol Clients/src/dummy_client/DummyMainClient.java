@@ -7,8 +7,6 @@ import java.util.List;
 
 import log_clients.LogFileClient;
 
-import common.IMessageObserver;
-
 
 /**
  * This is the main client, which is responsible for starting the log client 
@@ -16,7 +14,7 @@ import common.IMessageObserver;
  *  
  * @author Pablo Sampaio
  */
-public class DummyMainClient implements IMessageObserver {
+public class DummyMainClient implements TcpConnectionObserver {
 	private TcpConnection connection;
 
 	private int totalCycles;

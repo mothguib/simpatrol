@@ -11,8 +11,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import common.IMessageObserver;
-
 
 /**
  *  Implements a TCP client connection.
@@ -37,7 +35,7 @@ public class TcpConnection extends Thread {
 	protected LinkedList<String> messagesReceived;
 
 	// List of observers to be notified when there is data
-	protected ArrayList<IMessageObserver> observers;
+	protected ArrayList<TcpConnectionObserver> observers;
 	
 
 	/**
@@ -60,7 +58,7 @@ public class TcpConnection extends Thread {
 		
 		this.working = true;
 		this.messagesReceived = new LinkedList<String>();
-		this.observers = new ArrayList<IMessageObserver>();
+		this.observers = new ArrayList<TcpConnectionObserver>();
 		
 		super.setDaemon(true);
 	}
@@ -69,7 +67,7 @@ public class TcpConnection extends Thread {
 	/**
 	 * Set the observers that will be called when receive a message.
 	 */
-	public void addObserver(IMessageObserver observer){
+	public void addObserver(TcpConnectionObserver observer){
 		this.observers.add(observer);
 	}
 	
