@@ -49,7 +49,7 @@ public class RandomReactiveClient extends Client {
 		this.agents = new HashSet<Agent>();
 
 		for (int i = 0; i < agent_ids.length; i++) {
-			RandomReactiveAgent_OLD agent = new RandomReactiveAgent_OLD();
+			RandomReactiveAgent agent = new RandomReactiveAgent();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
 				agent.setConnection(new UDPClientConnection(this.CONNECTION

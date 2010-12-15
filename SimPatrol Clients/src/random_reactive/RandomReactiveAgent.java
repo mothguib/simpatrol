@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import common.Agent;
 
 
-public class RandomReactiveAgent_OLD extends Agent {
+public class RandomReactiveAgent extends Agent {
 	
 	protected int port_number;
 	protected String server_address;
 	
 	
-	public RandomReactiveAgent_OLD() {
+	public RandomReactiveAgent() {
 		super();
 	}
 	
