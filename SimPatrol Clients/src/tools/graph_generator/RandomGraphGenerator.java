@@ -4,8 +4,16 @@ import java.util.Random;
 
 import util.graph.Graph;
 import util.graph.GraphBuilder;
+import util.graph.Node;
 
 
+/**
+ * Generates graph with various random properties.
+ * 
+ * TODO: Integrate with the Environment Editor.
+ * 
+ * @author Pablo
+ */
 public class RandomGraphGenerator {
 	private Random random;
 
@@ -167,11 +175,11 @@ public class RandomGraphGenerator {
 	public static void main(String[] args) {
 		RandomGraphGenerator generator = new RandomGraphGenerator();
 		
-		Graph graph = generator.generateUndirected(7, 1, 3, 10, 20);
+		Graph graph = generator.generateUndirected(7, 1, 4, 1, 7);
 		
-//		for (Node n : graph.getNodees()) {
-//			System.out.printf("Degree[%s] = %s\n", n.getLabel(), n.getDegree());
-//		}
+		for (Node n : graph.getNodees()) {
+			System.out.printf("Degree[%s] = %s\n", n.getLabel(), n.getDegree());
+		}
 
 		System.out.print (graph.fullToXML(0));
 	}

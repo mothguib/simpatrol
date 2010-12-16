@@ -1,4 +1,4 @@
-package tools.test.client_types;
+package tools.configuration_files.client_types;
 
 public class CRClientType extends ClientType {
 	

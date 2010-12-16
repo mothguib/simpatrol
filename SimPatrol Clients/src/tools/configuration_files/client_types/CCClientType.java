@@ -1,10 +1,10 @@
-package tools.test.client_types;
+package tools.configuration_files.client_types;
 
-public class HPCCClientType extends ClientType {
+public class CCClientType extends ClientType {
 	
-	public HPCCClientType(int firstAgentTypeQuantity) {
+	public CCClientType(int firstAgentTypeQuantity) {
 		this.agentTypes = new AgentType[2];
-		this.name = "hpcc";
+		this.name = "cc";
 		
 		//Agentes normais
 		int[] allowedPerceptions1 = {0, 3, 4};

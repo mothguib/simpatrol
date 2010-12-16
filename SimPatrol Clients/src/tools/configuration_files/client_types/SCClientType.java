@@ -1,4 +1,4 @@
-package tools.test.client_types;
+package tools.configuration_files.client_types;
 
 import java.util.ArrayList;
 import java.util.List;
