@@ -351,7 +351,7 @@ public class MySetup extends JDialog implements ActionListener {
 		}
 		
 		if(e.getSource() == file_path_btn){
-			JFileChooser fd = new JFileChooser();
+			JFileChooser fd = new JFileChooser(".");
 			int validate = fd.showOpenDialog(this);
 			
 			if(validate == JFileChooser.APPROVE_OPTION){
