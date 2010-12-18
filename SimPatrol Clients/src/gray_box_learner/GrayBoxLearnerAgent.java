@@ -67,9 +67,6 @@ public class GrayBoxLearnerAgent extends Agent {
 	 */
 	private int na;
 	
-	// tries to perceive the nid attribute
-	boolean perceived_nid = false;
-	
 	private boolean stopped = false;
 
 
@@ -440,6 +437,7 @@ public class GrayBoxLearnerAgent extends Agent {
 	private int[] getStateItemValues() {
 		int[] stateItemValues;
 		int nextIndex = 0;
+		
 		if (GrayBoxLearnerAgent.GENERALIZED) {
 			stateItemValues = new int[3];
 		} else {

@@ -3,6 +3,11 @@ package gray_box_learner;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
+
+import util.file.FileReader;
+import util.graph.Graph;
+import util.graph.GraphTranslator;
+import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
 import common.Agent;
@@ -43,11 +48,10 @@ public final class GrayBoxLearnerClient extends Client {
 	 *            agent.
 	 * @param is_learning_phase
 	 *            TRUE if the agent is in its learning phase, FALSE if not.
-	 * @param state_items_cardinality
-	 *            Array that holds the number of possible values for each item
-	 *            of a state.
-	 * @param actions_per_state_count
-	 *            The maximum number of possible actions per state.
+	 * @param numNodes
+	 *            Number of nodes of the graph.
+	 * @param maxOutDegree
+	 *            The maximum number of edges that 'leaves' a node.
 	 * @param generalized
 	 * 			  If the agents are GGBLA agents
 	 * 
@@ -59,13 +63,18 @@ public final class GrayBoxLearnerClient extends Client {
 			String log_file_path, int time_of_simulation,
 			boolean is_real_time_simulator, double e, double alfa_decay_rate,
 			double gama, String q_table_dir, boolean is_learning_phase,
-			int[] state_items_cardinality, int actions_per_state_count,
-			boolean generalized)
+			int numNodes, int maxOutDegree, boolean generalized)
 			throws UnknownHostException, IOException {
 		super(remote_socket_address, remote_socket_number, environment_file_path, 
 				log_file_path, time_of_simulation, is_real_time_simulator);
-		GrayBoxLearnerAgent.configureLearningEngine(e, alfa_decay_rate, gama,
-				state_items_cardinality, actions_per_state_count);
+		
+		if (generalized) {
+			GrayBoxLearnerAgent.configureLearningEngine(e, alfa_decay_rate, gama,
+				new int[]{maxOutDegree, maxOutDegree, maxOutDegree+1}, maxOutDegree);
+		} else {
+			GrayBoxLearnerAgent.configureLearningEngine(e, alfa_decay_rate, gama,
+				new int[]{numNodes, maxOutDegree, maxOutDegree, maxOutDegree+1}, maxOutDegree);
+		}
 		GrayBoxLearnerAgent.setQtableDirectory(q_table_dir);
 		GrayBoxLearnerAgent.setIsLearningPhase(is_learning_phase);
 		GrayBoxLearnerAgent.GENERALIZED = generalized;
@@ -106,9 +115,9 @@ public final class GrayBoxLearnerClient extends Client {
 	 *             index 7: The rate of the decaying of the alpha value in the q-learning algorithm. 
 	 *             index 8: The discount factor in the q-learning algorithm. 
 	 *             index 9: The directory to salve the q-table values. 
-	 *             index 10: "true" if the agent is learning to patrol the environment, "false" if not. 
-	 *             index 11: The number of possible actions per state of the environment. 
-	 *             other indexes: The cardinality of each item of a state.
+	 *             index 10: If it is a learning phase: "true" if the agent is learning to patrol 
+	 *                       the environment, "false" if not. 
+	 *             index 11: If it is the generalized (GGBLA) or the standard (GBLA) version of the agents.
 	 */
 	public static void main(String[] args) {
 		System.out.println("Gray box learner agents!");
@@ -125,37 +134,35 @@ public final class GrayBoxLearnerClient extends Client {
 			double gama = Double.parseDouble(args[8]);
 			String q_table_dir = args[9];
 			boolean is_learning_phase = Boolean.parseBoolean(args[10]);
+			boolean generalized = Boolean.parseBoolean(args[11]);
 
-			int actions_per_state_count = Integer.parseInt(args[11]);
-			int[] state_items_cardinality = new int[args.length - 12];
-			for (int i = 0; i < state_items_cardinality.length; i++) {
-				state_items_cardinality[i] = Integer.parseInt(args[i + 17]);
-			}
+			FileReader freader = new FileReader(environment_file_path);
+			String environment_content = freader.readWholeFile();
+			Graph graph = GraphTranslator.getGraphs(GraphTranslator.parseString(environment_content))[0];
 			
-			boolean generalized;
-			if (state_items_cardinality.length == 3) {
-				System.out.println("Generalized!");
-				generalized = true;
-			} else {
-				generalized = false;
+			int numNodes = graph.getNodees().length;
+			int maxOutDegree = 0;
+			for (Node n : graph.getNodees()) {
+				if (n.getOutEdges().length > maxOutDegree) {
+					maxOutDegree = n.getOutEdges().length;
+				}
 			}
 
-			GrayBoxLearnerClient client = new GrayBoxLearnerClient(
-					remote_socket_address, remote_socket_number,
-					environment_file_path, log_file_path, time_of_simulation,
-					is_real_time_simulator, e, alfa_decay_rate, gama,
-					q_table_dir, is_learning_phase, state_items_cardinality,
-					actions_per_state_count, generalized);
+			GrayBoxLearnerClient client = new GrayBoxLearnerClient(remote_socket_address, 
+					remote_socket_number, environment_file_path, log_file_path, time_of_simulation,
+					is_real_time_simulator, e, alfa_decay_rate, gama, q_table_dir, 
+					is_learning_phase, numNodes, maxOutDegree, generalized);
+		
 			client.start();
+		
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java gray_box_learner.GrayBoxLearnerClient "
+					.println("Usage:\n  \"java gray_box_learner.GrayBoxLearnerClient "
 							+ "<IP address> <Remote socket number> <Environment file path> "
-							+ "<Log file name> <Time of simulation> <Is real time simulator? (true | false)> "
+							+ "<Log file name> <Time of simulation> <Is real time simulator? (true|false)> "
 							+ "<E-greedy value> <Alpha decay rate> <Discount factor> "
-							+ "<Q-table values directory> <Is learning phase? (true | false)> "
-							+ "<Number of possible actions per state> "
-							+ "<Cardinality of each item of the state>*\"");
+							+ "<Q-table values directory> <Is learning phase? (true|false)> "
+							+ "<Is generalized? (true|false)>\"");
 		}
 	}
 }
