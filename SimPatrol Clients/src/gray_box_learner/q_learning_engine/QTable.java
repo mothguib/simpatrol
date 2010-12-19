@@ -123,7 +123,6 @@ public class QTable {
 
 		// for each action of the given state, finds the best one
 		int actions_count = this.ACTIONS_PER_STATE_COUNT[state_id];
-		System.out.println("read ACTIONS[state" + state_id + "] : " + actions_count);
 
 		for (int i = 0; i < actions_count; i++)
 			if (this.VALUES[state_id][i] > best_q_value) {
@@ -224,7 +223,6 @@ public class QTable {
 	 *            The number of possible actions.
 	 */
 	public void setPossibleActionsCount(int state_id, int actions_count) {
-		System.out.println("set ACTIONS[state" + state_id + "] = " + actions_count);
 		this.ACTIONS_PER_STATE_COUNT[state_id] = actions_count;
 	}
 
