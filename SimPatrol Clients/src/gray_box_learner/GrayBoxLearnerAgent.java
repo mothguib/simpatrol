@@ -17,6 +17,9 @@ import common.Agent;
 /**
  * Implements gray box learner agents, with selfish utility, as it is described
  * in the work of SANTANA [2004].
+ * 
+ * In the current implementation, the map must use nodes named "v1" to "vN" 
+ * (or named by any letter followed by a number of the sequence 1..N).
  */
 public class GrayBoxLearnerAgent extends Agent {
 
@@ -24,9 +27,6 @@ public class GrayBoxLearnerAgent extends Agent {
 	public static boolean GENERALIZED;
 	
 	LinkedList<String> perceptions;
-	
-	// tries to find the ua and mo values
-	boolean perceived_ua_mo = false;
 	
 	/** The engine that implements the q-learning algorithm. */
 	private QLearningEngine learning_engine;
@@ -167,6 +167,8 @@ public class GrayBoxLearnerAgent extends Agent {
 
 				// updates the nid
 				this.nid = nid;
+				
+				print("NID: " + this.nid);
 
 				// signalizes that the nid was updated
 				return true;
@@ -290,7 +292,9 @@ public class GrayBoxLearnerAgent extends Agent {
 						this.ua = i + 1;
 						break;
 					}
-
+			
+			print("UA (last node): " + this.ua);
+			
 			// configures the mo value
 			// holds the biggest idleness found by the agent
 			double biggest_idleness = (-1) * Double.MAX_VALUE;
@@ -305,6 +309,9 @@ public class GrayBoxLearnerAgent extends Agent {
 
 			// configures the current neighborhood of the agent
 			this.neighborhood = neighborhood;
+			
+			print("MO: " + this.mo);
+			print("neighbors: " + this.neighborhood);
 
 			// returns the success of the operation
 			return true;
@@ -335,6 +342,9 @@ public class GrayBoxLearnerAgent extends Agent {
 					System.err.println("Somebody going to " + message);
 
 					this.na = i + 2;
+					
+					print("NA: " + this.na);
+					
 					return true;
 				}
 		}
@@ -400,7 +410,7 @@ public class GrayBoxLearnerAgent extends Agent {
 
 		// the goal node
 		String goal_node = goal_node_idleness.STRING;
-		System.err.println("Goal node " + goal_node);
+		print("Goal node " + goal_node);
 
 		// sends the message with its goal node
 		String message_2 = "<action type=\"3\" message=\"" + goal_node
@@ -416,7 +426,7 @@ public class GrayBoxLearnerAgent extends Agent {
 		if (this.na - 1 == action_id)
 			return 0;
 		else if (this.mo == action_id) {
-			System.err.println("Going to the idlest.");
+			print("Going to the idlest.");
 			return Math.pow(goal_node_idleness.DOUBLE, 2);
 		} else
 			return goal_node_idleness.DOUBLE;
@@ -472,7 +482,6 @@ public class GrayBoxLearnerAgent extends Agent {
 				perceived_nid = this.perceiveNid(perceptions.get(i));
 
 				if (perceived_nid) {
-					System.err.println("current node " + this.nid);
 					break;
 				}
 			}
@@ -498,7 +507,6 @@ public class GrayBoxLearnerAgent extends Agent {
 				}
 
 				if (perceived_ua_mo) {
-					System.err.println(this.neighborhood);
 					break;
 				}
 			}
@@ -565,7 +573,6 @@ public class GrayBoxLearnerAgent extends Agent {
 					perceived_nid = this.perceiveNid(perceptions.get(i));
 
 					if (perceived_nid) {
-						System.err.println("current node nid= " + this.nid);
 						break;
 					}
 				}
@@ -592,7 +599,6 @@ public class GrayBoxLearnerAgent extends Agent {
 					}
 
 					if (perceived_ua_mo) {
-						System.err.println(this.neighborhood);
 						break;
 					}
 				}
@@ -632,7 +638,7 @@ public class GrayBoxLearnerAgent extends Agent {
 			// sets the duration of the last action to the engine
 			this.learning_engine
 					.setLastActionDuration(this.last_action_duration);
-			System.err.println("Action duration " + this.last_action_duration);
+			print("Action duration " + this.last_action_duration);
 
 			// configures the reward of the action
 			this.learning_engine.setReward(reward + this.last_action_duration);
@@ -656,6 +662,11 @@ public class GrayBoxLearnerAgent extends Agent {
 		}
 	}
 
+	/** Print a message with the identifier of the agent */
+	private void print(String message) {
+		System.out.println("[" + id.toUpperCase() + "] " + message);
+	}
+	
 	/**
 	 * Turns this class into an executable one. Useful when running this agent
 	 * in an individual machine.
