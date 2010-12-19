@@ -495,18 +495,6 @@ public final class PerceptionDaemon extends AgentDaemon {
 				// changes the agent's state to JUST_PERCEIVED
 				this.AGENT.setState(AgentStates.JUST_PERCEIVED);
 			}
-			else
-			{
-				Perception[] perceptions = this.producePerceptions();
-				boolean sent_succesfully = true;
-				// for each perception, sends it to the remote agent
-				for (int i = 0; i < perceptions.length; i++) {
-					if (perceptions[i] instanceof BroadcastPerception)
-						sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
-						while(!sent_succesfully)
-							sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
-				}
-			}
 		}
 	}
 	
