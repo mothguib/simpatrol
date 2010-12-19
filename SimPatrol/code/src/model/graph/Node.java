@@ -268,12 +268,17 @@ public class Node implements XMLable, Visible {
 	 * @return The idleness of the node.
 	 */
 	public double getIdleness() {
-		double idleness;
 		if (Node.time_counter != null)
-			idleness = Node.time_counter.getElapsedTime() - this.last_visit_time;
+			return Node.time_counter.getElapsedTime() - this.last_visit_time;
 		else
-			idleness =  Math.abs(this.last_visit_time);
-		return idleness*this.getPriority();
+			return Math.abs(this.last_visit_time);
+	}
+	
+	/**
+	 * Returns the product of the idleness by the priority.
+	 */
+	public double getCombinedIdleness() {
+		return this.getIdleness() * this.getPriority();
 	}
 
 	/**
@@ -488,7 +493,7 @@ public class Node implements XMLable, Visible {
 		// fills the buffer
 		buffer.append("<node id=\"" + this.id + "\" label=\"" + this.label
 				+ "\" priority=\"" + this.priority + "\" visibility=\""
-				+ this.visibility + "\" idleness=\"" + this.getIdleness()
+				+ this.visibility + "\" idleness=\"" + this.getCombinedIdleness()
 				+ "\" fuel=\"" + this.fuel + "\" is_enabled=\"true" + "\"/>\n");
 
 		// returns the buffer content
@@ -506,7 +511,7 @@ public class Node implements XMLable, Visible {
 		// fills the buffer
 		buffer.append("<node id=\"" + this.id + "\" label=\"" + this.label
 				+ "\" priority=\"" + this.priority + "\" idleness=\""
-				+ this.getIdleness() + "\" fuel=\"" + this.fuel + "\"/>\n");
+				+ this.getCombinedIdleness() + "\" fuel=\"" + this.fuel + "\"/>\n");
 
 		// returns the buffer content
 		return buffer.toString();
