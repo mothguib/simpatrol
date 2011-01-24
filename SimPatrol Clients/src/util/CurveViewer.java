@@ -344,7 +344,6 @@ public class CurveViewer extends JFrame implements ActionListener{
 	}
 	
 	
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == close)
 			this.dispose();
