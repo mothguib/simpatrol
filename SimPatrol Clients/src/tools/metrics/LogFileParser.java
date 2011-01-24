@@ -49,15 +49,12 @@ public class LogFileParser implements DocHandler {
 	}
 	
 
-	@Override
 	public void startDocument() throws XMLParseException {
 	}
 
-	@Override
 	public void endDocument() throws XMLParseException {
 	}
 
-	@Override
 	public void startElement(String nameSpace, String tag,
 			Map<String, String> attributes, int line, int col)
 			throws XMLParseException {
@@ -120,16 +117,13 @@ public class LogFileParser implements DocHandler {
 		
 	}
 
-	@Override
 	public void endElement(String nameSpace, String tag)
 			throws XMLParseException {
 	}
 
-	@Override
 	public void text(String str, int line, int col) throws XMLParseException {
 	}
 
-	@Override
 	public void text(String str, boolean cdata, int line, int col)
 			throws XMLParseException {
 	}
