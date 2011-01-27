@@ -24,6 +24,10 @@ import model.interfaces.Visible;
  * @developer New CompoundAction classes must change this one.
  */
 public abstract class CompoundActionsParser {
+    // Precision that will be considered in double comparisons.
+	private static final double PRECISION = 0.0001d;
+
+
 	/* Methods. */
 	/**
 	 * Parses the GoToAction objects into time chained TeleportAction objects.
@@ -79,12 +83,12 @@ public abstract class CompoundActionsParser {
 		// if the acceleration exceeds the acceleration limitation,
 		// sets it as the acceleration limitation
 		if (acceleration_limitation > -1
-				&& acceleration > acceleration_limitation)
+				&& greater(acceleration, acceleration_limitation) )
 			acceleration = acceleration_limitation;
 
 		// if the initial speed exceeds the speed limitation,
 		// sets it as the speed limitation
-		if (speed_limitation > -1 && current_initial_speed > speed_limitation)
+		if (speed_limitation > -1 && greater(current_initial_speed, speed_limitation) )
 			current_initial_speed = speed_limitation;
 
 		// current displacement
@@ -142,7 +146,7 @@ public abstract class CompoundActionsParser {
 			double remained_length = path_edge.getLength()
 					- current_elapsed_length;
 
-			if (remained_length > current_displacement) {
+			if ( greater(remained_length, current_displacement) ) {
 				current_elapsed_length = current_elapsed_length
 						+ current_displacement;
 
@@ -153,7 +157,7 @@ public abstract class CompoundActionsParser {
 				// the objects that shall become visible during the teleport
 				LinkedList<Visible> visible_objects = new LinkedList<Visible>();
 
-				while (current_displacement >= remained_length) {
+				while ( greaterOrEqual(current_displacement, remained_length) ) {
 					current_displacement = current_displacement
 							- remained_length;
 					path_node = path_edge
@@ -176,8 +180,8 @@ public abstract class CompoundActionsParser {
 
 						return teleport_actions.toArray(new TeleportAction[0]);
 					}
-					
-					if (current_displacement == 0) {
+
+					if ( equal(current_displacement, 0) ) {
 						teleport_actions.add(new TeleportAction(current_graph_node, null, 
 													0, visible_objects.toArray(new Visible[0])));
 					}
@@ -199,7 +203,7 @@ public abstract class CompoundActionsParser {
 				
 				} //end inner while
 
-				if (current_displacement > 0) {
+				if ( greater(current_displacement, 0)) {
 					current_elapsed_length = current_displacement;
 
 					teleport_actions.add(new TeleportAction(
@@ -216,7 +220,7 @@ public abstract class CompoundActionsParser {
 			current_initial_speed = current_initial_speed + acceleration
 					* time_rate;
 			if (speed_limitation > -1
-					&& current_initial_speed > speed_limitation) {
+					&& greater(current_initial_speed, speed_limitation) ) {
 				current_initial_speed = speed_limitation;
 			}
 		
@@ -248,7 +252,7 @@ public abstract class CompoundActionsParser {
 			stamina_factor = action.getStamina();
 
 		// if the stamina factor is zero, returns an empty plan
-		if (stamina_factor == 0)
+		if ( equal(stamina_factor, 0) )
 			return new AtomicRechargeAction[0];
 
 		// holds the needed atomic actions
@@ -260,10 +264,59 @@ public abstract class CompoundActionsParser {
 			atomic_actions.add(new AtomicRechargeAction(stamina_factor));
 
 		double remained_stamina = action.getStamina() % stamina_factor;
-		if (remained_stamina > 0)
+		if ( greater(remained_stamina, 0) )
 			atomic_actions.add(new AtomicRechargeAction(remained_stamina));
 
 		// returns the answer
 		return atomic_actions.toArray(new AtomicRechargeAction[0]);
 	}
+	
+	
+	/**
+	 * Tests if "a <= b" considering the precision. 
+	 */
+	private static boolean equal(double a, double b) {
+		return Math.abs(a-b) < PRECISION;
+	}
+	
+	/**
+	 * Tests if "left < right" considering the precision. 
+	 */
+	private static boolean less(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return false;
+		}
+		return (left < right);
+	}
+	
+	/**
+	 * Tests if "left <= right" considering the precision. 
+	 */
+	private static boolean lessOrEqual(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return true;
+		}
+		return (left < right);
+	}
+
+	/**
+	 * Tests if "left > right" considering the precision. 
+	 */
+	private static boolean greater(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return false;
+		}
+		return (left > right);
+	}
+	
+	/**
+	 * Tests if "left >= right" considering the precision. 
+	 */
+	private static boolean greaterOrEqual(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return true;
+		}
+		return (left > right);
+	}
+	
 }
