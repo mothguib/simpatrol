@@ -159,9 +159,17 @@ public class CycledCoordinatorAgent extends Agent {
 
 		for (String solution_step : this.PLAN) {
 			for (int i = 0; i < this.AGENTS_POSITIONS.size(); i = i + 2)
-				if (this.AGENTS_POSITIONS.get(i + 1).equals(solution_step))
-					sorted_agents.add(this.AGENTS_POSITIONS.get(i));
-
+				if (this.AGENTS_POSITIONS.get(i + 1).equals(solution_step)){
+					String currentSorted = this.AGENTS_POSITIONS.get(i);
+					boolean alreadySorted = false;
+					for(int k = 0; k < sorted_agents.size(); k++){
+						if( sorted_agents.get(k).equals(currentSorted) ) {
+							alreadySorted = true;
+							break;
+						}
+					}
+					if(!alreadySorted) sorted_agents.add(this.AGENTS_POSITIONS.get(i));
+				}
 			// if all the agents were sorted, quits the loop
 			if (sorted_agents.size() == this.AGENTS_POSITIONS.size() / 2)
 				break;
