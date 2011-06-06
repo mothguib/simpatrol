@@ -1,16 +1,19 @@
 package launchers;
 
-import heuristic_cognitive_coordinated_OLD.HeuristicCognitiveCoordinatedAgent_OLD;
-import heuristic_cognitive_coordinated_OLD.HeuristicCognitiveCoordinatorAgent_OLD;
+import heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedAgent;
+import heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedClient;
+import heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatorAgent;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 
-import util.net_OLD.TCPClientConnection_OLD;
-import util.net_OLD.UDPClientConnection_OLD;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
 
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 public class HeuristicCogCoordLauncher extends Launcher {
 
@@ -26,22 +29,22 @@ public class HeuristicCogCoordLauncher extends Launcher {
 
 	@Override
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers) throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 		
 		for (int i = 0; i < agent_ids.length; i++) {
-			Agent_OLD agent = null;
+			Agent agent = null;
 		
 			if (agent_ids[i].equals("coordinator"))
-				agent = new HeuristicCognitiveCoordinatorAgent_OLD();
+				agent = new HeuristicCognitiveCoordinatorAgent();
 			else
-				agent = new HeuristicCognitiveCoordinatedAgent_OLD(agent_ids[i],
+				agent = new HeuristicCognitiveCoordinatedAgent(agent_ids[i],
 						this.IS_REAL_TIME_SIMULATOR);
 		
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 		
 			agent.start();

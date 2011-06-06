@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 
-import util.net_OLD.TCPClientConnection_OLD;
-import util.net_OLD.UDPClientConnection_OLD;
-import cognitive_coordinated_OLD.CognitiveCoordinatedAgent_OLD;
-import cognitive_coordinated_OLD.CognitiveCoordinatorAgent_OLD;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
+import cognitive_coordinated.CognitiveCoordinatedAgent;
+import cognitive_coordinated.CognitiveCoordinatorAgent;
 
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 /**
  * Implements a client that connects to the SimPatrol server and configures it,
@@ -63,22 +63,22 @@ public final class CognitiveCoordinatedLauncher extends Launcher {
 
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 			throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 
 		for (int i = 0; i < agent_ids.length; i++) {
-			Agent_OLD agent = null;
+			Agent agent = null;
 
 			if (agent_ids[i].equals("coordinator"))
-				agent = new CognitiveCoordinatorAgent_OLD(agent_ids.length -1);
+				agent = new CognitiveCoordinatorAgent(agent_ids.length -1);
 			else
-				agent = new CognitiveCoordinatedAgent_OLD(agent_ids[i],
+				agent = new CognitiveCoordinatedAgent(agent_ids[i],
 						this.IS_REAL_TIME_SIMULATOR);
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();

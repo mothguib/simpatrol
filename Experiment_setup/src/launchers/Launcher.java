@@ -9,11 +9,14 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Set;
 
-import common_OLD.Agent_OLD;
-
 import log_clients.LogFileClient;
 import util.file.FileReader;
-import util.net_OLD.TCPClientConnection_OLD;
+import util.net.TCPClientConnection;
+
+import common.Agent;
+
+import control.simulator.CycledSimulator;
+import control.simulator.Simulator;
 
 /**
  * Implements a client that connects to the SimPatrol server and configures it,
@@ -22,11 +25,14 @@ import util.net_OLD.TCPClientConnection_OLD;
 public abstract class Launcher extends Thread {
 	/* Attributes. */
 	
-	private final String ENVIRONMENT_DIR_PATH;
+	private Simulator simulator;
 	
-	private final String ENVIRONMENT_GEN_NAME;
 	
-	private final int NUM_ENV;
+	protected final String ENVIRONMENT_DIR_PATH;
+	
+	protected final String ENVIRONMENT_GEN_NAME;
+	
+	protected final int NUM_ENV;
 
 	private final String LOG_DIR_PATH;
 	
@@ -39,10 +45,10 @@ public abstract class Launcher extends Thread {
 	protected final boolean IS_REAL_TIME_SIMULATOR;
 
 	/** The TCP connection with the server. */
-	protected TCPClientConnection_OLD CONNECTION;
+	protected TCPClientConnection CONNECTION;
 
 	/** The set of agents acting in the simulation. */
-	protected Set<Agent_OLD> agents;
+	protected Set<Agent> agents;
 
 	/** The client added to log the simulation. */
 	private LogFileClient log_client;
@@ -92,6 +98,15 @@ public abstract class Launcher extends Thread {
 		this.log_client = null;
 	}
 	
+	
+	private void createAndStartSimulator(){
+		try {
+			simulator = new CycledSimulator(5000, 0.005);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Obtains the environment from the referred file and configures it into the
@@ -254,7 +269,7 @@ public abstract class Launcher extends Thread {
 		if (this.agents != null) {
 			Object[] agents_array = this.agents.toArray();
 			for (int i = 0; i < agents_array.length; i++)
-				((Agent_OLD) agents_array[i]).stopWorking();
+				((Agent) agents_array[i]).stopWorking();
 			
 			this.agents.clear();
 		}
@@ -267,7 +282,7 @@ public abstract class Launcher extends Thread {
 	
 	
 	try {
-		this.CONNECTION = new TCPClientConnection_OLD("127.0.0.1", 5000);
+		this.CONNECTION = new TCPClientConnection("127.0.0.1", 5000);
 	} catch (UnknownHostException e1) {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();

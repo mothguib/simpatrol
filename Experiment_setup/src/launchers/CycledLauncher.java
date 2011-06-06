@@ -4,45 +4,47 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 
-import util.net_OLD.TCPClientConnection_OLD;
-import util.net_OLD.UDPClientConnection_OLD;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
 
-import common_OLD.Agent_OLD;
+import common.Agent;
 
-import cycled_OLD.CycledAgent_OLD;
-import cycled_OLD.CycledCoordinatorAgent_OLD;
+import cycled.CycledAgent;
+import cycled.CycledCoordinatorAgent;
 
 public class CycledLauncher extends Launcher {
+	boolean use_precise_solution;
 
 	public CycledLauncher(String environment_dir_path, String env_gen_name,
 			int numEnv, String log_dir_path, 
 			String log_gen_name,
-			int time_of_simulation) throws UnknownHostException, IOException {
+			int time_of_simulation, boolean use_precise_solution) throws UnknownHostException, IOException {
 		super(environment_dir_path, 
 				env_gen_name, numEnv, 
 				log_dir_path, log_gen_name,
 				time_of_simulation);
+		this.use_precise_solution = use_precise_solution;
 
 	}
 
 	@Override
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 	throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 		
 		for (int i = 0; i < agent_ids.length; i++) {
-			Agent_OLD agent = null;
+			Agent agent = null;
 		
 			if (agent_ids[i].equals("coordinator"))
-				agent = new CycledCoordinatorAgent_OLD();
+				agent = new CycledCoordinatorAgent(this.use_precise_solution);
 			else
-				agent = new CycledAgent_OLD(agent_ids[i]);
+				agent = new CycledAgent(agent_ids[i]);
 		
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 		
 			agent.start();
@@ -55,18 +57,7 @@ public class CycledLauncher extends Launcher {
 	 * Turns this class into an executable one.
 	 * 
 	 * @param args
-	 *            Arguments: index 0: The IP address of the SimPatrol server.
-	 *            index 1: The number of the socket that the server is supposed
-	 *            to listen to this client. index 2: The path of the file that
-	 *            contains the environment. index 3. The path of the file that
-	 *            will save the mean instantaneous idlenesses; index 4. The path
-	 *            of the file that will save the max instantaneous idlenesses;
-	 *            index 5. The path of the file that will save the mean
-	 *            idlenesses; index 6. The path of the file that will save the
-	 *            max idlenesses; index 7: The time interval used to collect the
-	 *            metrics; index 8: The path of the file that will save the
-	 *            collected events; index 9: The time of simulation. index 10:
-	 *            false if the simulator is a cycled one, true if not.
+	 *            
 	 */
 	public static void main(String[] args) {
 		System.out.println("Cycled agents!");
@@ -78,12 +69,13 @@ public class CycledLauncher extends Launcher {
 			String log_dir_path = args[3];
 			String log_gen_name = args[4];
 			int time_of_simulation= Integer.parseInt(args[5]);
+			boolean use_precise_solution = Boolean.parseBoolean(args[6]);
 
 			CycledLauncher client = new CycledLauncher(
 					environment_dir_path, 
 					env_gen_name, numEnv, 
 					log_dir_path, log_gen_name, 
-					time_of_simulation);
+					time_of_simulation, use_precise_solution);
 			client.start();
 		} catch (Exception e) {
 			System.out
@@ -91,7 +83,8 @@ public class CycledLauncher extends Launcher {
 							+ "<Environment directory path> <Environment generic name> <number of environments>\n"
 							+ "<log directory path> <Log generic name> <num of cycle in simulations> \n" 
 							+ "It will launch N simulations with the environments ENV_DIR_PATH\\ENV_GEN_NAME_i.txt \n"
-							+ "and save the logs as LOG_DIR_PATH\\LOG_GEN_NAME_i.txt");
+							+ "and save the logs as LOG_DIR_PATH\\LOG_GEN_NAME_i.txt"
+							+ "<use the precise but slow reorientation method ? (true|false)>\" an\n");
 		}
 	}
 

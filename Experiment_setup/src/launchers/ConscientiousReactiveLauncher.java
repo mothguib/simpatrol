@@ -7,10 +7,10 @@ package launchers;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import util.net_OLD.TCPClientConnection_OLD;
-import util.net_OLD.UDPClientConnection_OLD;
-import common_OLD.Agent_OLD;
-import conscientious_reactive_OLD.ConscientiousReactiveAgent_OLD;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
+import common.Agent;
+import conscientious_reactive.ConscientiousReactiveAgent;
 
 /**
  * Implements a client that connects to the SimPatrol server and configures it,
@@ -31,16 +31,16 @@ public final class ConscientiousReactiveLauncher extends Launcher {
 
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 			throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 
 		for (int i = 0; i < agent_ids.length; i++) {
-			ConscientiousReactiveAgent_OLD agent = new ConscientiousReactiveAgent_OLD();
+			ConscientiousReactiveAgent agent = new ConscientiousReactiveAgent();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();

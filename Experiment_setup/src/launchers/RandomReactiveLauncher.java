@@ -4,12 +4,11 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 
-import random_reactive_OLD.RandomReactiveAgent_OLD;
+import random_reactive.RandomReactiveAgent;
+import util.net.TCPClientConnection;
+import util.net.UDPClientConnection;
 
-import util.net_OLD.TCPClientConnection_OLD;
-import util.net_OLD.UDPClientConnection_OLD;
-
-import common_OLD.Agent_OLD;
+import common.Agent;
 
 public class RandomReactiveLauncher extends Launcher {
 
@@ -29,16 +28,16 @@ public class RandomReactiveLauncher extends Launcher {
 
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 			throws IOException {
-		this.agents = new HashSet<Agent_OLD>();
+		this.agents = new HashSet<Agent>();
 
 		for (int i = 0; i < agent_ids.length; i++) {
-			RandomReactiveAgent_OLD agent = new RandomReactiveAgent_OLD();
+			RandomReactiveAgent agent = new RandomReactiveAgent();
 
 			if (this.IS_REAL_TIME_SIMULATOR)
-				agent.setConnection(new UDPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection_OLD(this.CONNECTION
+				agent.setConnection(new TCPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 
 			agent.start();
