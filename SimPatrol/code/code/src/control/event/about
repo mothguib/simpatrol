@@ -1,3 +1,0 @@
-This package contains the events generated due to the execution
-of a simulation, as well as the class Logger that helps logging
-such events.
