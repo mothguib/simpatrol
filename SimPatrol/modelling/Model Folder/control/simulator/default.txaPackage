@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="d81vpf17vcpxt-15s1dg">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="CycledSimulator"/>
+		<property name="mod__extends" value="Simulator"/>
+		<node uin="2gpxof17vcpxt-skmtsx">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="simulation_cycles"/>
+			<link uin="ba3x9f17vcpxtsm8egy">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::2gpxof17vcpxt-skmtsx:d81vpf17vcpxt-15s1dg" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="lq33f17vcpxt-vbq7t7">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="elapsed_cycles"/>
+			<link uin="fuz8df17vcpxt1n7up1">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::lq33f17vcpxt-vbq7t7:d81vpf17vcpxt-15s1dg" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="8fzaff17vcpxt-e5k9kp">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="$name" value="nextCycle"/>
+			<property name="@url" value="element://model:project::SimPatrol/design:node:::-qbjze4ez989u5d-fvsktw:-46k66rez5xzh74-xums3p"/>
+			<node uin="yvqnf17vcpxtetghm">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="aqptff17vcpxtt14uzw">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="2wphqf17vcpxtr85m85">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="1vi6cf17vcpxt-cyqli5">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="hu84bf17vcpxt-mflt89">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="ds418f17vcpxt-1cdwde">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="8x4mlf17vcpxt-ahjm41">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="9t0v6f17vcpxt-p1kwyt">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+		</node>
+		<link uin="ieje0rf17vcq2l-o9eam">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Simulator"/>
+			<participant referencedUin="design:node:::d81vpf17vcpxt-15s1dg" role="Client"></participant>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="eybmgf17vcpxt9w07jd">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="RealTimeSimulator"/>
+		<property name="mod__extends" value="Simulator"/>
+		<node uin="cggprf17vcpxtk9q9qc">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="$name" value="simulation_time"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__final" value="true"/>
+			<link uin="3uxtuf17vcpxt-ao0whg">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::cggprf17vcpxtk9q9qc:eybmgf17vcpxt9w07jd" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="j5sfjf17vcpxt-9e1xo0">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="$name" value="endSimulation"/>
+			<node uin="est7rf17vcpxt2fzu55">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="ghu6rf17vcpxt48i79w">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="iohvef17vcpxt-qazzeg">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="dplepf17vcpxt8gaqtv">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="iwl1wf17vcpxt4xoedm">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="dbbs4f17vcpxt-lbp7ew">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="8oajrf17vcpxt-y182ov">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="a8gnhf17vcpxt4fctcz">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+		</node>
+		<link uin="ieje0rf17vcq31fsrxa9">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Simulator"/>
+			<participant referencedUin="design:node:::eybmgf17vcpxt9w07jd" role="Client"></participant>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="5fdg2f17vcpxt33cmgu">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Simulator"/>
+		<property name="mod__abstract" value="true"/>
+		<node uin="co9mf17vcpxt-qsrxax">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="$name" value="startSimulation"/>
+			<node uin="5egn7f17vcpxt-r8c4ri">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="i987of17vcpxtnkgsrh">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="hfaxuf17vcpxtp8lnp">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="cdg2uf17vcpxt21rpwu">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="8opkof17vcpxt-zc12ip">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="bpr5jf17vcpxtyr5xy0">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="1tprhf17vcpxt-4demhi">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="2gbh2f17vcpxtsou3wz">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+		</node>
+		<link uin="ix325f17vcpxt-6yg3ys">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@supplierCardinality" value="1..*"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::hyht6f17ujey8gc0qlv" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fcb4-yppci0">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::gjtoxf17uk14ugglvpc" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1frms-1xbcsx">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@supplierCardinality" value="1..*"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::f1mcnf17vaioyh63h3f" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fthmhxxz1t">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<property name="@supplierCardinality" value="1..*"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::7664yf17vaioyemex79" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fviyiqv90w">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::eskvbf17vaioy-vzb1mq" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf1v1fy6g-ww4n0k">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::5fdg2f17vcpxt33cmgu" role="Client"></participant>
+			<participant referencedUin="design:node:::axoklf17vaioy-wrqfrm" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="j360yf1826tva-4w442n">
+		<property name="$metaclass" value="Note"/>
+		<property name="$name" value="Note3"/>
+		<property name="$note_text" value="measured in seconds"/>
+		<link uin="2cnadf1826tva-ugxcmj">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::j360yf1826tva-4w442n" role="Client"></participant>
+			<participant referencedUin="design:node:::cggprf17vcpxtk9q9qc:eybmgf17vcpxt9w07jd" role="Supplier"></participant>
+		</link>
+		<link uin="gd2exf1826tva-jdxflp">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::j360yf1826tva-4w442n" role="Client"></participant>
+			<participant referencedUin="design:node:::irlyjf17vgn3ftzcdzp:25yr4f17vgn3f-3jfmyc" role="Supplier"></participant>
+		</link>
+		<link uin="6kzgtf1826tvafd9bbq">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::j360yf1826tva-4w442n" role="Client"></participant>
+			<participant referencedUin="design:node:::g88f1f17vgn3f-rwz8ud:25yr4f17vgn3f-3jfmyc" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>

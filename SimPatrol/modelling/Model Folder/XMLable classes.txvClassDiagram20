@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhf15jejai7539kx">
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<property name="$name" value="XMLable classes"/>
+		<reference referencedUin="design:node:::bjwddf17ugxj12olap6">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="15,115,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::1xpvuf17ugxj1g1i4jp:bjwddf17ugxj12olap6">
+				<property name="sourceAnchor" value="100,145"/>
+				<property name="targetAnchor" value="351,53"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15krmxi-j0j83y:-tdsqjuezu99x09-7yjjox">
+					<property name="bounds" value="192,68,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::1xpvuf17ugxj1g1i4jp:bjwddf17ugxj12olap6">
+					<property name="bounds" value="192,68,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::i172kf17ujey8agupu8">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="214,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::2faevf17ujey8-9loa3g:i172kf17ujey8agupu8">
+				<property name="sourceAnchor" value="500,320"/>
+				<property name="targetAnchor" value="320,380"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="320,320"/>
+				<property name="smooth_bendpoints" value="320,320"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rezqcfv73l0uhxz:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="323,353,24,17"/>
+				</reference>
+				<reference referencedUin="label:label:design:link:::ieje0rezqcfv73l0uhxz:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="397,323,26,17"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rezqcfv73l0uhxz:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="480,300,10,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::a85h9f17ujey8-upmb7j:i172kf17ujey8agupu8">
+				<property name="sourceAnchor" value="278,220"/>
+				<property name="targetAnchor" value="356,59"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15kw45bbij63v:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="262,95,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::a85h9f17ujey8-upmb7j:i172kf17ujey8agupu8">
+					<property name="bounds" value="262,95,67,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::56598f17ujey8-mn4qb2:i172kf17ujey8agupu8">
+				<property name="sourceAnchor" value="500,280"/>
+				<property name="targetAnchor" value="219,380"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="220,280,220,380"/>
+				<property name="smooth_bendpoints" value="220,280,220,380"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:label:design:link:::ieje0rf02v6uvn-9hxsmd:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="182,322,35,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::4nanf17ujey8-fenk9p:i172kf17ujey8agupu8">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::ju0dqf17ujey85an9iv:i172kf17ujey8agupu8">
+				<property name="sourceAnchor" value="540,340"/>
+				<property name="targetAnchor" value="540,380"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:label:design:link:::ieje0rezqceltf-nqek:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="478,352,59,17"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rezqceltf-nqek:-tdsqjuezqc7d97-1372y3">
+					<property name="bounds" value="583,283,10,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::dlwtnf17ujey8bzkqn9:i172kf17ujey8agupu8">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::j6ugpf17ujey8btcg67:i172kf17ujey8agupu8">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::hyht6f17ujey8gc0qlv">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="114,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:node:::dpurnf17ujey8-gjzlva:hyht6f17ujey8gc0qlv">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::hvrrjf17ujey8e8hjdd:hyht6f17ujey8gc0qlv">
+				<property name="sourceAnchor" value="197,220"/>
+				<property name="targetAnchor" value="353,57"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15ks2es6pdi9q:-tdsqjuf08zaefj-b32oin">
+					<property name="bounds" value="197,130,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::hvrrjf17ujey8e8hjdd:hyht6f17ujey8gc0qlv">
+					<property name="bounds" value="197,130,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::a7glof17uk14ujzrw3k">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="414,215,82,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::95nu3f17uk14u37bb5j:a7glof17uk14ujzrw3k">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::bcv9gf17uk14u-fau4pw:a7glof17uk14ujzrw3k">
+				<property name="sourceAnchor" value="259,420"/>
+				<property name="targetAnchor" value="220,420"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rf02v1gt4ocf4qr:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="230,400,24,17"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rf02v1gt4ocf4qr:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="274,360,24,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::8kgff17uk14u-sspk1p:a7glof17uk14ujzrw3k">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::3c37sf17uk14uuhvfhc:a7glof17uk14ujzrw3k">
+				<property name="sourceAnchor" value="280,460"/>
+				<property name="targetAnchor" value="580,460"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="280,520,580,520"/>
+				<property name="smooth_bendpoints" value="280,520,580,520"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:$associationRoleSupplierInplace:design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="533,463,44,17"/>
+				</reference>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rezq9lgdu-2zmgsv:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="283,463,10,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::3ws1tf17uk14u98hz9z:a7glof17uk14ujzrw3k">
+				<property name="sourceAnchor" value="441,220"/>
+				<property name="targetAnchor" value="364,59"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15ktrms-6ccx5m:-tdsqjuezo86kcy-myuo2j">
+					<property name="bounds" value="391,95,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::3ws1tf17uk14u98hz9z:a7glof17uk14ujzrw3k">
+					<property name="bounds" value="391,95,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gjtoxf17uk14ugglvpc">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="614,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::401lyf17uk14u-1cq4pg:gjtoxf17uk14ugglvpc">
+				<property name="sourceAnchor" value="380,420"/>
+				<property name="targetAnchor" value="341,420"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rezq4691w3esy4i:-tdsqjuezobw7xjpdgrr8">
+					<property name="bounds" value="351,400,10,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::29k9yf17uk14u447lft:gjtoxf17uk14ugglvpc">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::80srpf17uk14ue2lwq1:gjtoxf17uk14ugglvpc">
+				<property name="sourceAnchor" value="619,230"/>
+				<property name="targetAnchor" value="369,55"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15kw9x8-39m6ky:-tdsqjuezobw7xjpdgrr8">
+					<property name="bounds" value="461,97,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::80srpf17uk14ue2lwq1:gjtoxf17uk14ugglvpc">
+					<property name="bounds" value="461,97,67,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::af5ff17uk14u-mrcbok:gjtoxf17uk14ugglvpc">
+				<property name="sourceAnchor" value="460,420"/>
+				<property name="targetAnchor" value="500,420"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rezobwv1z1xvppb:-tdsqjuezobw7xjpdgrr8">
+					<property name="bounds" value="608,303,24,17"/>
+					<property name="weight" value="0.3670886075949367"/>
+					<property name="location_set_by_user" value="true"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::32va9f17uk14u-45ywpq">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="316,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::cafm7f17uk14u8urkl8:32va9f17uk14u-45ywpq">
+				<property name="sourceAnchor" value="361,220"/>
+				<property name="targetAnchor" value="361,60"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15mu8e5ufen22:-tdsqjuf02v05jqdqob9w">
+					<property name="bounds" value="364,132,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::cafm7f17uk14u8urkl8:32va9f17uk14u-45ywpq">
+					<property name="bounds" value="364,132,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::e2gmtf17uk14u-dyl3jm">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="516,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::guv3bf17uk14u-btmybu:e2gmtf17uk14u-dyl3jm">
+				<property name="sourceAnchor" value="520,460"/>
+				<property name="targetAnchor" value="320,460"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="520,480,320,480"/>
+				<property name="smooth_bendpoints" value="520,480,320,480"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rezq4oojb-jo0pm3:-tdsqjuezo87k6v-pzk0nw">
+					<property name="bounds" value="350,460,10,17"/>
+				</reference>
+				<reference referencedUin="label:$associationRoleClientInplace:design:link:::ieje0rezq4oojb-jo0pm3:-tdsqjuezo87k6v-pzk0nw">
+					<property name="bounds" value="482,483,38,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::9q45ff17uk14ue5oh7o:e2gmtf17uk14u-dyl3jm">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::bf408f17uk14uf4vorm:e2gmtf17uk14u-dyl3jm">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::evhfef17uk14u-lqqqmf:e2gmtf17uk14u-dyl3jm">
+				<property name="sourceAnchor" value="640,460"/>
+				<property name="targetAnchor" value="180,460"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="640,560,180,560"/>
+				<property name="smooth_bendpoints" value="640,560,180,560"/>
+				<property name="$hidden" value="true"/>
+				<reference referencedUin="label:clientCardinality:design:link:::ieje0rf02v1m11-oum8tc:-tdsqjuezo87k6v-pzk0nw">
+					<property name="bounds" value="643,463,24,17"/>
+				</reference>
+				<reference referencedUin="label:supplierCardinality:design:link:::ieje0rf02v1m11-oum8tc:-tdsqjuezo87k6v-pzk0nw">
+					<property name="bounds" value="183,463,24,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::32i38f17uk14ufdhx9y:e2gmtf17uk14u-dyl3jm">
+				<property name="sourceAnchor" value="522,220"/>
+				<property name="targetAnchor" value="367,57"/>
+				<reference referencedUin="label:realize:design:link:::32i38f17uk14ufdhx9y:e2gmtf17uk14u-dyl3jm">
+					<property name="bounds" value="455,130,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15mwmox-oy1v5z:-tdsqjuezo87k6v-pzk0nw">
+					<property name="bounds" value="455,130,67,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::9qkinf17uk14ugabye5:e2gmtf17uk14u-dyl3jm">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::55wbf17uk14u-8yo3ww:e2gmtf17uk14u-dyl3jm">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:node:::fe8ckf17uk14u5zly7o:e2gmtf17uk14u-dyl3jm">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::b16cdf17uk2xity633y">
+			<property name="bounds" value="346,35,20,20"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<reference referencedUin="label:$name:design:node:::b16cdf17uk2xity633y">
+				<property name="bounds" value="-11,30,43,17"/>
+			</reference>
+			<reference referencedUin="label:$name:design:node:::-amcqg9f15jh9en-blfuev">
+				<property name="bounds" value="-11,-20,43,17"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::9gi2yf17uk7386paoue">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="613,115,82,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::1xm7yf17uk738-5yh29g:9gi2yf17uk7386paoue">
+				<property name="sourceAnchor" value="618,144"/>
+				<property name="targetAnchor" value="370,53"/>
+				<reference referencedUin="label:realize:design:link:::1xm7yf17uk738-5yh29g:9gi2yf17uk7386paoue">
+					<property name="bounds" value="461,67,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15kqrl1kriqsa:-tdsqjuezfzdrefy796g8">
+					<property name="bounds" value="461,67,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::eykymf17var26-q6g3uo">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="532,15,162,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::8ea1if17var26-s0f40r:eykymf17var26-q6g3uo">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::h84puf17var26-2ie99d:eykymf17var26-q6g3uo">
+				<property name="sourceAnchor" value="537,50"/>
+				<property name="targetAnchor" value="371,50"/>
+				<reference referencedUin="label:realize:design:link:::h84puf17var26-2ie99d:eykymf17var26-q6g3uo">
+					<property name="bounds" value="421,30,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15kwk28xcxean:-tdsqjuezuqc9va-7eu3vt">
+					<property name="bounds" value="421,30,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::2glexf17vfk7o7esqvc">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="15,215,80,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:node:::51plef17vfk7oby8kqp:2glexf17vfk7o7esqvc">
+				<property name="$hidden" value="true"/>
+			</reference>
+			<reference referencedUin="design:link:::77s19f17vfk7oj1b5w7:2glexf17vfk7o7esqvc">
+				<property name="sourceAnchor" value="100,231"/>
+				<property name="targetAnchor" value="352,55"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf15krvb5s59fax:-tdsqjuf152j6ar4xqbxg">
+					<property name="bounds" value="193,98,67,17"/>
+				</reference>
+				<reference referencedUin="label:realize:design:link:::77s19f17vfk7oj1b5w7:2glexf17vfk7o7esqvc">
+					<property name="bounds" value="193,98,67,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:node:::he2qxf17vfk7o-n2mzpk:2glexf17vfk7o7esqvc">
+				<property name="$hidden" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::977fwf17vcg2cbz4ofu">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="13,15,163,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf17wzkk8-vwss9j:977fwf17vcg2cbz4ofu">
+				<property name="sourceAnchor" value="181,50"/>
+				<property name="targetAnchor" value="351,50"/>
+				<reference referencedUin="label:realize:design:link:::ieje0rf17wzkk8-vwss9j:977fwf17vcg2cbz4ofu">
+					<property name="bounds" value="233,30,67,17"/>
+				</reference>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

@@ -1,0 +1,2 @@
+This package contains the implementations of the metrics collected during
+the simulation of the patrolling task.

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="8j88bf17vghjr-7fjxy4">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Clock"/>
+		<property name="@stereotype" value="active"/>
+		<link uin="6yy4tf17vghjrrh3bm7">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigableExplicitly"/>
+			<participant referencedUin="design:node:::8j88bf17vghjr-7fjxy4" role="Client"></participant>
+			<participant referencedUin="design:node:::7fxyuf17vbztqy5hrpa" role="Supplier"></participant>
+		</link>
+		<node uin="jmrmof17vghjr-rghe8k">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="current_time"/>
+			<link uin="jr9ogf17vghjrsrpk85">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::jmrmof17vghjr-rghe8k:8j88bf17vghjr-7fjxy4" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+	<node uin="ia1snf17vgj7o-b9w3i0">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="UDPSocket"/>
+	</node>
+	<node uin="nrlff17vgl5z6xtpx3">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="TimeProbabilityDistribution"/>
+		<node uin="ackbif17vgl5z8olub8">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="seed"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Double"/>
+			<property name="mod__type" value="Double"/>
+			<property name="mod_Visibility" value="$private"/>
+			<link uin="j4s6sf17vgl5zdi2yvj">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::ackbif17vgl5z8olub8:nrlff17vgl5z6xtpx3" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Double" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+	<node uin="25yr4f17vgn3f-3jfmyc">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Chronometer"/>
+		<property name="@stereotype" value="active"/>
+		<link uin="i71tmf17vgn3fyxeczh">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="supplierNavigability" value="$supplierNavigable"/>
+			<participant referencedUin="design:node:::25yr4f17vgn3f-3jfmyc" role="Client"></participant>
+			<participant referencedUin="design:node:::eybmgf17vcpxt9w07jd" role="Supplier"></participant>
+		</link>
+		<node uin="g88f1f17vgn3f-rwz8ud">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="elapsed_time"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__initialValue" value="0"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<link uin="8mo7f17vgn3f-p1zwyt">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::g88f1f17vgn3f-rwz8ud:25yr4f17vgn3f-3jfmyc" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="irlyjf17vgn3ftzcdzp">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="deadline"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__final" value="true"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<link uin="ini4vf17vgn3f-12ai7u">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::irlyjf17vgn3ftzcdzp:25yr4f17vgn3f-3jfmyc" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="e8102f17vgn3f-izfx42">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="$name" value="countTime"/>
+			<node uin="cqh2cf17vgn3ffj1u72">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="dqdsgf17vgn3fvvhxjz">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="g6yoqf17vgn3fi8zmpv">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="9sr5zf17vgn3f6qxnhp">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="ec0haf17vgn3fsunmet">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="3crzrf17vgn3f-pxv8kx">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="ajvobf17vgn3f9bi2wm">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="7rgt9f17vgn3fcpcd7r">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+		</node>
+	</node>
+	<node uin="hli7hf17vgtrfn0jlrc">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Queue"/>
+		<property name="mod__abstract" value="true"/>
+	</node>
+	<node uin="dywbif1829adh1a1ss1">
+		<property name="$metaclass" value="Note"/>
+		<property name="$name" value="Note4"/>
+		<property name="$note_text" value="equals to RealTimeSimulator.simulation_time"/>
+		<link uin="2ykgcf1829adhjkq38h">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::dywbif1829adh1a1ss1" role="Client"></participant>
+			<participant referencedUin="design:node:::irlyjf17vgn3ftzcdzp:25yr4f17vgn3f-3jfmyc" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>
