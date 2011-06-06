@@ -1,16 +1,24 @@
 package control.daemon;
 
 import org.xml.sax.SAXException;
+
+import control.event.AgentActivatingEvent;
 import control.event.AgentBroadcastingEvent;
+import control.event.AgentChangingSocietyEvent;
+import control.event.AgentDeactivatingEvent;
 import control.event.AgentReceivingMessageEvent;
 import control.event.AgentRechargingEvent;
+import control.event.AgentSendingMessageEvent;
 import control.event.AgentTeleportingEvent;
 import control.event.AgentVisitEvent;
 import control.event.AgentStigmatizingEvent;
+import control.simulator.Simulator;
 import model.graph.Graph;
 import model.graph.Node;
 import model.stigma.Stigma;
 import model.agent.Agent;
+import model.agent.OpenSociety;
+import model.agent.SeasonalAgent;
 import model.agent.Society;
 import model.action.TeleportAction;
 
@@ -115,6 +123,64 @@ public aspect Logger {
 		control.event.Logger.send(event);
 	}
 
+	
+	/**
+	 * Logs the message sending
+	 */
+	pointcut SendMessage(ActionDaemon daemon, Agent target_agent) :
+		call(* Simulator.getPerceptionDaemon(..))
+		&& this(daemon) &&
+		args(target_agent);
+
+	after(ActionDaemon daemon, Agent target_agent) : SendMessage(daemon, target_agent) {
+		AgentSendingMessageEvent event = new AgentSendingMessageEvent(daemon.AGENT.getObjectId(), 
+				target_agent.getObjectId(), daemon.action_message);		
+		control.event.Logger.send(event);
+	}
+	
+	
+	/**
+	 * Logs the deactivation of an agent
+	 */
+	pointcut attendDeActivateAction(ActionDaemon daemon) : 
+		call(* SeasonalAgent.deactivate()) && 
+		this(daemon) &&
+		withincode(* ActionDaemon.attendDeActivateAction(..));
+
+	after(ActionDaemon daemon) : attendDeActivateAction(daemon) {
+		AgentDeactivatingEvent event = new AgentDeactivatingEvent(daemon.AGENT.getObjectId());
+		control.event.Logger.send(event);
+	}
+	
+	/**
+	 * Logs the activation of an agent
+	 */
+	pointcut attendActivateAction(ActionDaemon daemon, OpenSociety society) : 
+		call(* SeasonalAgent.setSociety(..)) && 
+		this(daemon) &&
+		withincode(* ActionDaemon.attendActivateAction(..)) &&
+		args(society);
+
+	after(ActionDaemon daemon, OpenSociety society) : attendActivateAction(daemon, society) {
+		AgentActivatingEvent event = new AgentActivatingEvent(daemon.AGENT.getObjectId(), society);
+		control.event.Logger.send(event);
+	}
+	
+	/**
+	 * Logs the change of society of an agent
+	 */
+	pointcut attendChangeSocietyAction(ActionDaemon daemon, OpenSociety society) : 
+		call(* SeasonalAgent.setSociety(..)) && 
+		this(daemon) &&
+		withincode(* ActionDaemon.attendChangeSocietyAction(..)) &&
+		args(society);
+
+	after(ActionDaemon daemon, OpenSociety society) : attendChangeSocietyAction(daemon, society) {
+		AgentChangingSocietyEvent event = new AgentChangingSocietyEvent(daemon.AGENT.getObjectId(), society);
+		control.event.Logger.send(event);
+	}
+	
+	
 	/**
 	 * ActionDaemon starts working
 	 */

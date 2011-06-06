@@ -9,17 +9,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import control.exception.EdgeNotFoundException;
 import control.exception.NodeNotFoundException;
-import model.action.Action;
-import model.action.ActionTypes;
-import model.action.AtomicRechargeAction;
-import model.action.BroadcastAction;
-import model.action.BroadcastSocietyAction;
-import model.action.GoToAction;
-import model.action.RechargeAction;
-import model.action.StigmatizeAction;
-import model.action.TeleportAction;
-import model.action.VisitAction;
-import model.action.WaitAction;
+import model.action.*;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
@@ -63,79 +53,117 @@ public abstract class ActionTranslator extends Translator {
 		// switches the action type
 		switch (action_type) {
 		
-		//if it is a wait action, returns it
-		case ActionTypes.WAIT: {
-			return new WaitAction();
-		}
-		
-		// if it is a visit action, returns it
-		case ActionTypes.VISIT: {
-			return new VisitAction();
-		}
-
+			//if it is a wait action, returns it
+			case ActionTypes.WAIT: {
+				return new WaitAction();
+			}
+			
+			// if it is a visit action, returns it
+			case ActionTypes.VISIT: {
+				return new VisitAction();
+			}
+	
+				// if it is a broadcast action
+			case ActionTypes.BROADCAST: {
+				// obtains the message
+				String message = action_element.getAttribute("message");
+	
+				// obtains the depth of the message
+				int message_depth = -1;
+				String str_message_depth = action_element
+						.getAttribute("message_depth");
+				if (str_message_depth.length() > 0)
+					message_depth = Integer.parseInt(str_message_depth);
+	
+				// returns the action
+				return new BroadcastAction(message, message_depth);
+			}
 			// if it is a broadcast action
-		case ActionTypes.BROADCAST: {
-			// obtains the message
-			String message = action_element.getAttribute("message");
-
-			// obtains the depth of the message
-			int message_depth = -1;
-			String str_message_depth = action_element
-					.getAttribute("message_depth");
-			if (str_message_depth.length() > 0)
-				message_depth = Integer.parseInt(str_message_depth);
-
-			// returns the action
-			return new BroadcastAction(message, message_depth);
-		}
-		// if it is a broadcast action
-		case ActionTypes.BROADCAST_SOCIETY: {
-			// obtains the message
-			String message = action_element.getAttribute("message");
-
-			// obtains the depth of the message
-			int message_depth = -1;
-			String str_message_depth = action_element
-					.getAttribute("message_depth");
-			if (str_message_depth.length() > 0)
-				message_depth = Integer.parseInt(str_message_depth);
-
-			// returns the action
-			return new BroadcastSocietyAction(message, message_depth);
-		}
-
-			// if it is a stigmatize action, returns it
-		case ActionTypes.STIGMATIZE: {
-			return new StigmatizeAction();
-		}
-
-			// if it is an atomic recharge action
-		case ActionTypes.ATOMIC_RECHARGE: {
-			// obtains the stamina value to be added to the agent
-			double stamina = 0;
-			String str_stamina = action_element.getAttribute("stamina");
-			if (str_stamina.length() > 0)
-				stamina = Double.parseDouble(str_stamina);
-
-			// return the action
-			return new AtomicRechargeAction(stamina);
-		}
-
-			// if it is a recharge action
-		case ActionTypes.RECHARGE: {
-			// obtains the stamina value to be added to the agent
-			double stamina = 0;
-			String str_stamina = action_element.getAttribute("stamina");
-			if (str_stamina.length() > 0)
-				stamina = Double.parseDouble(str_stamina);
-
-			// return the action
-			return new RechargeAction(stamina);
-		}
+			case ActionTypes.BROADCAST_SOCIETY: {
+				// obtains the message
+				String message = action_element.getAttribute("message");
+	
+				// obtains the depth of the message
+				int message_depth = -1;
+				String str_message_depth = action_element
+						.getAttribute("message_depth");
+				if (str_message_depth.length() > 0)
+					message_depth = Integer.parseInt(str_message_depth);
+	
+				// returns the action
+				return new BroadcastSocietyAction(message, message_depth);
+			}
+	
+				// if it is a stigmatize action, returns it
+			case ActionTypes.STIGMATIZE: {
+				return new StigmatizeAction();
+			}
+	
+				// if it is an atomic recharge action
+			case ActionTypes.ATOMIC_RECHARGE: {
+				// obtains the stamina value to be added to the agent
+				double stamina = 0;
+				String str_stamina = action_element.getAttribute("stamina");
+				if (str_stamina.length() > 0)
+					stamina = Double.parseDouble(str_stamina);
+	
+				// return the action
+				return new AtomicRechargeAction(stamina);
+			}
+	
+				// if it is a recharge action
+			case ActionTypes.RECHARGE: {
+				// obtains the stamina value to be added to the agent
+				double stamina = 0;
+				String str_stamina = action_element.getAttribute("stamina");
+				if (str_stamina.length() > 0)
+					stamina = Double.parseDouble(str_stamina);
+	
+				// return the action
+				return new RechargeAction(stamina);
+			}
+			
+			// if it is a broadcast action
+			case ActionTypes.SEND_MESSAGE: {
+				// obtains the message
+				String message = action_element.getAttribute("message");
+				String target = action_element.getAttribute("target_agent");
+	
+				// obtains the depth of the message
+				int message_depth = -1;
+				String str_message_depth = action_element
+						.getAttribute("message_depth");
+				if (str_message_depth.length() > 0)
+					message_depth = Integer.parseInt(str_message_depth);
+	
+				// returns the action
+				return new SendMessageAction(target, message, message_depth);
+			}
+	
+				// if it is a deactivation action
+			case ActionTypes.DEACTIVATE: 
+				return new DeActivateAction();
+			
+				// if it is an activation action
+			case ActionTypes.ACTIVATE: {
+				// obtains the message
+				String society_id = action_element.getAttribute("society_id");
+	
+				// returns the action
+				return new ActivateAction(society_id);
+			}
+			
+				// if it is a change_society action
+			case ActionTypes.CHANGE_SOCIETY: {
+				// obtains the message
+				String society_id = action_element.getAttribute("society_id");
+	
+				// returns the action
+				return new ChangeSocietyAction(society_id);
+			}
 
 			// developer: new actions must add code here
 		}
-
 		// default answer
 		return null;
 	}

@@ -39,8 +39,9 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 
 	/** The SimPatrol's simulator. */
 	private Simulator simulator;
+	private boolean   simulatorConfigured;
 
-	/* GUI components. */
+	/** GUI components. */
 	// configuration panel
 	private JPanel configuration_panel;
 
@@ -104,7 +105,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 		}
 
 		// configures this window
-		this.setTitle("SimPatrol v1.2 alfa");
+		this.setTitle("SimPatrol v1.2");
 		this.setIconImage(ImagesList.ICON_2.getImage());
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
@@ -196,9 +197,8 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	public void setVisible(boolean visibility) {
 		super.setVisible(visibility);
 
-		if (visibility){
-			if( updateRate == 0) new SimulationConfigurationGUI(this).setVisible(true);
-			else configureSimulation(realTimeMode, 5000, updateRate);
+		if (visibility && !simulatorConfigured) {
+			new SimulationConfigurationGUI(this).setVisible(true);
 		}
 	}
 
@@ -220,6 +220,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 				+ " sec");
 
 		try {
+			
 			if (is_real_time_simulation) {
 				((TitledBorder) this.configuration_panel.getBorder())
 						.setTitle("Real time simulator");
@@ -231,6 +232,9 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 				this.simulator = new CycledSimulator(port_number,
 						update_time_rate);
 			}
+			
+			this.simulatorConfigured = true;
+			
 		} catch (BindException e) {
 			JOptionPane.showMessageDialog(this,
 					"Port number already in use. The program will be closed.",
@@ -287,12 +291,19 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	/** Turns this class into an executable one. */
 	public static void main(String args[]) {
 		double updateRate;
-		boolean realTimeMode = false;
-		if( args.length >= 1){
+		boolean realTimeMode;
+		int portNumber;
+
+		SimPatrolGUI mainWindow = new SimPatrolGUI();
+		
+		if( args.length == 3){
 			updateRate = Double.parseDouble(args[0]);
-			if( args.length == 2) realTimeMode = Boolean.parseBoolean(args[1]);
-			new SimPatrolGUI(updateRate, realTimeMode).setVisible(true);
+			realTimeMode = Boolean.parseBoolean(args[1]);
+			portNumber = Integer.parseInt(args[2]);
 			
-		} else new SimPatrolGUI().setVisible(true);
+			mainWindow.configureSimulation(realTimeMode, portNumber, updateRate);
+		}
+		
+		mainWindow.setVisible(true);
 	}
 }

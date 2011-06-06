@@ -32,6 +32,13 @@ public final class OpenSociety extends Society {
 		this.agents.remove(agent);
 	}
 
+	
+	/**
+	 * adds a given agent from the society, if it is not already in it
+	 * 
+	 * @param agent
+	 *            The agent to be added.
+	 */
 	public boolean addAgent(Agent agent) {
 		// registers if the agent already exists in the society
 		boolean agent_exists = false;

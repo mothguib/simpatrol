@@ -17,10 +17,7 @@ import control.simulator.RealTimeSimulator;
 import control.simulator.SimulatorStates;
 import control.translator.ActionTranslator;
 import model.action.*;
-import model.agent.Agent;
-import model.agent.AgentStates;
-import model.agent.SeasonalAgent;
-import model.agent.Society;
+import model.agent.*;
 import model.graph.*;
 import model.limitation.*;
 import model.permission.ActionPermission;
@@ -136,7 +133,7 @@ public final class ActionDaemon extends AgentDaemon {
 	}
 
 	/**
-	 * Attends an intention of immediately recharge the stamina of the agent.
+	 * Attends an intention of immediately recharge the stbroadcastamina of the agent.
 	 * 
 	 * If the agent is not on a "fueled" node (i.e. the node's "fuel"
 	 * attribute is not TRUE), then the action has no effect.
@@ -343,7 +340,7 @@ public final class ActionDaemon extends AgentDaemon {
 						message_depth);
 
 		// obtains the societies of the simulation
-		Society[] societies = simulator.getEnvironment().getSocieties();
+		Society[] societies = simulator.getEnvironment().getActiveSocieties();
 
 		// for each society
 		for (int i = 0; i < societies.length; i++) {
@@ -395,7 +392,7 @@ public final class ActionDaemon extends AgentDaemon {
 						message_depth);
 
 		// obtains the societies of the simulation
-		Society[] societies = simulator.getEnvironment().getSocieties();
+		Society[] societies = simulator.getEnvironment().getActiveSocieties();
 
 		// for each society
 		for (int i = 0; i < societies.length; i++) {
@@ -738,8 +735,19 @@ public final class ActionDaemon extends AgentDaemon {
 	}
 	
 	
-	private void attendQuitAction(QuitAction action){
-		((SeasonalAgent)(this.AGENT)).die();
+	/**
+	 * Attends the given DeActivate action : removes the agent from its current society and
+	 * transfers it in the Unactive Society
+	 * 
+	 * @param action
+	 *            The action of Deactivation
+	 */
+	private void attendDeActivateAction(DeActivateAction action){
+		((SeasonalAgent)(this.AGENT)).deactivate();
+		((SeasonalAgent)(this.AGENT)).setSociety(simulator.getEnvironment().getInactiveSociety());
+		((SeasonalAgent)(this.AGENT)).activate();
+		
+		/*
 		simulator.stopAndRemoveAgentDaemons((Agent) this.AGENT);
 
 		if(simulator instanceof RealTimeSimulator){
@@ -751,9 +759,192 @@ public final class ActionDaemon extends AgentDaemon {
 		else {
 			((CycledSimulator)simulator).removeAgentSpentStaminas((Agent)(this.AGENT));
 		}
+		*/
+	}
+	
+	/**
+	 * Attends the given Activate action : removes the agent from the Unactive Society and
+	 * transfers it in the given society if it is an open society
+	 * 
+	 * @param action
+	 *            The action of activation
+	 */
+	private boolean attendActivateAction(ActivateAction action){
+		OpenSociety society = null;
+		for(Society soc : simulator.getEnvironment().getActiveSocieties())
+			if((soc.getObjectId().equals(action.getSocietyId())) && (soc instanceof OpenSociety)){
+				society = (OpenSociety) soc;
+				break;
+			}
+		
+		if(society != null && ((SeasonalAgent)this.AGENT).isInactive()) {
+			((SeasonalAgent)(this.AGENT)).deactivate();
+			((SeasonalAgent)(this.AGENT)).setSociety(society);
+			((SeasonalAgent)(this.AGENT)).activate();
+			
+			return true;
+		}
+
+		return false;
+		
+		/*
+		simulator.stopAndRemoveAgentDaemons((Agent) this.AGENT);
+
+		if(simulator instanceof RealTimeSimulator){
+			// stops and removes its eventual stamina controller robot
+			((RealTimeSimulator)simulator).stopAndRemoveStaminaControllerRobot((Agent)(this.AGENT));
+			
+			((RealTimeSimulator)simulator).stopAndRemoveMortalityControllerRobot((SeasonalAgent)(this.AGENT));
+		}
+		else {
+			((CycledSimulator)simulator).removeAgentSpentStaminas((Agent)(this.AGENT));
+		}
+		*/
+	}
+	
+	/**
+	 * Attends the given ChangeSociety action : removes the agent from its current society and
+	 * transfers it in the given society if it is an open society
+	 * 
+	 * @param action
+	 *            The action of activation
+	 */
+	private boolean attendChangeSocietyAction(ChangeSocietyAction action){
+		OpenSociety society = null;
+		for(Society soc : simulator.getEnvironment().getActiveSocieties())
+			if((soc.getObjectId().equals(action.getSocietyId())) && (soc instanceof OpenSociety)){
+				society = (OpenSociety) soc;
+				break;
+			}
+		
+		if(society != null) {
+			((SeasonalAgent)(this.AGENT)).deactivate();
+			((SeasonalAgent)(this.AGENT)).setSociety(society);
+			((SeasonalAgent)(this.AGENT)).activate();
+			
+			return true;
+		}
+
+		return false;
 	}
 
+	
+	
 	/**
+	 * Attends an intention of sending a message.
+	 * 
+	 * @param action
+	 *            The action of sending a message.
+	 * @param limitations
+	 *            The limitations imposed to the action.
+	 * @developer New Limitation classes can change this method.
+	 */
+	private void attendSendMessageAction(SendMessageAction action,
+			Limitation[] limitations) {
+		// holds an eventual depth limitation
+		int depth = -1;
+
+		// holds an eventual stamina limitation
+		double stamina = 0;
+
+		// for each limitation, tries to set the depth and stamina limitations
+		for (int i = 0; i < limitations.length; i++) {
+			if (limitations[i] instanceof DepthLimitation) {
+				depth = ((DepthLimitation) limitations[i]).getDepth();
+			} else if (limitations[i] instanceof StaminaLimitation) {
+				stamina = ((StaminaLimitation) limitations[i]).getCost();
+				// developer: new limitations must add code here
+			}
+		}
+
+		// if there's enough stamina to act
+		if (this.AGENT.getStamina() > stamina) {
+			// decrements the agent's stamina
+			if (stamina > 0) {
+				this.AGENT.decStamina(stamina);
+			}
+
+			// obtains the depth of the broadcasted message
+			int message_depth = action.getMessage_depth();
+
+			// if the depth of the message is bigger than the
+			// depth limitation, replace it by the depth limitation
+			if (depth > -1 && (message_depth > depth || message_depth < 0)) {
+				message_depth = depth;
+			}
+
+			// sends the message
+			this.action_message = action.getMessage();
+			this.SendMessage(action.getTargetAgent(), this.action_message, message_depth);
+		}
+	}
+	
+	
+	/**
+	 * Sends the given message to the given target agent, if it is in the same society as this.AGENT. 
+	 * Its depth must be also informed.
+	 * 
+	 * @param target_agent
+	 * 			  The agent that must get the message
+	 * @param message
+	 *            The message to be sent.
+	 * @param message_depth
+	 *            The depth of the message to be sent.
+	 */
+	private void SendMessage(String target_agent, String message, int message_depth) {
+		// obtains the visible subgraph
+		// with the given message depth
+		Graph subgraph = simulator.getEnvironment().getGraph()
+				.getVisibleEnabledSubgraph(this.AGENT.getNode(),
+						message_depth);
+
+		// obtains the societies of the simulation
+		Society[] societies = simulator.getEnvironment().getActiveSocieties();
+
+		// for each society
+		for (int i = 0; i < societies.length; i++) {
+			
+			//if the agent doesn't exists in this society skip
+			if(! societies[i].hasAgent(this.AGENT) ) continue;
+			
+			// obtains its agents
+			Agent[] agents = societies[i].getAgents();
+
+			// for each agent
+			for (int j = 0; j < agents.length; j++) {
+				// if the current agent is not the one that's acting
+				if (target_agent.equals(agents[j].getObjectId())) {
+					// obtains the node that the current agent comes from
+					Node node = agents[j].getNode();
+
+					// obtains the edge where the agent is
+					Edge edge = agents[j].getEdge();
+
+					// if the obtained node and edge are part of the
+					// subgraph
+					if (subgraph.hasNode(node)
+							&& (edge == null || subgraph.hasEdge(edge))) {
+						// sends the message to the reachable agent
+						simulator.getPerceptionDaemon(agents[j]).receiveMessage(message);
+					}
+					
+					// if we went through that part, the target agent has been reached, we can stop
+					return;
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * The Activate Agent is open to all seasonal agents, even inactive ones
+	 * All other actions need for the agent to be perpetual or active.
+	 * 
 	 * @developer New action must change this method.
 	 * @modeler This method must be modeled.
 	 */
@@ -843,221 +1034,271 @@ public final class ActionDaemon extends AgentDaemon {
 							}
 						}
 						
-						
-						// if the obtained action is a waiting one
-						if (action instanceof WaitAction) {
-							System.err.println("Agent "
-									+ this.AGENT.getObjectId() + " waiting");
-							// attends the action
-							attendWaitAction((WaitAction) action);
-	
-							attended_actions = true;
-							// quits the loop
-						}
-
-						// if the obtained action is a visiting one
-						else if (action instanceof VisitAction) {
-
-							// verifies if the agent has permission to visit
-							// nodes
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.VISIT) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId() + " visiting");
-									// attends the action
-									this.attendVisitAction(
-											(VisitAction) action,
-											permissions[i].getLimitations());
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is a broadcasting one
-						else if (action instanceof BroadcastAction) {
-
-							// verifies if the agent has permission to broadcast
-							// messages
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.BROADCAST) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " broadcasting");
-									// attends the action
-									this.attendBroadcastAction(
-											(BroadcastAction) action,
-											permissions[i].getLimitations());
-
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is a broadcasting society one
-						else if (action instanceof BroadcastSocietyAction) {
-
-							// verifies if the agent has permission to broadcast
-							// messages
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " broadcasting to your society");
-									// attends the action
-									this.attendBroadcastSocietyAction(
-											(BroadcastSocietyAction) action,
-											permissions[i].getLimitations());
-
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is a stigmatize one
-						else if (action instanceof StigmatizeAction) {
-
-							// verifies if the agent has permission to deposit
-							// stigmas
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " stigmatizing");
-									// attends the action
-									this.attendStigmatizeAction(
-											(StigmatizeAction) action,
-											permissions[i].getLimitations());
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is an atomic recharge one
-						else if (action instanceof AtomicRechargeAction) {
-
-							// verifies if the agent has permission to
-							// immediately recharge
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " atomic recharging");
-									// attends the action
-									this.attendAtomicRechargeAction(
-											(AtomicRechargeAction) action,
-											permissions[i].getLimitations());
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-						}
-						// else if the obtained action is a recharge one
-						else if (action instanceof RechargeAction) {
-
-							// verifies if the agent has permission to recharge
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.RECHARGE) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId() + " recharging");
-									// attends the action
-									this.attendRechargeAction(
-											(RechargeAction) action,
-											permissions[i].getLimitations());
-
-									// if the simulator is a cycled one,
-									// calls this.act(1)
-									if (simulator instanceof CycledSimulator)
-										this.act();
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-						}
-						// else if the action is a teleport action
-						else if (action instanceof TeleportAction) {
-
-							// verifies if the agent has permission to teleport
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.TELEPORT) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId()
-											+ " teleporting");
-									// attends the intention of action
-									this.attendTeleportAction(
-											(TeleportAction) action,
-											permissions[i].getLimitations());
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-						}
-						// else if the action is a goto action
-						else if (action instanceof GoToAction) {
-
-							// verifies if the agent has permission to move
-							ActionPermission[] permissions = this.AGENT
-									.getAllowedActions();
-
-							for (int i = 0; i < permissions.length; i++)
-								if (permissions[i].getAction_type() == ActionTypes.GOTO) {
-									System.err.println("Agent "
-											+ this.AGENT.getObjectId() + " going");
-									// attends the intention of action
-									this.attendGoToAction((GoToAction) action,
-											permissions[i].getLimitations());
-
-									// if the simulator is a cycled one,
-									// calls this.act(1)
-									if (simulator instanceof CycledSimulator)
-										this.act();
-
-									attended_actions = true;
-									// quits the loop
-									break;
-								}
-
-						}
-						
-						else if (action instanceof QuitAction){
-							if(this.AGENT instanceof SeasonalAgent){
-								System.err.println("Agent "+ this.AGENT.getObjectId() + " quitting the simulation");
-								// attends the action
-								attendQuitAction((QuitAction) action);
+						// this action is open to any agent, even inactive
+						if (action instanceof ActivateAction){
+							if((this.AGENT instanceof SeasonalAgent) && attendActivateAction((ActivateAction) action)){
+								System.err.println("Agent "+ this.AGENT.getObjectId() + " activating in society " 
+										+ ((ActivateAction) action).getSocietyId());
 		
 								attended_actions = true;
 							}
 						}
-						// developer: new action types must add code here
-
-						// registers that the agent just acted,
-						// if some action was attended
-						if (attended_actions)
-							this.AGENT.setState(AgentStates.JUST_ACTED);
+						
+						// other actions are only for active agents
+						if((this.AGENT instanceof PerpetualAgent) || !((SeasonalAgent)this.AGENT).isInactive()){
+							
+							// if the obtained action is a waiting one
+							if (action instanceof WaitAction) {
+								System.err.println("Agent "
+										+ this.AGENT.getObjectId() + " waiting");
+								// attends the action
+								attendWaitAction((WaitAction) action);
+		
+								attended_actions = true;
+								// quits the loop
+							}
+	
+							// if the obtained action is a visiting one
+							else if (action instanceof VisitAction) {
+	
+								// verifies if the agent has permission to visit
+								// nodes
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.VISIT) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId() + " visiting");
+										// attends the action
+										this.attendVisitAction(
+												(VisitAction) action,
+												permissions[i].getLimitations());
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+							}
+							// else if the obtained action is a broadcasting one
+							else if (action instanceof BroadcastAction) {
+	
+								// verifies if the agent has permission to broadcast
+								// messages
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.BROADCAST) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " broadcasting");
+										// attends the action
+										this.attendBroadcastAction(
+												(BroadcastAction) action,
+												permissions[i].getLimitations());
+	
+										// quits the loop
+										break;
+									}
+							}
+							// else if the obtained action is a broadcasting society one
+							else if (action instanceof BroadcastSocietyAction) {
+	
+								// verifies if the agent has permission to broadcast
+								// messages
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.BROADCAST_SOCIETY) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " broadcasting to your society");
+										// attends the action
+										this.attendBroadcastSocietyAction(
+												(BroadcastSocietyAction) action,
+												permissions[i].getLimitations());
+	
+										// quits the loop
+										break;
+									}
+							}
+							// else if the obtained action is a stigmatize one
+							else if (action instanceof StigmatizeAction) {
+	
+								// verifies if the agent has permission to deposit
+								// stigmas
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.STIGMATIZE) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " stigmatizing");
+										// attends the action
+										this.attendStigmatizeAction(
+												(StigmatizeAction) action,
+												permissions[i].getLimitations());
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+							}
+							// else if the obtained action is an atomic recharge one
+							else if (action instanceof AtomicRechargeAction) {
+	
+								// verifies if the agent has permission to
+								// immediately recharge
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.ATOMIC_RECHARGE) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " atomic recharging");
+										// attends the action
+										this.attendAtomicRechargeAction(
+												(AtomicRechargeAction) action,
+												permissions[i].getLimitations());
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+							}
+							// else if the obtained action is a recharge one
+							else if (action instanceof RechargeAction) {
+	
+								// verifies if the agent has permission to recharge
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.RECHARGE) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId() + " recharging");
+										// attends the action
+										this.attendRechargeAction(
+												(RechargeAction) action,
+												permissions[i].getLimitations());
+	
+										// if the simulator is a cycled one,
+										// calls this.act(1)
+										if (simulator instanceof CycledSimulator)
+											this.act();
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+							}
+							// else if the action is a teleport action
+							else if (action instanceof TeleportAction) {
+	
+								// verifies if the agent has permission to teleport
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.TELEPORT) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " teleporting");
+										// attends the intention of action
+										this.attendTeleportAction(
+												(TeleportAction) action,
+												permissions[i].getLimitations());
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+							}
+							// else if the action is a goto action
+							else if (action instanceof GoToAction) {
+	
+								// verifies if the agent has permission to move
+								ActionPermission[] permissions = this.AGENT
+										.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.GOTO) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId() + " going");
+										// attends the intention of action
+										this.attendGoToAction((GoToAction) action,
+												permissions[i].getLimitations());
+	
+										// if the simulator is a cycled one,
+										// calls this.act(1)
+										if (simulator instanceof CycledSimulator)
+											this.act();
+	
+										attended_actions = true;
+										// quits the loop
+										break;
+									}
+	
+							}
+							// else if the obtained action is a sendMessage one
+							else if (action instanceof SendMessageAction) {
+	
+								// verifies if the agent has permission to send
+								// messages
+								ActionPermission[] permissions = this.AGENT.getAllowedActions();
+	
+								for (int i = 0; i < permissions.length; i++)
+									if (permissions[i].getAction_type() == ActionTypes.SEND_MESSAGE) {
+										System.err.println("Agent "
+												+ this.AGENT.getObjectId()
+												+ " sends a message to " + ((SendMessageAction) action).getTargetAgent());
+										// attends the action
+										((SendMessageAction) action).setSenderAgent(this.AGENT.getObjectId());
+										this.attendSendMessageAction((SendMessageAction) action, permissions[i].getLimitations());
+	
+										// quits the loop
+										break;
+									}
+							}
+							
+							else if (action instanceof DeActivateAction){
+								if(this.AGENT instanceof SeasonalAgent){
+									System.err.println("Agent "+ this.AGENT.getObjectId() + " deactivating.");
+									// attends the action
+									attendDeActivateAction((DeActivateAction) action);
+			
+									attended_actions = true;
+								}
+							}
+						
+							
+							else if (action instanceof ChangeSocietyAction){
+								if(this.AGENT instanceof SeasonalAgent && attendChangeSocietyAction((ChangeSocietyAction) action)){
+									System.err.println("Agent "+ this.AGENT.getObjectId() + " changing society to "
+											+ ((ChangeSocietyAction) action).getSocietyId() + ".");
+			
+									attended_actions = true;
+								}
+							}
+							
+							// developer: new action types must add code here
+	
+							// registers that the agent just acted,
+							// if some action was attended
+							if (attended_actions)
+								this.AGENT.setState(AgentStates.JUST_ACTED);
+							
+						}
 					}
+					
+					if((this.AGENT instanceof SeasonalAgent) && ((SeasonalAgent)this.AGENT).isInactive())
+						this.AGENT.setState(AgentStates.JUST_ACTED);
+					
+					
 				}
 				/*try {
 					Thread.sleep(1);

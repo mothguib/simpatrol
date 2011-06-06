@@ -73,15 +73,31 @@ public abstract class ActionTypes {
 	public static final int BROADCAST_SOCIETY = 7;
 	
 	
+	/**
+	 * The actions of sending messages to an other agent through the graph.
+	 * see SendMessageAction 
+	 */
+	public static final int SEND_MESSAGE = 8;
+	
+	
+	/*
+	 * The following actions do not need permission to be used, but are only available 
+	 * to SeasonalAgents
+	 */
 	
 	/**
-	 * The actions of entering the society, at a time chosen by the Agent
-	 * TODO : implement this action
+	 * The actions of activating, by rejoining an open society
 	 */
-	public static final int ENTER = 11;
+	public static final int ACTIVATE = 10;
 	
 	/**
-	 * The actions of quitting the society, at a time chosen by the Agent
+	 * The actions of deactivating, by quitting an open society
 	 */
-	public static final int QUIT = 11;
+	public static final int DEACTIVATE = 11;
+	
+	
+	/**
+	 * The actions of changing of open society
+	 */
+	public static final int CHANGE_SOCIETY = 12;
 }
