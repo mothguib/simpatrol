@@ -1,3 +1,0 @@
-* New Metric subclasses must add new classes in this package;
-* New Metric subclasses must change the "MetricTypes" class.
-* New Metric subclasses must change the "control.translator.MetricTranslator" class.

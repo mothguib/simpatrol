@@ -1,1 +1,0 @@
-This package contains the essential interfaces to implement the model package.
