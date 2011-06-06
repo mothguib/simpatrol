@@ -1,0 +1,42 @@
+<society id="society_0_4_limited@s0" label="society_0_4_limited" is_closed="true">
+	<agent id="a2@d72200#12b5df66ebc" label="a2" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="0">
+			<limitation type="0">
+				<lmt_parameter value="1"/>
+			</limitation>
+		</allowed_perception>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>
+	</agent>
+	<agent id="a1@d72200#12b5df66ebc" label="a1" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="0">
+			<limitation type="0">
+				<lmt_parameter value="1"/>
+			</limitation>
+		</allowed_perception>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>
+	</agent>
+	<agent id="a3@d72200#12b5df66ebc" label="a3" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="0">
+			<limitation type="0">
+				<lmt_parameter value="1"/>
+			</limitation>
+		</allowed_perception>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>
+	</agent>
+	<agent id="a4@d72200#12b5df66ebc$3" label="a4" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="4"/>
+		<allowed_perception type="0">
+			<limitation type="0">
+				<lmt_parameter value="1"/>
+			</limitation>
+		</allowed_perception>
+		<allowed_action type="1"/>
+		<allowed_action type="2"/>
+	</agent>
+</society>
