@@ -26,6 +26,10 @@ public class AverageMetricsReport {
 		return null;
 	}
 	
+	public int size(){
+		return metrics.size();
+	}
+	
 	
 /***** Metrics based on intervals *****/
 	
@@ -39,6 +43,13 @@ public class AverageMetricsReport {
 			max += m.getMaxInterval();
 		return max/metrics.size();
 	}
+	
+	public double getAvMaxInterval(int start, int end){
+		double av = 0;
+		for(MetricsReport m : metrics)
+			av += m.getMaxInterval(start, end);
+		return av/metrics.size();
+	}
 
 	/**
 	 * Average interval between consecutive visits, considering all 
@@ -50,6 +61,13 @@ public class AverageMetricsReport {
 			av += m.getAverageInterval();
 		return av/metrics.size();
 	}
+	
+	public double getAvAverageInterval(int start, int end) {
+		double av = 0;
+		for(MetricsReport m : metrics)
+			av += m.getAverageInterval(start, end);
+		return av/metrics.size();
+	}
 
 	/**
 	 * Standard deviation of the intervals between consecutive visits, 
@@ -59,6 +77,28 @@ public class AverageMetricsReport {
 		double std = 0;
 		for(MetricsReport m : metrics)
 			std += m.getStdDevOfIntervals();
+		return std/metrics.size();
+	}
+	
+	public double getAvStdDevInterval(int start, int end) {
+		double std = 0;
+		for(MetricsReport m : metrics)
+			std += m.getStdDevOfIntervals(start, end);
+		return std/metrics.size();
+	}
+	
+	
+	public double getAvQuadraticMeanOfIntervals() {
+		double std = 0;
+		for(MetricsReport m : metrics)
+			std += m.getQuadraticMeanOfIntervals();
+		return std/metrics.size();
+	}
+	
+	public double getAvQuadraticMeanOfIntervals(int start, int end) {
+		double std = 0;
+		for(MetricsReport m : metrics)
+			std += m.getQuadraticMeanOfIntervals(start, end);
 		return std/metrics.size();
 	}
 	
@@ -76,6 +116,13 @@ public class AverageMetricsReport {
 		return max/metrics.size();
 	}
 	
+	public double getAvMaxInstantaneousIdleness(int start, int end){
+		double max = 0;
+		for(MetricsReport m : metrics)
+			max += m.getMaxInstantaeousIdleness(start, end);
+		return max/metrics.size();
+	}
+	
 	/**
 	 * Average idlenesses along the simulation, averaged by the number of nodes
 	 * (average of nodes of average in time or vice-versa).  
@@ -87,6 +134,37 @@ public class AverageMetricsReport {
 		return av/metrics.size();
 		
 	}
+	
+	
+	public double getAvAverageIdleness(int start, int end) {
+		double av = 0;
+		for(MetricsReport m : metrics)
+			av += m.getAverageIdleness(start, end);
+		return av/metrics.size();
+		
+	}
+	
+	/**
+	 * Average idlenesses along the simulation, averaged by the number of nodes
+	 * (average of nodes of average in time or vice-versa).  
+	 */
+	public double getAvStdDevOfIdleness() {
+		double av = 0;
+		for(MetricsReport m : metrics)
+			av += m.getStdDevOfIdleness();
+		return av/metrics.size();
+		
+	}
+	
+	
+	public double getAvStdDevOfIdleness(int start, int end) {
+		double av = 0;
+		for(MetricsReport m : metrics)
+			av += m.getStdDevOfIdleness(start, end);
+		return av/metrics.size();
+		
+	}
+	
 	
 	
 	/***** Metrics based on the number of visits per node *****/
@@ -149,10 +227,42 @@ public class AverageMetricsReport {
 	
 	/***** Metrics for curb representation *****/
 	
+	
+	public Double[] getAvIntervals_curb(int freq) {
+		Double[] curve = metrics.get(0).getIntervals_curb(freq);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getIntervals_curb(freq);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+
+	}
+	
+	
+	public Double[] getAvMSI_curb(int freq) {
+		Double[] curve = metrics.get(0).getMSI_curb(freq);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getMSI_curb(freq);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+
+	}
+	
 	/**
-	 * Average idleness as a function of time, considering all nodes.
+	 * Average interval as a function of time, considering all nodes.
 	 * @param freq 
-	 * 			The average idleness is given every freq turn/seconds 
+	 * 			The average interval is given every freq turn/seconds 
 	 * 			(depending on type of simulation)
 	 * 
 	 * @author Cyril Poulet
@@ -172,11 +282,24 @@ public class AverageMetricsReport {
 
 	}
 	
-	
+	public Double[] getAvAverageIdleness_curb(int freq, int start, int end) {
+		Double[] curve = metrics.get(0).getAverageIdleness_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getAverageIdleness_curb(freq, start, end);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+
+	}
 	/**
-	 * Maximum idleness as a function of time, considering all nodes.
+	 * Maximum interval as a function of time, considering all nodes.
 	 * @param freq 
-	 * 			The maximum idleness is given every freq turn/seconds 
+	 * 			The maximum interval is given every freq turn/seconds 
 	 * 			(depending on type of simulation)
 	 * 
 	 * @author Cyril Poulet
@@ -195,18 +318,46 @@ public class AverageMetricsReport {
 		return curve;
 	}
 	
+	public Double[] getAvMaxIdleness_curb(int freq, int start, int end) {
+		Double[] curve = metrics.get(0).getMaxIdleness_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getMaxIdleness_curb(freq, start, end);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+	}
+	
 	/**
 	 * Standart Deviation as a function of time, considering all nodes.
 	 * @param freq 
-	 * 			The standart deviation in idleness is given every freq turn/seconds 
+	 * 			The standart deviation in interval is given every freq turn/seconds 
 	 * 			(depending on type of simulation)
 	 * 
 	 * @author Cyril Poulet
 	 */
-	public Double[] getAvStdDev_curb(int freq) {
-		Double[] curve = metrics.get(0).getStdDev_curb(freq);
+	public Double[] getAvStdDevIdleness_curb(int freq) {
+		Double[] curve = metrics.get(0).getStdDevIdleness_curb(freq);
 		for(int i = 1; i < metrics.size(); i++){
-			Double[] mc = metrics.get(i).getStdDev_curb(freq);
+			Double[] mc = metrics.get(i).getStdDevIdleness_curb(freq);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+	}
+	
+	public Double[] getAvStdDevIdleness_curb(int freq, int start, int end) {
+		Double[] curve = metrics.get(0).getStdDevIdleness_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getStdDevIdleness_curb(freq, start, end);
 			for(int j = 0; j < curve.length; j++)
 				curve[j] += mc[j];
 		}
@@ -239,6 +390,20 @@ public class AverageMetricsReport {
 		return curve;
 	}
 	
+	public Double[] getAvVisitsNum_curb(int freq, int start, int end) {		
+		Double[] curve = metrics.get(0).getVisitsNum_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getVisitsNum_curb(freq, start, end);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+	}
+	
 	/**
 	 * Average Number of visits as a function of time, considering all nodes.
 	 * @param freq 
@@ -251,6 +416,20 @@ public class AverageMetricsReport {
 		Double[] curve = metrics.get(0).getVisitsAvg_curb(freq);
 		for(int i = 1; i < metrics.size(); i++){
 			Double[] mc = metrics.get(i).getVisitsAvg_curb(freq);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+	}
+	
+	public Double[] getAvVisitsAvg_curb(int freq, int start, int end) {	
+		Double[] curve = metrics.get(0).getVisitsAvg_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getVisitsAvg_curb(freq, start, end);
 			for(int j = 0; j < curve.length; j++)
 				curve[j] += mc[j];
 		}
@@ -284,4 +463,22 @@ public class AverageMetricsReport {
 
 	}
 	
+	public Double[] getAvVisitStdDev_curb(int freq, int start, int end) {	
+		Double[] curve = metrics.get(0).getVisitStdDev_curb(freq, start, end);
+		for(int i = 1; i < metrics.size(); i++){
+			Double[] mc = metrics.get(i).getVisitStdDev_curb(freq, start, end);
+			for(int j = 0; j < curve.length; j++)
+				curve[j] += mc[j];
+		}
+		
+		for(int j = 0; j < curve.length; j++)
+			curve[j] /= metrics.size();
+		
+		return curve;
+
+	}
+	
+
+		
+
 }
