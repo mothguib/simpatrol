@@ -1,0 +1,2 @@
+This package contains the exceptions generated due to the execution
+of SimPatrol.

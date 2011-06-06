@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="4zhv6f17vcpxtasy5n7">
+		<property name="$defaultDiagram" value="true"/>
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<reference referencedUin="design:node:::d81vpf17vcpxt-15s1dg">
+			<property name="bounds" value="15,135,158,98"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf17vcq2l-o9eam:d81vpf17vcpxt-15s1dg">
+				<property name="sourceAnchor" value="140,140"/>
+				<property name="targetAnchor" value="140,100"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::eybmgf17vcpxt9w07jd">
+			<property name="bounds" value="195,135,161,98"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf17vcq31fsrxa9:eybmgf17vcpxt9w07jd">
+				<property name="sourceAnchor" value="218,140"/>
+				<property name="targetAnchor" value="218,100"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::5fdg2f17vcpxt33cmgu">
+			<property name="bounds" value="115,15,117,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::j360yf1826tva-4w442n">
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="231,275,128,25"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::2cnadf1826tva-ugxcmj:j360yf1826tva-4w442n">
+				<property name="sourceAnchor" value="320,280"/>
+				<property name="targetAnchor" value="320,195"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="eykymf17var26-q6g3uo">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="ActionIntention"/>
+		<property name="mod__implements" value="model.interface.XMLable"/>
+		<node uin="8ea1if17var26-s0f40r">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="action_type"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::etwghf17ugxj1w3eodz"/>
+			<property name="mod__type" value="action.ActionType"/>
+			<link uin="3hyfwf17var26-9ob170">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::8ea1if17var26-s0f40r:eykymf17var26-q6g3uo" role="Client"></participant>
+				<participant referencedUin="design:node:::etwghf17ugxj1w3eodz" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="h84puf17var26-2ie99d">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="model.interface.XMLable"/>
+			<participant referencedUin="design:node:::eykymf17var26-q6g3uo" role="Client"></participant>
+			<participant referencedUin="design:node:::b16cdf17uk2xity633y" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>

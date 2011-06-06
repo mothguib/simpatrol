@@ -57,7 +57,7 @@ public final class MortalityControllerRobot extends Robot {
 			// if there's a death tpd and the object must die now
 			if (death_tpd != null && death_tpd.nextBoolean()) {
 				// kills the object
-				this.OBJECT.die();
+				this.OBJECT.deactivate();
 
 				// if the object is an agent, stops its daemons
 				if (this.OBJECT instanceof Agent) {

@@ -90,9 +90,30 @@ public final class SeasonalAgent extends Agent implements Mortal {
 		return buffer.toString();
 	}
 
-	public void die() {
+	
+	/**
+	 * Ability for the seasonal agent to deactivate. 
+	 * The agent is removed from its current society
+	 */
+	public void deactivate() {
 		// removes the agent from its society
 		this.society.removeAgent(this);
+	}
+	
+	/**
+	 * Ability for the seasonal agent to activate.
+	 * The agent is added to its current society
+	 */
+	public boolean  activate(){
+		return this.society.addAgent(this);
+	}
+	
+	
+	/**
+	 * Is the agent inactive (i.e. in the InactiveSociety) ?
+	 */
+	public boolean isInactive(){
+		return this.society.getObjectId().equals("InactiveSociety");
 	}
 
 	public EventTimeProbabilityDistribution getDeathTPD() {

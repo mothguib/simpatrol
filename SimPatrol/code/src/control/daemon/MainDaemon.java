@@ -259,7 +259,7 @@ public final class MainDaemon extends Daemon implements IMessageObserver {
 		// if an agent was found
 		if (agent != null) {
 			// FINISH HIM!
-			((Mortal) agent).die();
+			((Mortal) agent).deactivate();
 
 			// stops the agent's action and perception daemons
 			simulator.stopAndRemoveAgentDaemons(agent);

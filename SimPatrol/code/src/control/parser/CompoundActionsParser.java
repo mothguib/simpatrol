@@ -24,6 +24,10 @@ import model.interfaces.Visible;
  * @developer New CompoundAction classes must change this one.
  */
 public abstract class CompoundActionsParser {
+    // Precision that will be considered in double comparisons.
+	private static final double PRECISION = 0.0001d;
+
+
 	/* Methods. */
 	/**
 	 * Parses the GoToAction objects into time chained TeleportAction objects.
@@ -79,12 +83,12 @@ public abstract class CompoundActionsParser {
 		// if the acceleration exceeds the acceleration limitation,
 		// sets it as the acceleration limitation
 		if (acceleration_limitation > -1
-				&& acceleration > acceleration_limitation)
+				&& greater(acceleration, acceleration_limitation) )
 			acceleration = acceleration_limitation;
 
 		// if the initial speed exceeds the speed limitation,
 		// sets it as the speed limitation
-		if (speed_limitation > -1 && current_initial_speed > speed_limitation)
+		if (speed_limitation > -1 && greater(current_initial_speed, speed_limitation) )
 			current_initial_speed = speed_limitation;
 
 		// current displacement
@@ -92,21 +96,21 @@ public abstract class CompoundActionsParser {
 
 		// current node positions
 		Node current_graph_node = agent.getNode();
-		Node current_path_node = null;
+		Node path_node = null;
 
 		Node[] path_nodes = path.getNodes();
 		for (int i = 0; i < path_nodes.length; i++)
 			if (path_nodes[i].equals(current_graph_node)) {
-				current_path_node = path_nodes[i];
+				path_node = path_nodes[i];
 				break;
 			}
 
 		// current edge positions
 		Edge current_graph_edge = agent.getEdge();
 
-		Edge current_path_edge = null;
-		if (current_path_node.getEdges().length > 0)
-			current_path_edge = current_path_node.getEdges()[0];
+		Edge path_edge = null;
+		if (path_node.getEdges().length > 0)
+			path_edge = path_node.getEdges()[0];
 		else
 			return new TeleportAction[0];
 
@@ -114,7 +118,7 @@ public abstract class CompoundActionsParser {
 			Edge[] graph_edges = current_graph_node.getEdges();
 
 			for (int i = 0; i < graph_edges.length; i++)
-				if (graph_edges[i].equals(current_path_edge)) {
+				if (graph_edges[i].equals(path_edge)) {
 					current_graph_edge = graph_edges[i];
 					break;
 				}
@@ -139,10 +143,10 @@ public abstract class CompoundActionsParser {
 				return new TeleportAction[0];
 
 			// calculates the next position of the agent on the graph
-			double remained_length = current_path_edge.getLength()
+			double remained_length = path_edge.getLength()
 					- current_elapsed_length;
 
-			if (remained_length > current_displacement) {
+			if ( greater(remained_length, current_displacement) ) {
 				current_elapsed_length = current_elapsed_length
 						+ current_displacement;
 
@@ -153,11 +157,11 @@ public abstract class CompoundActionsParser {
 				// the objects that shall become visible during the teleport
 				LinkedList<Visible> visible_objects = new LinkedList<Visible>();
 
-				while (current_displacement >= remained_length) {
+				while ( greaterOrEqual(current_displacement, remained_length) ) {
 					current_displacement = current_displacement
 							- remained_length;
-					current_path_node = current_path_edge
-							.getOtherNode(current_path_node);
+					path_node = path_edge
+							.getOtherNode(path_node);
 					current_graph_node = current_graph_edge
 							.getOtherNode(current_graph_node);
 
@@ -165,7 +169,7 @@ public abstract class CompoundActionsParser {
 
 					depth_limitation--;
 
-					Edge[] edges_current_path_node = current_path_node
+					Edge[] edges_current_path_node = path_node
 							.getEdges();
 					if (edges_current_path_node.length <= 1
 							|| depth_limitation == 0) {
@@ -177,40 +181,51 @@ public abstract class CompoundActionsParser {
 						return teleport_actions.toArray(new TeleportAction[0]);
 					}
 
-					current_path_edge = edges_current_path_node[0];
-					if (current_path_edge.equals(current_graph_edge))
-						current_path_edge = edges_current_path_node[1];
+					if ( equal(current_displacement, 0) ) {
+						teleport_actions.add(new TeleportAction(current_graph_node, null, 
+													0, visible_objects.toArray(new Visible[0])));
+					}
+
+					path_edge = edges_current_path_node[0];
+					if (path_edge.equals(current_graph_edge))
+						path_edge = edges_current_path_node[1];
 
 					Edge[] graph_edges = current_graph_node.getEdges();
 					for (int i = 0; i < graph_edges.length; i++)
-						if (graph_edges[i].equals(current_path_edge)) {
+						if (graph_edges[i].equals(path_edge)) {
 							current_graph_edge = graph_edges[i];
 							break;
 						}
 
 					visible_objects.add(current_graph_edge);
 
-					remained_length = current_path_edge.getLength();
-				}
+					remained_length = path_edge.getLength();
+				
+				} //end inner while
 
-				if (current_displacement > 0) {
+				if ( greater(current_displacement, 0)) {
 					current_elapsed_length = current_displacement;
 
 					teleport_actions.add(new TeleportAction(
 							current_graph_node, current_graph_edge,
 							current_elapsed_length));
-				} else
+				} else {
 					current_elapsed_length = 0;
-			}
+				}
+			
+			} //end else
 
 			// updates the current initial speed
 			// v = v0 + a*t
 			current_initial_speed = current_initial_speed + acceleration
 					* time_rate;
 			if (speed_limitation > -1
-					&& current_initial_speed > speed_limitation)
+					&& greater(current_initial_speed, speed_limitation) ) {
 				current_initial_speed = speed_limitation;
-		}
+			}
+		
+		} //end main while 
+		
 	}
 
 	/**
@@ -237,7 +252,7 @@ public abstract class CompoundActionsParser {
 			stamina_factor = action.getStamina();
 
 		// if the stamina factor is zero, returns an empty plan
-		if (stamina_factor == 0)
+		if ( equal(stamina_factor, 0) )
 			return new AtomicRechargeAction[0];
 
 		// holds the needed atomic actions
@@ -249,10 +264,59 @@ public abstract class CompoundActionsParser {
 			atomic_actions.add(new AtomicRechargeAction(stamina_factor));
 
 		double remained_stamina = action.getStamina() % stamina_factor;
-		if (remained_stamina > 0)
+		if ( greater(remained_stamina, 0) )
 			atomic_actions.add(new AtomicRechargeAction(remained_stamina));
 
 		// returns the answer
 		return atomic_actions.toArray(new AtomicRechargeAction[0]);
 	}
+	
+	
+	/**
+	 * Tests if "a <= b" considering the precision. 
+	 */
+	private static boolean equal(double a, double b) {
+		return Math.abs(a-b) < PRECISION;
+	}
+	
+	/**
+	 * Tests if "left < right" considering the precision. 
+	 */
+	private static boolean less(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return false;
+		}
+		return (left < right);
+	}
+	
+	/**
+	 * Tests if "left <= right" considering the precision. 
+	 */
+	private static boolean lessOrEqual(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return true;
+		}
+		return (left < right);
+	}
+
+	/**
+	 * Tests if "left > right" considering the precision. 
+	 */
+	private static boolean greater(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return false;
+		}
+		return (left > right);
+	}
+	
+	/**
+	 * Tests if "left >= right" considering the precision. 
+	 */
+	private static boolean greaterOrEqual(double left, double right) {
+		if (Math.abs(left-right) < PRECISION) {
+			return true;
+		}
+		return (left > right);
+	}
+	
 }

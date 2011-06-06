@@ -216,7 +216,7 @@ public final class Coordinator extends Thread {
 			// if there's a death tpd and the object must die now
 			if (death_tpd != null && death_tpd.nextBoolean()) {
 				// kills the object
-				current_object.die();
+				current_object.deactivate();
 
 				// if the object is an agent
 				if (current_object instanceof Agent) {

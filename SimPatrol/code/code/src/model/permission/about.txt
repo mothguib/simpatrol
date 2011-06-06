@@ -1,0 +1,2 @@
+This package contains the implementations of the permissions
+for specific types of perceptions and actions allowed to an agent.

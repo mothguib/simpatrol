@@ -7,11 +7,11 @@ package control.daemon;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import control.simulator.CycledSimulator;
 import control.simulator.SimulatorStates;
 import util.data_structures.Queue;
-import model.agent.Agent;
-import model.agent.AgentStates;
-import model.agent.Society;
+import model.agent.*;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Node;
@@ -25,6 +25,7 @@ import model.perception.Perception;
 import model.perception.PerceptionTypes;
 import model.perception.SelfPerception;
 import model.perception.StigmasPerception;
+import model.perception.TimePerception;
 import model.permission.PerceptionPermission;
 import model.stigma.Stigma;
 
@@ -105,6 +106,9 @@ public final class PerceptionDaemon extends AgentDaemon {
 	/**
 	 * Produces all the perceptions an agent is allowed to have at the moment.
 	 * 
+	 * The time perception is always available, whereas the other perceptions are allowed to active agents only
+	 * 
+	 * 
 	 * @return The perceptions of the agent at the moment.
 	 * @developer New Perception classes must change this method.
 	 */
@@ -119,85 +123,96 @@ public final class PerceptionDaemon extends AgentDaemon {
 		PerceptionPermission[] allowed_perceptions = this.AGENT
 				.getAllowedPerceptions();
 
-		// for each allowed perception
-		for (int i = 0; i < allowed_perceptions.length; i++) {
-			// depending on the type of the current permission
-			switch (allowed_perceptions[i].getPerception_type()) {
-			// if it's a permission for "graph perceptions"
-			case (PerceptionTypes.GRAPH): {
-				// obtains the perception of the graph
-				GraphPerception perception = this
-						.produceGraphPerception(allowed_perceptions[i]
-								.getLimitations());
-
-				// if the perception is valid, adds it to the produced
-				// perceptions
-				if (perception != null)
-					perceptions.add(perception);
-
+		// the time perception is allowed even for inactive agents
+		for (int i = 0; i < allowed_perceptions.length; i++)
+			if(allowed_perceptions[i].getPerception_type() == PerceptionTypes.TIME){
+				perceptions.add(this.produceTimePerception());
 				break;
 			}
-
-				// if it's a permission for "agents perceptions"
-			case (PerceptionTypes.AGENTS): {
-				// obtains the perception of the agents
-				AgentsPerception perception = this
-						.produceAgentsPerception(allowed_perceptions[i]
-								.getLimitations());
-
-				// if the perception is valid, adds it to the produced
-				// perceptions
-				if (perception != null)
-					perceptions.add(perception);
-
-				break;
-			}
-
-				// if it's a permission for "stigmas perceptions"
-			case (PerceptionTypes.STIGMAS): {
-				// obtains the perceptions of the stigmas
-				StigmasPerception perception = this
-						.produceStigmasPerception(allowed_perceptions[i]
-								.getLimitations());
-
-				// if the perception is valid, adds it to the produced
-				// perceptions
-				if (perception != null)
-					perceptions.add(perception);
-
-				break;
-			}
-
-				// if it's a permission for "broadcasted messages perceptions"
-			case (PerceptionTypes.BROADCAST): {
-				// obtains the perceptions of the messages
-				BroadcastPerception[] broadcast_perceptions = this
-						.produceBroadcastPerceptions(allowed_perceptions[i]
-								.getLimitations());
-
-				// adds each one to the produced perceptions
-				for (int j = 0; j < broadcast_perceptions.length; j++)
-					perceptions.add(broadcast_perceptions[j]);
-
-				break;
-			}
-
-				// if it's a permission of itself
-			case (PerceptionTypes.SELF): {
-				// obtains the perceptions of itself
-				SelfPerception self_perception = this
-						.produceSelfPerception(allowed_perceptions[i]
-								.getLimitations());
-
-				// if the perception is valid, adds it to the produced
-				// perceptions
-				if (self_perception != null)
-					perceptions.add(self_perception);
-
-				break;
-			}
-
-				// developer: new perceptions must add code here
+		
+		
+		// the other perceptions are for perpetual agents and active seasonal agents
+		if((this.AGENT instanceof PerpetualAgent)|| !((SeasonalAgent)this.AGENT).isInactive()){
+			// for each allowed perception
+			for (int i = 0; i < allowed_perceptions.length; i++) {
+				// depending on the type of the current permission
+				switch (allowed_perceptions[i].getPerception_type()) {
+				// if it's a permission for "graph perceptions"
+				case (PerceptionTypes.GRAPH): {
+					// obtains the perception of the graph
+					GraphPerception perception = this
+							.produceGraphPerception(allowed_perceptions[i]
+									.getLimitations());
+	
+					// if the perception is valid, adds it to the produced
+					// perceptions
+					if (perception != null)
+						perceptions.add(perception);
+	
+					break;
+				}
+	
+					// if it's a permission for "agents perceptions"
+				case (PerceptionTypes.AGENTS): {
+					// obtains the perception of the agents
+					AgentsPerception perception = this
+							.produceAgentsPerception(allowed_perceptions[i]
+									.getLimitations());
+	
+					// if the perception is valid, adds it to the produced
+					// perceptions
+					if (perception != null)
+						perceptions.add(perception);
+	
+					break;
+				}
+	
+					// if it's a permission for "stigmas perceptions"
+				case (PerceptionTypes.STIGMAS): {
+					// obtains the perceptions of the stigmas
+					StigmasPerception perception = this
+							.produceStigmasPerception(allowed_perceptions[i]
+									.getLimitations());
+	
+					// if the perception is valid, adds it to the produced
+					// perceptions
+					if (perception != null)
+						perceptions.add(perception);
+	
+					break;
+				}
+	
+					// if it's a permission for "broadcasted messages perceptions"
+				case (PerceptionTypes.BROADCAST): {
+					// obtains the perceptions of the messages
+					BroadcastPerception[] broadcast_perceptions = this
+							.produceBroadcastPerceptions(allowed_perceptions[i]
+									.getLimitations());
+	
+					// adds each one to the produced perceptions
+					for (int j = 0; j < broadcast_perceptions.length; j++)
+						perceptions.add(broadcast_perceptions[j]);
+	
+					break;
+				}
+	
+					// if it's a permission of itself
+				case (PerceptionTypes.SELF): {
+					// obtains the perceptions of itself
+					SelfPerception self_perception = this
+							.produceSelfPerception(allowed_perceptions[i]
+									.getLimitations());
+	
+					// if the perception is valid, adds it to the produced
+					// perceptions
+					if (self_perception != null)
+						perceptions.add(self_perception);
+	
+					break;
+				}
+	
+					// developer: new perceptions must add code here
+				}
 			}
 		}
 
@@ -323,7 +338,7 @@ public final class PerceptionDaemon extends AgentDaemon {
 					.getVisibleEnabledSubgraph(this.AGENT.getNode(), depth);
 
 			// obtains the societies of the simulation
-			Society[] societies = simulator.getEnvironment().getSocieties();
+			Society[] societies = simulator.getEnvironment().getActiveSocieties();
 
 			// for each society
 			for (int i = 0; i < societies.length; i++) {
@@ -452,6 +467,17 @@ public final class PerceptionDaemon extends AgentDaemon {
 		return answer;
 	}
 
+	
+	/**
+	 * Obtains the perception of internal time
+	 * 
+	 * @return The perception of current internal time
+	 */
+	private TimePerception produceTimePerception(){
+		return new TimePerception(simulator.getElapsedTime());
+	}
+	
+	
 	public void start(int local_socket_number) throws IOException {
 		super.start(local_socket_number);
 	}
@@ -467,44 +493,48 @@ public final class PerceptionDaemon extends AgentDaemon {
 			// if the daemon can produce perceptions at the moment and the
 			// simulator is already simulating
 			if (simulator.getState() == SimulatorStates.SIMULATING
-					&& !this.is_blocked
-					&& !(this.AGENT.getAgentState() == AgentStates.JUST_PERCEIVED)) {
-				// registers if some perception was successfully sent
-				boolean sent_succesfully = true;
+					&& !this.is_blocked){
+				
+				if(!(this.AGENT.getAgentState() == AgentStates.JUST_PERCEIVED)) {
+					// registers if some perception was successfully sent
+					boolean sent_succesfully = true;
+	
+					// obtains all the perceptions the agent is supposed to have at
+					// the moment
+					Perception[] perceptions = this.producePerceptions();
+	
+					// for each perception, sends it to the remote agent
+					for (int i = 0; i < perceptions.length; i++) {
+						String buffered_perception = perceptions[i].fullToXML(0);
 
-				// obtains all the perceptions the agent is supposed to have at
-				// the moment
-				Perception[] perceptions = this.producePerceptions();
-
-				// for each perception, sends it to the remote agent
-				for (int i = 0; i < perceptions.length; i++) {
-					sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
-					while(!sent_succesfully)
-						sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
-					
-					/*if (perceptions[i] instanceof AgentsPerception) {
-						this.connection.send(perceptions[i].fullToXML(0));
-						this.connection.send(perceptions[i].fullToXML(0));
-						this.connection.send(perceptions[i].fullToXML(0));
-						this.connection.send(perceptions[i].fullToXML(0));
-						this.connection.send(perceptions[i].fullToXML(0));
-//					}*/
-				}
-
-				// if the perceptions were successfully sent,
-				// changes the agent's state to JUST_PERCEIVED
-				this.AGENT.setState(AgentStates.JUST_PERCEIVED);
-			}
-			else
-			{
-				Perception[] perceptions = this.producePerceptions();
-				boolean sent_succesfully = true;
-				// for each perception, sends it to the remote agent
-				for (int i = 0; i < perceptions.length; i++) {
-					if (perceptions[i] instanceof BroadcastPerception)
-						sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
+						sent_succesfully = this.connection.send(buffered_perception);
 						while(!sent_succesfully)
+							sent_succesfully = this.connection.send(buffered_perception);
+						
+						/*if (perceptions[i] instanceof AgentsPerception) {
+							this.connection.send(perceptions[i].fullToXML(0));
+							this.connection.send(perceptions[i].fullToXML(0));
+							this.connection.send(perceptions[i].fullToXML(0));
+							this.connection.send(perceptions[i].fullToXML(0));
+							this.connection.send(perceptions[i].fullToXML(0));
+	//					}*/
+					}
+	
+					// if the perceptions were successfully sent,
+					// changes the agent's state to JUST_PERCEIVED
+					this.AGENT.setState(AgentStates.JUST_PERCEIVED);
+				}
+				else
+				{
+					Perception[] perceptions = this.producePerceptions();
+					boolean sent_succesfully = true;
+					// for each perception, sends it to the remote agent
+					for (int i = 0; i < perceptions.length; i++) {
+						if (perceptions[i] instanceof BroadcastPerception)
 							sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
+							while(!sent_succesfully)
+								sent_succesfully = this.connection.send(perceptions[i].fullToXML(0));
+					}
 				}
 			}
 		}

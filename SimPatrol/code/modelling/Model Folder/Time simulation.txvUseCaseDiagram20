@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V-jr6xbaez31cvq2ii88i6">
+		<property name="$metaclass" value="UseCaseDiagram20"/>
+		<property name="$description" value="Expressa a utilização do SimPatrol quanto à função de simulação de tempo."/>
+		<property name="$doc" value="Expressa a utilização do SimPatrol quanto à função de simulação de tempo."/>
+		<property name="$name" value="Time simulation"/>
+		<reference referencedUin="design:node:::gj7tthez31ggovbbvben">
+			<property name="bounds" value="215,115,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezfwjyue-79owly:gj7tthez31ggovbbvben">
+				<property name="sourceAnchor" value="260,123"/>
+				<property name="targetAnchor" value="260,77"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthez31ghprvs69jm">
+			<property name="bounds" value="15,115,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezfwjbgtsnu5pz:gj7tthez31ghprvs69jm">
+				<property name="sourceAnchor" value="159,123"/>
+				<property name="targetAnchor" value="160,77"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::8bho0jez5xhlq6lsjjlx">
+			<property name="bounds" value="15,15,55,89"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezfwj5xlgeld9f:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="75,60"/>
+				<property name="targetAnchor" value="120,60"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthezfwidxc2c43gr">
+			<property name="bounds" value="115,35,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+	</view>
+</nodeSet>

@@ -10,6 +10,14 @@ package model.perception;
  */
 public abstract class PerceptionTypes {
 	/**
+	 * The perceptions of the internal time of the simulation.
+	 * The time perception IS THE ONLY PERCEPTION that remains to inactive agents
+	 * 
+	 * @see TimePerception
+	 */
+	public static final int TIME = -1;
+	
+	/**
 	 * The perceptions of the graph of the simulation.
 	 * 
 	 * @see GraphPerception

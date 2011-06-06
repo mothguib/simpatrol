@@ -15,6 +15,7 @@ import model.perception.Perception;
 import model.perception.PerceptionTypes;
 import model.perception.SelfPerception;
 import model.perception.StigmasPerception;
+import model.perception.TimePerception;
 import model.stigma.Stigma;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -253,4 +254,49 @@ public abstract class PerceptionTranslator extends Translator {
 		// returns the answer
 		return perceptions.toArray(new StigmasPerception[0]);
 	}
+	
+	
+	/**
+	 * Obtains the perceptions of the internal time from the
+	 * given XML element.
+	 * 
+	 * @param xml_element
+	 *            The XML source containing the perceptions.
+	 */
+	public static TimePerception[] getTimePerceptions(Element xml_element) {
+		// obtains the nodes with the "perception" tag
+		NodeList perception_node = xml_element.getElementsByTagName("perception");
+
+		// holds all the obtained perceptions
+		List<TimePerception> perceptions = new LinkedList<TimePerception>();
+
+		// for each perception_node
+		for (int i = 0; i < perception_node.getLength(); i++) {
+			// obtains the current perception element
+			Element perception_element = (Element) perception_node.item(i);
+
+			// the current perception to be obtained
+			TimePerception perception = null;
+
+			// the type of the current perception
+			int type = Integer.parseInt(perception_element.getAttribute("type"));
+
+			// if the type is an agents perception
+			if (type == PerceptionTypes.TIME) {
+				// tries to obtain the agents from the perception element
+				double time = Double.parseDouble(perception_element.getAttribute("time"));
+				if (time >= 0)
+					perception = new TimePerception(time);
+			}
+
+			// adds the current perception to the list of perceptions, if it's
+			// valid
+			if (perception != null)
+				perceptions.add(perception);
+		}
+
+		// returns the answer
+		return perceptions.toArray(new TimePerception[0]);
+	}
+	
 }
