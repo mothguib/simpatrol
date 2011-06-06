@@ -1,2 +1,0 @@
-This package contains the implementations of the stigmas deposited
-by the agents on the graph of the simulation.

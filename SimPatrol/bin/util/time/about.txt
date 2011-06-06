@@ -1,2 +1,0 @@
-This package contains the implementation of the objects
-that work with the passage of time.
