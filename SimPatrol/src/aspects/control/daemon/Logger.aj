@@ -130,6 +130,7 @@ public aspect Logger {
 	pointcut SendMessage(ActionDaemon daemon, Agent target_agent) :
 		call(* Simulator.getPerceptionDaemon(..))
 		&& this(daemon) &&
+		withincode(* ActionDaemon.attendSendMessageAction(..)) &&
 		args(target_agent);
 
 	after(ActionDaemon daemon, Agent target_agent) : SendMessage(daemon, target_agent) {

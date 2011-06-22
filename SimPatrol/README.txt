@@ -41,8 +41,9 @@ Goal : ease the communication. This action is only available to communicate betw
 The internal representation of the message (SendMessageAction) has a field "sender" wich is filled by the ActionDaemon, but so far not
 exploited later by the perception daemon (i.e. the receiving agent does not know the sender).
 
+Test :
+	- tested on cycled simulation
+
 Questions :
 	- is it interesting to know where the message comes from ? how can we implement it ?
 	- is it interesting to add a send_message_to_agent_in_another_society action ? (like the difference between Broadcast and BroadcastSociety)
-
-
