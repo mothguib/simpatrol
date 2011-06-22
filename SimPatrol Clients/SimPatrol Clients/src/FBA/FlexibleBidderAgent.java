@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import util.StringAndDouble;
 import util.graph.Edge;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
@@ -1373,102 +1374,5 @@ public class FlexibleBidderAgent extends CommunicatorAgent {
 
 }
 
-/** Internal class that holds together a string and a double value. */
-final class StringAndDouble {
-	/* Attributes */
-	/** The string value. */
-	public final String STRING;
 
-	/** The double value. */
-	public double double_value;
-
-	/* Methods. */
-	/**
-	 * Constructor.
-	 * 
-	 * @param string
-	 *            The string value of the pair.
-	 * @param double_value
-	 *            The double value of the pair.
-	 */
-	public StringAndDouble(String string, double double_value) {
-		this.STRING = string;
-		this.double_value = double_value;
-	}
-	
-	public String toString(){
-		return this.STRING + "," + this.double_value;
-	}
-	
-}
-
-final class TransactionNodes {
-	
-	public String[] in_nodes;
-	public String[] out_nodes;
-	
-	public int transaction_id;
-	
-	
-	public TransactionNodes(int trans_id, String[] in, String[] out){
-		transaction_id = trans_id;
-		in_nodes = in;
-		out_nodes = out;
-	}
-	
-	public TransactionNodes(int trans_id, LinkedList<String> in, LinkedList<String> out){
-		transaction_id = trans_id;
-		in_nodes = new String[in.size()];
-		for (int i = 0; i < in_nodes.length; i++)
-			in_nodes[i] = in.get(i);
-		
-		out_nodes = new String[out.size()];
-		for (int i = 0; i < out_nodes.length; i++)
-			out_nodes[i] = out.get(i);
-
-	}
-	
-	public TransactionNodes(int trans_id, LinkedList<String> in, ComplexBid out){
-		transaction_id = trans_id;
-		
-		in_nodes = new String[in.size()];
-		for (int i = 0; i < in_nodes.length; i++)
-			in_nodes[i] = in.get(i);
-		
-		LinkedList<String> outNodes = new LinkedList<String>();
-		
-		String[] nodes;
-		if(out.getBidsForFirst() != null){
-			nodes =  out.getBidsForFirst();
-			for(int i = 0; i < nodes.length; i+= 2)
-				if(outNodes.indexOf(nodes[i]) == -1)
-					outNodes.add(nodes[i]);
-		}
-		if(out.getBidsForSecond() != null){
-			nodes =  out.getBidsForSecond();
-			for(int i = 0; i < nodes.length; i+= 2)
-			if(outNodes.indexOf(nodes[i]) == -1)
-				outNodes.add(nodes[i]);
-		}
-		if(out.getBidsForBoth() != null){
-			nodes =  out.getBidsForBoth();
-			for(int i = 0; i < nodes.length; i+= 2)
-			if(outNodes.indexOf(nodes[i]) == -1)
-				outNodes.add(nodes[i]);
-		}
-		if(out.getDoubleBidsForBoth() != null)
-			for(String[] nodes2 : out.getDoubleBidsForBoth())
-				for(int i = 0; i < nodes2.length; i+= 2)
-					if(outNodes.indexOf(nodes2[i]) == -1)
-						outNodes.add(nodes2[i]);
-		
-		out_nodes = new String[outNodes.size()];
-		for (int i = 0; i < out_nodes.length; i++)
-			out_nodes[i] = outNodes.get(i);
-
-	}
-	
-	
-	
-}
 

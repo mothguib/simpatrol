@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import util.StringAndDouble;
 import util.graph.Edge;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
@@ -17,50 +18,50 @@ import util.net.UDPClientConnection;
 public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	
 	
-	int cycles_without_exchange = 0;
-	int agents_num;
-	int nb_min_nodes;
-	int nb_max_propositions;
-	private final static int NETWORK_QUALITY = 5;
-	private final static int MAX_VISITS_WITHOUT_EXCHANGE = 10;
+	protected int cycles_without_exchange = 0;
+	protected int agents_num;
+	protected int nb_min_nodes;
+	protected int nb_max_propositions;
+	protected final static int NETWORK_QUALITY = 5;
+	protected final static int MAX_VISITS_WITHOUT_EXCHANGE = 10;
 	
 	
-	boolean first_time = true;
+	protected boolean first_time = true;
 	
-	double visit_cost;
+	protected double visit_cost;
 	
 	// importance of idleness in calculating heuristic destination
-	double idleness_rate_p; //path_idleness_rate; (not used here)
+	protected double idleness_rate_p; //path_idleness_rate; (not used here)
 	// importance of idleness in calculating nodes to trade
-	private double idleness_rate_a; // distance_rate;
+	protected double idleness_rate_a; // distance_rate;
 	
 	/** The plan of walking through the graph. */
-	private LinkedList<String> plan;
-	private double length_of_last_edge = 0;
+	protected LinkedList<String> plan;
+	protected double length_of_last_edge = 0;
 	 
-	private LinkedList<TransactionNodes> engaged_transactions;
-	private int nb_engaged_nodes = 0; 
+	protected LinkedList<TransactionNodes> engaged_transactions;
+	protected int nb_engaged_nodes = 0; 
 	 
 	// Select node(s) to exchange. the agent can have only one node...
-	private LinkedList<String> bids;
-	private String best_proposition1 = null;
-	private String best_proposition2 = null;
+	protected LinkedList<String> bids;
+	protected String best_proposition1 = null;
+	protected String best_proposition2 = null;
  	
  	//transactions
-	private static int transaction_id = 0;
-	private LinkedList<String> FBABuyers;
-	private LinkedList<ComplexBid> ComplexPropositions;
-	private int myCurrentTransaction = -1;
-	private int received_answers = 0;
+	protected static int transaction_id = 0;
+	protected LinkedList<String> FBABuyers;
+	protected LinkedList<ComplexBid> ComplexPropositions;
+	protected int myCurrentTransaction = -1;
+	protected int received_answers = 0;
 	
 	//received propositions
-	private String best_offer1 = null;
-	private int best_offer1_idle = 0;
-	private String best_offer2 = null;
-	private int best_offer2_idle = 0;
-	private String special_offer = null;
-	private int special_offer_idle = 0;
-	private int best_buyer = -1;
+	protected String best_offer1 = null;
+	protected int best_offer1_idle = 0;
+	protected String best_offer2 = null;
+	protected int best_offer2_idle = 0;
+	protected String special_offer = null;
+	protected int special_offer_idle = 0;
+	protected int best_buyer = -1;
 	 
 	
 	public FlexibleBidder2Agent(String id, int number_of_agents, LinkedList<String> nodes, double idleness_rate_for_path, double idleness_rate_for_auction) {
@@ -75,11 +76,44 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 		nb_min_nodes = (int) Math.min(2, Math.ceil((double)this.myNodes.size() / 2.0)) ;
 		nb_max_propositions = (int) Math.ceil((double)this.myNodes.size() / 2.0) ;
 		
-		String message = "Agent " + this.agent_id + " starting with ";
-		for(String bla : this.getMyNodes())
-			message += bla + ", ";
-		message = message.substring(0, message.length() - 2) + ".";
-		System.out.println(message);
+		if(this.getMyNodes().size() > 0){
+			String message = "Agent " + this.agent_id + " starting with ";
+			for(String bla : this.getMyNodes())
+				message += bla + ", ";
+			message = message.substring(0, message.length() - 2) + ".";
+			System.out.println(message);
+		}
+		else {
+			System.out.println("Agent " + this.agent_id + " starting.");
+		}
+		
+	}
+	
+	
+	public FlexibleBidder2Agent(String id, double entering_time, double quitting_time, 
+											int number_of_agents, LinkedList<String> nodes, 
+											double idleness_rate_for_path, double idleness_rate_for_auction) {
+		super(id, entering_time, quitting_time, nodes);
+		
+		plan = new LinkedList<String>();
+		engaged_transactions = new LinkedList<TransactionNodes>();
+		
+		agents_num = number_of_agents;
+		idleness_rate_p = idleness_rate_for_path;
+		idleness_rate_a = idleness_rate_for_auction;
+		nb_min_nodes = (int) Math.min(2, Math.ceil((double)this.myNodes.size() / 2.0)) ;
+		nb_max_propositions = (int) Math.ceil((double)this.myNodes.size() / 2.0) ;
+		
+		if(this.getMyNodes().size() > 0){
+			String message = "Agent " + this.agent_id + " starting with ";
+			for(String bla : this.getMyNodes())
+				message += bla + ", ";
+			message = message.substring(0, message.length() - 2) + ".";
+			System.out.println(message);
+		}
+		else {
+			System.out.println("Agent " + this.agent_id + " starting.");
+		}
 		
 	}
 
@@ -92,7 +126,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * @return The current position of the agent, as a pair "current vertex id -
 	 *         elapsed length on the current edge".
 	 */
-	private StringAndDouble perceiveCurrentPosition(String perception) {
+	protected StringAndDouble perceiveCurrentPosition(String perception) {
 		if (perception.indexOf("<perception type=\"4\"") > -1) {
 			// obtains the id of the current vertex
 			int vertex_id_index = perception.indexOf("node_id=\"");
@@ -124,7 +158,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 */
-	private Graph perceiveGraph(String perception) throws ParserConfigurationException, SAXException, IOException {
+	protected Graph perceiveGraph(String perception) throws ParserConfigurationException, SAXException, IOException {
 		Graph[] parsed_perception = GraphTranslator.getGraphs(GraphTranslator.parseString(perception));
 		if (parsed_perception.length > 0)
 			return parsed_perception[0];
@@ -137,7 +171,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * 
 	 * @throws IOException
 	 */
-	private void visitCurrentNode(String node_name) throws IOException {
+	protected void visitCurrentNode(String node_name) throws IOException {
 		String message = "<action type=\"2\"/>";
 		this.connection.send(message);
 		
@@ -155,7 +189,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 *            The next node the agent is supposed to go to.
 	 * @throws IOException
 	 */
-	private void GoTo(String next_vertex_id) throws IOException {
+	protected void GoTo(String next_vertex_id) throws IOException {
 		String message = "<action type=\"1\" node_id=\"" + next_vertex_id + "\"/>";
 		this.connection.send(message);
 	}
@@ -171,7 +205,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * @param graph
 	 *				the graph in which the agent moves
 	 */
-	private void Pathfinding(String position, String goal, Graph graph) {
+	protected void Pathfinding(String position, String goal, Graph graph) {
 		this.plan.clear();
 		
 		if(position.equals(goal)){
@@ -228,7 +262,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * @return
 	 * 			the id (String) of the next node to go to
 	 */
-	private String NextHeuristicNode(String current_node, double idleness_rate){
+	protected String NextHeuristicNode(String current_node, double idleness_rate){
 		if(myNodes.size() == 0)
 			return null;
 		if(myNodes.size() == 1)
@@ -283,7 +317,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * 
 	 * @return nodes as a LinkedList<String> of their ids
 	 */
-	private LinkedList<String> ChooseNodesForAuction(){
+	protected LinkedList<String> ChooseNodesForAuction(){
 		if(this.myNodes.size() <= nb_min_nodes)
 			return new LinkedList<String>();
 		double cost = 0, currentcost = 0;
@@ -379,7 +413,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * @param act the received SpeechAct
 	 * @return the SpeechAct to send to the sender of the treated SpeechAct
 	 */
-	private SpeechAct negociate(SpeechAct act){
+	protected SpeechAct negociate(SpeechAct act){
 		ComplexBid proposition, bid;
 		SpeechAct answer;
 		
@@ -497,7 +531,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	 * 
 	 * @return a ComplexBid answering the propositions
 	 */
-    private ComplexBid emitProposition(LinkedList<String> received_offers){
+    protected ComplexBid emitProposition(LinkedList<String> received_offers){
     	double currentcost = this.visit_cost;
     	String offer;
     	String current, current2;
@@ -764,7 +798,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
      * @param act : the SpeechAct to send
      * @throws IOException
      */
-    private void SendSpeechAct(SpeechAct act) throws IOException{
+    protected void SendSpeechAct(SpeechAct act) throws IOException{
     	String act_str = act.toString();
     	
     	this.connection.send("<action type=\"3\" message=\"" + act_str + "\"/>");
@@ -783,7 +817,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	/**
 	 * chooses what to exchange and sends auction
 	 */
-    private void SendNewProposition(){
+    protected void SendNewProposition(){
     	bids = this.ChooseNodesForAuction();
     	
     	if(bids.size() == 0 || (this.myNodes.size() - this.nb_engaged_nodes) <= nb_min_nodes){
@@ -824,7 +858,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
      * @param perceptions
      * 					The received perceptions
      */
-    private void ManageAnswers(String[] perceptions){
+    protected void ManageAnswers(String[] perceptions){
 		SpeechAct received_act, response_act;
 		
 		for (int i = 0; i < perceptions.length; i++) {
@@ -857,7 +891,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
      * Processes the received answers
      * Calculates which of the received answers is the most interesting
      */
-    private void ProcessAnswers(){
+    protected void ProcessAnswers(){
     	
     	LinkedList<String> choice = new LinkedList<String>();
     	boolean exchange_done = false;
@@ -1191,7 +1225,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
     }
     
     
-    private boolean isNodeEngaged(String node){
+    protected boolean isNodeEngaged(String node){
     	
     	if((best_proposition1 != null && best_proposition1.equals(node)) 
     			|| (best_proposition2 != null && best_proposition2.equals(node)))
@@ -1210,7 +1244,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
     }
 
     
-    private TransactionNodes getEngagedTransacFromId(int id){
+    protected TransactionNodes getEngagedTransacFromId(int id){
     	for(TransactionNodes transac : engaged_transactions){
     		if(transac.transaction_id == id)
     			return transac;
@@ -1220,7 +1254,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
     }
     
     
-	private int NbEngagedNodes(){
+	protected int NbEngagedNodes(){
 		LinkedList<String> engaged = new LinkedList<String>();
 		if(best_proposition1 != null)
 			engaged.add(best_proposition1);
@@ -1237,7 +1271,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 		return engaged.size();
 	}
 	
-    public void run(){
+    protected void active_run(){
 		// starts its connection
 		this.connection.start();
 
@@ -1449,64 +1483,35 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 			e.printStackTrace();
 		}
 	}
+
+
+	
+    
+    
+    /**
+     * These functions are not used and are here to comply to the OpenAgent heritage
+     */
+    @Override
+	protected void inactive_run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void activating_run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void deactivating_run() {
+		// TODO Auto-generated method stub
+		
+	}
     	
     
-    /*
-	
-	/**
-	 * Mounts a priority queue
-	 * The first node is the node that is the most interesting to remove
-	 * (i.e. the one without it the remaining path is the smallest), and so on
-	 * 
-	 * TODO test for initialisation of actualcost
-	 *
-	private void mountPriorityQueue(){
-		this.myPriorityQueue.clear();
-		this.OrderMyNodes();
-		this.visit_cost = this.CalculateMyPathCost();
-		
-		LinkedList<String> aux = this.getMyNodes();
-		
-		LinkedList<String> path = new LinkedList<String>();
-		int indice = 0;
-		String smallest = "";
-		double actualcost;
-		
-		while(aux.size() > 2){
-			indice = 0;
-			smallest = "";
-			actualcost = visit_cost;
-			
-			// for all nodes in list
-			// TODO : actual cost may have to be reset here...
-			for(int i = 0; i < aux.size(); i++){
-				// put all other nodes in path
-				path.clear();
-				for(int j = 0; j < aux.size(); j++){
-					if(i!=j)
-						path.add(aux.get(j));
-				}
-				// order path and calculate its cost
-				double cost = this.CalculatePathCost(this.OrderNodes(path));
-				// if cost inferior to actualcost
-				if(cost <= actualcost){
-					// actualize variables
-					indice = i;
-					smallest = aux.get(i);
-					actualcost = cost;
-				}
-			}
-			// remove smallest
-			aux.remove(indice);
-			// add smallest at the end of priority queue
-			this.myPriorityQueue.add(smallest);	
-		}
-		
-		// add end of node list to priority queue
-		for(int i = 0; i < aux.size(); i++)
-			this.myPriorityQueue.add(aux.get(i));
-	}
-	
-	*/
+    
 }
 

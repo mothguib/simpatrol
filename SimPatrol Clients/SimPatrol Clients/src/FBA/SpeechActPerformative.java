@@ -6,5 +6,7 @@ public enum SpeechActPerformative {
 	PROPOSE,
 	ACCEPT, 
 	REFUSE, 
-	NOT_UNDERSTOOD
+	NOT_UNDERSTOOD,
+	ENTER,
+	QUIT
 }

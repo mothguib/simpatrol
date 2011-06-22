@@ -37,4 +37,8 @@ public class StringAndDouble {
 		return false;
 	}
 	
+	public String toString(){
+		return this.STRING + "," + this.double_value;
+	}
+	
 }

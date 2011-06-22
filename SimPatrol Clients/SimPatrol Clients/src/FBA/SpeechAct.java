@@ -69,6 +69,14 @@ public class SpeechAct {
 		this.setReceiver(receiver);
 		this.setComplexBid(bid);
 	}
+	
+	public SpeechAct(int id, SpeechActPerformative performative, String sender,
+			String receiver){
+		this.transaction_id = id;
+		this.setPerformative(performative);
+		this.setSender(sender);
+		this.setReceiver(receiver);
+	}
 
 
 	public void setPerformative(SpeechActPerformative performative){
@@ -243,6 +251,10 @@ public class SpeechAct {
 			perf = SpeechActPerformative.REFUSE;
 		else if(perf_str.equals("NOT_UNDERSTOOD"))
 			perf = SpeechActPerformative.NOT_UNDERSTOOD;
+		else if(perf_str.equals("ENTER"))
+			perf = SpeechActPerformative.ENTER;
+		else if(perf_str.equals("QUIT"))
+			perf = SpeechActPerformative.QUIT;
 		else 
 			return null;
 		

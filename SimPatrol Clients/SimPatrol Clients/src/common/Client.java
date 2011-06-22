@@ -26,7 +26,7 @@ public abstract class Client extends Thread {
 	private final String LOG_FILE_PATH;
 
 	/** The time of the simulation. */
-	private final double TIME_OF_SIMULATION;
+	protected final double TIME_OF_SIMULATION;
 
 	/** Holds if the simulator is a real time one. */
 	protected final boolean IS_REAL_TIME_SIMULATOR;

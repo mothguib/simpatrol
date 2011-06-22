@@ -2,38 +2,48 @@ package FBA;
 
 import java.util.LinkedList;
 
-import util.graph.Graph;
+import util.StringAndDouble;
 import util.graph.Node;
 
-import common.Agent;
+import common.OpenAgent;
 
-public class CommunicatorAgent2 extends Agent {
+public abstract class CommunicatorAgent2 extends OpenAgent {
 
-	Graph graph;
 	
-	LinkedList<StringAndDouble> myNodes;
+	protected LinkedList<StringAndDouble> myNodes;
 	static final int IDLENESS_PAST_SIZE = 10;
-	long exchanges;
-	
-	String agent_id;
+	protected long exchanges;
 	
 	
 	
 	public CommunicatorAgent2(String id) {
-		super();
+		super(id);
 		
 		myNodes = new LinkedList<StringAndDouble>();
 		exchanges = 0;
+	}
+	
+	public CommunicatorAgent2(String id, double entering_time, double quitting_time) {
+		super(id, entering_time, quitting_time);
 		
-		agent_id = id;
+		myNodes = new LinkedList<StringAndDouble>();
+		exchanges = 0;
 	}
 	
 	
 	public CommunicatorAgent2(String id, LinkedList<String> nodes) {
-		super();
+		super(id);
 
 		exchanges = 0;
-		agent_id = id;
+		myNodes = new LinkedList<StringAndDouble>();
+		for(String node : nodes)
+			this.addToMyNodes(node);
+	}
+	
+	public CommunicatorAgent2(String id, double entering_time, double quitting_time, LinkedList<String> nodes) {
+		super(id, entering_time, quitting_time);
+
+		exchanges = 0;
 		myNodes = new LinkedList<StringAndDouble>();
 		for(String node : nodes)
 			this.addToMyNodes(node);
