@@ -4,17 +4,24 @@
 package agent;
 
 /* Imported classes and/or interfaces. */
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import etpd.EventTimeProbabilityDistributionGUI;
 import permission.PermissionGUI;
+import model.Environment;
 import model.action.ActionTypes;
 import model.agent.Agent;
 import model.agent.PerpetualAgent;
 import model.agent.SeasonalAgent;
+import model.agent.Society;
 import model.etpd.EmpiricalEventTimeProbabilityDistribution;
 import model.etpd.EventTimeProbabilityDistribution;
 import model.etpd.NormalEventTimeProbabilityDistribution;
@@ -39,9 +46,9 @@ public class AgentJPanel extends javax.swing.JPanel {
      *  @param owner The GUI that called this one.
      *  @param agent The Agent object to be configured.
      *  @param graph The graph of the patrolling simulation. */
-    public AgentJPanel(JDialog owner, Agent agent, Graph graph) {
+    public AgentJPanel(JDialog owner, Society society, Agent agent, Environment env) {
         this.initComponents();
-        this.initComponents2(owner, agent, graph);
+        this.initComponents2(owner, society, agent, env);
     }
     
     /** Initiates the components of the GUI.
@@ -109,6 +116,19 @@ public class AgentJPanel extends javax.swing.JPanel {
         death_panel = new javax.swing.JPanel();
         death_button = new javax.swing.JButton();
         death_combo = new javax.swing.JComboBox();
+        
+        activity_panel = new javax.swing.JPanel();
+        nonSim_panel = new javax.swing.JPanel();
+        timer_panel = new javax.swing.JPanel();
+        activation_panel = new javax.swing.JPanel();
+        deactivation_panel = new javax.swing.JPanel();
+        socToJoin_panel = new javax.swing.JPanel();
+        activation_label = new javax.swing.JLabel();
+        deactivation_label = new javax.swing.JLabel();
+        socToJoin_label = new javax.swing.JLabel();
+        activation_field = new javax.swing.JTextField();
+        deactivation_field = new javax.swing.JTextField();
+        socToJoin_combo = new javax.swing.JComboBox();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -485,9 +505,13 @@ public class AgentJPanel extends javax.swing.JPanel {
 
         main_panel.add(position_stamina_allowance_panel, java.awt.BorderLayout.CENTER);
 
+        
+        
+        activity_panel.setLayout(new BoxLayout(activity_panel, BoxLayout.Y_AXIS));
+        activity_panel.setBorder(new javax.swing.border.TitledBorder("Activities"));
+        
         death_panel.setLayout(new java.awt.BorderLayout());
-
-        death_panel.setBorder(new javax.swing.border.TitledBorder("Death time probability distribution"));
+        death_panel.setBorder(new javax.swing.border.TitledBorder("Death time probability distribution (SimPatrol managed)"));
         death_button.setText("Edit");
         death_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -506,21 +530,74 @@ public class AgentJPanel extends javax.swing.JPanel {
         death_combo.setEnabled(false);
 
         death_panel.add(death_combo, java.awt.BorderLayout.CENTER);
+        activity_panel.add(death_panel);
+        
+        
+        nonSim_panel.setLayout(new BoxLayout(nonSim_panel, BoxLayout.Y_AXIS));
+        nonSim_panel.setBorder(new javax.swing.border.TitledBorder("Non SimPatrol managed properties"));
+        
+        timer_panel.setLayout(new BoxLayout(timer_panel, BoxLayout.X_AXIS));
+        
+        activation_panel.setLayout(new BoxLayout(activation_panel, BoxLayout.X_AXIS));
+        activation_label.setText("activation time");
+        activation_label.setPreferredSize(new Dimension(125, 25));
+        activation_panel.add(activation_label);
+        activation_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	activation_fieldKeyReleased(evt);
+            }
+        });
+        activation_panel.add(activation_field);
+        timer_panel.add(activation_panel);
+        
+        deactivation_panel.setLayout(new BoxLayout(deactivation_panel, BoxLayout.X_AXIS));
+        deactivation_label.setText("  deactivation time");
+        deactivation_label.setPreferredSize(new Dimension(150, 25));
+        deactivation_panel.add(deactivation_label);
+        deactivation_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	deactivation_fieldKeyReleased(evt);
+            }
+        });
+        deactivation_panel.add(deactivation_field);
+        timer_panel.add(deactivation_panel);
+        
+        nonSim_panel.add(timer_panel);
+        
+        socToJoin_panel.setLayout(new BoxLayout(socToJoin_panel, BoxLayout.X_AXIS));
+        socToJoin_label.setText("Society to join");
+        socToJoin_label.setPreferredSize(new Dimension(125, 25));
+        socToJoin_panel.add(socToJoin_label);
+        
+        socToJoin_combo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Uniform", "Empirical", "Normal", "Specific time" }));
+        socToJoin_combo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	socToJoin_comboActionPerformed(evt);
+            }
+        });
+        socToJoin_combo.setEnabled(true);
+        socToJoin_panel.add(socToJoin_combo);
+        nonSim_panel.add(socToJoin_panel);
+        
+        activity_panel.add(nonSim_panel);
 
-        main_panel.add(death_panel, java.awt.BorderLayout.SOUTH);
+        main_panel.add(activity_panel, java.awt.BorderLayout.SOUTH);
 
         add(main_panel, java.awt.BorderLayout.NORTH);
     }//GEN-END:initComponents 
     
-    /** Complements the initiation of the components of the GUI.
+
+	/** Complements the initiation of the components of the GUI.
      * 
      *  @param owner The GUI that called this one.
      *  @param agent The Agent object to be configured.
      *  @param graph The graph of the patrolling simulation. */
-    public void initComponents2(JDialog owner, Agent agent, Graph graph) {
+    public void initComponents2(JDialog owner, Society society, Agent agent, Environment env) {
     	this.owner = owner;
+    	this.society = society;
     	this.agent = agent;
-    	this.graph = graph;    	
+    	this.environment = env;
+    	this.graph = env.getGraph();    	
     	
     	this.object_id_field.setText(this.agent.getObjectId());
     	this.label_field.setText(this.agent.getLabel());
@@ -639,8 +716,46 @@ public class AgentJPanel extends javax.swing.JPanel {
     		}
     		
     		this.death_combo.setEnabled(true);
+    		
+    		if(!this.society.getObjectId().equals("InactiveSociety")){
+    			this.activation_field.setEnabled(false);
+    			javax.swing.DefaultComboBoxModel model = new javax.swing.DefaultComboBoxModel(new String[] {"", this.society.getObjectId()});
+    			this.socToJoin_combo.setModel(model);
+    		} 
+    		else {
+    			Society[] societies = this.environment.getSocieties();
+    			int j = 0;
+    			for(int i = 0; i < societies.length; i++)
+    				if(!societies[i].getObjectId().equals("InactiveSociety"))
+    					j++;
+    			
+    			String[] socs = new String[j+1];
+    			socs[0] = "";
+    			j=1;
+    			for(int i = 0; i < societies.length; i++)
+    				if(!societies[i].getObjectId().equals("InactiveSociety")){
+    					socs[j] = societies[i].getObjectId();
+    					j++;
+    				}
+    			javax.swing.DefaultComboBoxModel model = new javax.swing.DefaultComboBoxModel(socs);
+    			this.socToJoin_combo.setModel(model);
+    		}
+    		
+    		if(((SeasonalAgent) this.agent).activating_time != -1)
+    			this.activation_field.setText(String.valueOf(((SeasonalAgent) this.agent).activating_time));
+    		if(((SeasonalAgent) this.agent).deactivating_time != -1)
+    			this.deactivation_field.setText(String.valueOf(((SeasonalAgent) this.agent).deactivating_time));
+    		if(((SeasonalAgent) this.agent).Society_to_join != null){
+    			for(int i=0; i < this.socToJoin_combo.getModel().getSize(); i++){
+    				if(((String)(this.socToJoin_combo.getItemAt(i))).equals(((SeasonalAgent) this.agent).Society_to_join)){
+    					this.socToJoin_combo.setSelectedIndex(i);
+    					break;
+    				}
+    			}
+    		}
+    		
     	}
-    	else this.death_panel.setVisible(false);    	
+    	else this.activity_panel.setVisible(false);    	
     }
     
     /** Executed when the depth_combo object changes.
@@ -1326,7 +1441,22 @@ public class AgentJPanel extends javax.swing.JPanel {
 				answer = new SeasonalAgent(label, Node, allowed_perceptions, allowed_actions, this.death_tpd);
 			else
 				answer = new SeasonalAgent(label, Node, allowed_perceptions, allowed_actions, null);
+			
+			if(this.activation_field.getText().trim().length() > 0){
+				int activation_time = Integer.valueOf(this.activation_field.getText().trim());
+				((SeasonalAgent)answer).setActivatingTime(activation_time);
+			}
+			
+			if(this.deactivation_field.getText().trim().length() > 0){
+				int deactivation_time = Integer.valueOf(this.deactivation_field.getText().trim());
+				((SeasonalAgent)answer).setDeactivatingTime(deactivation_time);
+			}
+			
+			if(((String)(this.socToJoin_combo.getSelectedItem())).trim().length() > 0){
+				((SeasonalAgent)answer).setSocietyToJoin(((String)(this.socToJoin_combo.getSelectedItem())).trim());
+			}
 		}
+
 		
 		answer.setObjectId(object_id);
 		
@@ -1339,10 +1469,89 @@ public class AgentJPanel extends javax.swing.JPanel {
     	return answer;
     }
     
+    
+    protected void socToJoin_comboActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void deactivation_fieldKeyReleased(KeyEvent evt) {
+    	String str_deactiv = this.deactivation_field.getText().trim(); 
+        if(str_deactiv.length() > 0) {
+            int deactivation_time = 0;
+        
+        	try {
+        		deactivation_time = Integer.parseInt(str_deactiv);
+        		if(deactivation_time < -1)
+        			this.deactivation_field.setText("-1");
+            }
+            catch(NumberFormatException e) {
+            	if(str_deactiv.equals("-"))
+            		return;
+            	JOptionPane.showMessageDialog(this, "Deactivation time must be -1 or a positive integer.", "Value error.", JOptionPane.ERROR_MESSAGE);                    
+            	this.deactivation_field.setText("");
+            }
+        }
+		
+	}
+
+	protected void activation_fieldKeyReleased(KeyEvent evt) {
+    	String str_activ = this.activation_field.getText().trim(); 
+        if(str_activ.length() > 0) {
+            int activation_time = 0;
+        
+        	try {
+        		activation_time = Integer.parseInt(str_activ);
+        		if(activation_time < -1)
+        			this.activation_field.setText("-1");
+            }
+            catch(NumberFormatException e) {
+            	if(str_activ.equals("-"))
+            		return;
+            	JOptionPane.showMessageDialog(this, "Activation time must be -1 or a positive integer.", "Value error.", JOptionPane.ERROR_MESSAGE);                    
+            	this.activation_field.setText("");
+            }
+        }
+		
+	}
+	
+	public boolean check_times(){
+		String str_activ = this.activation_field.getText().trim(); 
+		int activation_time = -1;
+        if(str_activ.length() > 0)
+            activation_time = Integer.parseInt(str_activ);
+        
+        String str_deactiv = this.deactivation_field.getText().trim(); 
+		int deactivation_time = -1;
+        if(str_deactiv.length() > 0)
+            deactivation_time = Integer.parseInt(str_deactiv);
+        
+        if(activation_time != -1 && deactivation_time != -1 && activation_time > deactivation_time){
+        	JOptionPane.showMessageDialog(this, "Activation time must be <= to deactivation time.", "Value error", JOptionPane.ERROR_MESSAGE);
+    		return false;
+        }
+        
+        if(this.society.getObjectId().equals("InactiveSociety")){
+        	if(activation_time == -1){
+        		JOptionPane.showMessageDialog(this, "Your agent will never activate, please set an activation time.", "Value error", JOptionPane.ERROR_MESSAGE);
+        		return false;
+        	}
+        	if(this.socToJoin_combo.getSelectedIndex() == 0){
+        		JOptionPane.showMessageDialog(this, "Please set a society to join for your agent.", "Value error", JOptionPane.ERROR_MESSAGE);
+        		return false;
+        	}
+        }
+        
+        return true;
+
+	}
+    
     /* Attributes. */
     // added manually
     private Agent agent;
     private Graph graph;
+    private Society society;
+    private Environment environment;
     private PerceptionPermission agent_perception_permission;
     private PerceptionPermission broadcast_perception_permission;
     private PerceptionPermission graph_perception_permission;
@@ -1427,5 +1636,19 @@ public class AgentJPanel extends javax.swing.JPanel {
     private javax.swing.JButton visit_button;
     private javax.swing.JCheckBox visit_check;
     private javax.swing.JPanel visit_panel;
+    
+    private javax.swing.JPanel activity_panel;
+    private javax.swing.JPanel nonSim_panel;
+    private javax.swing.JPanel timer_panel;
+    private javax.swing.JPanel activation_panel;
+    private javax.swing.JPanel deactivation_panel;
+    private javax.swing.JPanel socToJoin_panel;
+    private javax.swing.JLabel activation_label;
+    private javax.swing.JLabel deactivation_label;
+    private javax.swing.JLabel socToJoin_label;
+    private javax.swing.JTextField activation_field;
+    private javax.swing.JTextField deactivation_field;
+    private javax.swing.JComboBox socToJoin_combo;
+    
     // End of variables declaration//GEN-END:variables   
 }

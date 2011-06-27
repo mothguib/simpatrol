@@ -241,7 +241,7 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 			for(int i = 0; i < societies.length; i++){
 				societybuttons[i] = new JButton();
 				societybuttons[i].setName("SocietyButton_" + i);
-				societybuttons[i].setText("Modify Society " + i);
+				societybuttons[i].setText("Modify " + societies[i].getObjectId());
 				societybuttons[i].setHorizontalAlignment(SwingConstants.CENTER);
 				societybuttons[i].setComponentOrientation(ComponentOrientation.UNKNOWN);
 				societybuttons[i].setPreferredSize(new Dimension(150, 25));
@@ -269,11 +269,11 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 			if( source == "Create Graph"){
 				Create_Graph();
 			}
-			if(source == "Modify Graph"){
+			else if(source == "Modify Graph"){
 				Modify_Graph();
 			}
-			if(source.contains("Modify Society")){
-				Modify_Society(Integer.parseInt(String.valueOf(source.charAt(source.length()-1))));
+			else if(source.contains("Modify")){
+				Modify_Society(source.substring(7));
 			}
 			if(source == "Create Society"){
 				Create_Society();
@@ -479,7 +479,19 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 		}
 		int i = societies.length;
 		
-		Object[] options = {"Open Society", "Closed Society", "Cancel"};
+		boolean has_inactive = false;
+		for(int j = 0; j < societies.length; j++)
+			if(societies[j] != null && societies[j].getObjectId().equals("InactiveSociety"))
+				has_inactive = true;
+		if(!has_inactive && societies[0] == null)
+			has_inactive = true;
+		
+		Object[] options;
+		if(!has_inactive)
+			options = new Object[]{"Open Society", "Closed Society", "Inactive Society", "Cancel"};
+		else
+			options = new Object[]{"Open Society", "Closed Society", "Cancel"};
+		
 		int n = JOptionPane.showOptionDialog(this,
 				"What kind of society do you want to create ?",
 				"Society creator",
@@ -488,14 +500,22 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 				null,
 				options,
 				options[2]);
-		if(n == JOptionPane.CANCEL_OPTION) return;
-		if(n == JOptionPane.OK_OPTION)
-			societies[i-1] = new OpenSociety("Society " + (i-1), new SeasonalAgent[0]);
-		if(n == JOptionPane.NO_OPTION)
-			societies[i-1] = new ClosedSociety("Society " + (i-1), new PerpetualAgent[0]);
 		
-		societies[i-1].setObjectId("s" + (i-1));
-		SocietyGUI society_gui = new SocietyGUI(this, societies[i-1], i-1, graph);
+		if((has_inactive && n == 2) || (!has_inactive && n == 3)) return;
+		if(n == 0){
+			societies[i-1] = new OpenSociety("Society " + (i-1), new SeasonalAgent[0]);
+			societies[i-1].setObjectId("s" + (i-1));
+		}
+		if(n == 1){
+			societies[i-1] = new ClosedSociety("Society " + (i-1), new PerpetualAgent[0]);
+			societies[i-1].setObjectId("s" + (i-1));
+		}
+		if(!has_inactive && n == 2){
+			societies[i-1] = new OpenSociety("InactiveSociety", new SeasonalAgent[0]);
+			societies[i-1].setObjectId("InactiveSociety");
+		}
+
+		SocietyGUI society_gui = new SocietyGUI(this, societies[i-1], i-1, new Environment(this.graph, societies));
 		society_gui.setVisible(true);
 	}
 	
@@ -504,8 +524,12 @@ public class Editor extends javax.swing.JFrame implements ActionListener{
 	 * This method launches the GUI associated to the i_th society
 	 * @param i : number of the society to change
 	 */
-	private void Modify_Society(int i){
-		SocietyGUI society_gui = new SocietyGUI(this, societies[i], i, graph);
+	private void Modify_Society(String s_id){
+		int i;
+		for(i = 0; i < societies.length; i++)
+			if(societies[i] != null && societies[i].getObjectId().equals(s_id))
+					break;
+		SocietyGUI society_gui = new SocietyGUI(this, societies[i], i, new Environment(this.graph, societies));
 		society_gui.setVisible(true);
 	}
 

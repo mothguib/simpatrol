@@ -7,6 +7,7 @@ package society;
 import javax.swing.JFrame;
 
 import editor.Editor;
+import model.Environment;
 import model.agent.ClosedSociety;
 import model.agent.Society;
 import model.graph.Graph;
@@ -22,10 +23,10 @@ public class SocietyGUI extends javax.swing.JDialog {
      *  @param owner The GUI that called this one.
 	 *  @param society The Society object to be configured by the GUI.
 	 *  @param graph The graph of the patrolling simulation. */
-    public SocietyGUI(JFrame owner, Society society, int soc_num, Graph graph) {
+    public SocietyGUI(JFrame owner, Society society, int soc_num, Environment env) {
         super(owner, true);
         this.initComponents();
-        this.initComponents2(society, soc_num, graph);
+        this.initComponents2(society, soc_num, env);
     }
     
     /** Initiates the components of the GUI.
@@ -92,11 +93,11 @@ public class SocietyGUI extends javax.swing.JDialog {
      * 
      *  @param society The Society object to be configured.
      *  @param graph The graph of the patrolling simulation. */
-    private void initComponents2(Society society, int soc_num, Graph graph) {
+    private void initComponents2(Society society, int soc_num, Environment env) {
     	this.society = society;
     	this.society_number = soc_num;
     	
-    	this.society_panel = new SocietyJPanel(this, society, graph);
+    	this.society_panel = new SocietyJPanel(this, society, env);
     	this.tabbed_panel.setComponentAt(0, this.society_panel);
     	
     	if(society instanceof ClosedSociety) this.society_label.setText("Closed society");

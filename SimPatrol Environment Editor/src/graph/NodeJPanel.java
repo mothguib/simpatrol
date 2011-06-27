@@ -89,6 +89,13 @@ public class NodeJPanel extends JPanel{
 	private JComboBox enabtpd_combo;
 	private JComboBox disabltpd_combo;
 	
+	private JPanel localization_panel;
+	private JPanel X_panel;
+	private JPanel Y_panel;
+	private JLabel X_label;
+	private JLabel Y_label;
+	private JTextField X_field;
+	private JTextField Y_field;
 	
 	private JPanel edge_panel;
 	private JScrollPane edges_scroll;
@@ -145,6 +152,15 @@ public class NodeJPanel extends JPanel{
         disabltpd_panel = new javax.swing.JPanel();
         disabltpd_label = new javax.swing.JLabel();
         disabltpd_combo = new javax.swing.JComboBox();
+        
+        
+        localization_panel = new javax.swing.JPanel();
+        X_panel = new javax.swing.JPanel();
+        Y_panel = new javax.swing.JPanel();
+    	X_label = new javax.swing.JLabel();
+    	Y_label = new javax.swing.JLabel();
+    	X_field = new javax.swing.JTextField();
+    	Y_field = new javax.swing.JTextField();
         
         edge_panel = new javax.swing.JPanel();
         edges_scroll = new javax.swing.JScrollPane();
@@ -427,7 +443,44 @@ public class NodeJPanel extends JPanel{
         
         genprop_panel.add(dynprop_panel);
         
+        
+        
+        // localization properties
+        localization_panel.setLayout(new BoxLayout(localization_panel, BoxLayout.Y_AXIS));
+        localization_panel.setBorder(new javax.swing.border.TitledBorder("Localization Properties"));
+        localization_panel.setMaximumSize(new Dimension(250, 150));
+        //localization_panel.setPreferredSize(new Dimension(250, 140));
+        localization_panel.setMinimumSize(new Dimension(200, 100));
+        
+        X_panel.setLayout(new BoxLayout(X_panel, BoxLayout.X_AXIS));
+        X_label.setText("  X");
+        X_label.setPreferredSize(new Dimension(70, 25));
+        X_panel.add(X_label);
+        X_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                X_fieldKeyReleased(evt);
+            }
+        });
+        X_panel.add(X_field);
+        localization_panel.add(X_panel);
+        
+        Y_panel.setLayout(new BoxLayout(Y_panel, BoxLayout.X_AXIS));
+        Y_label.setText("  Y");
+        Y_label.setPreferredSize(new Dimension(70, 25));
+        Y_panel.add(Y_label);
+        Y_field.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                Y_fieldKeyReleased(evt);
+            }
+
+        });
+        Y_panel.add(Y_field);
+        localization_panel.add(Y_panel);
+        
+        genprop_panel.add(localization_panel);
+        
         add(genprop_panel);
+
         
         
         /**
@@ -1040,6 +1093,20 @@ public class NodeJPanel extends JPanel{
 	 */
 	public Graph getGraph() {
 		return new Graph(graph.getObjectId(), node);
+	}
+	
+
+	private void X_fieldKeyReleased(KeyEvent evt) {
+		if(node[selected_node] != null)
+	        node[selected_node].setX(Double.valueOf(X_field.getText()));
+		
+	}
+	
+
+	private void Y_fieldKeyReleased(KeyEvent evt) {
+		if(node[selected_node] != null)
+	        node[selected_node].setY(Double.valueOf(Y_field.getText()));
+		
 	}
 
 

@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import agent.AgentGUI;
+import model.Environment;
 import model.agent.Agent;
 import model.agent.ClosedSociety;
 import model.agent.OpenSociety;
@@ -32,9 +33,9 @@ public class SocietyJPanel extends javax.swing.JPanel {
      *  @param owner The GUI that called this one.
      *  @param society The Society object to be configured.
      *  @param graph The graph of the patrolling simulation. */
-    public SocietyJPanel(JDialog owner, Society society, Graph graph) {
+    public SocietyJPanel(JDialog owner, Society society, Environment env) {
         this.initComponents();
-        this.initComponents2(owner, society, graph);
+        this.initComponents2(owner, society, env);
     }
     
     /** Initiates the components of the GUI.
@@ -173,9 +174,10 @@ public class SocietyJPanel extends javax.swing.JPanel {
      *  @param owner The GUI that called this one.
      *  @param society The Society object to be configured.
      *  @param graph The graph of the patrolling simulation. */
-    private void initComponents2(JDialog owner, Society society, Graph graph) {
+    private void initComponents2(JDialog owner, Society society, Environment env) {
     	this.owner = owner;
-    	this.graph = graph;    	
+    	this.environment = env;
+    	this.graph = env.getGraph();    	
     	this.agents = new LinkedList<Agent>();
     	
     	if(society instanceof ClosedSociety)
@@ -226,7 +228,7 @@ public class SocietyJPanel extends javax.swing.JPanel {
         	
         	for(int i = 0; i < this.agents.size(); i++)
         		if(this.agents.get(i).getObjectId().equals(agent_id)) {
-        			this.agent_gui = new AgentGUI(this.owner, this.agents.get(i), this.graph);
+        			this.agent_gui = new AgentGUI(this.owner, this.getSociety(), this.agents.get(i), this.environment);
         			this.agent_gui.setVisible(true);
         			
         			Agent[] obtained_agents = this.agent_gui.getAgents();
@@ -264,7 +266,7 @@ public class SocietyJPanel extends javax.swing.JPanel {
     	
     	added_agent.setObjectId(added_agent.getClass().getName() + "@" + Integer.toHexString(added_agent.hashCode()) + "#" + Long.toHexString(System.currentTimeMillis()));
     	
-    	this.agent_gui = new AgentGUI(this.owner, added_agent, this.graph);
+    	this.agent_gui = new AgentGUI(this.owner, this.getSociety(), added_agent, this.environment);
 		this.agent_gui.setVisible(true);
 		
 		Agent[] obtained_agents = this.agent_gui.getAgents();
@@ -343,6 +345,7 @@ public class SocietyJPanel extends javax.swing.JPanel {
     // added manually
     private JDialog owner;
     private boolean is_closed_society;
+    private Environment environment;
     private Graph graph;    
     private AgentGUI agent_gui;
     private LinkedList<Agent> agents;
