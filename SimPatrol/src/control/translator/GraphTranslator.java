@@ -100,6 +100,9 @@ public abstract class GraphTranslator extends Translator {
 			String str_idleness = node_element.getAttribute("idleness");
 			String str_fuel = node_element.getAttribute("fuel");
 			String str_is_enabled = node_element.getAttribute("is_enabled");
+			
+			String str_x = node_element.getAttribute("x");
+			String str_y = node_element.getAttribute("y");
 
 			// obtains the eventual time probability distributions
 			EventTimeProbabilityDistribution[] etpds = EventTimeProbabilityDistributionTranslator
@@ -148,6 +151,11 @@ public abstract class GraphTranslator extends Translator {
 			if (str_fuel.length() > 0)
 				fuel = Boolean.parseBoolean(str_fuel);
 			current_node.setFuel(fuel);
+			
+			if(str_x.length() > 0)
+				current_node.setX(Double.valueOf(str_x));
+			if(str_y.length() > 0)
+				current_node.setY(Double.valueOf(str_y));
 
 			// adds the new node to the answer
 			answer[i] = current_node;

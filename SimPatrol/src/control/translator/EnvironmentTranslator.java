@@ -48,30 +48,6 @@ public abstract class EnvironmentTranslator extends Translator {
 		// obtains the societies of the environment
 		Society[] societies = SocietyTranslator.getSocieties(
 				environment_element, graph);
-
-		// detects if there is a declared inactive society
-		OpenSociety inactive_society = null;
-		for(Society soc: societies){
-			if(soc instanceof OpenSociety && soc.getObjectId().equals("InactiveSociety"))
-				inactive_society = (OpenSociety)soc;
-		}
-		
-		// if so, we put it apart
-		if(inactive_society != null){
-			Society[] societies2 = new Society[societies.length - 1];
-			int i = 0;
-			int j = 0;
-			while( i < societies.length){
-				if(!(societies[i].getObjectId().equals("InactiveSociety"))){
-					societies2[j] = societies[i];
-					j++;
-				}
-				i++;
-			}
-			
-			return new Environment(graph, societies2, inactive_society);
-		}
-		
 		
 		// returns the answer
 		return new Environment(graph, societies);
@@ -107,31 +83,9 @@ public abstract class EnvironmentTranslator extends Translator {
 			Society[] societies = SocietyTranslator.getSocieties(
 					environment_element, graph);
 
-			// detects if there is a declared inactive society
-			OpenSociety inactive_society = null;
-			for(Society soc: societies){
-				if(soc instanceof OpenSociety && soc.getObjectId().equals("InactiveSociety"))
-					inactive_society = (OpenSociety)soc;
-			}
-			// if so, we put it apart
-			if(inactive_society != null){
-				Society[] societies2 = new Society[societies.length - 1];
-				int k = 0;
-				int j = 0;
-				while( k < societies.length){
-					if(!(societies[k].getObjectId().equals("InactiveSociety"))){
-						societies2[j] = societies[k];
-						j++;
-					}
-					k++;
-				}
-				
-				answer[i] =  new Environment(graph, societies2, inactive_society);
-			}
-			else {
-				// adds the new environment to the answer
-				answer[i] = new Environment(graph, societies);
-			}
+			
+			// adds the new environment to the answer
+			answer[i] = new Environment(graph, societies);
 		}
 
 		// returns the answer

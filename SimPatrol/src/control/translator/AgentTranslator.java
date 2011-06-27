@@ -61,11 +61,14 @@ public abstract class AgentTranslator extends Translator {
 			String str_state = agent_element.getAttribute("state");
 			String node_id = agent_element.getAttribute("node_id");
 			String edge_id = agent_element.getAttribute("edge_id");
-			String str_elapsed_length = agent_element
-					.getAttribute("elapsed_length");
+			String str_elapsed_length = agent_element.getAttribute("elapsed_length");
 			String str_stamina = agent_element.getAttribute("stamina");
 			String str_max_stamina = agent_element.getAttribute("max_stamina");
-
+			
+			String socToJoin = agent_element.getAttribute("society_to_join");
+			String str_activating_time = agent_element.getAttribute("activating_time");
+			String str_deactivating_time = agent_element.getAttribute("deactivating_time");
+			
 			// finds the node of the agent
 			Node node = null;
 			for (int j = 0; j < nodes.length; j++)
@@ -107,10 +110,18 @@ public abstract class AgentTranslator extends Translator {
 				if (read_death_tpd.length > 0)
 					death_tpd = read_death_tpd[0];
 
+				int activating_time = -1;
+				int deactivating_time = -1;
+				if(str_activating_time.length() > 0)
+					activating_time = Integer.valueOf(str_activating_time);
+				if(str_deactivating_time.length() > 0)
+					deactivating_time = Integer.valueOf(str_deactivating_time);
+				
 				// new seasonal agent
 				agent = new SeasonalAgent(label, node,
 						getAllowedPerceptions(agent_element),
-						getAllowedActions(agent_element), death_tpd);
+						getAllowedActions(agent_element), death_tpd, 
+						socToJoin, activating_time, deactivating_time);
 			}
 
 			// configures the new agent...

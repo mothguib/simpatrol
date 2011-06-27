@@ -40,16 +40,41 @@ public final class Environment implements XMLable {
 	 */
 	public Environment(Graph graph, Society[] societies) {
 		this.graph = graph;
-
-		this.societies = Collections.synchronizedSet(new HashSet<Society>());
-		for (int i = 0; i < societies.length; i++)
-			this.societies.add(societies[i]);
 		
-		inactiveSociety = new OpenSociety("InactiveSociety", new SeasonalAgent[0]);
-		inactiveSociety.setObjectId("InactiveSociety");
+		OpenSociety inactive_society = null;
+		for(Society soc: societies){
+			if(soc instanceof OpenSociety && soc.getObjectId().equals("InactiveSociety"))
+				inactive_society = (OpenSociety)soc;
+		}
+		
+		// if so, we put it apart
+		if(inactive_society != null){
+			Society[] societies2 = new Society[societies.length - 1];
+			int i = 0;
+			int j = 0;
+			while( i < societies.length){
+				if(!(societies[i].getObjectId().equals("InactiveSociety"))){
+					societies2[j] = societies[i];
+					j++;
+				}
+				i++;
+			}
+			societies = societies2;
+		}
+		
+		this.societies = Collections.synchronizedSet(new HashSet<Society>());
+		for(Society soc : societies)
+			this.societies.add(soc);
+		
+		if(inactive_society != null)
+			this.inactiveSociety = inactive_society;
+		else {
+			inactiveSociety = new OpenSociety("InactiveSociety", new SeasonalAgent[0]);
+			inactiveSociety.setObjectId("InactiveSociety");
+		}
 	}
 	
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -59,7 +84,7 @@ public final class Environment implements XMLable {
 	 *            The societies of patrollers of the simulation.
 	 * @param inactive_society
 	 * 				The open society containing the agents that are inactive at the beginning of the simulation
-	 */
+	 */ /*
 	public Environment(Graph graph, Society[] societies, OpenSociety inactive_society) {
 		this.graph = graph;
 
@@ -69,7 +94,7 @@ public final class Environment implements XMLable {
 		
 		inactiveSociety = inactive_society;
 		inactiveSociety.setObjectId("InactiveSociety");
-	}
+	} */
 
 	/**
 	 * Returns the graph of the environment.
