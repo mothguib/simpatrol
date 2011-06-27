@@ -264,10 +264,11 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
     protected void ProcessAnswers(){
     	if(this.transition_counter != 0){
     		SpeechAct reject = new SpeechAct(this.myCurrentTransaction, SpeechActPerformative.REJECT, this.agent_id, "", new LinkedList<String>(), 0);
-    		for(String buyer : this.FBABuyers){
-    			reject.setReceiver(buyer);
-				this.SendSpeechAct(reject);
-    		}
+    		if(this.FBABuyers != null)
+	    		for(String buyer : this.FBABuyers){
+	    			reject.setReceiver(buyer);
+					this.SendSpeechAct(reject);
+	    		}
     		
         	this.cycles_without_exchange++;  	
         	this.best_proposition1 = null;
