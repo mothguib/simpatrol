@@ -40,6 +40,10 @@ public final class Node {
 	 */
 	private boolean fuel = false;
 
+	
+	double x;
+	double y;
+	
 	/* Methods. */
 	/**
 	 * Constructor.
@@ -211,163 +215,6 @@ public final class Node {
 		return answer;
 	}
 
-	/**
-	 * Returns all the nodees in the neighbourhood.
-	 * 
-	 * @return The set of nodees in the neighbourhood.
-	 */
-	public Node[] getNeighbourhood() {
-		// holds the set of neighbour nodes
-		Set<Node> neighbourhood = new HashSet<Node>();
-
-		// for each edge whose emitter is this node
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the other node
-				Node other_node = ((Edge) out_edges_array[i])
-						.getOtherNode(this);
-
-				// adds it to set of neighbours
-				neighbourhood.add(other_node);
-			}
-		}
-
-		// for each edge whose collector is this node
-		if (this.in_edges != null) {
-			Object[] in_edges_array = this.in_edges.toArray();
-			for (int i = 0; i < in_edges_array.length; i++) {
-				// obtains the other node
-				Node other_node = ((Edge) in_edges_array[i])
-						.getOtherNode(this);
-
-				// adds it to set of neighbours
-				neighbourhood.add(other_node);
-			}
-		}
-
-		// mounts and returns the answer
-		Object[] neighbourhood_array = neighbourhood.toArray();
-		Node[] answer = new Node[neighbourhood_array.length];
-		for (int i = 0; i < neighbourhood_array.length; i++)
-			answer[i] = (Node) neighbourhood_array[i];
-		return answer;
-	}
-
-	/**
-	 * Returns the nodees in the neighbourhood of which emitter is this one.
-	 * 
-	 * @return The set of nodees in the neighbourhood of which emitter is this
-	 *         one.
-	 */
-	public Node[] getCollectorNeighbourhood() {
-		// holds the set of neighbour nodes
-		Set<Node> neighbourhood = new HashSet<Node>();
-
-		// for each edge whose emitter is this node
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the other node
-				Node other_node = ((Edge) out_edges_array[i])
-						.getOtherNode(this);
-
-				// adds it to set of neighbours
-				neighbourhood.add(other_node);
-			}
-		}
-
-		// mounts and returns the answer
-		Object[] neighbourhood_array = neighbourhood.toArray();
-		Node[] answer = new Node[neighbourhood_array.length];
-		for (int i = 0; i < neighbourhood_array.length; i++)
-			answer[i] = (Node) neighbourhood_array[i];
-		return answer;
-	}
-
-	/**
-	 * Returns all the edges between this node and the given one.
-	 * 
-	 * @param node
-	 *            The adjacent node of which edges shared with this node are
-	 *            to be returned.
-	 * @return The edges in common between this node and the given one.
-	 */
-	public Edge[] getConnectingEdges(Node node) {
-		// holds the answer to the method
-		Set<Edge> shared_edges = new HashSet<Edge>();
-
-		// for each edge whose emitter is this node
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) out_edges_array[i];
-
-				// if the given node is the collector of the current edge,
-				// adds it to the answer
-				if (node.isCollectorOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
-
-		// for each edge whose collector is this node
-		if (this.in_edges != null) {
-			Object[] in_edges_array = this.in_edges.toArray();
-			for (int i = 0; i < in_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) in_edges_array[i];
-
-				// if the given node is the emitter of the current edge,
-				// adds it to the answer
-				if (node.isEmitterOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
-
-		// mounts and returns the answer
-		Object[] shared_edges_array = shared_edges.toArray();
-		Edge[] answer = new Edge[shared_edges_array.length];
-		for (int i = 0; i < shared_edges_array.length; i++)
-			answer[i] = (Edge) shared_edges_array[i];
-		return answer;
-	}
-
-	/**
-	 * Returns all the edges between this node and the given one, of which
-	 * emitter is this node.
-	 * 
-	 * @param node
-	 *            The adjacent node of which edges shared with this node are
-	 *            to be returned.
-	 * @return The edges in common between this node and the given one, of
-	 *         which emitter is this node.
-	 */
-	public Edge[] getConnectingOutEdges(Node node) {
-		// holds the answer to the method
-		Set<Edge> shared_edges = new HashSet<Edge>();
-
-		// for each edge whose emitter is this node
-		if (this.out_edges != null) {
-			Object[] out_edges_array = this.out_edges.toArray();
-			for (int i = 0; i < out_edges_array.length; i++) {
-				// obtains the current edge
-				Edge current_edge = (Edge) out_edges_array[i];
-
-				// if the given node is the collector of the current edge,
-				// adds it to the answer
-				if (node.isCollectorOf(current_edge))
-					shared_edges.add(current_edge);
-			}
-		}
-
-		// mounts and returns the answer
-		Object[] shared_edges_array = shared_edges.toArray();
-		Edge[] answer = new Edge[shared_edges_array.length];
-		for (int i = 0; i < shared_edges_array.length; i++)
-			answer[i] = (Edge) shared_edges_array[i];
-		return answer;
-	}
 
 	public boolean equals(Object object) {
 		if (this.id != null && object instanceof Node)
@@ -382,5 +229,21 @@ public final class Node {
 
 	public void setObjectId(String object_id) {
 		this.id = object_id;
+	}
+	
+	public double getX(){
+		return this.x;
+	}
+	
+	public void setX(double x){
+		this.x = x;
+	}
+	
+	public double getY(){
+		return this.y;
+	}
+	
+	public void setY(double y){
+		this.y = y;
 	}
 }

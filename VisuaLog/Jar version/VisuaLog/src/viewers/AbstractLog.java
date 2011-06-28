@@ -108,16 +108,42 @@ public abstract class AbstractLog extends Thread {
 	 *  visual representations.
 	 */
 	protected void configure_canvas(){
-		int i = 50;
-		int j = 50;
-		for(Node vert : graph.getNodes()){
-			NodeCircle node = new NodeCircle(new Point(i, j), vert, vert.getObjectId(), 0, this.getType().contains("turn")? false : true);
-			node.setModified(true);
-			mycanvas.addDrawable(node);
-			i += 40;
-			if(i > 200){
-				i = 10;
-				j += 40;
+		int max_x = Integer.MIN_VALUE, min_x = Integer.MAX_VALUE, max_y = Integer.MIN_VALUE, min_y = Integer.MAX_VALUE;
+		for(Node node : this.graph.getNodes()){
+			if(node.getX() > max_x)
+				max_x = (int)node.getX();
+			if(node.getX() < min_x)
+				min_x = (int)node.getX();
+			if(node.getY() > max_y)
+				max_y = (int)node.getY();
+			if(node.getY() < min_y)
+				min_y = (int)node.getY();
+		}
+		
+		
+		// if no node has coordinates, we create nodes where we want
+		if(max_x == Integer.MIN_VALUE){
+			int i = 50;
+			int j = 50;
+			for(Node vert : graph.getNodes()){
+				NodeCircle node = new NodeCircle(new Point(i, j), vert, vert.getObjectId(), 0, this.getType().contains("turn")? false : true);
+				node.setModified(true);
+				mycanvas.addDrawable(node);
+				i += 40;
+				if(i > 200){
+					i = 10;
+					j += 40;
+				}
+			}
+		} 
+		else {
+			for(Node node : graph.getNodes()){
+				int x = (int)((node.getX() - min_x)/(max_x - min_x) * (this.mycanvas.getWidth() * 0.8) + this.mycanvas.getWidth()*0.1);
+				int y = (int)((node.getY() - min_y)/(max_y - min_y) * (this.mycanvas.getHeight() * 0.8) + this.mycanvas.getHeight()*0.1);
+				NodeCircle nodec = new NodeCircle(new Point(x, y), node, node.getObjectId(), 0, this.getType().contains("turn")? false : true);
+				nodec.setModified(true);
+				mycanvas.addDrawable(nodec);
+			
 			}
 		}
 		

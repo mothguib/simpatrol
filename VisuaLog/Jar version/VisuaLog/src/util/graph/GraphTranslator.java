@@ -81,6 +81,9 @@ public abstract class GraphTranslator extends Translator {
 			String str_priority = vertex_element.getAttribute("priority");
 			String str_idleness = vertex_element.getAttribute("idleness");
 			String str_fuel = vertex_element.getAttribute("fuel");
+			
+			String str_x = vertex_element.getAttribute("x");
+			String str_y = vertex_element.getAttribute("y");
 
 			// instatiates the new vertex
 			Node current_vertex = new Node(label);
@@ -106,6 +109,11 @@ public abstract class GraphTranslator extends Translator {
 			if (str_fuel.length() > 0)
 				fuel = Boolean.parseBoolean(str_fuel);
 			current_vertex.setFuel(fuel);
+			
+			if(str_x.length() > 0)
+				current_vertex.setX(Double.valueOf(str_x));
+			if(str_y.length() > 0)
+				current_vertex.setY(Double.valueOf(str_y));
 
 			// adds the new vertex to the answer
 			answer[i] = current_vertex;
