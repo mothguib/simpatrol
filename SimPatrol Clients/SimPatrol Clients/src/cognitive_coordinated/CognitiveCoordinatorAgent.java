@@ -175,7 +175,7 @@ public final class CognitiveCoordinatorAgent extends Agent {
 			*/
 			
 			// mounts a heap with the vertexes, based on their idlenesses
-			Node[] vertexes = this.graph.getNodees();
+			Node[] vertexes = this.graph.getNodes();
 			ComparableNode[] comparable_vertexes = new ComparableNode[vertexes.length];
 			for (int i = 0; i < comparable_vertexes.length; i++)
 				comparable_vertexes[i] = new ComparableNode(vertexes[i]);

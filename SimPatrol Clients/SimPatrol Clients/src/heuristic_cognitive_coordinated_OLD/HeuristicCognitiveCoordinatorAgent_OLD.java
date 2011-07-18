@@ -186,7 +186,7 @@ public final class HeuristicCognitiveCoordinatorAgent_OLD extends Agent_OLD {
 					// mounts a heap with the vertexes, based on their
 					// idlenesses
 					// and their distances to the reference position
-					Node[] vertexes = this.graph.getNodees();
+					Node[] vertexes = this.graph.getNodes();
 					ComparableNode[] comparable_vertexes = new ComparableNode[vertexes.length - 1];
 					int comparable_vertexes_index = 0;
 					for (int j = 0; j < vertexes.length; j++)

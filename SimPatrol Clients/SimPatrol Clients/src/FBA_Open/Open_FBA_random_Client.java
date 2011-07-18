@@ -71,7 +71,7 @@ public class Open_FBA_random_Client extends Client {
 		}
 		
 		
-		Node[] nodes = parsed_graph.getNodees();
+		Node[] nodes = parsed_graph.getNodes();
 		int[] distributed = new int[nodes.length];
 		
 		int nb_active_agents = 0;

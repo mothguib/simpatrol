@@ -90,10 +90,10 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 	}
 	
 	
-	public FlexibleBidder2Agent(String id, double entering_time, double quitting_time, 
+	public FlexibleBidder2Agent(String id, double entering_time, double quitting_time, String Society,
 											int number_of_agents, LinkedList<String> nodes, 
 											double idleness_rate_for_path, double idleness_rate_for_auction) {
-		super(id, entering_time, quitting_time, nodes);
+		super(id, entering_time, quitting_time, Society, nodes);
 		
 		plan = new LinkedList<String>();
 		engaged_transactions = new LinkedList<TransactionNodes>();
@@ -225,7 +225,7 @@ public class FlexibleBidder2Agent extends CommunicatorAgent2 {
 		Graph path = graph.getIdlenessedDijkstraPath(begin_vertex, end_vertex);
 
 		// adds the ordered vertexes in the plan of the agent
-		Node[] path_vertexes = path.getNodees();
+		Node[] path_vertexes = path.getNodes();
 		for (int i = 0; i < path_vertexes.length; i++)
 			if (path_vertexes[i].equals(begin_vertex)) {
 				begin_vertex = path_vertexes[i];

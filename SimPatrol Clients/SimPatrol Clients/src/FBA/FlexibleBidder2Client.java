@@ -60,7 +60,7 @@ public class FlexibleBidder2Client extends Client {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Node[] nodes = parsed_graph.getNodees();
+		Node[] nodes = parsed_graph.getNodes();
 		int[] distributed = new int[nodes.length];
 		
 		int node_by_agent = nodes.length / agent_ids.length;

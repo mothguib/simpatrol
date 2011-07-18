@@ -33,14 +33,12 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
 									int number_of_agents, LinkedList<String> nodes,
 									double idleness_rate_for_path, double idleness_rate_for_auction,
 									String society_id) {
-		super(id, entering_time, quitting_time, number_of_agents, nodes, idleness_rate_for_path, idleness_rate_for_auction);
+		super(id, entering_time, quitting_time, society_id, number_of_agents, nodes, idleness_rate_for_path, idleness_rate_for_auction);
 		
 		if(this.myNodes.size() == 0)
 			this.nb_min_nodes = 1;
 		
 		received_messages = new LinkedList<String>();
-		
-		this.Society_id = society_id;
 		
 		this.setScenario();
 	}

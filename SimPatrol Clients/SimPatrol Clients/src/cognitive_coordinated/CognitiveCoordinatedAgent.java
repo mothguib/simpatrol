@@ -181,7 +181,7 @@ public final class CognitiveCoordinatedAgent extends Agent {
 		Graph path = graph.getDijkstraPath(begin_Node, end_Node);
 
 		// adds the ordered Nodees in the plan of the agent
-		Node[] path_Nodees = path.getNodees();
+		Node[] path_Nodees = path.getNodes();
 		for (int i = 0; i < path_Nodees.length; i++)
 			if (path_Nodees[i].equals(begin_Node)) {
 				begin_Node = path_Nodees[i];

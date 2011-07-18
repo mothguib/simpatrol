@@ -206,7 +206,7 @@ public class MyGBLearnerAgent extends Agent {
 			LinkedList<StringAndDouble> neighborhood = new LinkedList<StringAndDouble>();
 			
 			// gets all the neighbors of the current node
-			for( Node node : graph_perception[0].getNodees()){
+			for( Node node : graph_perception[0].getNodes()){
 				if(node.getLabel().equals(this.node_id)){
 					Edge[] edges = node.getEdges();
 					for( Edge edge : edges){

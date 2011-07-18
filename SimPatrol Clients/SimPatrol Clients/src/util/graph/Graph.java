@@ -73,7 +73,7 @@ public final class Graph {
 	 * 
 	 * @return The nodes of the graph.
 	 */
-	public Node[] getNodees() {
+	public Node[] getNodes() {
 		Node[] answer = new Node[this.nodes.size()];
 		int i = 0;
 		for (Node node : this.nodes) {
@@ -938,7 +938,7 @@ public final class Graph {
 
 					// adds the nodes of such path to the hamiltonian cycle
 					Node[] dijkstra_path_nodes = dijkstra_path
-							.getNodees();
+							.getNodes();
 					HashSet<Edge> considered_dijkstra_edges = new HashSet<Edge>();
 
 					Node dijkstra_path_node = null;
@@ -1123,7 +1123,7 @@ public final class Graph {
 		// obtains the nodes of such tree that have odd degree
 		HashSet<Node> odd_degree_nodes_set = new HashSet<Node>();
 
-		Node[] mws_tree_nodes = mws_tree.getNodees();
+		Node[] mws_tree_nodes = mws_tree.getNodes();
 		for (int i = 0; i < mws_tree_nodes.length; i++) {
 			Node current_node = mws_tree_nodes[i];
 
@@ -1201,7 +1201,7 @@ public final class Graph {
 
 			// obtains, in a list, all the nodes that have the current degree
 			LinkedList<Node> current_mws_nodes = new LinkedList<Node>();
-			for (Node current_mws_node : mws_tree.getNodees()) {
+			for (Node current_mws_node : mws_tree.getNodes()) {
 				// holds the degree of the current node
 				int current_mws_node_degree = current_mws_node.getDegree();
 
@@ -1221,7 +1221,7 @@ public final class Graph {
 			// if the the number of node of the mws tree that have degree
 			// smaller than the current considered degree is equals to the
 			// number of node of the mws tree, quits the loop
-			if (small_degree_count == mws_tree.getNodees().length)
+			if (small_degree_count == mws_tree.getNodes().length)
 				break;
 
 			// if the current considered degree is 1...
@@ -1612,7 +1612,7 @@ public final class Graph {
 			if (!graph.label.equals(this.label))
 				return false;
 
-			Node[] nodes = graph.getNodees();
+			Node[] nodes = graph.getNodes();
 			for (int i = 0; i < nodes.length; i++) {
 				Node node = this.getNode(nodes[i].getObjectId());
 				if (node == null

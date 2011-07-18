@@ -16,6 +16,8 @@ public abstract class OpenAgent extends Agent {
 
 	protected String agent_id;
 	
+	protected String Society_id;
+	
 	protected double time = -1;
 	protected Graph graph;
 	protected LinkedList<String> AGENTS_POSITIONS;
@@ -38,13 +40,14 @@ public abstract class OpenAgent extends Agent {
 	protected final static int NETWORK_QUALITY = 5;
 	
 	
-	public OpenAgent(String id, double entering_time, double quitting_time) {
+	public OpenAgent(String id, double entering_time, double quitting_time, String Society) {
 		super();
 		
 		this.agent_id = id;
 		
 		this.entering_time = entering_time;
 		this.quitting_time = quitting_time;
+		this.Society_id = Society;
 		
 		if(this.entering_time != -1)
 			this.inactive = true;

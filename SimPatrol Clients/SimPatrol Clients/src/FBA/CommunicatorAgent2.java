@@ -23,8 +23,8 @@ public abstract class CommunicatorAgent2 extends OpenAgent {
 		exchanges = 0;
 	}
 	
-	public CommunicatorAgent2(String id, double entering_time, double quitting_time) {
-		super(id, entering_time, quitting_time);
+	public CommunicatorAgent2(String id, double entering_time, double quitting_time, String Society) {
+		super(id, entering_time, quitting_time, Society);
 		
 		myNodes = new LinkedList<StringAndDouble>();
 		exchanges = 0;
@@ -40,8 +40,8 @@ public abstract class CommunicatorAgent2 extends OpenAgent {
 			this.addToMyNodes(node);
 	}
 	
-	public CommunicatorAgent2(String id, double entering_time, double quitting_time, LinkedList<String> nodes) {
-		super(id, entering_time, quitting_time);
+	public CommunicatorAgent2(String id, double entering_time, double quitting_time, String Society, LinkedList<String> nodes) {
+		super(id, entering_time, quitting_time, Society);
 
 		exchanges = 0;
 		myNodes = new LinkedList<StringAndDouble>();

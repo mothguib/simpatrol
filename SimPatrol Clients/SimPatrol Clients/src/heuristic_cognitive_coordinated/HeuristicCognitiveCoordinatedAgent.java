@@ -183,7 +183,7 @@ public final class HeuristicCognitiveCoordinatedAgent extends Agent {
 		Graph path = graph.getIdlenessedDijkstraPath(begin_vertex, end_vertex);
 
 		// adds the ordered vertexes in the plan of the agent
-		Node[] path_vertexes = path.getNodees();
+		Node[] path_vertexes = path.getNodes();
 		for (int i = 0; i < path_vertexes.length; i++)
 			if (path_vertexes[i].equals(begin_vertex)) {
 				begin_vertex = path_vertexes[i];
