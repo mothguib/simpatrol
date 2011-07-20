@@ -208,8 +208,12 @@ public abstract class CommunicatorAgent2 extends OpenAgent {
 		
 		for(int i = 0; i < nodes.size() - 1; i ++){
 			node2 = graph.getNode(nodes.get(i+1));
-			cost += graph.getDistance(node1, node2);
-			node1 = node2;
+			double dist = graph.getDistance(node1, node2);
+			
+			if(dist != Double.MAX_VALUE){
+				cost += dist;
+				node1 = node2;
+			}
 		}
 		
 		node2 = graph.getNode(nodes.get(0));
