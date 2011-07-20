@@ -99,8 +99,8 @@ public class SocietyTranslator {
 			String node_id = node_element.getAttribute("node_id");
 			double stamina = Double.valueOf(node_element.getAttribute("stamina"));
 			double max_stamina = Double.valueOf(node_element.getAttribute("max_stamina"));
-			String enter_str = node_element.getAttribute("enter_time");
-			String quit_str = node_element.getAttribute("quit_time");
+			String enter_str = node_element.getAttribute("activating_time");
+			String quit_str = node_element.getAttribute("deactivating_time");
 			String socToJoin = node_element.getAttribute("society_to_join");
 			
 			int enter_time = -1, quit_time = -1;
