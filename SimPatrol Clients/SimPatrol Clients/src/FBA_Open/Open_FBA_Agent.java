@@ -238,7 +238,7 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
 				return null;
 			this.transition_counter++;
 			answer = manage_Quit_Message(act);
-			mytrans = new TransactionNodes(act.getTransactionId(), act.getPropositions(), answer.getComplexBid());
+			mytrans = new TransactionNodes(act.getTransactionId(), act.getPropositions(), new ComplexBid(0));
 			this.engaged_transactions.add(mytrans);
 			break;
 			
@@ -310,16 +310,22 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
     }
    
     
-    
-    
-    protected abstract void manage_Quit_Protocol();
+    protected abstract SpeechAct quit_Message(int id);
     
     protected abstract SpeechAct manage_Quit_Message(SpeechAct quitting_act); 
     
+    protected abstract void manage_Quit_Protocol();
+    
+
+    
+    
+    protected abstract SpeechAct enter_Message(int id);
+    
+    protected abstract SpeechAct manage_Enter_Message(SpeechAct entering_act);
     
     protected abstract void manage_Enter_Protocol();
     
-    protected abstract SpeechAct manage_Enter_Message(SpeechAct quitting_act);
+    
     
     
     protected void PlanAndMove(){
@@ -583,7 +589,7 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
 					int my_trans_id = FlexibleBidder2Agent.transaction_id;
 			    	FlexibleBidder2Agent.transaction_id++;
 			    	
-			    	SpeechAct quit_act = new SpeechAct(my_trans_id, SpeechActPerformative.QUIT, this.agent_id, "all_agents");
+			    	SpeechAct quit_act = this.quit_Message(my_trans_id);
 			    	myCurrentTransaction = my_trans_id;
 					this.SendSpeechAct(quit_act);
 					this.nb_answer_awaited = this.agents_num - 1;
@@ -733,7 +739,7 @@ public abstract class Open_FBA_Agent extends FlexibleBidder2Agent {
 				int my_trans_id = FlexibleBidder2Agent.transaction_id;
 		    	FlexibleBidder2Agent.transaction_id++;
 		    	
-		    	SpeechAct enter_act = new SpeechAct(my_trans_id, SpeechActPerformative.ENTER, this.agent_id, "all_agents");
+		    	SpeechAct enter_act = this.enter_Message(my_trans_id);
 		    	myCurrentTransaction = my_trans_id;
 				this.SendSpeechAct(enter_act);
 				this.nb_answer_awaited = this.agents_num - 1;

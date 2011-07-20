@@ -71,6 +71,12 @@ public class Open_FBA_random_Agent extends Open_FBA_Agent {
     	this.inactive = true;
     }
 
+    
+	@Override
+	protected SpeechAct enter_Message(int id) {
+		return new SpeechAct(id, SpeechActPerformative.ENTER, this.agent_id, "all_agents");
+	}
+	
 	@Override
 	protected SpeechAct manage_Enter_Message(SpeechAct entering_act) {
 		int nb_nodes_to_send = (int)((double)this.myNodes.size() * (1 - (double)this.agents_num / (double)(this.agents_num + 1)));
@@ -144,6 +150,13 @@ public class Open_FBA_random_Agent extends Open_FBA_Agent {
 		}
 		*/
 	}
+
+	@Override
+	protected SpeechAct quit_Message(int id) {
+		return new SpeechAct(id, SpeechActPerformative.QUIT, this.agent_id, "all_agents");
+	}
+
+
     
     	
 }
