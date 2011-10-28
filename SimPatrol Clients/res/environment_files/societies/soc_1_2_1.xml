@@ -1,0 +1,33 @@
+<society id="society_1_2_1@s0" label="society_1_2_1" is_closed="false">
+	<agent id="coordinator@1b08cf3#12b5e2513ed" label="coordinator" state="1" node_id="c" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="0"/>
+		<allowed_perception type="4"/>
+		<allowed_perception type="3"/>
+		<allowed_perception type="1"/>
+		<allowed_action type="2"/>
+		<allowed_action type="1"/>
+		<allowed_action type="3"/>
+	</agent>
+	<agent id="a2@d72200#12b5df66ebc$1" label="a2" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="1"/>
+		<allowed_perception type="3"/>
+		<allowed_perception type="0"/>
+		<allowed_perception type="4"/>
+		<allowed_action type="2"/>
+		<allowed_action type="3"/>
+		<allowed_action type="1"/>
+		<etpd seed="1929639426" next_bool_count="-1" type="3">
+			<pd_parameter value="1.0"/>
+			<pd_parameter value="1000"/>
+		</etpd>
+	</agent>
+	<agent id="a1@d72200#12b5df66ebc$0$0" label="a1" state="1" node_id="a" stamina="1.0" max_stamina="1.0">
+		<allowed_perception type="1"/>
+		<allowed_perception type="3"/>
+		<allowed_perception type="0"/>
+		<allowed_perception type="4"/>
+		<allowed_action type="2"/>
+		<allowed_action type="3"/>
+		<allowed_action type="1"/>
+	</agent>
+</society>
