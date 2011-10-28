@@ -1,0 +1,351 @@
+<environment>
+	<graph label="map_a">
+		<node id="v28" label="v28" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v37" label="v37" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v20" label="v20" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v5" label="v5" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v18" label="v18" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v13" label="v13" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v29" label="v29" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v2" label="v2" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v33" label="v33" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v32" label="v32" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v19" label="v19" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v49" label="v49" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v22" label="v22" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v9" label="v9" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v44" label="v44" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v21" label="v21" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v31" label="v31" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v46" label="v46" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v38" label="v38" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v17" label="v17" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v24" label="v24" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v6" label="v6" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v7" label="v7" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v27" label="v27" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v40" label="v40" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v47" label="v47" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v26" label="v26" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v35" label="v35" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v30" label="v30" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v1" label="v1" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v15" label="v15" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v34" label="v34" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v11" label="v11" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v25" label="v25" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v48" label="v48" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v39" label="v39" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v14" label="v14" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v8" label="v8" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v23" label="v23" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v43" label="v43" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v36" label="v36" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v42" label="v42" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v12" label="v12" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v3" label="v3" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v4" label="v4" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v45" label="v45" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v41" label="v41" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v50" label="v50" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v16" label="v16" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<node id="v10" label="v10" priority="1.0" visibility="true" idleness="0.0" fuel="false" is_enabled="true" x="0.0" y="0.0"/>
+		<edge id="e54" source="v39" target="v38" directed="false" length="8.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e38" source="v27" target="v28" directed="false" length="20.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e42" source="v29" target="v28" directed="false" length="9.899494936611665" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e102" source="v31" target="v19" directed="false" length="6.4031242374328485" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e48" source="v34" target="v32" directed="false" length="8.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e71" source="v3" target="v44" directed="false" length="7.810249675906654" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e36" source="v26" target="v27" directed="false" length="4.47213595499958" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e31" source="v25" target="v21" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e40" source="v22" target="v29" directed="false" length="15.132745950421556" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e90" source="v47" target="v39" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e41" source="v19" target="v29" directed="false" length="7.0710678118654755" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e43" source="v17" target="v30" directed="false" length="5.385164807134504" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e51" source="v30" target="v36" directed="false" length="9.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e103" source="v19" target="v33" directed="false" length="6.082762530298219" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e104" source="v33" target="v29" directed="false" length="6.082762530298219" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e44" source="v17" target="v31" directed="false" length="2.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e82" source="v12" target="v21" directed="false" length="6.082762530298219" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e57" source="v15" target="v41" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e95" source="v50" target="v30" directed="false" length="8.602325267042627" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e106" source="v34" target="v28" directed="false" length="9.219544457292887" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e61" source="v44" target="v45" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e72" source="v6" target="v45" directed="false" length="10.295630140987" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e84" source="v13" target="v24" directed="false" length="4.242640687119285" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e34" source="v23" target="v26" directed="false" length="7.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e69" source="v50" target="v42" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e62" source="v45" target="v46" directed="false" length="12.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e66" source="v49" target="v48" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e30" source="v21" target="v24" directed="false" length="10.63014581273465" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e88" source="v39" target="v37" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e63" source="v46" target="v47" directed="false" length="4.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e35" source="v26" target="v22" directed="false" length="7.280109889280518" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e25" source="v18" target="v20" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e74" source="v6" target="v43" directed="false" length="5.830951894845301" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e8" source="v4" target="v7" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e6" source="v4" target="v5" directed="false" length="6.082762530298219" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e45" source="v31" target="v32" directed="false" length="10.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e32" source="v25" target="v24" directed="false" length="8.602325267042627" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e27" source="v20" target="v22" directed="false" length="9.055385138137417" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e89" source="v47" target="v40" directed="false" length="11.180339887498949" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e7" source="v4" target="v6" directed="false" length="13.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e49" source="v32" target="v35" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e85" source="v18" target="v15" directed="false" length="10.816653826391969" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e67" source="v49" target="v43" directed="false" length="8.54400374531753" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e96" source="v42" target="v30" directed="false" length="7.280109889280518" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e4" source="v2" target="v5" directed="false" length="8.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e78" source="v11" target="v41" directed="false" length="5.656854249492381" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e70" source="v3" target="v45" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e16" source="v10" target="v12" directed="false" length="11.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e37" source="v24" target="v27" directed="false" length="22.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e29" source="v21" target="v23" directed="false" length="7.211102550927978" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e14" source="v8" target="v11" directed="false" length="5.656854249492381" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e17" source="v10" target="v13" directed="false" length="11.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e76" source="v8" target="v41" directed="false" length="8.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e81" source="v12" target="v20" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e9" source="v5" target="v6" directed="false" length="7.0710678118654755" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e101" source="v16" target="v17" directed="false" length="14.142135623730951" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e5" source="v3" target="v6" directed="false" length="9.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e64" source="v46" target="v48" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e56" source="v38" target="v40" directed="false" length="4.242640687119285" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e3" source="v1" target="v4" directed="false" length="9.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e46" source="v31" target="v33" directed="false" length="4.47213595499958" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e24" source="v16" target="v19" directed="false" length="11.180339887498949" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e60" source="v43" target="v44" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e92" source="v49" target="v37" directed="false" length="8.06225774829855" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e53" source="v36" target="v38" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e100" source="v15" target="v19" directed="false" length="14.866068747318506" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e21" source="v14" target="v16" directed="false" length="2.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e2" source="v2" target="v3" directed="false" length="7.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e91" source="v48" target="v37" directed="false" length="4.47213595499958" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e12" source="v7" target="v9" directed="false" length="4.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e65" source="v49" target="v44" directed="false" length="8.54400374531753" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e86" source="v39" target="v40" directed="false" length="11.40175425099138" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e93" source="v37" target="v50" directed="false" length="4.123105625617661" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e99" source="v42" target="v14" directed="false" length="12.649110640673518" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e11" source="v7" target="v8" directed="false" length="10.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e68" source="v49" target="v50" directed="false" length="9.486832980505138" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e39" source="v22" target="v19" directed="false" length="10.44030650891055" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e50" source="v35" target="v30" directed="false" length="5.0990195135927845" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e28" source="v21" target="v22" directed="false" length="13.038404810405298" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e80" source="v12" target="v18" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e20" source="v14" target="v15" directed="false" length="4.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e73" source="v6" target="v44" directed="false" length="5.830951894845301" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e75" source="v8" target="v43" directed="false" length="8.54400374531753" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e26" source="v20" target="v21" directed="false" length="4.47213595499958" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e97" source="v42" target="v17" directed="false" length="4.47213595499958" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e79" source="v11" target="v18" directed="false" length="5.830951894845301" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e13" source="v9" target="v10" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e22" source="v14" target="v17" directed="false" length="14.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e83" source="v13" target="v21" directed="false" length="11.180339887498949" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e15" source="v11" target="v12" directed="false" length="5.830951894845301" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e52" source="v36" target="v37" directed="false" length="8.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e18" source="v13" target="v12" directed="false" length="15.556349186104045" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e10" source="v6" target="v8" directed="false" length="6.708203932499369" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e59" source="v41" target="v43" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e77" source="v8" target="v16" directed="false" length="14.317821063276353" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e87" source="v39" target="v48" directed="false" length="4.123105625617661" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e105" source="v29" target="v34" directed="false" length="9.219544457292887" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e94" source="v50" target="v36" directed="false" length="8.06225774829855" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e19" source="v11" target="v14" directed="false" length="9.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e1" source="v1" target="v2" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e23" source="v16" target="v18" directed="false" length="6.708203932499369" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e47" source="v33" target="v34" directed="false" length="8.94427190999916" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e55" source="v39" target="v37" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e98" source="v42" target="v19" directed="false" length="11.180339887498949" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e33" source="v25" target="v23" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+		<edge id="e58" source="v15" target="v42" directed="false" length="12.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	</graph>
+	<society id="test" label="test" is_closed="false">
+		<agent id="a1@" label="a1" state="1" node_id="v35" stamina="1.0" max_stamina="1.0" deactivating_time="16200">
+			<allowed_perception type="0"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="-1"/>
+			<allowed_action type="1"/>
+			<allowed_action type="3"/>
+			<allowed_action type="2"/>
+			<allowed_action type="8"/>
+		</agent>
+		<agent id="a3@" label="a3" state="1" node_id="v8" stamina="1.0" max_stamina="1.0" deactivating_time="6500">
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="-1"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="1"/>
+			<allowed_action type="8"/>
+		</agent>
+		<agent id="a5@" label="a5" state="1" node_id="v17" stamina="1.0" max_stamina="1.0" deactivating_time="5800">
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="8"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="1"/>
+		</agent>
+		<agent id="a4@" label="a4" state="1" node_id="v28" stamina="1.0" max_stamina="1.0" deactivating_time="5400">
+			<allowed_perception type="-1"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="3"/>
+			<allowed_action type="1"/>
+			<allowed_action type="2"/>
+			<allowed_action type="8"/>
+		</agent>
+		<agent id="a2@" label="a2" state="1" node_id="v13" stamina="1.0" max_stamina="1.0" deactivating_time="7100">
+			<allowed_perception type="4"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="1"/>
+			<allowed_action type="8"/>
+			<allowed_action type="2"/>
+			<allowed_action type="1"/>
+			<allowed_action type="3"/>
+		</agent>
+	</society>
+	<society id="InactiveSociety" label="InactiveSociety" is_closed="false">
+		<agent id="a17@" label="a17" state="1" node_id="v38" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="17900">
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="1"/>
+			<allowed_action type="8"/>
+			<allowed_action type="3"/>
+			<allowed_action type="2"/>
+			<allowed_action type="1"/>
+		</agent>
+		<agent id="a14@" label="a14" state="1" node_id="v42" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="8400" deactivating_time="12600">
+			<allowed_perception type="3"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="8"/>
+			<allowed_action type="2"/>
+			<allowed_action type="1"/>
+			<allowed_action type="3"/>
+		</agent>
+		<agent id="a10@" label="a10" state="1" node_id="v15" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="3600" deactivating_time="7100">
+			<allowed_perception type="0"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="1"/>
+		</agent>
+		<agent id="a9@" label="a9" state="1" node_id="v4" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="1000" deactivating_time="10000">
+			<allowed_perception type="1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="1"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+		</agent>
+		<agent id="a8@" label="a8" state="1" node_id="v36" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="200" deactivating_time="6500">
+			<allowed_perception type="4"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="1"/>
+			<allowed_action type="1"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="8"/>
+		</agent>
+		<agent id="a12@" label="a12" state="1" node_id="v48" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="8100" deactivating_time="10000">
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="4"/>
+			<allowed_action type="1"/>
+			<allowed_action type="8"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+		</agent>
+		<agent id="a13@" label="a13" state="1" node_id="v14" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="8100">
+			<allowed_perception type="1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="1"/>
+			<allowed_action type="2"/>
+		</agent>
+		<agent id="a7@" label="a7" state="1" node_id="v9" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="200" deactivating_time="6600">
+			<allowed_perception type="1"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="1"/>
+		</agent>
+		<agent id="a6@" label="a6" state="1" node_id="v9" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="200" deactivating_time="16200">
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="0"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="2"/>
+			<allowed_action type="1"/>
+			<allowed_action type="3"/>
+		</agent>
+		<agent id="a16@" label="a16" state="1" node_id="v40" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="12400" deactivating_time="16200">
+			<allowed_perception type="4"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="2"/>
+			<allowed_action type="3"/>
+			<allowed_action type="8"/>
+			<allowed_action type="1"/>
+		</agent>
+		<agent id="a15@" label="a15" state="1" node_id="v19" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="11800" deactivating_time="12600">
+			<allowed_perception type="4"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="3"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="3"/>
+			<allowed_action type="2"/>
+			<allowed_action type="1"/>
+			<allowed_action type="8"/>
+		</agent>
+		<agent id="a11@" label="a11" state="1" node_id="v41" stamina="1.0" max_stamina="1.0" society_to_join="test" activating_time="5700">
+			<allowed_perception type="3"/>
+			<allowed_perception type="-1"/>
+			<allowed_perception type="1"/>
+			<allowed_perception type="4"/>
+			<allowed_perception type="0"/>
+			<allowed_action type="1"/>
+			<allowed_action type="8"/>
+			<allowed_action type="3"/>
+			<allowed_action type="2"/>
+		</agent>
+	</society>
+</environment>
