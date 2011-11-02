@@ -19,15 +19,16 @@ public class Main {
 		int log_num = Integer.parseInt(args[2]);
 		int cycle_num = Integer.parseInt(args[3]);
 	
-		Log_dir = "/home/pouletc/experimentation/Simulations/islands/0_25/logs_FBA/";
-		cycle_num = 2999;
+		Log_dir = "/home/pouletc/experimentation/Simulations/mapA/1_long/logs_SC";
+		cycle_num = 19999;
+		log_num = 15;
 		
 		AverageMetricsReport MyAvReport = new AverageMetricsReport();
 		
 		LogFileParser parser;
 		MetricsReport metrics;
 		
-		int num_agents = 25;
+		int num_agents = 10;
 		
 		for(int i = 0; i < log_num; i++){
 			try{

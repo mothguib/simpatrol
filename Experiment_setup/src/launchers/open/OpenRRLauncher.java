@@ -1,9 +1,11 @@
-package launchers;
+package launchers.open;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.LinkedList;
+
+import launchers.Launcher;
 
 import org.xml.sax.SAXException;
 
@@ -16,36 +18,27 @@ import util.graph.GraphTranslator;
 import util.graph.Node;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
-import FBA.FlexibleBidder2Agent;
-import FBA_Open.Open_FBA_random_Agent;
 
 import common.Agent;
+import open.RandomReactive.OpenRRAgent;
 
-public class OpenFBARandomLauncher extends Launcher {
-
-	
-	double idleness_rate_for_path, idleness_rate_for_auction;
+public class OpenRRLauncher extends Launcher {
 	String env_file;
 
-	public OpenFBARandomLauncher(String environment_dir_path, String env_gen_name,
+	public OpenRRLauncher(String environment_dir_path, String env_gen_name,
 			int numEnv, String log_dir_path, String log_gen_name,
-			int time_of_simulation,
-			double idleness_rate_for_path, double idleness_rate_for_auction)
-			throws UnknownHostException, IOException {
-		
+			int time_of_simulation)
+	throws UnknownHostException, IOException {
+
 		super(environment_dir_path, env_gen_name, numEnv, 
 				log_dir_path, log_gen_name,
 				time_of_simulation);
-		
-		this.idleness_rate_for_path = idleness_rate_for_path;
-		this.idleness_rate_for_auction = idleness_rate_for_auction;
-		
+
 		env_file = this.ENVIRONMENT_DIR_PATH + "/" + this.ENVIRONMENT_GEN_NAME + "_" + this.NUM_ENV + ".txt";
-		
-		
+
 	}
-	
-	
+
+
 	@Override
 	protected void createAndStartAgents(String[] agent_ids, int[] socket_numbers)
 	throws IOException {
@@ -66,7 +59,7 @@ public class OpenFBARandomLauncher extends Launcher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		SocietyImage[] societies = null;
 		try {
 			societies = SocietyTranslator.getSocieties(SocietyTranslator.parseString(buffer.toString()));
@@ -74,23 +67,21 @@ public class OpenFBARandomLauncher extends Launcher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		Node[] nodes = parsed_graph.getNodees();
+
+
+		Node[] nodes = parsed_graph.getNodes();
 		int[] distributed = new int[nodes.length];
-		
+
 		int nb_active_agents = 0;
 		for(SocietyImage soc : societies)
 			if(!soc.id.equals("InactiveSociety"))
 				nb_active_agents += soc.agents.length;
-		
+
 		int node_by_agent = nodes.length / nb_active_agents;
 		int more_than_necessary = nodes.length % nb_active_agents;
-		
+
 		this.agents = new HashSet<Agent>();
-		
-		Open_FBA_random_Agent.setNB_AGENTS_AT_START(agent_ids.length);
-		
+
 		for(SocietyImage soc : societies)
 			if(!soc.id.equals("InactiveSociety"))
 				for (int i = 0; i < soc.agents.length; i++) {
@@ -101,50 +92,46 @@ public class OpenFBARandomLauncher extends Launcher {
 					}
 					else
 						nb_nodes = node_by_agent;
-			
+
 					LinkedList<String> mynodes = new LinkedList<String>(); 
 					for(int j = 0; j < nb_nodes; j++){
 						int rand = (int) (Math.random() * nodes.length );
 						boolean left = true;
 						while(distributed[rand] != 0 && left)
 							rand = (int) (Math.random() * nodes.length );
-						
+
 						mynodes.add(nodes[rand].getObjectId());
 						distributed[rand] = 1;
-						
+
 						left = false;
 						for (int k = 0; k < distributed.length; k++)
 							left |= (distributed[k] == 0);
 					}
-			
+
 					int corresponding_id;
 					for(corresponding_id = 0; corresponding_id < agent_ids.length; corresponding_id++)
 						if(soc.agents[i].id.equals(agent_ids[corresponding_id]))
 							break;
-						
-			
-					Agent agent = new Open_FBA_random_Agent(soc.agents[i].id, -1, soc.agents[i].quit_time, 
-														nb_active_agents, mynodes, 
-														idleness_rate_for_path, idleness_rate_for_auction, 
-														soc.agents[i].Society_to_join);
-		
+
+					Agent agent = new OpenRRAgent(soc.agents[i].id, -1, soc.agents[i].quit_time, soc.agents[i].Society_to_join);
+
 					if (this.IS_REAL_TIME_SIMULATOR)
 						agent.setConnection(new UDPClientConnection(this.CONNECTION
 								.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
 					else
 						agent.setConnection(new TCPClientConnection(this.CONNECTION
 								.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
-				
+
 					agent.start();
 					this.agents.add(agent);
 				}
-			else {
+			else if(soc.agents.length > 0){
 				// first order agents by time of arrival
 				AgentImage[] ordered_agents = new AgentImage[soc.agents.length];
 				int[] used = new int[soc.agents.length];
 				boolean all_used = false;
 				int current = 0;
-				
+
 				while(!all_used){
 					int time_min = Integer.MAX_VALUE;
 					int indice = -1;
@@ -160,12 +147,12 @@ public class OpenFBARandomLauncher extends Launcher {
 					for(int j = 0; j < soc.agents.length; j++)
 						all_used &= ( used[j] == 1);
 				}
-				
+
 				// then calculate for each how many agents are in the system when they enter it
 				int[] nb_agents_in_system = new int[ordered_agents.length];
 				for(int j = 0; j < ordered_agents.length; j++)
 					nb_agents_in_system[j] = nb_active_agents + j;
-				
+
 				for(SocietyImage soc2 : societies)
 					for(int j = 0; j < soc2.agents.length; j++){
 						int quit_time = soc2.agents[j].quit_time;
@@ -176,7 +163,7 @@ public class OpenFBARandomLauncher extends Launcher {
 								nb_agents_in_system[k]--;
 						}
 					}
-				
+
 				for(int j = 0; j < ordered_agents.length; j++){
 					int enter_time = ordered_agents[j].enter_time;
 					for(int k = j+1; k < ordered_agents.length; k++){
@@ -184,40 +171,31 @@ public class OpenFBARandomLauncher extends Launcher {
 							nb_agents_in_system[k]--;
 					}
 				}
-				
+
 				for (int i = 0; i < soc.agents.length; i++) {
 
 					int corresponding_id;
 					for(corresponding_id = 0; corresponding_id < agent_ids.length; corresponding_id++)
-						if(soc.agents[i].id.equals(agent_ids[corresponding_id]))
+						if(ordered_agents[i].id.equals(agent_ids[corresponding_id]))
 							break;
-					
-					Agent agent = new Open_FBA_random_Agent(soc.agents[i].id, soc.agents[i].enter_time, soc.agents[i].quit_time, 
-																nb_agents_in_system[i] + 1, new LinkedList<String>(), 
-																idleness_rate_for_path, idleness_rate_for_auction, 
-																soc.agents[i].Society_to_join);
+
+					Agent agent = new OpenRRAgent(ordered_agents[i].id, ordered_agents[i].enter_time, ordered_agents[i].quit_time, ordered_agents[i].Society_to_join);
 
 					if (this.IS_REAL_TIME_SIMULATOR)
 						agent.setConnection(new UDPClientConnection(this.CONNECTION
-									.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
+								.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
 					else
 						agent.setConnection(new TCPClientConnection(this.CONNECTION
-									.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
-					
+								.getRemoteSocketAdress(), socket_numbers[corresponding_id]));
+
 					agent.start();
 					this.agents.add(agent);
-				}
-				
-				
-				
-				
+				}	
 			}
-				
+	}
 
-}
-	
 	public static void main(String[] args) {
-		System.out.println("Open FBA Agents - random strategy!");
+		System.out.println("Open RR Agents");
 
 		try {
 			String environment_dir_path = args[0];
@@ -226,23 +204,21 @@ public class OpenFBARandomLauncher extends Launcher {
 			String log_dir_path = args[3];
 			String log_gen_name = args[4];
 			int time_of_simulation= Integer.parseInt(args[5]);
-			double idleness_rate_for_path = Double.parseDouble(args[6]);
-			double idleness_rate_for_auction = Double.parseDouble(args[7]);
-			
-			
-			OpenFBARandomLauncher client = new OpenFBARandomLauncher(
+
+			OpenRRLauncher client = new OpenRRLauncher(
 					environment_dir_path, 
 					env_gen_name, numEnv, 
 					log_dir_path, log_gen_name, 
-					time_of_simulation, idleness_rate_for_path, idleness_rate_for_auction);
+					time_of_simulation);
 			client.start();
 		} catch (Exception e) {
 			System.out
-					.println("Usage \"java Open FBA Agents - random strategy! \n"
-							+ "<Environment directory path> <Environment generic name> <number of environments>\n"
-							+ "<log directory path> <Log generic name> <num of cycle in simulations> \n" 
-							+ "<rate of idleness in calculating heuristic destination> <rate of idleness in calculating nodes to trade>");
+			.println("Usage \"java Open RR Agents \n"
+					+ "<Environment directory path> <Environment generic name> <number of environments>\n"
+					+ "<log directory path> <Log generic name> <num of cycle in simulations>");
 		}
 	}
 
 }
+
+

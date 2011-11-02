@@ -31,15 +31,16 @@ public class StartRandomizer {
 		Environment env = EnvironmentTranslator.getEnvironment(in_path);
 		
 		model.graph.Graph graph = env.getGraph();
-		Society society = env.getSocieties()[0];
+		Society[] societies = env.getSocieties();
 		
 		model.graph.Node[] nodes = graph.getNodes();
-		for(Agent agent : society.getAgents()){
-			int nodenum = nodes.length;
-			while(nodenum == nodes.length)
-				nodenum = (int)(Math.random()*nodes.length);
-			agent.setNode(nodes[nodenum]);
-		}
+		for(Society soc : societies)
+			for(Agent agent : soc.getAgents()){
+				int nodenum = nodes.length;
+				while(nodenum == nodes.length)
+					nodenum = (int)(Math.random()*nodes.length);
+				agent.setNode(nodes[nodenum]);
+			}
 		
 		FileWriter output_file = new FileWriter(out_path);
 		output_file.print(env.fullToXML(0));
