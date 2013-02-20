@@ -19,7 +19,7 @@ public class Main {
 		int log_num = Integer.parseInt(args[2]);
 		int cycle_num = Integer.parseInt(args[3]);
 	
-		Log_dir = "/home/pouletc/experimentation/Simulations/mapA/1_long/logs_SC";
+		Log_dir = "/home/pouletc/experimentation/Simulations/corridor_corrige/0_long/logs_Minimax3";
 		cycle_num = 19999;
 		log_num = 15;
 		
@@ -28,7 +28,7 @@ public class Main {
 		LogFileParser parser;
 		MetricsReport metrics;
 		
-		int num_agents = 10;
+		int num_agents = 5;
 		
 		for(int i = 0; i < log_num; i++){
 			try{
@@ -83,7 +83,7 @@ public class Main {
 		Double[] myfreq = new Double[cycle_num/freq +1];
 		for(int i = 0; i < myfreq.length; i++)
 			myfreq[i] = (double) i * freq;
-		/*
+		
 		Double[] myvalues = MyAvReport.getAvAverageIdleness_curb(freq);
 		Double[] mymaxvalues = MyAvReport.getAvMaxIdleness_curb(freq);
 		Double[] mystdvalues = MyAvReport.getAvStdDevIdleness_curb(freq);
@@ -96,16 +96,16 @@ public class Main {
 		myviewer.setXdivision(250);
 		myviewer.setYdivision(50);
 		myviewer.setVisible(true);
-		*/
 		
-		Double[] myvalues = MyAvReport.getAvIntervals_curb(freq);
+		
+		myvalues = MyAvReport.getAvIntervals_curb(freq);
 		Double[] myvalues2 = MyAvReport.getAvMSI_curb(freq);
-		CurveViewer myviewer = new CurveViewer("Visits");
-		myviewer.addCurve(myfreq, myvalues, Color.blue);
-		myviewer.addCurve(myfreq, myvalues2, Color.red);
-		myviewer.setXdivision(250);
-		myviewer.setYdivision(10);
-		myviewer.setVisible(true);
+		CurveViewer myviewer2 = new CurveViewer("Visits");
+		myviewer2.addCurve(myfreq, myvalues, Color.blue);
+		myviewer2.addCurve(myfreq, myvalues2, Color.red);
+		myviewer2.setXdivision(250);
+		myviewer2.setYdivision(10);
+		myviewer2.setVisible(true);
 	}
 
 }

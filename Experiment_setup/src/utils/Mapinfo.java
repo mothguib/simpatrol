@@ -4,57 +4,43 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import model.Environment;
 import org.xml.sax.SAXException;
 
-import control.exception.EdgeNotFoundException;
-import control.exception.NodeNotFoundException;
-import control.translator.EnvironmentTranslator;
+import util.DoubleList;
+import util.EnvironmentTranslator;
 
 public class Mapinfo {
 
 	
-	public static void MapInformation(String in_path) throws ParserConfigurationException, SAXException, IOException, NodeNotFoundException, EdgeNotFoundException {
+	public static void MapInformation(String in_path) throws ParserConfigurationException, SAXException, IOException {
 		
-		Environment env = EnvironmentTranslator.getEnvironment(in_path);
+		util.Environment env = EnvironmentTranslator.getEnvironment(in_path);
 		
-		model.graph.Graph graph = env.getGraph();
+		util.graph.Graph graph = env.getGraph();
 		
-		model.graph.Node[] nodes = graph.getNodes();
+		util.graph.Node[] nodes = graph.getNodes();
 		
-		int connectivity = -1;
-		double med_connectivity = 0;
+		DoubleList connect_list = new DoubleList();
+		for(int i = 0; i < nodes.length; i++)
+			connect_list.add(nodes[i].getEdges().length);
 		
-		for(model.graph.Node node : nodes){
-			med_connectivity += node.getEdges().length;
-			if(node.getEdges().length > connectivity)
-				connectivity = node.getEdges().length;
-		}
+		System.out.print("This map has a maximum node connectivity of " + connect_list.max() + ".\n");
+		System.out.print("This map has a medium node connectivity of " + connect_list.mean() + ".\n");
+		System.out.print("This map has a std dev node connectivity of " + connect_list.standardDeviation() + ".\n");
 		
-		med_connectivity /= nodes.length;
 		
-		System.out.print("This map has a maximum node connectivity of " + connectivity + ".\n");
-		System.out.print("This map has a medium node connectivity of " + med_connectivity + ".\n");
-
+		util.graph.Edge[] edges = graph.getEdges();
+		DoubleList edgelength_list = new DoubleList();
+		for(int i = 0; i < edges.length; i++)
+			edgelength_list.add(edges[i].getLength());
 		
-		double max_edge = -1;
-		double min_edge = Double.MAX_VALUE;
-		double med_edge = 0;
+		System.out.print("This map has longest edge of " + edgelength_list.max() + ".\n");
+		System.out.print("This map has smallest edge of " + edgelength_list.min() + ".\n");
+		System.out.print("This map has medium length of edges of " + edgelength_list.mean() + ".\n");
+		System.out.print("This map has std dev length of edges of " + edgelength_list.standardDeviation() + ".\n");
 		
-		model.graph.Edge[] edges = graph.getEdges();
-		for(model.graph.Edge edge : edges){
-			med_edge += edge.getLength();
-			if(edge.getLength() > max_edge)
-				max_edge = edge.getLength();
-			if(edge.getLength() < min_edge)
-				min_edge = edge.getLength();
-		}
 		
-		med_edge /= edges.length;
 		
-		System.out.print("This map has longest edge of " + max_edge + ".\n");
-		System.out.print("This map has smallest edge of " + min_edge + ".\n");
-		System.out.print("This map has medium length of edges of " + med_edge + ".\n");
 	}
 	
 	

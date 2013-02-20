@@ -148,7 +148,7 @@ public class RandomSocietyGenerator {
 	public static void main(String[] args) {
 
 		try {
-			String soc_id = args[0];
+			/*String soc_id = args[0];
 			int startnum = Integer.parseInt(args[1]);
 			int minnum  = Integer.parseInt(args[2]);
 			int maxnum  = Integer.parseInt(args[3]);
@@ -167,6 +167,9 @@ public class RandomSocietyGenerator {
 			
 			new RandomSocietyGenerator(soc_id, startnum, minnum, maxnum, nbturn, interval, 
 					event_probability, probas, path);
+			*/		
+			new RandomSocietyGenerator("small", 100, 60, 140, 100000, 100, 
+							0.2, new double[]{0.4, 0.3, 0.15, 0.1, 0.05}, "/home/pouletc/experimentation/Simulations/small.txt");
 					
 		} catch (Exception e) {
 			System.out
