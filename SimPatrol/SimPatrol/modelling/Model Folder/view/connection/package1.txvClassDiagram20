@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="8vrkcf17vflv5-ypifiy">
+		<property name="$defaultDiagram" value="true"/>
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<reference referencedUin="design:node:::hp721f17vflv5nweczq">
+			<property name="bounds" value="55,14,101,80"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::cmvoxf17vflv5-nneeo7">
+			<property name="bounds" value="215,135,380,102"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::hf972f17vflv5wknk2z:cmvoxf17vflv5-nneeo7">
+				<property name="sourceAnchor" value="260,140"/>
+				<property name="targetAnchor" value="160,84"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::dzrkrf17vflv5-87xgvl">
+			<property name="bounds" value="15,135,181,100"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::dgx0hf17vflv5p89eu6:dzrkrf17vflv5-87xgvl">
+				<property name="sourceAnchor" value="109,140"/>
+				<property name="targetAnchor" value="109,98"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::939iuf17vflv5-vhv0o">
+			<property name="bounds" value="315,14,241,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::j992cf17vflv5-vl5lmb:939iuf17vflv5-vhv0o">
+				<property name="sourceAnchor" value="320,59"/>
+				<property name="targetAnchor" value="161,59"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

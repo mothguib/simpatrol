@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="2glexf17vfk7o7esqvc">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Message"/>
+		<property name="mod__implements" value="model.interface.XMLable"/>
+		<node uin="51plef17vfk7oby8kqp">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod__typeReferencedElement" value="design:node:::3agb2f17vfk84-ja3s07"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="message_type"/>
+			<property name="mod__type" value="MessageType"/>
+			<link uin="13ygzf17vfk7o-r3ymfo">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::51plef17vfk7oby8kqp:2glexf17vfk7o7esqvc" role="Client"></participant>
+				<participant referencedUin="design:node:::3agb2f17vfk84-ja3s07" role="Supplier"></participant>
+			</link>
+		</node>
+		<node uin="he2qxf17vfk7o-n2mzpk">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="content"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.String"/>
+			<property name="mod__type" value="String"/>
+			<link uin="3p1vuf17vfk7oflog5">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::he2qxf17vfk7o-n2mzpk:2glexf17vfk7o7esqvc" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.String" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="77s19f17vfk7oj1b5w7">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="model.interface.XMLable"/>
+			<participant referencedUin="design:node:::2glexf17vfk7o7esqvc" role="Client"></participant>
+			<participant referencedUin="design:node:::b16cdf17uk2xity633y" role="Supplier"></participant>
+		</link>
+		<link uin="ieje0rf181ftdq-59vp8z">
+			<property name="$metaclass" value="Dependency20"/>
+			<participant referencedUin="design:node:::2glexf17vfk7o7esqvc" role="Client"></participant>
+			<participant referencedUin="design:node:::hli7hf17vgtrfn0jlrc" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="3agb2f17vfk84-ja3s07">
+		<property name="$metaclass" value="Enumeration"/>
+		<property name="$name" value="MessageType"/>
+		<node uin="7hspkf17vfk84esno9x">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="PERCEPTION_REQUISITION"/>
+		</node>
+		<node uin="ab5xwf17vfk84-d2zrpg">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="ACTION_INTENTION"/>
+		</node>
+		<node uin="glq2f17vfk84-cvdxfa">
+			<property name="$metaclass" value="EnumerationLiteral"/>
+			<property name="$name" value="PERCEPTION"/>
+		</node>
+	</node>
+	<node uin="87fcnf18211rjgztw6a">
+		<property name="$metaclass" value="Note"/>
+		<property name="$name" value="Note9"/>
+		<property name="$note_text" value="Actually, XML"/>
+		<link uin="j8jfxf18211rj-rgx3st">
+			<property name="$metaclass" value="Note Link"/>
+			<participant referencedUin="design:node:::87fcnf18211rjgztw6a" role="Client"></participant>
+			<participant referencedUin="design:node:::he2qxf17vfk7o-n2mzpk:2glexf17vfk7o7esqvc" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>

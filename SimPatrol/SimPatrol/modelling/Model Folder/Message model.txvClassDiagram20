@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhf152i11i-nx5s17">
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<property name="$name" value="Message model"/>
+		<reference referencedUin="design:node:::2glexf17vfk7o7esqvc">
+			<property name="bounds" value="15,15,181,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::51plef17vfk7oby8kqp:2glexf17vfk7o7esqvc">
+				<property name="bounds" value="51,26,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::he2qxf17vfk7o-n2mzpk:2glexf17vfk7o7esqvc">
+				<property name="bounds" value="119,-2,0,0"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::3agb2f17vfk84-ja3s07">
+			<property name="bounds" value="235,15,148,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:node:::ab5xwf17vfk84-d2zrpg:3agb2f17vfk84-ja3s07">
+				<property name="bounds" value="34,-8,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::7hspkf17vfk84esno9x:3agb2f17vfk84-ja3s07">
+				<property name="bounds" value="39,6,0,0"/>
+			</reference>
+			<reference referencedUin="design:node:::glq2f17vfk84-cvdxfa:3agb2f17vfk84-ja3s07">
+				<property name="bounds" value="112,-3,0,0"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::87fcnf18211rjgztw6a">
+			<property name="bounds" value="55,135,92,25"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<reference referencedUin="design:link:::j8jfxf18211rj-rgx3st:87fcnf18211rjgztw6a">
+				<property name="sourceAnchor" value="106,140"/>
+				<property name="targetAnchor" value="106,101"/>
+			</reference>
+		</reference>
+	</view>
+</nodeSet>

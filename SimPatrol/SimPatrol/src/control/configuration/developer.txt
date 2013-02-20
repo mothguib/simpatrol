@@ -1,0 +1,4 @@
+* New Configuration subclasses must add new classes to this package;
+* New Configuration subclasses must change the "ConfigurationTypes" class.
+* New Configuration subclasses must change the "control.translator.ConfigurationTranslator" class.
+* New Configuration subclasses must change the "control.daemon.MainDaemon" class.

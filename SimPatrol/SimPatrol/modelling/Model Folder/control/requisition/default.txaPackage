@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<node uin="co187f17vytgp-jh8zma">
+		<property name="$metaclass" value="AssociationClass"/>
+		<property name="$name" value="ActionRequisitionTime"/>
+		<link uin="9lf75f17vytgp-1whlhe">
+			<property name="$metaclass" value="AssociationClassConnectorAspect"/>
+			<participant referencedUin="design:node:::co187f17vytgp-jh8zma" role="Client"></participant>
+			<participant referencedUin="design:node:::beqggf17vytgphxgiwr" role="Supplier"></participant>
+		</link>
+		<node uin="6skzof17vytgp-cipb23">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="time"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::PrimitiveType.Integer"/>
+			<property name="mod__type" value="Integer"/>
+			<link uin="e6qg0f17vytgp-hmecfz">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::6skzof17vytgp-cipb23:co187f17vytgp-jh8zma" role="Client"></participant>
+				<participant referencedUin="design:node:::PrimitiveType.Integer" role="Supplier"></participant>
+			</link>
+		</node>
+	</node>
+	<node uin="beqggf17vytgphxgiwr">
+		<property name="$metaclass" value="AssociationClassLinkAspect"/>
+		<property name="$name" value="AssociationClassLinkAspect2"/>
+	</node>
+	<node uin="gtuu7f17vcg2c-779mfa">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="ActionRequisition"/>
+		<property name="mod__extends" value="Requisition"/>
+		<node uin="4tznxf17vcg2c7vqq0a">
+			<property name="$metaclass" value="Property20"/>
+			<property name="$name" value="action_type"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="mod__typeReferencedElement" value="design:node:::1ap6if17ugxj1jmswgw"/>
+			<property name="mod__type" value="action.AtomicActionType"/>
+			<link uin="75pknf17vcg2csh26ol">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::4tznxf17vcg2c7vqq0a:gtuu7f17vcg2c-779mfa" role="Client"></participant>
+				<participant referencedUin="design:node:::1ap6if17ugxj1jmswgw" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="ieje0rf17vcg7kx5x1e8">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Requisition"/>
+			<participant referencedUin="design:node:::gtuu7f17vcg2c-779mfa" role="Client"></participant>
+			<participant referencedUin="design:node:::977fwf17vcg2cbz4ofu" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="4gdw3f17vcg2c3hi59r">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="ActionRequisitionQueue"/>
+		<property name="mod__extends" value="util.Queue"/>
+		<node uin="f5tfef17vcg2cxt64xx">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezu8k4vi-fnssu5"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezu8k4vi-fnssu5"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="$name" value="insert"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yff00325yoihv6cm"/>
+			<property name="__aggregationEnd_formalParameter" value="glyi4f17v15r6aw90xg"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<property name="__aggregationEnd_formalParameter" value="ak2zkf17vcg2c-rhqh2b"/>
+			<node uin="c1uvdf17vcg2cvvcsyn">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="989yjf17vcg2c-xh3kca">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="asji8f17vcg2c-u3l08a">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="hhbmsf17vcg2c-qfekas">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="ii30qf17vcg2c-lfzsvz">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="bldn6f17vcg2cguvp2n">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="1wp9uf17vcg2c-xptg8s">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="c1rgf17vcg2c-2xf5fc">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="ak2zkf17vcg2c-rhqh2b">
+				<property name="$metaclass" value="Parameter"/>
+				<property name="$name" value="requisition"/>
+				<property name="lower" value="1"/>
+				<property name="upper" value="1"/>
+				<property name="multiplicity" value="1"/>
+				<property name="mod__typeReferencedElement" value="design:node:::gtuu7f17vcg2c-779mfa"/>
+				<property name="direction" value="$in"/>
+				<property name="mod__type" value="ActionRequisition"/>
+				<link uin="fypo2f17vcg2ceqkja6">
+					<property name="$metaclass" value="TypeLink"/>
+					<participant referencedUin="design:node:::ak2zkf17vcg2c-rhqh2b:f5tfef17vcg2cxt64xx:4gdw3f17vcg2c3hi59r" role="Client"></participant>
+					<participant referencedUin="design:node:::gtuu7f17vcg2c-779mfa" role="Supplier"></participant>
+				</link>
+			</node>
+		</node>
+		<node uin="aj9uef17vcg2c-rkhjvn">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="$name" value="remove"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezu8l3fuwhsq9f"/>
+			<property name="__aggregationEnd_returnResult" value="e9r6cf17v15r6-20tl0s"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="mod__returnType" value="requisition.ActionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<property name="__aggregationEnd_returnResult" value="7yawjf17vcg2cn1wh4r"/>
+			<node uin="hk96tf17vcg2c-q5n85q">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="2em36f17vcg2c-ctohrx">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="9lmb4f17vcg2cfaiqz4">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="5k6tmf17vcg2cz7l4he">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="9dusvf17vcg2c-vft128">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="f1kovf17vcg2c-ewwx7i">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="byqfgf17vcg2cv66dny">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="i5egff17vcg2c-fz39l5">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="7yawjf17vcg2cn1wh4r">
+				<property name="$metaclass" value="Parameter"/>
+				<property name="$name" value="Parameter1"/>
+				<property name="mod__typeReferencedElement" value="design:node:::gtuu7f17vcg2c-779mfa"/>
+				<property name="direction" value="$return"/>
+				<property name="mod__type" value="ActionRequisition"/>
+				<link uin="nddvf17vcg2c-14g3z3">
+					<property name="$metaclass" value="TypeLink"/>
+					<participant referencedUin="design:node:::7yawjf17vcg2cn1wh4r:aj9uef17vcg2c-rkhjvn:4gdw3f17vcg2c3hi59r" role="Client"></participant>
+					<participant referencedUin="design:node:::gtuu7f17vcg2c-779mfa" role="Supplier"></participant>
+				</link>
+			</node>
+		</node>
+		<link uin="jfp35f17vcg2c2r5fka">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="aggregation" value=""/>
+			<property name="visibility" value="private"/>
+			<property name="supplierIsOrdered" value="true"/>
+			<property name="supplierIsUnique" value="true"/>
+			<property name="@supplierCardinality" value="*"/>
+			<participant referencedUin="design:node:::4gdw3f17vcg2c3hi59r" role="Client"></participant>
+			<participant referencedUin="design:node:::gtuu7f17vcg2c-779mfa" role="Supplier"></participant>
+		</link>
+		<link uin="csrhjf17vcg2c-epz4qv">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="util.Queue"/>
+			<participant referencedUin="design:node:::4gdw3f17vcg2c3hi59r" role="Client"></participant>
+			<participant referencedUin="design:node:::hli7hf17vgtrfn0jlrc" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="6wu5ef17vcg2c-9118fj">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AnalysisReportRequisition"/>
+		<property name="mod__extends" value="Requisition"/>
+		<link uin="ieje0rf17vcg8v-46wn1c">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Requisition"/>
+			<participant referencedUin="design:node:::6wu5ef17vcg2c-9118fj" role="Client"></participant>
+			<participant referencedUin="design:node:::977fwf17vcg2cbz4ofu" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="2npurf17vcg2c-kqst7b">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="AnalysisReportRequisitionQueue"/>
+		<property name="mod__extends" value="util.Queue"/>
+		<link uin="i5aewf17vcg2c-a41pbm">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="util.Queue"/>
+			<participant referencedUin="design:node:::2npurf17vcg2c-kqst7b" role="Client"></participant>
+			<participant referencedUin="design:node:::hli7hf17vgtrfn0jlrc" role="Supplier"></participant>
+		</link>
+		<link uin="dlq8tf17vcg2cmcpr0b">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="aggregation" value=""/>
+			<property name="@supplierCardinality" value="*"/>
+			<property name="supplierIsOrdered" value="true"/>
+			<property name="supplierIsUnique" value="true"/>
+			<participant referencedUin="design:node:::2npurf17vcg2c-kqst7b" role="Client"></participant>
+			<participant referencedUin="design:node:::6wu5ef17vcg2c-9118fj" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="dm0n5f17vcg2c-joneso">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="PerceptionRequisition"/>
+		<property name="mod__extends" value="Requisition"/>
+		<node uin="jmkg1f17vcg2cdluq0x">
+			<property name="$metaclass" value="Property20"/>
+			<property name="mod_Visibility" value="$private"/>
+			<property name="lower" value="1"/>
+			<property name="upper" value="1"/>
+			<property name="multiplicity" value="1"/>
+			<property name="$name" value="perception_type"/>
+			<property name="mod__typeReferencedElement" value="design:node:::4vwnif17uk738bm2foa"/>
+			<property name="mod__type" value="perception.PerceptionType"/>
+			<link uin="9avcnf17vcg2cq0zg5p">
+				<property name="$metaclass" value="TypeLink"/>
+				<participant referencedUin="design:node:::jmkg1f17vcg2cdluq0x:dm0n5f17vcg2c-joneso" role="Client"></participant>
+				<participant referencedUin="design:node:::4vwnif17uk738bm2foa" role="Supplier"></participant>
+			</link>
+		</node>
+		<link uin="ieje0rf17vcg80jgqepr">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="Requisition"/>
+			<participant referencedUin="design:node:::dm0n5f17vcg2c-joneso" role="Client"></participant>
+			<participant referencedUin="design:node:::977fwf17vcg2cbz4ofu" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="9wao5f17vcg2cqgz4qq">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="PerceptionRequisitionQueue"/>
+		<property name="mod__extends" value="util.Queue"/>
+		<link uin="by50kf17vcg2c-ad5wn4">
+			<property name="$metaclass" value="KernelAssociation20"/>
+			<property name="aggregation" value=""/>
+			<property name="supplierNavigability" value="$supplierNavigable"/>
+			<property name="visibility" value="private"/>
+			<property name="supplierIsOrdered" value="true"/>
+			<property name="supplierIsUnique" value="true"/>
+			<property name="supplierVisibility" value="$supplierPrivate"/>
+			<property name="@supplierCardinality" value="*"/>
+			<participant referencedUin="design:node:::9wao5f17vcg2cqgz4qq" role="Client"></participant>
+			<participant referencedUin="design:node:::dm0n5f17vcg2c-joneso" role="Supplier"></participant>
+		</link>
+		<node uin="chi0wf17vcg2cdqidz2">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="$name" value="insert"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="-5kd6yfezg6ko4vn13xbk"/>
+			<property name="__aggregationEnd_formalParameter" value="8ldptf17v1key-1zqg1u"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<property name="__aggregationEnd_formalParameter" value="iebshf17vcg2cn5715v"/>
+			<node uin="i494wf17vcg2cr148oo">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="af23mf17vcg2c-r60j1i">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="n8paf17vcg2c-mk9wiw">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="isgb5f17vcg2c-4yop8g">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="czc81f17vcg2c-rbmwxf">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="8c630f17vcg2c-jk6dn">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="cf32ef17vcg2c-vl97q7">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="9nxf6f17vcg2cn7bkfl">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="iebshf17vcg2cn5715v">
+				<property name="$metaclass" value="Parameter"/>
+				<property name="$name" value="requisition"/>
+				<property name="lower" value="1"/>
+				<property name="upper" value="1"/>
+				<property name="multiplicity" value="1"/>
+				<property name="mod__typeReferencedElement" value="design:node:::dm0n5f17vcg2c-joneso"/>
+				<property name="direction" value="$in"/>
+				<property name="mod__type" value="PerceptionRequisition"/>
+				<link uin="jqbbyf17vcg2c-fqt3ct">
+					<property name="$metaclass" value="TypeLink"/>
+					<participant referencedUin="design:node:::iebshf17vcg2cn5715v:chi0wf17vcg2cdqidz2:9wao5f17vcg2cqgz4qq" role="Client"></participant>
+					<participant referencedUin="design:node:::dm0n5f17vcg2c-joneso" role="Supplier"></participant>
+				</link>
+			</node>
+		</node>
+		<node uin="8lpczf17vcg2cw9sos6">
+			<property name="$metaclass" value="Operation20"/>
+			<property name="$name" value="remove"/>
+			<property name="mod_Visibility" value="$public"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="-5kd6yfezg6m26jxjcyit"/>
+			<property name="__aggregationEnd_returnResult" value="h11t1f17v1key8nt0lh"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="mod__returnType" value="requisition.PerceptionRequisition"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<property name="__aggregationEnd_returnResult" value="c7s3yf17vcg2c-3pvem2"/>
+			<node uin="cwg4if17vcg2c-sl098m">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="precondition"/>
+				<node uin="pjlrf17vcg2c8qvnut">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="hrdyff17vcg2c-y662f7">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="bodyCondition"/>
+				<node uin="62vfhf17vcg2c-ihan2i">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+				</node>
+			</node>
+			<node uin="7ty4nf17vcg2c-1njopm">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="postcondition"/>
+				<node uin="jvqgmf17vcg2ckipmoi">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="jk0csf17vcg2c-hub14">
+				<property name="$metaclass" value="Constraint"/>
+				<property name="$name" value="ownedRuleAggregation"/>
+				<node uin="7wxfgf17vcg2c-b3x1ah">
+					<property name="$metaclass" value="ValueSpecification"/>
+					<property name="$name" value="ValueSpecification1"/>
+					<property name="language" value="ocl"/>
+				</node>
+			</node>
+			<node uin="c7s3yf17vcg2c-3pvem2">
+				<property name="$metaclass" value="Parameter"/>
+				<property name="$name" value="Parameter1"/>
+				<property name="mod__typeReferencedElement" value="design:node:::dm0n5f17vcg2c-joneso"/>
+				<property name="direction" value="$return"/>
+				<property name="mod__type" value="PerceptionRequisition"/>
+				<link uin="6371nf17vcg2curo5g3">
+					<property name="$metaclass" value="TypeLink"/>
+					<participant referencedUin="design:node:::c7s3yf17vcg2c-3pvem2:8lpczf17vcg2cw9sos6:9wao5f17vcg2cqgz4qq" role="Client"></participant>
+					<participant referencedUin="design:node:::dm0n5f17vcg2c-joneso" role="Supplier"></participant>
+				</link>
+			</node>
+		</node>
+		<link uin="3jkadf17vcg2c-7c5339">
+			<property name="$metaclass" value="Generalization20"/>
+			<property name="mod__cachedBaseName" value="util.Queue"/>
+			<participant referencedUin="design:node:::9wao5f17vcg2cqgz4qq" role="Client"></participant>
+			<participant referencedUin="design:node:::hli7hf17vgtrfn0jlrc" role="Supplier"></participant>
+		</link>
+	</node>
+	<node uin="977fwf17vcg2cbz4ofu">
+		<property name="$metaclass" value="Class20"/>
+		<property name="$name" value="Requisition"/>
+		<property name="mod__abstract" value="true"/>
+		<property name="mod__implements" value="model.interface.XMLable"/>
+		<link uin="ieje0rf17wzkk8-vwss9j">
+			<property name="$metaclass" value="Implementation20"/>
+			<property name="mod__cachedBaseName" value="model.interface.XMLable"/>
+			<participant referencedUin="design:node:::977fwf17vcg2cbz4ofu" role="Client"></participant>
+			<participant referencedUin="design:node:::b16cdf17uk2xity633y" role="Supplier"></participant>
+		</link>
+	</node>
+</nodeSet>

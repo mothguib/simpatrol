@@ -1,0 +1,4 @@
+This package contains the classes that implement the configuration features 
+of a simulation. Add to that, it also contains the classes that implement
+orientations given by the simulator in order to satisfy such configuration
+features.

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V-jr6xbaf0b1jln0-lmrs7y">
+		<property name="$metaclass" value="UseCaseDiagram20"/>
+		<property name="$name" value="Energy simulation"/>
+		<reference referencedUin="design:node:::8bho0jez5xhlq6lsjjlx">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="238,95,55,101"/>
+			<property name="location_set_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rezu82ukqdn6bgt:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="298,180"/>
+				<property name="targetAnchor" value="343,180"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rezfxw4uf-1djx5l:8bho0jez5xhlq6lsjjlx">
+				<property name="sourceAnchor" value="243,180"/>
+				<property name="targetAnchor" value="204,180"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthezu7zcaaredknw">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="338,155,138,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf0b1o262-dk4scn">
+			<property name="bounds" value="18,75,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf0b214le-gvdutb:gj7tthf0b1o262-dk4scn">
+				<property name="sourceAnchor" value="40,112"/>
+				<property name="targetAnchor" value="460,198"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="40,240,460,240"/>
+				<property name="smooth_bendpoints" value="40,240,460,240"/>
+				<reference referencedUin="label:extend:design:link:::ieje0rf0b214le-gvdutb:gj7tthf0b1o262-dk4scn">
+					<property name="bounds" value="215,220,70,17"/>
+				</reference>
+				<reference referencedUin="design:node:::ttifwdf0b21hg3-lk3lkp:ieje0rf0b214le-gvdutb:gj7tthf0b1o262-dk4scn">
+					<property name="bounds" value="231,108,38,21"/>
+					<property name="$hidden" value="true"/>
+					<reference referencedUin="design:node:::ul14qaf0b21hg3co6xu3:ttifwdf0b21hg3-lk3lkp:ieje0rf0b214le-gvdutb:gj7tthf0b1o262-dk4scn">
+						<property name="bounds" value="-230,-217,-28,0"/>
+					</reference>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf0b21mak-63wkcq:gj7tthf0b1o262-dk4scn">
+				<property name="sourceAnchor" value="120,120"/>
+				<property name="targetAnchor" value="120,161"/>
+				<property name="location_set_by_user" value="true"/>
+				<reference referencedUin="design:node:::ttifwdf0b23y3hd2cxmu:ieje0rf0b21mak-63wkcq:gj7tthf0b1o262-dk4scn">
+					<property name="$hidden" value="true"/>
+					<reference referencedUin="design:node:::ul14qaf0b23y3h-hx2pbs:ttifwdf0b23y3hd2cxmu:ieje0rf0b21mak-63wkcq:gj7tthf0b1o262-dk4scn">
+						<property name="bounds" value="-113,-138,-28,0"/>
+					</reference>
+				</reference>
+				<reference referencedUin="label:extend:design:link:::ieje0rf0b21mak-63wkcq:gj7tthf0b1o262-dk4scn">
+					<property name="bounds" value="123,132,70,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf0b1okl9jd60cf">
+			<property name="bounds" value="338,75,181,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf0b24cmxi81ds1:gj7tthf0b1okl9jd60cf">
+				<property name="sourceAnchor" value="420,120"/>
+				<property name="targetAnchor" value="420,160"/>
+				<property name="location_set_by_user" value="true"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthf0b1udz1-b6bync">
+			<property name="bounds" value="175,15,181,43"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<property name="background_color" value="255,255,128"/>
+			<reference referencedUin="design:link:::ieje0rf0b1zbwu-z410kh:gj7tthf0b1udz1-b6bync">
+				<property name="location_set_by_user" value="true"/>
+				<property name="sourceAnchor" value="180,40"/>
+				<property name="targetAnchor" value="113,80"/>
+				<property name="bendpoints" value="113,40"/>
+				<property name="smooth_bendpoints" value="113,40"/>
+				<reference referencedUin="label:include:design:link:::ieje0rf0b1zbwu-z410kh:gj7tthf0b1udz1-b6bync">
+					<property name="bounds" value="102,20,69,17"/>
+				</reference>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf0b28xp7yrzgvx:gj7tthf0b1udz1-b6bync">
+				<property name="sourceAnchor" value="270,63"/>
+				<property name="targetAnchor" value="270,100"/>
+			</reference>
+			<reference referencedUin="design:link:::ieje0rf0b1zf876booss:gj7tthf0b1udz1-b6bync">
+				<property name="sourceAnchor" value="360,40"/>
+				<property name="targetAnchor" value="433,80"/>
+				<property name="location_set_by_user" value="true"/>
+				<property name="bendpoints" value="433,40"/>
+				<property name="smooth_bendpoints" value="433,40"/>
+				<reference referencedUin="label:include:design:link:::ieje0rf0b1zf876booss:gj7tthf0b1udz1-b6bync">
+					<property name="bounds" value="362,20,69,17"/>
+				</reference>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::gj7tthezfx3vt5-tjx03j">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="55,155,144,41"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+	</view>
+</nodeSet>

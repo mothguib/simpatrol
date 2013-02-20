@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<nodeSet  version="1.1">
+	<view uin="V1hexuhez9bn6lp-22rzza">
+		<property name="$metaclass" value="ClassDiagram20"/>
+		<property name="$name" value="Cycled time simulation"/>
+		<reference referencedUin="design:node:::d81vpf17vcpxt-15s1dg">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="175,15,181,110"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+			<reference referencedUin="design:link:::ieje0rf17vcq2l-o9eam:d81vpf17vcpxt-15s1dg">
+				<property name="sourceAnchor" value="179,74"/>
+				<property name="targetAnchor" value="141,74"/>
+			</reference>
+		</reference>
+		<reference referencedUin="design:node:::5fdg2f17vcpxt33cmgu">
+			<property name="$imported" value="true"/>
+			<property name="$shortcutReference" value="true"/>
+			<property name="bounds" value="15,29,121,81"/>
+			<property name="location_set_by_user" value="true"/>
+			<property name="bounds_setted_by_user" value="true"/>
+		</reference>
+	</view>
+</nodeSet>

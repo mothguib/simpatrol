@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ACTION
+  
+  type = 0: teleport
+    * parameter "vertex_id" is the id of the vertex to where the agent
+      shall be teleported (required in this case);
+    * parameter "edge_id" is the id of the edge to where the agent shall
+      be teleported (optional in this case, its default value is null);      
+    * parameter "elapsed_length" is the length already trespassed by the
+      agent on the edge (optional in this case, its default value is 0).
+      
+  type = 1: go to
+    * parameter "vertex_id" is the id of the vertex to where the agent
+      shall go to (required in this case);
+    * parameter "initial_speed" contains the speed of the agent at
+      the beginning of the movement (its default value is -1);
+    * parameter "acceleration" contains the acc of the movement
+      (its default value is -1).
+      
+  type = 2: visit
+    * no parameters required.
+    
+  type = 3: broadcast message
+    * parameter "message" contains the message to be broadcasted
+      (its default value is null);
+    * parameter "message_depth" contains the depth the message reaches
+      on the graph of the simulation (its default value is -1).
+      
+  type = 4: stigmatize
+    * no parameters required.
+      
+  type = 5: recharge
+    * parameter "stamina" contains the value of stamina to be added to the
+      agent (its default value is 0);
+      
+  type = 6: atomic recharge
+    * parameter "stamina" contains the value of stamina to be added to the
+      agent (its default value is 0);        
+-->
+
+<!ELEMENT action (EMPTY)>
+<!ATTLIST action type (0 | 1 | 2 | 3 | 4 | 5 | 6) #REQUIRED>
+<!ATTLIST action vertex_id CDATA "null">
+<!ATTLIST action edge_id CDATA "null">
+<!ATTLIST action elapsed_length CDATA "0">
+<!ATTLIST action initial_speed CDATA "-1">
+<!ATTLIST action acceleration CDATA "-1">
+<!ATTLIST action message CDATA  "null">
+<!ATTLIST action message_depth CDATA "-1">
+<!ATTLIST action stamina CDATA "0">
