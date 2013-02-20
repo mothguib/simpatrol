@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 
-import open.RandomReactive.RandomReactiveAgent;
-import open.RandomReactive.RandomReactiveClient;
+import open.RandomReactive.OpenRRAgent;
+import open.RandomReactive.OpenRRClient;
 
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;

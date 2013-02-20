@@ -1,5 +1,6 @@
 package tools.graph_generator;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 import util.graph.Graph;
@@ -64,6 +65,82 @@ public class RandomGraphGenerator {
 					randomDegree --;
 				}
 			}
+		}
+		
+		return g.toGraph("random-undirected");
+	}
+	
+	
+	public Graph generateUndirected_noGap(int numVertices, int minDegree, int maxDegree) {
+		return generateUndirected_noGap(numVertices, minDegree, maxDegree, 1, 1);
+	}
+	
+	public Graph generateUndirected_noGap(int numVertices, int minDegree, int maxDegree, int minWeight, int maxWeight) {
+		GraphBuilder g = new GraphBuilder(numVertices, false);
+		
+		int[] degree = new int[numVertices];
+		
+		int randomDegree;
+		int neighbor, weight;
+		boolean added, connect;
+		
+		LinkedList<Integer> connected = new LinkedList<Integer>();
+		
+				
+		for (int v = 0; v < numVertices; v++) {
+			randomDegree = intRandom(minDegree, maxDegree);
+			//System.out.printf("RandomDeg[%s] = %s\n", v, randomDegree);
+			
+			if(connected.size() == 0)
+				connected.add(v);
+			
+			connect = (connected.contains(v) ? true : false);
+			LinkedList<Integer> neighbourlist = new LinkedList<Integer>();
+			
+			
+			while (degree[v] < randomDegree) {
+				neighbor = intRandom(v+1, numVertices-1);
+				weight = intRandom(minWeight, maxWeight);
+		
+				added = false;
+				
+				if((degree[v] == randomDegree - 1) && !connect){
+					neighbor = intRandom(0, connected.size() - 1);
+					for (int x = neighbor; x < connected.size(); x++) {
+						if (degree[connected.get(x)] < maxDegree && !g.hasEdge(v, connected.get(x))) {	
+							g.addEdge(v, connected.get(x), weight);
+							degree[v] ++;
+							degree[connected.get(x)] ++;
+							added = true;
+							connect = true;					
+							break;
+						}
+					}
+				}
+				else {
+					for (int x = neighbor; x < numVertices; x++) {
+						if (degree[x] < maxDegree && !g.hasEdge(v, x)) {	
+							g.addEdge(v, x, weight);
+							degree[v] ++;
+							degree[x] ++;
+							added = true;
+							
+							neighbourlist.add(x);
+							if(connected.contains(x))
+								connect = true;
+							break;
+						}
+					}
+				}
+				
+				if (!added) {
+					randomDegree --;
+				}
+			}
+			if(connect)
+				for(Integer neigh : neighbourlist)
+					if(!connected.contains(neigh))
+						connected.add(neigh);
 		}
 		
 		return g.toGraph("random-undirected");
@@ -167,7 +244,7 @@ public class RandomGraphGenerator {
 	public static void main(String[] args) {
 		RandomGraphGenerator generator = new RandomGraphGenerator();
 		
-		Graph graph = generator.generateUndirected(10, 1, 4, 2, 10);
+		Graph graph = generator.generateUndirected_noGap(1000, 1, 7, 2, 22);
 		
 //		for (Node n : graph.getNodees()) {
 //			System.out.printf("Degree[%s] = %s\n", n.getLabel(), n.getDegree());

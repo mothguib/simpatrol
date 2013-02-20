@@ -31,6 +31,7 @@ public class OpenCycledAgent extends OpenAgent {
 	 */
 	private boolean oriented = false;
 	private int let_pass;
+	private int time_multiplier = 1;
 	private int nb_agents = 0;
 
 	/**
@@ -121,10 +122,13 @@ public class OpenCycledAgent extends OpenAgent {
 					// obtains the time this agent must wait, after the last agent
 					// passed it, to start walking
 					message = message.substring(message.indexOf(";") + 1);
+					this.time_multiplier = Integer.parseInt(message.substring(0, message.indexOf(";")));
+					
+					message = message.substring(message.indexOf(";") + 1);
 					if(message.indexOf("###") < 0)
-						this.wait_time = Double.parseDouble(message);
+						this.wait_time = this.time_multiplier * Double.parseDouble(message);
 					else
-						this.wait_time = Double.parseDouble(message.substring(0, message.indexOf("###")));
+						this.wait_time = this.time_multiplier * Double.parseDouble(message.substring(0, message.indexOf("###")));
 					System.err.println(this.agent_id + ": Must wait " + this.wait_time
 							+ " cycles/seconds.");
 					
@@ -156,8 +160,12 @@ public class OpenCycledAgent extends OpenAgent {
 					// obtains the time this agent must wait, after the last agent
 					// passed it, to start walking
 					//message = message.substring(message.indexOf(";") + 1);
-					this.wait_time += Double.parseDouble(message.substring(0, message.indexOf(";")));
-					System.err.println(this.agent_id + ": Must wait " + this.wait_time + " cycles/seconds.");
+					if(this.let_pass > 0)
+						this.wait_time = this.time_multiplier * Double.parseDouble(message.substring(0, message.indexOf(";")));
+					else {
+						this.wait_time += Double.parseDouble(message.substring(0, message.indexOf(";")));
+						System.err.println(this.agent_id + ": Must wait " + this.wait_time + " cycles/seconds.");
+					}
 					
 					// due to the way the coordinator recalculates the positions, we need to reset the current step plan
 					//if(let_pass !=0)
@@ -172,11 +180,30 @@ public class OpenCycledAgent extends OpenAgent {
 				}
 			}
 			
+		
 			return false;
 		}
 		// default answer
 		return false;
 	}
+	
+	
+	private void manageMessages(String perception){
+		if(perception.indexOf("waiting_time?") > -1){
+			int index = perception.indexOf("waiting_time?") + 14;
+			String agent_id = perception.substring(index);
+			agent_id = agent_id.substring(0, agent_id.indexOf("\""));
+			this.SendMessage("waiting_time!;" + this.wait_time, agent_id);
+		}
+		if(perception.indexOf("waiting_time!") > -1){
+			int index = perception.indexOf("waiting_time!") + 14;
+			String time = perception.substring(index);
+			time = time.substring(0, time.indexOf("\""));
+			this.wait_time += Math.max(0, Double.valueOf(time));
+		}
+	}
+	
+	
 	
 	/**
 	 * Lets the agent perceive and count the passing agents.
@@ -189,7 +216,7 @@ public class OpenCycledAgent extends OpenAgent {
 		// lets the agent perceive some agent
 		if (perception.indexOf("<perception type=\"1\"") > -1) {
 			// holds the perceived agents
-			String current_perceived_agents = "";
+			String current_perceived_agent = "";
 			String current_agent_position = "";
 
 			// at the beginning, if the other agents are on the same node, they are considered as passing by,
@@ -199,20 +226,35 @@ public class OpenCycledAgent extends OpenAgent {
 				int agent_index = perception.indexOf("<agent id=\"");
 				while (agent_index > -1) {
 					perception = perception.substring(agent_index + 11);
-					current_perceived_agents = perception.substring(0, perception.indexOf("\""));
+					current_perceived_agent = perception.substring(0, perception.indexOf("\""));
 					agent_index = perception.indexOf("node_id=\"");
 					perception = perception.substring(agent_index + 9);
 					current_agent_position = perception.substring(0, perception.indexOf("\""));
 					
+					String edge = null;
+					double length = 0;
+					if(perception.indexOf("edge_id") > -1 && (perception.indexOf("<agent id=\"") == -1 ||
+							perception.indexOf("edge_id") < perception.indexOf("<agent id=\""))){
+						int edge_index = perception.indexOf("edge_id=\"");
+						perception = perception.substring(edge_index + 9);
+						edge = perception.substring(0, perception.indexOf("\""));
+						
+						int length_index = perception.indexOf("elapsed_length=\"");
+						perception = perception.substring(length_index + 16);
+						String length_str = perception.substring(0, perception.indexOf("\""));
+						length = Double.valueOf(length_str);
+					}
+					
 					nb_agents++;
 					
-					if (!current_perceived_agents.equals("coordinator")
-							&& !this.PERCEIVED_AGENTS.contains(current_perceived_agents)
-							&& this.current_position.STRING.equals(current_agent_position)) {
+					if (!current_perceived_agent.equals("coordinator")
+							&& !this.PERCEIVED_AGENTS.contains(current_perceived_agent)
+							&& this.current_position.STRING.equals(current_agent_position)
+							&& length == 0) {
 						// adds it to the already perceived agents
-						this.PERCEIVED_AGENTS.add(current_perceived_agents);
+						this.PERCEIVED_AGENTS.add(current_perceived_agent);
 
-						System.err.println(this.agent_id + ": Agent " + current_perceived_agents + " is in the same spot as me.");
+						System.err.println(this.agent_id + ": Agent " + current_perceived_agent + " is in the same spot as me.");
 					}		
 					agent_index = perception.indexOf("<agent id=\"");
 				}
@@ -228,21 +270,38 @@ public class OpenCycledAgent extends OpenAgent {
 				int agent_index = perception.indexOf("<agent id=\"");
 				while (agent_index > -1) {
 					perception = perception.substring(agent_index + 11);
-					current_perceived_agents = perception.substring(0, perception.indexOf("\""));
+					current_perceived_agent = perception.substring(0, perception.indexOf("\""));
 					agent_index = perception.indexOf("node_id=\"");
 					perception = perception.substring(agent_index + 9);
 					current_agent_position = perception.substring(0, perception.indexOf("\""));
 					
-					if (!current_perceived_agents.equals("coordinator")
-							&& !this.PERCEIVED_AGENTS.contains(current_perceived_agents)
-							&& this.current_position.STRING.equals(current_agent_position)) {
+					String edge = null;
+					double length = 0;
+					if(perception.indexOf("edge_id") > -1 && (perception.indexOf("<agent id=\"") == -1 ||
+							perception.indexOf("edge_id") < perception.indexOf("<agent id=\""))){
+						int edge_index = perception.indexOf("edge_id=\"");
+						perception = perception.substring(edge_index + 9);
+						edge = perception.substring(0, perception.indexOf("\""));
+						
+						int length_index = perception.indexOf("elapsed_length=\"");
+						perception = perception.substring(length_index + 16);
+						String length_str = perception.substring(0, perception.indexOf("\""));
+						length = Double.valueOf(length_str);
+					}
+					
+					if (!current_perceived_agent.equals("coordinator")
+							&& !this.PERCEIVED_AGENTS.contains(current_perceived_agent)
+							&& this.current_position.STRING.equals(current_agent_position)
+							&& length == 0) {
 						// adds it to the already perceived agents
-						this.PERCEIVED_AGENTS.add(current_perceived_agents);
-	
+						this.PERCEIVED_AGENTS.add(current_perceived_agent);
+						
+						if(this.let_pass == 1)
+							this.SendMessage("waiting_time?;"+this.agent_id, current_perceived_agent);
+						
 						// decreases the number of agents to let pass
 						this.let_pass--;
-	
-						System.err.println(this.agent_id + ": Agent " + current_perceived_agents + " passed me.");
+						System.err.println(this.agent_id + ": Agent " + current_perceived_agent + " passed me.");
 					}		
 					agent_index = perception.indexOf("<agent id=\"");
 					
@@ -379,6 +438,7 @@ public class OpenCycledAgent extends OpenAgent {
 		
 		if(this.oriented){
 			this.inactive = false;
+			this.PERCEIVED_AGENTS = new HashSet<String>();
 		}
 		
 		this.Wait();
@@ -395,6 +455,9 @@ public class OpenCycledAgent extends OpenAgent {
 		double previous_time = this.time;
 		
 		boolean acted = false;
+		
+		int tries = 0;
+		
 		while(!acted){
 			String[] perceptions = this.connection.getBufferAndFlush();
 
@@ -447,8 +510,10 @@ public class OpenCycledAgent extends OpenAgent {
 			}
 			
 			if(this.oriented){
-				for (int i = 0; i < perceptions.length; i++)
+				for (int i = 0; i < perceptions.length; i++){
 					this.perceivePassingAgents(perceptions[i]);
+					this.manageMessages(perceptions[i]);
+				}
 	
 				
 				if(this.current_position.double_value == 0){
@@ -462,12 +527,14 @@ public class OpenCycledAgent extends OpenAgent {
 						this.Wait();
 						this.wait_time -= (this.time - previous_time);
 						//his.wait_time -= 1;
-						if(this.wait_time <= 0)
+						if(this.wait_time <= 0){
 							this.start_moving = true;
+							this.time_multiplier = 1;
+						}
 						acted = true;
 					}
 					
-					else if((this.start_moving || received_position )){
+					else if(this.start_moving || (updated_time & received_position) || (received_position && tries > 10000)){
 						try {
 							this.visitAndGoToNextStep();
 						} catch (IOException e) {
@@ -478,6 +545,8 @@ public class OpenCycledAgent extends OpenAgent {
 							this.start_moving = false;
 						acted = true;
 					}
+					
+					tries++;
 				}
 				
 				else if(received_position && this.current_position.double_value != 0){

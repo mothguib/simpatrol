@@ -248,6 +248,32 @@ public class TransactionAnalyzer {
 		return distribution;
 	}
 	
+	public int getNbSuccessfulTransaction(int start, int stop, boolean open){
+		int nb = 0;
+		for(int i = 0; i < this.transactions.size(); i++){
+			CompleteTransaction transac = this.transactions.get(i);
+			boolean isconcluded = (open? transac.isConcluded_openSystem() : transac.isConcluded_closedSystem());
+			boolean isSuccessful = (open? (isconcluded && transac.nb_accept == 1) : isconcluded);
+			if(isSuccessful && transac.creation_time >= start && transac.getAcceptationTime() < stop)
+				nb++;
+		}
+		
+		return nb;
+	}
+	
+	public int getNbSuccessfulTransaction(boolean open){
+		int nb = 0;
+		for(int i = 0; i < this.transactions.size(); i++){
+			CompleteTransaction transac = this.transactions.get(i);
+			boolean isconcluded = (open? transac.isConcluded_openSystem() : transac.isConcluded_closedSystem());
+			boolean isSuccessful = (open? (isconcluded && transac.nb_accept == 1) : isconcluded);
+			if(isSuccessful)
+				nb++;
+		}
+		
+		return nb;
+	}
+	
 	
 	/**
 	 * this is only an exemple of use
@@ -257,12 +283,12 @@ public class TransactionAnalyzer {
 		TransactionAnalyzer analyzer = new TransactionAnalyzer();
 		
 		try {
-			analyzer.ReadDoc_closedSystem("/home/pouletc/experimentation/Simulations/mapA/0_5_4_open/logs_OpenFBANodes/log_0.txt", 5);
+			analyzer.ReadDoc_closedSystem("/home/pouletc/experimentation/Simulations/mapA/0_10_open/logs_Minimax/log_2.txt", 10);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//analyzer.Analyze();
+		analyzer.Analyze_closedSystem();
 		//analyzer.AnalyseOwnership("v25");
 		//analyzer.FullAnalysisByNode("v25");
 		int freq = 10;
@@ -321,6 +347,7 @@ final class CompleteTransaction {
 		this.trans_id = trans_id;
 		this.creation_time = creation_time;
 		acts = new LinkedList<SpeechAct>();
+		acts_time = new LinkedList<Integer>();
 	}
 	
 	public void addAct(SpeechAct act, int time){

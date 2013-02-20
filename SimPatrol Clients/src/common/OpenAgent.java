@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import util.AgentPosition;
 import util.StringAndDouble;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
@@ -69,7 +70,7 @@ public abstract class OpenAgent extends Agent {
 	/* inner representations of the environment */
 	protected double time = -1;
 	protected Graph graph;
-	protected LinkedList<String> AGENTS_POSITIONS;
+	protected LinkedList<AgentPosition> AGENTS_POSITIONS;
 	protected LinkedList<String> received_messages;
 	protected StringAndDouble current_position;
 	
@@ -165,9 +166,22 @@ public abstract class OpenAgent extends Agent {
 				int agent_node_id_index = perception.indexOf("node_id=\"");
 				perception = perception.substring(agent_node_id_index + 9);
 				String agent_node_id = perception.substring(0, perception.indexOf("\""));
+				
+				String edge = null;
+				double length = 0;
+				if(perception.indexOf("edge_id") > -1 && (perception.indexOf("<agent id=\"") == -1 ||
+						perception.indexOf("edge_id") < perception.indexOf("<agent id=\""))){
+					int edge_index = perception.indexOf("edge_id=\"");
+					perception = perception.substring(edge_index + 9);
+					edge = perception.substring(0, perception.indexOf("\""));
+					
+					int length_index = perception.indexOf("elapsed_length=\"");
+					perception = perception.substring(length_index + 16);
+					String length_str = perception.substring(0, perception.indexOf("\""));
+					length = Double.valueOf(length_str);
+				}
 
-				this.AGENTS_POSITIONS.add(agent_id);
-				this.AGENTS_POSITIONS.add(agent_node_id);
+				this.AGENTS_POSITIONS.add(new AgentPosition(agent_id, agent_node_id, edge, length));
 				
 				agent_id_index = perception.indexOf("<agent id=\"");
 			}
@@ -499,5 +513,8 @@ public abstract class OpenAgent extends Agent {
 		}
 	}
 }
+
+
+
 	
 

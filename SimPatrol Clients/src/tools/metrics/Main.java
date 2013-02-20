@@ -1,7 +1,6 @@
 package tools.metrics;
 
 import java.awt.Color;
-import java.util.LinkedList;
 
 import util.CurveViewer;
 import util.DoubleList;
@@ -12,11 +11,11 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LogFileParser parser = new LogFileParser();
 		
-		parser.parseFile("/home/pouletc/experimentation/Simulations/mapA/0_long/logs_OpenFBAPrecalculatedGroup/log_0.txt");
+		parser.parseFile("/home/pouletc/experimentation/Simulations/high_scale/coord/logs_OpenHPCC/3_2/log_6.txt");
 
 	
 		int startCycle = 0;
-		int finalCycle = 16999;
+		int finalCycle = 2999;
 		
 		DoubleList priorities = new DoubleList();
 		for(int i = 0; i < parser.getNodePriorities().size(); i++)
@@ -88,14 +87,17 @@ public class Main {
 		System.out.println();
 		System.out.println("METRICS: 3000 - 4000");
 		System.out.println();
+		
+		int min_cycle = 11000;
+		int max_cycle = 14000;
 
-		System.out.println(" - Maximum interval: " + metrics.getMaxInterval(2500,2999));
-		System.out.println(" - Average interval: " + metrics.getAverageInterval(2500,2999));
-		System.out.println(" - Standard deviation of the intervals: " + metrics.getStdDevOfIntervals(2500,2999));
-		System.out.println(" - Quadratic mean of the intervals: " + metrics.getQuadraticMeanOfIntervals(2500,2999));
+		System.out.println(" - Maximum interval: " + metrics.getMaxInterval(min_cycle,max_cycle));
+		System.out.println(" - Average interval: " + metrics.getAverageInterval(min_cycle,max_cycle));
+		System.out.println(" - Standard deviation of the intervals: " + metrics.getStdDevOfIntervals(min_cycle,max_cycle));
+		System.out.println(" - Quadratic mean of the intervals: " + metrics.getQuadraticMeanOfIntervals(min_cycle,max_cycle));
 		System.out.println();
-		System.out.println(" - Maximum instantaneous idleness: " + metrics.getMaxInstantaeousIdleness(2500,2999));
-		System.out.println(" - Average idleness: " + metrics.getAverageIdleness(2500,2999));
+		System.out.println(" - Maximum instantaneous idleness: " + metrics.getMaxInstantaeousIdleness(min_cycle,max_cycle));
+		System.out.println(" - Average idleness: " + metrics.getAverageIdleness(min_cycle,max_cycle));
 		System.out.println();
 		
 		
@@ -122,7 +124,7 @@ public class Main {
 		myviewer.addCurve(myfreq, mymaxvalues, Color.red, DrawStyle.LONG_DOTS);
 		myviewer.addCurve(myfreq, mystdvalues, Color.orange, DrawStyle.SHORT_DOTS);
 		myviewer.setXdivision(1000);
-		myviewer.setYdivision(100);
+		myviewer.setYdivision(25);
 		//myviewer.setYcenter(10);
 		myviewer.setVisible(true);
 		

@@ -225,6 +225,8 @@ public abstract class CommunicatorAgent2 extends OpenAgent {
 	 * @return the length of the path
 	 */
 	protected double CalculatePathCost(LinkedList<String> nodes){
+		if(nodes.size() < 2)
+			return 0;
 		double cost = 0;
 		Node node1 = graph.getNode(nodes.get(0)), node2=null;
 		

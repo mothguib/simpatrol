@@ -30,6 +30,13 @@ public final class MinimumHeap {
 		// constructs the heap, using the bottom up strategy
 		this.assureMinimumHeap();
 	}
+	
+	
+	public MinimumHeap(LinkedList<Comparable> objects_list){
+		this.HEAP = objects_list;
+		this.assureMinimumHeap();
+	}
+	
 
 	/**
 	 * Verifies if the heap has some element.

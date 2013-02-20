@@ -466,4 +466,8 @@ public final class Node {
 		return buffer.toString();
 	}
 	
+	public String toString(){
+		return this.label;
+	}
+	
 }

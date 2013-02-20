@@ -556,6 +556,8 @@ public class Open_FBA_mapB_Agent extends Open_FBA_Agent {
 	
 	@Override
 	protected boolean enterCondition() {
+		if(this.current_position == null)
+			return false;
 		return true;
 	}
 

@@ -189,4 +189,8 @@ public final class Edge implements Comparable {
 		// returns the buffer content
 		return buffer.toString();
 	}
+	
+	public String toString(){
+		return this.getObjectId();
+	}
 }

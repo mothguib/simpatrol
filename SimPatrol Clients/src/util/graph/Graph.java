@@ -12,31 +12,31 @@ import util.heap.MinimumHeap;
 import util.heap.Comparable;
 
 /** Implements graphs that represent the territories to be patrolled. */
-public final class Graph {
+public class Graph {
 	/* Attributes. */
 	/** The label of the graph. */
-	private String label;
+	protected String label;
 
 	/** The set of nodes of the graph. */
-	private Set<Node> nodes;
+	protected Set<Node> nodes;
 
 	/** The set of edges of the graph. */
-	private Set<Edge> edges;
+	protected Set<Edge> edges;
 
 	/** Holds the weight of the idlenesses in the comparison of nodes. */
-	private static final double IDLENESSES_WEIGHT = 0.2;
+	protected static final double IDLENESSES_WEIGHT = 0.2;
 
 	/**
 	 * Table that holds, for each node, its list of distances to the other
 	 * nodes of the graph.
 	 */
-	private static List<DistancesList> distances_table;
+	protected List<DistancesList> distances_table;
 
 	/** Holds the biggest distance between the nodes of the graph. */
-	private static double biggest_distance;
+	protected double biggest_distance;
 
 	/** Holds the smallest distance between the nodes of the graph. */
-	private static double smallest_distance;
+	protected double smallest_distance;
 
 	/* Methods. */
 	/**
@@ -148,7 +148,7 @@ public final class Graph {
 	 * Fills the table that holds, for each node, its list of distances to the
 	 * other nodes of the graph.
 	 */
-	private synchronized void calculateDistances() {
+	protected synchronized void calculateDistances() {
 		distances_table = new LinkedList<DistancesList>();
 
 		// initiates the bound distances
@@ -297,6 +297,13 @@ public final class Graph {
 
 		double[] answer = { smallest_distance, biggest_distance };
 		return answer;
+	}
+	
+	public double getDiameter(){
+		if (distances_table == null || distances_table.isEmpty())
+			this.calculateDistances();
+		
+		return biggest_distance;
 	}
 
 	/**
@@ -626,7 +633,7 @@ public final class Graph {
 	 * 
 	 * @return The minimum-weight spanning tree of the graph.
 	 */
-	private Graph getMWST() {
+	protected Graph getMWST() {
 		// minimum heap with the edges of the graph, based on their lengths
 		MinimumHeap heap = new MinimumHeap(this.getEdges());
 
@@ -726,7 +733,7 @@ public final class Graph {
 	 *            The edges to be ignored in the matching constitution.
 	 * @return The edges constituting the matching.
 	 */
-	private Edge[] getMWPM(Node[] nodes, Edge[] ignored_edges) {
+	protected Edge[] getMWPM(Node[] nodes, Edge[] ignored_edges) {
 		// adds the given nodes to a set
 		HashSet<Node> given_nodes_set = new HashSet<Node>();
 		for (int i = 0; i < nodes.length; i++)
@@ -898,7 +905,7 @@ public final class Graph {
 	 *            spanning tree was obtained.
 	 * @return A try for an hamiltonian cycle.
 	 */
-	private Node[] getHamiltonianCycle(Graph original_graph) {
+	protected Node[] getHamiltonianCycle(Graph original_graph) {
 		// holds the answer for this method
 		LinkedList<Node> hamiltonian_cycle = new LinkedList<Node>();
 
@@ -1604,7 +1611,7 @@ public final class Graph {
 	 * @return The edge with the given id, or NULL if there's no edge with such
 	 *         id.
 	 */
-	private Edge getEdge(String id) {
+	public Edge getEdge(String id) {
 		if (this.edges != null)
 			for (Edge edge : this.edges)
 				if (edge.getObjectId().equals(id))
@@ -1735,6 +1742,10 @@ final class NodeWithDistance {
 	public NodeWithDistance(Node node, double distance) {
 		this.NODE = node;
 		this.DISTANCE = distance;
+	}
+	
+	public String toString(){
+		return this.NODE.getObjectId() + "," + this.DISTANCE;
 	}
 }
 
@@ -1881,5 +1892,9 @@ final class IdlenessedNodeDistanceEdge implements Comparable {
 		}
 
 		return false;
+	}
+	
+	public String toString(){
+		return "(" + this.NODE.getObjectId() + "," + this.distance + "," + ((this.edge != null) ? this.edge.getObjectId() : "_");
 	}
 }
