@@ -1,0 +1,111 @@
+<simulation_log>
+<graph label="random-undirected">
+	<node id="node3" label="node3" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node0" label="node0" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node4" label="node4" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node1" label="node1" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node2" label="node2" priority="1.0" idleness="0.0" fuel="false"/>
+	<edge id="arc3-4" source="node3" target="node4" directed="true" length="1.0"/>
+	<edge id="arc4-0" source="node4" target="node0" directed="true" length="1.0"/>
+	<edge id="arc3-1" source="node3" target="node1" directed="true" length="1.0"/>
+	<edge id="arc0-1" source="node0" target="node1" directed="true" length="1.0"/>
+	<edge id="arc1-2" source="node1" target="node2" directed="true" length="1.0"/>
+	<edge id="arc2-3" source="node2" target="node3" directed="true" length="1.0"/>
+</graph>
+<society id="soc1" label="soc1">
+	<agent id="ag1" label="ag1" node_id="node1"/>
+	<agent id="coordinator" label="coordinator" node_id="node0"/>
+	<agent id="ag2" label="ag2" node_id="node1"/>
+</society>
+<event type="2" time="0.0" agent_id="ag1"/>
+<society id="InactiveSociety" label="InactiveSociety"/>
+<event type="2" time="0.0" agent_id="ag2"/>
+<event type="2" time="0.0" agent_id="coordinator"/>
+<event type="6" time="0.0" agent_id="ag1"/>
+<event type="2" time="0.0" agent_id="ag1"/>
+<event type="6" time="0.0" agent_id="ag2"/>
+<event type="2" time="0.0" agent_id="ag2"/>
+<event type="2" time="1.0" agent_id="ag2"/>
+<event type="2" time="1.0" agent_id="ag1"/>
+<event type="2" time="1.0" agent_id="coordinator"/>
+<event type="5" time="1.0" agent_id="ag1" node_id="node2"/>
+<event type="2" time="1.0" agent_id="ag1"/>
+<event type="5" time="1.0" agent_id="ag2" node_id="node2"/>
+<event type="2" time="1.0" agent_id="ag2"/>
+<event type="2" time="2.0" agent_id="ag1"/>
+<event type="2" time="2.0" agent_id="ag2"/>
+<event type="2" time="2.0" agent_id="coordinator"/>
+<event type="6" time="2.0" agent_id="ag2"/>
+<event type="2" time="2.0" agent_id="ag2"/>
+<event type="6" time="2.0" agent_id="ag1"/>
+<event type="2" time="2.0" agent_id="ag1"/>
+<event type="2" time="3.0" agent_id="ag2"/>
+<event type="2" time="3.0" agent_id="ag1"/>
+<event type="2" time="3.0" agent_id="coordinator"/>
+<event type="5" time="3.0" agent_id="ag1" node_id="node3"/>
+<event type="2" time="3.0" agent_id="ag1"/>
+<event type="5" time="3.0" agent_id="ag2" node_id="node3"/>
+<event type="2" time="3.0" agent_id="ag2"/>
+<event type="2" time="4.0" agent_id="ag2"/>
+<event type="2" time="4.0" agent_id="ag1"/>
+<event type="2" time="4.0" agent_id="coordinator"/>
+<event type="6" time="4.0" agent_id="ag2"/>
+<event type="2" time="4.0" agent_id="ag2"/>
+<event type="6" time="4.0" agent_id="ag1"/>
+<event type="2" time="4.0" agent_id="ag1"/>
+<event type="2" time="5.0" agent_id="ag1"/>
+<event type="2" time="5.0" agent_id="ag2"/>
+<event type="2" time="5.0" agent_id="coordinator"/>
+<event type="5" time="5.0" agent_id="ag2" node_id="node1"/>
+<event type="2" time="5.0" agent_id="ag2"/>
+<event type="5" time="5.0" agent_id="ag1" node_id="node4"/>
+<event type="2" time="5.0" agent_id="ag1"/>
+<event type="2" time="6.0" agent_id="ag2"/>
+<event type="2" time="6.0" agent_id="ag1"/>
+<event type="2" time="6.0" agent_id="coordinator"/>
+<event type="6" time="6.0" agent_id="ag2"/>
+<event type="2" time="6.0" agent_id="ag2"/>
+<event type="6" time="6.0" agent_id="ag1"/>
+<event type="2" time="6.0" agent_id="ag1"/>
+<event type="2" time="7.0" agent_id="ag1"/>
+<event type="2" time="7.0" agent_id="ag2"/>
+<event type="2" time="7.0" agent_id="coordinator"/>
+<event type="5" time="7.0" agent_id="ag1" node_id="node0"/>
+<event type="2" time="7.0" agent_id="ag1"/>
+<event type="5" time="7.0" agent_id="ag2" node_id="node2"/>
+<event type="2" time="7.0" agent_id="ag2"/>
+<event type="2" time="8.0" agent_id="ag2"/>
+<event type="2" time="8.0" agent_id="ag1"/>
+<event type="2" time="8.0" agent_id="coordinator"/>
+<event type="6" time="8.0" agent_id="ag2"/>
+<event type="2" time="8.0" agent_id="ag2"/>
+<event type="6" time="8.0" agent_id="ag1"/>
+<event type="2" time="8.0" agent_id="ag1"/>
+<event type="2" time="9.0" agent_id="coordinator"/>
+<event type="2" time="9.0" agent_id="ag1"/>
+<event type="2" time="9.0" agent_id="ag2"/>
+<event type="5" time="9.0" agent_id="ag1" node_id="node1"/>
+<event type="2" time="9.0" agent_id="ag1"/>
+<event type="5" time="9.0" agent_id="ag2" node_id="node3"/>
+<event type="2" time="9.0" agent_id="ag2"/>
+<event type="2" time="10.0" agent_id="ag1"/>
+<event type="2" time="10.0" agent_id="coordinator"/>
+<event type="2" time="10.0" agent_id="ag2"/>
+<event type="6" time="10.0" agent_id="ag2"/>
+<event type="2" time="10.0" agent_id="ag2"/>
+<event type="6" time="10.0" agent_id="ag1"/>
+<event type="2" time="10.0" agent_id="ag1"/>
+<event type="2" time="11.0" agent_id="ag1"/>
+<event type="2" time="11.0" agent_id="coordinator"/>
+<event type="2" time="11.0" agent_id="ag2"/>
+<event type="5" time="11.0" agent_id="ag2" node_id="node4"/>
+<event type="2" time="11.0" agent_id="ag2"/>
+<event type="5" time="11.0" agent_id="ag1" node_id="node2"/>
+<event type="2" time="11.0" agent_id="ag1"/>
+<event type="2" time="12.0" agent_id="coordinator"/>
+<event type="2" time="12.0" agent_id="ag2"/>
+<event type="2" time="12.0" agent_id="ag1"/>
+<event type="6" time="12.0" agent_id="ag2"/>
+<event type="2" time="12.0" agent_id="ag2"/>
+<event type="6" time="12.0" agent_id="ag1"/>
+<event type="2" time="12.0" agent_id="ag1"/>
