@@ -91,7 +91,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 		}
 
 		// configures this window
-		this.setTitle("SimPatrol v1.2");
+		this.setTitle("SimPatrol v1.3beta");
 		this.setIconImage(ImagesList.ICON_2.getImage());
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
