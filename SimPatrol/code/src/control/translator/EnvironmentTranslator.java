@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import control.exception.EdgeNotFoundException;
 import control.exception.NodeNotFoundException;
 import model.Environment;
+import model.agent.OpenSociety;
 import model.agent.Society;
 import model.graph.Graph;
 

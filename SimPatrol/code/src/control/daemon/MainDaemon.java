@@ -13,6 +13,7 @@ import util.net.SocketNumberGenerator;
 import view.connection.ServerSideAgentTCPConnection;
 import view.connection.AgentUDPConnection;
 import view.connection.Connection;
+import view.connection.ServerSideIPCConnection;
 import view.connection.ServerSideTCPConnection;
 import view.connection.UDPConnection;
 import model.Environment;
@@ -259,7 +260,7 @@ public final class MainDaemon extends Daemon implements IMessageObserver {
 		// if an agent was found
 		if (agent != null) {
 			// FINISH HIM!
-			((Mortal) agent).die();
+			((Mortal) agent).deactivate();
 
 			// stops the agent's action and perception daemons
 			simulator.stopAndRemoveAgentDaemons(agent);
@@ -364,12 +365,24 @@ public final class MainDaemon extends Daemon implements IMessageObserver {
 			connection = new AgentUDPConnection(agent.getObjectId()
 					+ "'s connection", perception_daemon.BUFFER,
 					action_daemon.BUFFER);
-		else
-			connection = new ServerSideAgentTCPConnection(agent.getObjectId()
-					+ "'s connection", perception_daemon.BUFFER,
+		else{
+			if( simulator.isIPC()){
+				connection = new ServerSideIPCConnection(agent.getObjectId()
+					, perception_daemon.BUFFER,
 					action_daemon.BUFFER);
+				((ServerSideIPCConnection)connection).setAction(action_daemon);
+			}
+			else 
+				connection = new ServerSideAgentTCPConnection(agent.getObjectId()
+						+ "'s connection", perception_daemon.BUFFER,
+						action_daemon.BUFFER);
+				
+		}
+			
+			
 
 		// configures the perception and action daemons' connection
+				
 		perception_daemon.setConnection(connection);
 		action_daemon.setConnection(connection);
 

@@ -216,7 +216,7 @@ public final class Coordinator extends Thread {
 			// if there's a death tpd and the object must die now
 			if (death_tpd != null && death_tpd.nextBoolean()) {
 				// kills the object
-				current_object.die();
+				current_object.deactivate();
 
 				// if the object is an agent
 				if (current_object instanceof Agent) {
@@ -265,8 +265,10 @@ public final class Coordinator extends Thread {
 		ActionDaemon[] action_daemons = simulator.getActionDaemons();
 
 		// for each action daemon, forces the act method
-		for (int i = 0; i < action_daemons.length; i++)
+		for (int i = 0; i < action_daemons.length; i++){			
 			action_daemons[i].act();
+		}
+		
 	}
 
 	/** @modeler This method must be modeled. */
@@ -316,6 +318,8 @@ public final class Coordinator extends Thread {
 		// stops the simulation
 		try {
 			simulator.stopSimulation();
+			simulator.exit();
+			System.exit(0);
 		} catch (IOException e) {
 			e.printStackTrace(); // traced IO exception
 		}

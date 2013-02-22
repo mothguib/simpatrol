@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
 import control.simulator.CycledSimulator;
 import control.simulator.RealTimeSimulator;
 import control.simulator.Simulator;
@@ -199,7 +200,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	 *            The update time rate of the simulator.
 	 */
 	public void configureSimulation(boolean is_real_time_simulation,
-			int port_number, double update_time_rate) {
+			int port_number, double update_time_rate, boolean useIPC) {
 		this.port_label.setText("Port: " + port_number);
 		this.update_rate_label.setText("Update rate: " + update_time_rate
 				+ " sec");
@@ -215,7 +216,7 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 				((TitledBorder) this.configuration_panel.getBorder())
 						.setTitle("Cycled simulator");
 				this.simulator = new CycledSimulator(port_number,
-						update_time_rate);
+						update_time_rate, useIPC);
 			}
 			
 			this.simulatorConfigured = true;
@@ -277,16 +278,18 @@ public class SimPatrolGUI extends javax.swing.JFrame {
 	public static void main(String args[]) {
 		double updateRate;
 		boolean realTimeMode;
+		boolean useIPC = false;
 		int portNumber;
-
+		
 		SimPatrolGUI mainWindow = new SimPatrolGUI();
 		
-		if( args.length == 3){
+		if( args.length >= 3){
 			updateRate = Double.parseDouble(args[0]);
 			realTimeMode = Boolean.parseBoolean(args[1]);
 			portNumber = Integer.parseInt(args[2]);
+			if( args.length >= 4 ) useIPC = Boolean.parseBoolean(args[3]);
+			mainWindow.configureSimulation(realTimeMode, portNumber, updateRate, useIPC);
 			
-			mainWindow.configureSimulation(realTimeMode, portNumber, updateRate);
 		}
 		
 		mainWindow.setVisible(true);

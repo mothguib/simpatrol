@@ -66,7 +66,7 @@ public final class RealTimeSimulator extends Simulator implements
 	 */
 	public RealTimeSimulator(int local_socket_number, double update_time_rate)
 			throws IOException {
-		super(local_socket_number, update_time_rate);
+		super(local_socket_number, update_time_rate, false);
 		this.chronometer = null;
 		Robot.setSimulator(this);
 	}

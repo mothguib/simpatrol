@@ -93,4 +93,39 @@ public abstract class EventTypes {
 	 * @see EdgeEnablingEvent
 	 */
 	public static final int EDGE_ENABLING = 11;
+	
+	
+	
+	/**
+	 * The events related to the activation of agents.
+	 * 
+	 * @see AgentActivatingEvent
+	 */
+	public static final int AGENT_ACTIVATING = 12;
+	
+	/**
+	 * The events related to the deactivation of agents.
+	 * 
+	 * @see AgentDeactivatingEvent
+	 */
+	public static final int AGENT_DEACTIVATING = 13;
+	
+	/**
+	 * The events related to the changing of society of agents.
+	 * 
+	 * @see AgentChangingSocietyEvent
+	 */
+	public static final int AGENT_CHANGING_SOCIETY = 14;
+	
+	
+	
+	/**
+	 * The events related to the agent sending a message.
+	 * 
+	 * @see AgentSendingMessageEvent
+	 */
+	public static final int AGENT_SENDING_MESSAGE = 15;	
+	
+	
+	
 }

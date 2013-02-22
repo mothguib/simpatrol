@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,7 +50,11 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 	private JPanel update_rate_panel;
 
 	private JFormattedTextField update_rate_input;
-
+	
+	private JPanel use_IPC_panel;
+	
+	private JCheckBox use_IPC_checkbox;
+	
 	private JLabel sec_label;
 
 	// button panel
@@ -82,7 +87,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 
 		// 2. configures the "configuration panel"
 		this.configuration_panel = new JPanel();
-		this.configuration_panel.setLayout(new GridLayout(3, 1));
+		this.configuration_panel.setLayout(new GridLayout(4, 1));
 
 		// 2.1. configures the simulation mode panel
 		this.simulation_mode_panel = new JPanel();
@@ -107,6 +112,19 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 		});
 		this.simulation_mode_panel.add(this.cycled_choice);
 		this.configuration_panel.add(this.simulation_mode_panel);
+		
+		// Configures the IPC panel
+		
+		this.use_IPC_panel = new JPanel();
+		this.use_IPC_panel.setLayout(new BorderLayout());
+		this.use_IPC_checkbox = new JCheckBox();
+		this.use_IPC_checkbox.setText("IPC");
+		this.use_IPC_checkbox.setSelected(true);
+		this.use_IPC_panel.setBorder(new TitledBorder(new EtchedBorder(),
+				"Use IPC"));
+		this.use_IPC_panel.add(this.use_IPC_checkbox);
+		
+		this.configuration_panel.add(this.use_IPC_panel);
 
 		// 2.2. configures the port number configuration
 		this.port_panel = new JPanel();
@@ -135,7 +153,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 		this.sec_label.setText(" sec");
 		this.update_rate_panel.add(this.sec_label, BorderLayout.EAST);
 		this.configuration_panel.add(this.update_rate_panel);
-
+		
 		// 2.4. adds the configuration panel to the dialog window
 		this.getContentPane()
 				.add(this.configuration_panel, BorderLayout.CENTER);
@@ -156,7 +174,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
 				.getScreenSize();
 		setBounds((screenSize.width - 350) / 2, (screenSize.height - 207) / 2,
-				350, 207);
+				350, 257);
 	}
 
 	/** Doesn't let the dialog window close. */
@@ -172,7 +190,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 	private void ok_buttonActionPerformed(ActionEvent evt) {
 		// treats the update time rate
 		double update_time_rate = ((Double) this.update_rate_input.getValue())
-				.doubleValue();
+				.doubleValue();		
 		if (update_time_rate <= 0) {
 			JOptionPane.showMessageDialog(this,
 					"The update rate must be a real positive number.",
@@ -186,7 +204,7 @@ public class SimulationConfigurationGUI extends javax.swing.JDialog {
 		// configures the main GUI
 		((SimPatrolGUI) this.getParent()).configureSimulation(
 				this.real_time_choice.isSelected(), ((Integer) this.port_input
-						.getValue()).intValue(), update_time_rate);
+						.getValue()).intValue(), update_time_rate, use_IPC_checkbox.isSelected());
 
 		// closes this window
 		this.dispose();

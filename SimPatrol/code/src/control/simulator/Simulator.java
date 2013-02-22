@@ -63,6 +63,12 @@ public abstract class Simulator implements TimeSensible {
 	 * action.
 	 */
 	private final double UPDATE_TIME_RATE;
+	
+	/**
+	 * Defines, if use internal Interprocess Communication.
+	 * Boost the local connection
+	 */
+	private final boolean USE_IPC;
 
 	/* Methods. */
 	/**
@@ -75,7 +81,7 @@ public abstract class Simulator implements TimeSensible {
 	 *            measured in seconds.
 	 * @throws IOException
 	 */
-	public Simulator(int local_socket_number, double update_time_rate)
+	public Simulator(int local_socket_number, double update_time_rate, boolean use_ipc)
 			throws IOException {
 		// configures the control.event object
 		Logger.setSimulator(this);
@@ -105,6 +111,12 @@ public abstract class Simulator implements TimeSensible {
 
 		// configures the model's update time rate
 		this.UPDATE_TIME_RATE = update_time_rate;
+		
+		this.USE_IPC = use_ipc;
+	}
+
+	public boolean isIPC() {
+		return USE_IPC;
 	}
 
 	/**

@@ -63,6 +63,19 @@ public class Node implements XMLable, Visible {
 	 * Counts the time. Shared by all the Node.
 	 */
 	protected static TimeSensible time_counter;
+	
+	
+	/*
+	 * These attributes are NOT used by the simulator
+	 * However they are used by other tools.
+	 * These attributes are thus added to make a SINGLE package
+	 * containing every needed thing to use the simulator in the 
+	 * most efficient and easy way
+	 */
+	
+	// these are the coordinates of the node if it must be drawn on a map
+	double x;
+	double y;
 
 	/* Methods. */
 	/**
@@ -268,6 +281,7 @@ public class Node implements XMLable, Visible {
 	 * @return The idleness of the node.
 	 */
 	public double getIdleness() {
+		double idleness;
 		if (Node.time_counter != null)
 			return Node.time_counter.getElapsedTime() - this.last_visit_time;
 		else
@@ -319,6 +333,9 @@ public class Node implements XMLable, Visible {
 		answer.visibility = this.visibility;
 		answer.fuel = this.fuel;
 		answer.last_visit_time = this.last_visit_time;
+		
+		answer.x = this.x;
+		answer.y = this.y;
 
 		return answer;
 	}
@@ -494,7 +511,8 @@ public class Node implements XMLable, Visible {
 		buffer.append("<node id=\"" + this.id + "\" label=\"" + this.label
 				+ "\" priority=\"" + this.priority + "\" visibility=\""
 				+ this.visibility + "\" idleness=\"" + this.getCombinedIdleness()
-				+ "\" fuel=\"" + this.fuel + "\" is_enabled=\"true" + "\"/>\n");
+				+ "\" fuel=\"" + this.fuel + "\" is_enabled=\"true" + 
+				"\" x=\"" + this.x + "\" y=\"" + this.y + "\"/>\n");
 
 		// returns the buffer content
 		return buffer.toString();
@@ -538,5 +556,21 @@ public class Node implements XMLable, Visible {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	public double getX(){
+		return this.x;
+	}
+	
+	public void setX(double x){
+		this.x = x;
+	}
+	
+	public double getY(){
+		return this.y;
+	}
+	
+	public void setY(double y){
+		this.y = y;
 	}
 }

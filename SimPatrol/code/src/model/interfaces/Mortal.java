@@ -18,5 +18,5 @@ public interface Mortal {
 	public EventTimeProbabilityDistribution getDeathTPD();
 
 	/** Kills the mortal object. */
-	public void die();
+	public void deactivate();
 }

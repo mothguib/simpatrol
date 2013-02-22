@@ -39,9 +39,9 @@ public final class CycledSimulator extends Simulator {
 	 *            the simulation.
 	 * @throws IOException
 	 */
-	public CycledSimulator(int local_socket_number, double update_time_rate)
+	public CycledSimulator(int local_socket_number, double update_time_rate, boolean use_ipc)
 			throws IOException {
-		super(local_socket_number, update_time_rate);
+		super(local_socket_number, update_time_rate, use_ipc);
 		this.coordinator = null;
 	}
 
@@ -57,11 +57,24 @@ public final class CycledSimulator extends Simulator {
 			// for each agent
 			Agent[] agents = societies[i].getAgents();
 			for (int j = 0; j < agents.length; j++)
-				if (agents[j].getAgentState() != AgentStates.JUST_ACTED)
+				// hack for coordinated agents
+				if (!(agents[j].getLabel().equals("coordinator")) && agents[j].getAgentState() != AgentStates.JUST_ACTED)
+				//if (agents[j].getAgentState() != AgentStates.JUST_ACTED)
 					return false;
 		}
 
-		// default answer
+		
+		//* end of hack : set coordinator to 0 for next turn perception
+		for (int i = 0; i < societies.length; i++){
+			Agent[] agents = societies[i].getAgents();
+			for (int j = 0; j < agents.length; j++)
+				if (agents[j].getLabel().equals("coordinator")){
+					agents[j].setAgentState(AgentStates.JUST_ACTED);
+					break;
+				}
+					       
+		}//*/
+
 		return true;
 	}
 
@@ -77,10 +90,10 @@ public final class CycledSimulator extends Simulator {
 			// for each agent
 			Agent[] agents = societies[i].getAgents();
 			for (int j = 0; j < agents.length; j++)
-				if (agents[j].getAgentState() != AgentStates.JUST_PERCEIVED)
+				if (agents[j].getAgentState() != AgentStates.JUST_PERCEIVED){					
 					return false;
-		}
-
+				}
+		}		
 		// default answer
 		return true;
 	}

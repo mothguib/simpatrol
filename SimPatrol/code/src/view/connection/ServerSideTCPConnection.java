@@ -59,8 +59,10 @@ public class ServerSideTCPConnection extends Connection {
 	}
 
 	public boolean send(String message) {
-		if (this.socket != null)
+		if (this.socket != null){
+			System.err.println("Server: " +System.currentTimeMillis());			
 			return this.socket.send(message);
+		}
 
 		return false;
 	}
