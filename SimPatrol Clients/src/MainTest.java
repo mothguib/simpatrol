@@ -1,19 +1,15 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import gray_box_learner.GrayBoxLearnerClient;
+import heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedClient;
 
-import org.w3c.dom.Element;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import random_reactive.RandomReactiveClient;
 import util.file.FileReader;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
-import gravitational.version1.GravitationalMainClient1;
-import gravitational.version2.GravitationalMainClient2;
-import gray_box_learner.GrayBoxLearnerClient;
-import heuristic_cognitive_coordinated.HeuristicCognitiveCoordinatedClient;
-import conscientious_reactive.ConscientiousReactiveClient;
 import cognitive_coordinated.CognitiveCoordinatedClient;
+import conscientious_reactive.ConscientiousReactiveClient;
 import cycled.CycledClient;
 
 
@@ -32,8 +28,7 @@ public class MainTest {
 		System.out.println("\t 2 - Conscientious Reactive");
 		System.out.println("\t 3 - TSP - Single Cycle");
 		System.out.println("\t 4 - Heuristic Pathfinder Cognitive Coordinated");
-		System.out.println("\t 5 - Gravitational I");
-		System.out.println("\t 6 - Gravitational II");
+
 		System.out.println("\t 7 - Generalized Gray Box Learner (learning)");
 		System.out.println("\t 8 - Generalized Gray Box Learner");
 		System.out.println("\t 9 - Random Reactive");
@@ -84,34 +79,6 @@ public class MainTest {
 					"tmp\\hpcc_log.txt",
 					"100",
 					"false"
-				});
-			break;
-		
-		case '5':
-			GravitationalMainClient1.main(new String[]{
-					"127.0.0.1",
-					"5000",
-					"res\\configurations\\examples\\grav1_test.xml",
-					"tmp\\grav1_log.txt",
-					"100",
-					"Edge",
-					"A",
-					"2",
-					"max"
-				});
-			break;
-		
-		case '6':
-			GravitationalMainClient2.main(new String[]{
-					"127.0.0.1",
-					"5000",
-					"res\\configurations\\examples\\grav2_test.xml",
-					"tmp\\grav2_log.txt",
-					"100",
-					"Edge",
-					"A",
-					"2",
-					"max"
 				});
 			break;
 		
