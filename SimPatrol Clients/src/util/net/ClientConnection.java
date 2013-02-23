@@ -1,6 +1,10 @@
 package util.net;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import util.Queue;
 
 
@@ -15,23 +19,33 @@ public abstract class ClientConnection extends Thread {
 	/**
 	 * The buffer where the connection writes the received messages.
 	 */
-	protected final Queue<String> BUFFER;
+	protected final List<String> BUFFER;
 
 	/* Methods. */
 	/** Constructor. */
 	public ClientConnection() {
 		this.stop_working = false;
-		this.BUFFER = new Queue<String>();
+		this.BUFFER = Collections.synchronizedList(new LinkedList<String>());
+	}
+	
+	/** Constructor. */
+	public ClientConnection(String name) {
+		super(name);
+		this.stop_working = false;
+		this.BUFFER = Collections.synchronizedList(new LinkedList<String>());
 	}
 
 	/**
 	 * Returns the content of the buffer of the connection and clears it.
 	 */
 	public String[] getBufferAndFlush() {
-		String[] answer = new String[this.BUFFER.getSize()];
+		String[] answer;
 
-		for (int i = 0; i < answer.length; i++)
-			answer[i] = this.BUFFER.remove();
+		synchronized (BUFFER) {
+			answer = new String[this.BUFFER.size()];
+			answer = BUFFER.toArray(answer);
+			BUFFER.clear();
+		}
 
 		return answer;
 	}
@@ -56,8 +70,9 @@ public abstract class ClientConnection extends Thread {
 
 	/**
 	 * Implements the receiving of a message.
+	 * @return 
 	 * 
 	 * @throws IOException
 	 */
-	protected abstract void receive() throws IOException;
+	protected abstract boolean receive() throws IOException;
 }

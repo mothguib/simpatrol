@@ -89,16 +89,15 @@ public class TCPClientConnection extends ClientConnection {
 	 * 
 	 * @throws IOException
 	 */
-	protected void receive() throws IOException {
+	protected boolean receive() throws IOException {
 		StringBuffer buffer = new StringBuffer();
 
 		String message_line = null;
 		do {
 			try {
-				message_line = this.INPUT.readLine();
+				message_line = this.INPUT.readLine();				
 				if (message_line != null) {
-					buffer.append(message_line);
-
+					buffer.append(message_line);					
 					if (buffer.indexOf("</perception>") > -1)
 						break;
 					else if (buffer.indexOf("<perception ") > -1
@@ -114,8 +113,10 @@ public class TCPClientConnection extends ClientConnection {
 			}
 		} while (true);
 
-		if (buffer.length() > 0)
-			this.BUFFER.insert(buffer.toString());
+		if (buffer.length() > 0){
+			this.BUFFER.add(buffer.toString());
+		}
+		return false;
 	}
 
 	public void run() {

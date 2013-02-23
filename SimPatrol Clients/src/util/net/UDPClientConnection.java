@@ -67,12 +67,13 @@ public class UDPClientConnection extends ClientConnection {
 	 * 
 	 * @throws IOException
 	 */
-	protected void receive() throws IOException {
+	protected boolean receive() throws IOException {
 		byte[] buffer = new byte[BUFFER_SIZE];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		this.SOCKET.receive(packet);
 
-		this.BUFFER.insert(new String(packet.getData(), 0, packet.getLength()));
+		this.BUFFER.add(new String(packet.getData(), 0, packet.getLength()));
+		return false;
 	}
 
 	public void run() {
