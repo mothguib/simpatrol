@@ -2,16 +2,17 @@ package strategies.cycledIPC;
 
 import java.io.IOException;
 import java.util.LinkedList;
+
 import org.xml.sax.SAXException;
 
-import agent_library.connections.IpcConnection;
 import util.Keyboard;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
 import util.graph.Node;
-import util.net.IMessageObserver;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
+import agent_library.connections.IpcConnection;
+
 import common.Agent;
 
 
@@ -20,7 +21,7 @@ import common.Agent;
  * in order to send the solution to the cycled agents in the environment, as
  * well synchronize them. Based in the work of [Chevaleyre, 2005].
  */
-public class CycledCoordinatorAgent extends Agent  implements IMessageObserver {
+public class CycledCoordinatorAgent extends Agent {
 	
 	/**
 	 * Expresses the quality of the network (i.e. the number of times the
@@ -401,9 +402,4 @@ public class CycledCoordinatorAgent extends Agent  implements IMessageObserver {
 		}
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}	
 }

@@ -12,7 +12,6 @@ import agent_library.connections.IpcConnection;
 import util.Keyboard;
 import util.graph.Graph;
 import util.graph.GraphTranslator;
-import util.net.IMessageObserver;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
 import view.connection.IPCConnection;
@@ -23,7 +22,7 @@ import common.Agent;
  * Implements cycled agents, as it is described in the work of Chevaleyre
  * [2005].
  */
-public final class CycledAgent extends Agent implements IMessageObserver {
+public final class CycledAgent extends Agent /*implements IMessageObserver*/ {
 
 	/** The id of this agent. */
 	private String id;
@@ -477,12 +476,6 @@ public final class CycledAgent extends Agent implements IMessageObserver {
 					.println("Usage:\n  \"java cycled.CycledAgent "
 							+ "<IP address> <Remote socket number> <Is real time simulator? (true | false)> <Agent ID>\"");
 		}
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
