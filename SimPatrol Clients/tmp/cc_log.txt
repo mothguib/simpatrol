@@ -1,0 +1,35 @@
+<simulation_log>
+<graph label="random-undirected">
+	<node id="node4" label="node4" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node5" label="node5" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node0" label="node0" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node2" label="node2" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node1" label="node1" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node6" label="node6" priority="1.0" idleness="0.0" fuel="false"/>
+	<node id="node3" label="node3" priority="1.0" idleness="0.0" fuel="false"/>
+	<edge id="edge0-5" source="node0" target="node5" directed="false" length="7.0"/>
+	<edge id="edge4-5" source="node4" target="node5" directed="false" length="4.0"/>
+	<edge id="edge1-6" source="node1" target="node6" directed="false" length="5.0"/>
+	<edge id="edge3-6" source="node3" target="node6" directed="false" length="7.0"/>
+	<edge id="edge3-4" source="node3" target="node4" directed="false" length="7.0"/>
+	<edge id="edge4-6" source="node4" target="node6" directed="false" length="6.0"/>
+	<edge id="edge0-2" source="node0" target="node2" directed="false" length="1.0"/>
+	<edge id="edge0-6" source="node0" target="node6" directed="false" length="3.0"/>
+	<edge id="edge0-3" source="node0" target="node3" directed="false" length="3.0"/>
+</graph>
+<event type="2" time="0.0" agent_id="a1"/>
+<event type="2" time="0.0" agent_id="coordinator"/>
+<society id="soc1" label="soc1">
+	<agent id="a2" label="a2" node_id="node2"/>
+	<agent id="coordinator" label="coordinator" node_id="node0"/>
+	<agent id="a1" label="a1" node_id="node1"/>
+</society>
+<society id="InactiveSociety" label="InactiveSociety"/>
+<event type="2" time="0.0" agent_id="a2"/>
+<event type="2" time="0.0" agent_id="coordinator"/>
+<event type="9" time="0.0" agent_id="coordinator" message="a2###node2"/>
+<event type="9" time="0.0" agent_id="a1" message="a2###node2"/>
+<event type="8" time="0.0" agent_id="a2" message="a2###node2"/>
+<event type="9" time="0.0" agent_id="a2" message="a1###node1"/>
+<event type="9" time="0.0" agent_id="coordinator" message="a1###node1"/>
+<event type="8" time="0.0" agent_id="a1" message="a1###node1"/>
