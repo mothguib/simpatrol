@@ -1,0 +1,46 @@
+<environment>
+<graph label="random-undirected">
+	<node id="n4" label="node4" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n5" label="node5" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n6" label="node6" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n2" label="node2" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n3" label="node3" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n1" label="node1" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<node id="n7" label="node7" priority="1.0" visibility="true" idleness="0" fuel="false" is_enabled="true"/>
+	<edge id="edge7-2" source="n7" target="n2" directed="false" length="1.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge7-6" source="n7" target="n6" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge7-5" source="n7" target="n5" directed="false" length="7.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge4-5" source="n4" target="n5" directed="false" length="4.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge1-6" source="n1" target="n6" directed="false" length="5.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge4-6" source="n4" target="n6" directed="false" length="6.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge3-4" source="n3" target="n4" directed="false" length="7.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge7-3" source="n7" target="n3" directed="false" length="3.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+	<edge id="edge3-6" source="n3" target="n6" directed="false" length="7.0" visibility="true" is_enabled="true" is_in_dynamic_source_memory="false" is_in_dynamic_target_memory="false"/>
+</graph>
+<society id="soc1" label="soc1">
+<agent id="ag1" label="ag1" node_id="n1" state="1" stamina="1.0" max_stamina="1.0">
+	<allowed_perception type="0">
+		<limitation type="0">
+			<lmt_parameter value="1"/>
+		</limitation>
+	</allowed_perception>
+	<allowed_perception type="3"/>
+	<allowed_perception type="4"/>
+	<allowed_action type="3"/>
+	<allowed_action type="1"/>
+	<allowed_action type="2"/>			
+</agent>
+<agent id="ag2" label="ag2" node_id="n2" state="1" stamina="1.0" max_stamina="1.0">
+	<allowed_perception type="0">
+		<limitation type="0">
+			<lmt_parameter value="1"/>
+		</limitation>
+	</allowed_perception>
+	<allowed_perception type="3"/>
+	<allowed_perception type="4"/>
+	<allowed_action type="3"/>
+	<allowed_action type="1"/>
+	<allowed_action type="2"/>			
+</agent>
+</society>
+</environment>
