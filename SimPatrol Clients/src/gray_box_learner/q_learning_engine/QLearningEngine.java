@@ -285,19 +285,20 @@ public class QLearningEngine extends Thread {
 	public void run() {
 		while (this.is_active) {
 			// waits while the last action was not executed
-			while (this.last_action_id == -1 || this.last_action_duration == -1)
+			/*while (this.last_action_id == -1 || this.last_action_duration == -1)
 				if (!this.is_active)
 					return;
 
 			// waits while the reward was not determined
 			while (this.reward == -1)
 				if (!this.is_active)
-					return;
+					return;*/
 
 			// waits while the next state was not determined
-			while (this.next_state_id == -1)
+			while ((this.last_action_id == -1 || this.last_action_duration == -1) || this.reward == -1 ||this.next_state_id == -1)
 				if (!this.is_active)
 					return;
+				else Thread.yield();
 
 			// updates the q-table
 			this.updateQTable();

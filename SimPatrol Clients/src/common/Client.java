@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Set;
+
+import org.omg.CORBA.INTERNAL;
+
 import log_clients.LogFileClient;
 import util.Keyboard;
 import util.file.FileReader;
@@ -16,25 +19,33 @@ import util.net.TCPClientConnection;
 public abstract class Client extends Thread {
 	/* Attributes. */
 	/** The path of the file that contains the environment. */
-	private final String ENVIRONMENT_FILE_PATH;
+	private String ENVIRONMENT_FILE_PATH = "";
 
 	/** The path of the file to store the log of the simulation. */
-	private final String LOG_FILE_PATH;
+	protected String LOG_FILE_PATH = "";
 
 	/** The time of the simulation. */
-	private final double TIME_OF_SIMULATION;
+	private double TIME_OF_SIMULATION = 1000;
 
 	/** Holds if the simulator is a real time one. */
-	protected final boolean IS_REAL_TIME_SIMULATOR;
+	protected boolean IS_REAL_TIME_SIMULATOR = false;
 
 	/** The TCP connection with the server. */
-	protected final TCPClientConnection CONNECTION;
+	protected TCPClientConnection CONNECTION;
 
 	/** The set of agents acting in the simulation. */
 	protected Set<Agent> agents;
 
 	/** The client added to log the simulation. */
 	private LogFileClient log_client;
+
+	protected boolean CREATE_AGENTS = true;
+
+	private boolean START_SIMULATION = true;
+
+	protected  boolean INTERATIVE_MODE = false;
+	
+	
 
 	/* Methods. */
 	/**
@@ -78,6 +89,59 @@ public abstract class Client extends Thread {
 				remote_socket_number);
 		this.agents = null;
 		this.log_client = null;
+	}
+	
+	public Client(String cmd_args[])
+			throws UnknownHostException, IOException {
+		if( cmd_args.length < 3 ){
+			System.out
+			.println("Usage \"SimpatrolClient "
+						+ "<IP address> <Remote socket number> <Environment file path> "
+						+ "[-t <Time of simulation>] [-i] [-r] [-c] [-s] [-l <logfile>]\""
+						+ "Where:\t\t -t <Time of Simulation> - Default 1000"
+						+ "\t\t-c - Don't create and start agents: Default create"	
+						+ "\t\t-s - Don't start simulation: Default start"
+						+ "\t\t-r - Real time simulation: Default: cycled Simulation"
+						+ "\t\t-i - Interative mode"
+						+ "\t\t-l <logfile> - Log Simulation on logfile: Default don't save log");							
+			System.exit(0);
+		} else {
+			processCmdLine(cmd_args);
+			this.ENVIRONMENT_FILE_PATH = cmd_args[2];
+			this.CONNECTION = new TCPClientConnection(cmd_args[0],
+					Integer.parseInt(cmd_args[1]));
+			this.agents = null;
+			this.log_client = null;
+		}
+		
+		
+	}
+
+	private void processCmdLine(String[] cmd_args) {
+		boolean processedAllOptions = false;
+		for(int i = 0; i < cmd_args.length; i++){
+			if(cmd_args[i].equals("-t")){
+				this.TIME_OF_SIMULATION = Double.parseDouble(cmd_args[i+1]);
+				i++;
+			}
+			if(cmd_args[i].equals("-l")){
+				this.LOG_FILE_PATH = cmd_args[i+1];
+				i++;
+			}
+			if(cmd_args[i].equals("-r")){
+				this.IS_REAL_TIME_SIMULATOR = true;				
+			}
+			if(cmd_args[i].equals("-c")){
+				this.CREATE_AGENTS  = false;				
+			}
+			if(cmd_args[i].equals("-s")){
+				this.START_SIMULATION   = false;				
+			}
+			if(cmd_args[i].equals("-i")){
+				this.INTERATIVE_MODE    = true;				
+			}
+			
+		}
 	}
 
 	/**
@@ -159,12 +223,15 @@ public abstract class Client extends Thread {
 	private int configureLogging() throws IOException {
 		// the answer for the method
 		int answer = -1;
+		String key = "";
 
 		// asks if a log connection shall be established
-		System.out.println("Should I log the simulation? [y]es or [n]o?");
-		String key = Keyboard.readLine();
-
-		if (key.equalsIgnoreCase("y")) {
+		if( INTERATIVE_MODE ){
+			System.out.println("Should I log the simulation? [y]es or [n]o?");
+			key = Keyboard.readLine();
+		}
+		
+		if ( (INTERATIVE_MODE && ! key.equalsIgnoreCase("n")) || !LOG_FILE_PATH.equals("") ) {
 			// the message to establish a connection to the server to log the
 			// simulation
 			String message = "<configuration type=\"5\"/>";
@@ -203,13 +270,15 @@ public abstract class Client extends Thread {
 	 */
 	private void createAndStartLogClient(int socket_number) throws IOException {
 		// if the socket number is valid
+		String key = "";
 		if (socket_number > -1) {
 			// asks if the client shall itself start the log client
-			System.out
-					.println("Should I myself create and start the log client? [y]es or [n]o?");
-			String key = Keyboard.readLine();
-
-			if (key.equalsIgnoreCase("y")) {
+			if( INTERATIVE_MODE ){
+				System.out
+						.println("Should I myself create and start the log client? [y]es or [n]o?");
+				key = Keyboard.readLine();
+			}
+			if ( (INTERATIVE_MODE && ! key.equalsIgnoreCase("n")) || !LOG_FILE_PATH.equals("") ) {
 				// screen message
 				System.out.print("Creating and starting the log client... ");
 
@@ -238,12 +307,19 @@ public abstract class Client extends Thread {
 	 */
 	private void configureStart() throws IOException {
 		// waits for the user to press any key to start simulation
-		System.out.print("Press [ENTER] to start simulation.");
-		Keyboard.readLine();
-
+		if( INTERATIVE_MODE || !START_SIMULATION ){
+			System.out.print("Press [ENTER] to start simulation.");
+			Keyboard.readLine();
+		}
 		// the message to be sent to the server
 		String message = "<configuration type=\"3\" parameter=\""
 				+ this.TIME_OF_SIMULATION + "\"/>";
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		// send the message to the server
 		this.CONNECTION.send(message);
@@ -290,16 +366,18 @@ public abstract class Client extends Thread {
 
 		// creates, connects and starts the agents
 		// asks if the client should itself create and start the agents
-		System.out
-				.println("Should I myself create and start the agent clients? [y]es or [n]o?");
 		String key = "";
-		try {
-			key = Keyboard.readLine();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		if( INTERATIVE_MODE ){
+			System.out
+					.println("Should I myself create and start the agent clients? [y]es or [n]o?");
+			
+			try {
+				key = Keyboard.readLine();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
-
-		if (key.equalsIgnoreCase("y")) {
+		if ((INTERATIVE_MODE && ! key.equalsIgnoreCase("n")) || CREATE_AGENTS ) {
 			try {
 				String[] agents_ids = new String[agents_socket_numbers.length];
 				int[] socket_numbers = new int[agents_socket_numbers.length];
@@ -331,6 +409,7 @@ public abstract class Client extends Thread {
 
 		// while the TCP connection is alive, waits...
 		while (this.CONNECTION.getState() != Thread.State.TERMINATED){
+			Thread.yield();
 			/*try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {

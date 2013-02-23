@@ -16,7 +16,7 @@ import cycled.CycledClient;
 /**
  * This class executes any of the available agents with a test configuration. 
  * 
- * @author Pablo
+ * @author Pablo A. Sampaio
  */
 public class MainTest {
 
@@ -42,7 +42,7 @@ public class MainTest {
 			CognitiveCoordinatedClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\cc_test.xml",
+					"examples\\cc_test.xml",
 					"tmp\\cc_log.txt",
 					"100",
 					"false"
@@ -53,7 +53,7 @@ public class MainTest {
 			ConscientiousReactiveClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\cr_test.xml",
+					"examples\\cr_test.xml",
 					"tmp\\cr_log.txt",
 					"100",
 					"false"
@@ -64,7 +64,7 @@ public class MainTest {
 			CycledClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\sc_test.xml",
+					"examples\\sc_test.xml",
 					"tmp\\sc_log.txt",
 					"100",
 					"false"
@@ -75,7 +75,7 @@ public class MainTest {
 			HeuristicCognitiveCoordinatedClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\hpcc_test.xml",
+					"examples\\hpcc_test.xml",
 					"tmp\\hpcc_log.txt",
 					"100",
 					"false"
@@ -87,7 +87,7 @@ public class MainTest {
 			GrayBoxLearnerClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\gbla_test.xml",
+					"examples\\gbla_test.xml",
 					"tmp\\gbla_learning_log.txt",
 					"2000",
 					"false",
@@ -105,7 +105,7 @@ public class MainTest {
 			GrayBoxLearnerClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\gbla_test.xml",
+					"examples\\gbla_test.xml",
 					"tmp\\gbla_log.txt",
 					"1000",
 					"false",
@@ -122,7 +122,7 @@ public class MainTest {
 			RandomReactiveClient.main(new String[]{
 					"127.0.0.1",
 					"5000",
-					"res\\configurations\\examples\\random_test.xml",
+					"examples\\random_test.xml",
 					"tmp\\random_log.txt",
 					"100",
 					"false"
@@ -130,17 +130,8 @@ public class MainTest {
 			break;
 		
 		default:
-			FileReader freader = new FileReader("res\\configurations\\examples\\gbla_test.xml");
-			String graph = freader.readWholeFile();
-			
-			//graph = graph.substring(graph.indexOf("<graph "), graph.indexOf("<society "));
-			
-			//System.out.println(graph);
-			
-			Graph g = GraphTranslator.getGraphs(GraphTranslator.parseString(graph))[0];
-			
 			System.out.println("Invalid option!");
-		
+			
 		}
 		
 	}

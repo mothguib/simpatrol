@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import util.net.TCPClientConnection;
 import util.net.UDPClientConnection;
+import view.connection.IPCConnection;
 import common.Agent;
 import common.Client;
 
@@ -59,8 +60,7 @@ public final class CycledClient extends Client {
 				agent.setConnection(new UDPClientConnection(this.CONNECTION
 						.getRemoteSocketAdress(), socket_numbers[i]));
 			else
-				agent.setConnection(new TCPClientConnection(this.CONNECTION
-						.getRemoteSocketAdress(), socket_numbers[i]));
+				agent.setConnection(new TCPClientConnection(agent_ids[i],socket_numbers[i]));
 
 			agent.start();
 			this.agents.add(agent);

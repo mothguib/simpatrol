@@ -536,7 +536,7 @@ public class GrayBoxLearnerAgent extends Agent {
 
 		// initializes the q-learning engine
 		this.learning_engine = new QLearningEngine(state_item_values,
-				GrayBoxLearnerAgent.q_table_dir + this.id + ".txt");
+				GrayBoxLearnerAgent.q_table_dir+"\\"+this.id + ".txt");
 		this.learning_engine.start();
 
 		// while the agent is supposed to work
