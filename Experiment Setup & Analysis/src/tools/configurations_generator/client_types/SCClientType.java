@@ -14,16 +14,16 @@ public class SCClientType extends ClientType {
 		this.name = "sc";
 		
 		//Agentes normais
-		int[] allowedPerceptions1 = {0, 1, 3, 4};
+		int[] allowedPerceptions1 = {1, 0, 3, 4};  //don't change the order!
 		int[] allowedActions1 = {1, 2};
 		
 		List<List<Integer>> allowedPerceptionLimitations = new ArrayList<List<Integer>>();
 		allowedPerceptionLimitations.add(new ArrayList<Integer>());
-		allowedPerceptionLimitations.get(0).add(0);
+		allowedPerceptionLimitations.get(0).add(0); //in the first perception type, set limitation 0-0
 		
 		List<List<Integer>> allowedActionLimitations = new ArrayList<List<Integer>>();
 		allowedActionLimitations.add(new ArrayList<Integer>());
-		allowedActionLimitations.get(0).add(1);
+		allowedActionLimitations.get(0).add(1); //in the first action type, set limitation 0-1
 		
 		this.agentTypes[0] = new AgentType(firstAgentTypeQuantity,
 				allowedPerceptions1, allowedActions1, "a");

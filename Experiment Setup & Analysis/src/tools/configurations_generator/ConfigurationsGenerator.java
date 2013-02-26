@@ -277,8 +277,8 @@ public class ConfigurationsGenerator {
 	
 		List<ClientType> clientTypes = new LinkedList<ClientType>();
 		
-		String[] mapNames = { "a", "grid", "islands", "cicles_corridor", "city_traffic2", "random_directed_1", "random_directed_2" };
-		int[] agentNumbers = { 1, 6, 11, 16 };
+		String[] mapNames = { /*"a", "grid", "islands",*/ "cicles_corridor" /*, "city_traffic2", "random_directed_1", "random_directed_2"*/ };
+		int[] agentNumbers = { 1, 6 /*, 11, 16*/ };
 		int[] maxNodePriorities = { 1 }; //priorities ranges from 1 to these values
 		
 		int numberOfRandomizations = 1;
@@ -309,7 +309,7 @@ public class ConfigurationsGenerator {
 				for (int k = 0; k < maxNodePriorities.length; k++) {
 					for (int id = 0; id < numberOfRandomizations; id++) {
 						//loads positions previously generated
-						generator.loadPredefinedPositions("_positions-" + mapNames[m] + ".txt");
+						//generator.loadPredefinedPositions("_positions-" + mapNames[m] + ".txt");
 						
 						generator.generateConfigurations(clientTypes, mapNames[m], 1, maxNodePriorities[k], id);
 					}
