@@ -19,8 +19,6 @@ import agent_library.coordinated_agents.CoordinatorAgent;
  * The coordinator agent of the "Heuristic Pathfinder Cognitive Coordinated" (HPCC) strategy (Almeida et al.,2003).
  * <br><br>
  * Observation: The coordinated agents are the generic ones provided by the library, in the package "agent_library.coordinated_agents". 
- *
- * @author Pablo A. Sampaio
  */
 public class HpccCoordinatorAgent extends CoordinatorAgent {
 	private static final double IDLENESSES_RATE = 0.2;

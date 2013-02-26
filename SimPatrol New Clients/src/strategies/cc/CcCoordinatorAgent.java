@@ -14,8 +14,6 @@ import agent_library.coordinated_agents.CoordinatorAgent;
  * The coordinator agent of the "Cognitive Coordinated" (CC) strategy (Machado et al.,2002).
  * <br><br>
  * Observation: The coordinated agents are the generic ones provided by the library, in the package "agent_library.coordinated_agents". 
- *
- * @author Pablo A. Sampaio
  */
 public class CcCoordinatorAgent extends CoordinatorAgent {
 	private MinimumHeap heap;  //organizes the nodes based on their idlenesses

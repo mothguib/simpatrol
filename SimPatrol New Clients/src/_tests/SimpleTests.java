@@ -8,13 +8,13 @@ import launchers.CcLauncher;
 import launchers.CrLauncher;
 import launchers.GravLauncher;
 import launchers.HpccLauncher;
-
+import launchers.ScLauncher;
 import strategies.conscientious_reactiveIPC.ConscientiousReactiveClient;
 import strategies.cycledIPC.CycledClient;
 
 
 /**
- * Used to run simple simulatios with any of the currently implemented strategies.
+ * Used to run very simple simulations with any of the currently implemented strategies.
  * 
  * @author Pablo A. Sampaio
  */
@@ -36,6 +36,7 @@ public class SimpleTests {
 		System.out.println("\t 2 - Cognitive Coordinated");
 		System.out.println("\t 3 - Heuristic Pathfinder Cognitive Coordinated");
 		System.out.println("\t 4 - Conscientious Reactive");
+		System.out.println("\t 5 - TSP Single Cycle (in development)");
 		System.out.println("\t -");
 		System.out.println("\t 8 - Conscientious Reactive (old implementation)");
 		System.out.println("\t 9 - TSP Single Cycle (old implementation)");
@@ -45,7 +46,6 @@ public class SimpleTests {
 		char type = reader.readLine().trim().charAt(0);
 		
 		switch (type) {
-
 		case '1':
 			GravLauncher.main(new String[]{
 					"127.0.0.1", "5000", 
@@ -87,6 +87,17 @@ public class SimpleTests {
 					"-time", "30",
 					"-log", "tmp\\cr_log.txt",
 					"-ipc"
+				});
+			break;
+		
+		case '5':
+			ScLauncher.main(new String[]{
+					"127.0.0.1", "5000", 
+					CONFIG_DIR + "sc_test.xml",
+					"-time", "30",
+					"-log", "tmp\\sc_log.txt",
+					"-ipc",
+					//"-callback"
 				});
 			break;
 			

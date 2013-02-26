@@ -16,8 +16,6 @@ import agent_library.connections.ClientConnection;
 
 /**
  * The agent of the "Conscientious Reactive" (CR) strategy (Machado et al.,2002).
- *
- * @author Pablo A. Sampaio
  */
 public class CrAgent extends ThreadAgent {
 	private String currentNode;

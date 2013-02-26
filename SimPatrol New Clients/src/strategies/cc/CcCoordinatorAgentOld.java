@@ -17,8 +17,6 @@ import agent_library.connections.ClientConnection;
  * extend the CoordinatorAgent class. It is kept mainly for didatical purposes.
  * <br><br>
  * The coordinated agents are the generic ones provided by the library, in the package "agent_library.coordinated_agents". 
- *
- * @author Pablo A. Sampaio
  */
 public final class CcCoordinatorAgentOld extends ThreadAgent {
 	private static long TIME_WAITING_GRAPH = 20000;

@@ -164,11 +164,13 @@ class AbstractAgentManager extends Thread {
 			
 		//_PRINT("TYPE: " + type);
 		
-		if (type == -1) {
+		switch (type) {
+		case -1:
 			double time = Double.parseDouble(element.getAttribute("time"));
 			agent.setCurrentTurn(time);
+			break;
 			
-		} else if (type == 0) {
+		case 0:
 			if (agent.usingGraph2) {
 				util.graph2.Graph[] graphs = util.graph2.GraphTranslator.getGraphs(element);
 				if (graphs.length > 0) {
@@ -186,8 +188,9 @@ class AbstractAgentManager extends Thread {
 					printDebug("Perception type 0 w/out graph!");
 				}
 			}
+			break;
 		
-		} else if (type == 1) { //NOT TESTED
+		case 1:
 			SocietyImage[] societyInfos = SocietyTranslator.getSocieties(element);
 			if (societyInfos.length > 0) {
 				agent.setSocietyInfo(societyInfos[0]); //should have only one
@@ -195,16 +198,19 @@ class AbstractAgentManager extends Thread {
 			} else {
 				printDebug("Perception type 1 w/out society info!");
 			}
+			break;
 
-		} else if (type == 2) { //NOT TESTED
-			printDebug("Node mark not implemented!");
+		case 2: //NOT TESTED
+			throw new Error("Node mark not implemented!");
 			//TODO: implement node marks
+			//break;
 		
-		} else if (type == 3) {
+		case 3:
 			agent.addBroadcast(element.getAttribute("message"));
 			currentAgentChangedPerception = true;
+			break;
 		
-		} else if (type == 4) {
+		case 4:
 			AgentImage[] selfInfo = SocietyTranslator.getAgents(element);
 			if (selfInfo.length > 0) {
 				agent.setSelfInfo(new AgentInformation(selfInfo[0])); //should have only one
@@ -212,8 +218,9 @@ class AbstractAgentManager extends Thread {
 			} else {
 				printDebug("Perception type 4 w/out agent info!");
 			}
+			break;
 		
-		} else {
+		default:
 			printDebug("Unknown perception type: " + type);
 			
 		}
