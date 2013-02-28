@@ -42,31 +42,40 @@ public class SocietyTranslator {
 	 *            The XML source containing the graphs.
 	 * @return The graphs from the XML source.
 	 */
-	public static SocietyImage[] getSocieties(Element xml_element) {
+	public static SocietyImage getSocieties(Element xml_element) {
 		// obtains the nodes with the "graph" tag
-		NodeList soc_node = xml_element.getElementsByTagName("society");
+//		NodeList soc_node = xml_element.getElementsByTagName("society"); //this should came from SimPatrol, but this is not happening
+
+		AgentImage[] agents = getAgentsSimple(xml_element);
+			
+		SocietyImage soc = new SocietyImage("", "", false, agents);
+
+		return soc;
+	}
+
+	public static AgentImage[] getAgentsSimple(Element xml_element) {
+		// obtains the nodes with the "node" tag
+		NodeList node_nodes = xml_element.getElementsByTagName("agent");
 
 		// the answer to the method
-		SocietyImage[] answer = new SocietyImage[soc_node.getLength()];
+		AgentImage[] answer = new AgentImage[node_nodes.getLength()];
 
-		// for each graph_node
+		// for each occurrence
 		for (int i = 0; i < answer.length; i++) {
-			// obtains the current graph element
-			Element soc_element = (Element) soc_node.item(i);
+			// obtains the current node element
+			Element node_element = (Element) node_nodes.item(i);
 
-			// obtains the data
-			String id = soc_element.getAttribute("id");
-			String label = soc_element.getAttribute("label");
-			boolean isClosed = Boolean.parseBoolean(soc_element.getAttribute("is_closed"));
-
-			// obtains the agents
-			AgentImage[] agents = getAgents(soc_element);
+			// obtains its data
+			String id = node_element.getAttribute("id");
+			String label = node_element.getAttribute("label");
+			String node_id = node_element.getAttribute("node_id");
 			
-			// obtains the new society
-			SocietyImage soc = new SocietyImage(id, label, isClosed, agents);
+			// instantiates the new node
+			AgentImage current_agent = new AgentImage(id, label, -1, node_id, "", -1.d, 
+					-1.d, -1.d, null, null, -1, -1, "");
 
-			// adds the new graph to the answer
-			answer[i] = soc;
+			// adds the new node to the answer
+			answer[i] = current_agent;
 		}
 
 		// returns the answer
