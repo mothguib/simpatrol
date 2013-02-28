@@ -108,7 +108,7 @@ class AbstractAgentManager extends Thread {
 						continue; //restart the loop
 					}
 					
-					analysePerception(agent, parsedPerception);
+					analysePerception(agent, parsedPerception, message); //TODO: remove "message"
 				}
 				
 				if (currentAgentChangedPerception) {
@@ -154,7 +154,7 @@ class AbstractAgentManager extends Thread {
 		printDebug("Finished!");		
 	}	
 
-	private void analysePerception(AbstractAgent agent, Element element) {
+	private void analysePerception(AbstractAgent agent, Element element, String percep) {
 		if (!element.getLocalName().equals("perception")) {
 			printDebug("Not a perception!");
 			return;
@@ -191,16 +191,13 @@ class AbstractAgentManager extends Thread {
 			break;
 		
 		case 1:
-			SocietyImage[] societyInfos = SocietyTranslator.getSocieties(element);
-			if (societyInfos.length > 0) {
-				agent.setSocietyInfo(societyInfos[0]); //should have only one
-				currentAgentChangedPerception = true;
-			} else {
-				printDebug("Perception type 1 w/out society info!");
-			}
+			printDebug(percep); //TODO: remove
+			SocietyImage societyInfo = SocietyTranslator.getSocieties(element);
+			agent.setSocietyInfo(societyInfo);
+			currentAgentChangedPerception = true;
 			break;
 
-		case 2: //NOT TESTED
+		case 2:
 			throw new Error("Node mark not implemented!");
 			//TODO: implement node marks
 			//break;
