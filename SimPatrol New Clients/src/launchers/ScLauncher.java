@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import strategies.sc.ScAgent;
-import strategies.sc.ScAgentTemp;
 import strategies.sc.ScCoordinator;
 import agent_library.basic_agents.AbstractAgent;
 import agent_library.connections.ClientConnection;
@@ -73,10 +72,10 @@ public class ScLauncher extends Launcher {
 			
 			} else {
 				if (useCallbackAgents) {
-					//agent = new CoordinatedAgentC(agentIds[i], connection);
+					//agent = new ScAgentCallback(Ids[i], connection);
 					throw new RuntimeException("SC in callback mode not implemented yet!");
 				} else {
-					agent = new ScAgentTemp(agentIds[i], (IpcConnection)connection); //remover cast
+					agent = new ScAgent(agentIds[i], connection);
 				}
 			}
 			

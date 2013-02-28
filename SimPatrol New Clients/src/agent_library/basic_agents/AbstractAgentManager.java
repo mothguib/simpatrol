@@ -108,7 +108,7 @@ class AbstractAgentManager extends Thread {
 						continue; //restart the loop
 					}
 					
-					analysePerception(agent, parsedPerception, message); //TODO: remove "message"
+					analysePerception(agent, parsedPerception);
 				}
 				
 				if (currentAgentChangedPerception) {
@@ -154,7 +154,7 @@ class AbstractAgentManager extends Thread {
 		printDebug("Finished!");		
 	}	
 
-	private void analysePerception(AbstractAgent agent, Element element, String percep) {
+	private void analysePerception(AbstractAgent agent, Element element) {
 		if (!element.getLocalName().equals("perception")) {
 			printDebug("Not a perception!");
 			return;
@@ -191,7 +191,6 @@ class AbstractAgentManager extends Thread {
 			break;
 		
 		case 1:
-			printDebug(percep); //TODO: remove
 			SocietyImage societyInfo = SocietyTranslator.getSocieties(element);
 			agent.setSocietyInfo(societyInfo);
 			currentAgentChangedPerception = true;

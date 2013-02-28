@@ -36,7 +36,7 @@ public class SimpleTests {
 		System.out.println("\t 2 - Cognitive Coordinated");
 		System.out.println("\t 3 - Heuristic Pathfinder Cognitive Coordinated");
 		System.out.println("\t 4 - Conscientious Reactive");
-		System.out.println("\t 5 - TSP Single Cycle (in development)");
+		System.out.println("\t 5 - TSP Single Cycle");
 		System.out.println("\t -");
 		System.out.println("\t 8 - Conscientious Reactive (old implementation)");
 		System.out.println("\t 9 - TSP Single Cycle (old implementation)");

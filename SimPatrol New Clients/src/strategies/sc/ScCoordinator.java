@@ -56,6 +56,7 @@ public class ScCoordinator extends ThreadAgent {
 			
 		}
 		
+		printDebug("Finishing...");
 	}
 
 	private void calculatesTspCycle(Graph graph) {
