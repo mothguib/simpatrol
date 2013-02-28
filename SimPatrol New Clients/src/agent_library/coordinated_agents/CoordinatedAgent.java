@@ -85,7 +85,7 @@ public final class CoordinatedAgent extends ThreadAgent {
 			printDebug("Going to: " + myGoalNode);
 			this.actGoto(myGoalNode);
 
-			while (!myPosition.equals(myGoalNode)) {
+			while (!this.stopRequested && !myPosition.equals(myGoalNode)) {
 				AgentInformation selfInfo = this.perceiveSelfBlocking(PERCEPTION_TIMEOUT);
 				if (selfInfo != null) {
 					myPosition = selfInfo.node_id;
