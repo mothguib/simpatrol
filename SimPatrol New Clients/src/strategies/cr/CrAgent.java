@@ -75,13 +75,9 @@ public class CrAgent extends ThreadAgent {
 
 	private List<String> perceiveNeighbors() throws AgentStoppedException {
 		Graph graph = super.perceiveGraph2Blocking(20000);
-		List<String> nodes = new LinkedList<String>();
-		
-//		for (int i = 0; i < graph.getNumVertices(); i++) {
-//			nodes.add(graph.getNode(i).getIdentifier());
-//		}
-		
 		List<Edge> edges = graph.getOutEdges( graph.getNode(this.currentNode) );
+		
+		List<String> nodes = new LinkedList<String>();
 		Node n;
 		
 		for (Edge e : edges) {
@@ -104,8 +100,6 @@ public class CrAgent extends ThreadAgent {
 				
 				if (nodeVisitTimes.containsKey(nodeId)) {
 					nodeVisitTime = this.nodeVisitTimes.get(nodeId);					
-				} else {
-					//inserir com tempo -1 ?? acho que não precisa...					
 				}
 				
 				if (nodeVisitTime < lastVisitedTime) {
