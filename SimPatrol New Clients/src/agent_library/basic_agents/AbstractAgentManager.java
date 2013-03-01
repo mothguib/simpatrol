@@ -134,7 +134,6 @@ class AbstractAgentManager extends Thread {
 			
 			// the hack part: sends messages from agent to agent
 			// TODO: change server and remove this
-			//this.getAgents(agentsBuffer);  //fill in an auxiliary buffer, to avoid concurrency problems
 			
 			for (int i = 0; i < agentsBuffer.size(); i++) {
 				agentsBuffer.get(i).retrieveBroadcastsToSend(messagesToAttend);
