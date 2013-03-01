@@ -1,15 +1,15 @@
 @ECHO OFF
 
-set JAVA_EXEC="D:\Program Files (x86)\Java\jdk1.7.0_07\bin\java.exe"
+set JAVA_EXEC="C:\Program Files (x86)\Java\jdk1.7.0_09\bin\java.exe"
 
 echo Iniciando o SimPatrol em sequencia
 
 cd ..
-cd "New SimPatrol"
+cd "SimPatrol"
 start runServerBatch
 cd ..
 
-cd "New Agent Library"
+cd "SimPatrol New Clients"
 
 echo Pressione para iniciar os agentes em sequencia
 
@@ -20,5 +20,6 @@ FOR %%f in (_experiments\*.xml) DO (
 	%JAVA_EXEC% -cp bin\;_oldclients_bin _tests.RunAgentsConfigFile %%f
 )
 
+echo Fim da execucao
 pause
 
