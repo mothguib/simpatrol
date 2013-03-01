@@ -14,7 +14,7 @@ public class SCClientType extends ClientType {
 		this.name = "sc";
 		
 		//Agentes normais
-		int[] allowedPerceptions1 = {1, 0, 3, 4};  //don't change the order!
+		int[] allowedPerceptions1 = {1, /*0,*/ 3, 4, -1};  //don't change the order!
 		int[] allowedActions1 = {1, 2};
 		
 		List<List<Integer>> allowedPerceptionLimitations = new ArrayList<List<Integer>>();
