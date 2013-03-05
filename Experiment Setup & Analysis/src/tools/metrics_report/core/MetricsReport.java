@@ -361,6 +361,18 @@ public class MetricsReport {
 		return exp_time * numAgents / numNodes;
 	}
 	
+	public int[] getIntervalsHistogram() {
+		int[] histogram = new int[(int)this.allIntervals.max() + 1];
+		int interval;
+		
+		for (int i = 0; i < this.allIntervals.size(); i ++) {
+			interval = (int)this.allIntervals.get(i);
+			histogram[interval] ++;
+		}
+		
+		return histogram;
+	}
+	
 	
 	/***** Metrics for curb representation *****/
 	

@@ -56,9 +56,6 @@ public class ExportMetricsSummary {
 		          tableINTspecial = results.createTable("(INTqmean)^2/INTavg");
 		          //tableINTpmi4  = results.createTable("INTpmi-4");
 		
-//		BigDecimal obj;
-//		obj.
-		
 		File[] logFiles = logDir.listFiles(LOG_FILE_FILTER);
 		DecimalFormat df= new DecimalFormat("#0.0000");
 		
@@ -110,6 +107,65 @@ public class ExportMetricsSummary {
 		System.out.println("Exported to " + resultsFileName + ".");
 	}
 	
+	public static void generateHistogramReport(String mapName, String algName) throws Exception {
+		File logDir = new File(LOG_DIR);
+		
+		CoolTableList results = new CoolTableList("Results for map " + mapName);
+		
+		File[] logFiles = logDir.listFiles(LOG_FILE_FILTER);
+		DecimalFormat df= new DecimalFormat("#0.0000");
+		
+		LogFileParser parser = new LogFileParser(false);
+
+		for (File file : logFiles) {
+			String[] parts = file.getName().split("-");
+			String algorithm = parts[0];
+			String map = parts[1];
+			String numAgents = parts[2];
+			
+			System.out.println("File: " + file);			
+			
+			if (map.equals(mapName)) {
+				try {
+					System.out.println("Parsing...");
+
+					parser.parseFile(file.getAbsolutePath());
+
+					if (parser.getLastCycle() < FINAL_CYCLE) {
+						System.out.println("Warning: Last cycle reported is lower than expected: " + parser.getLastCycle());
+						Thread.sleep(1000);
+					}
+
+					MetricsReport metrics = new MetricsReport(parser.getNumNodes(), 
+							START_CYCLE, FINAL_CYCLE, parser.getVisitsList());
+
+					String tableName = numAgents + " agents";
+					if (!results.hasTable(tableName)) {
+						results.createTable(tableName);
+					}
+					
+					CoolTable table = results.getTable(tableName);
+					int[] histogram = metrics.getIntervalsHistogram();
+					
+					for (int i = 0; i < histogram.length; i++) {
+						table.set(algorithm, ""+i, ""+histogram[i]);
+					}
+					
+					System.out.println("INTqmean: " + df.format(metrics.getQuadraticMeanOfIntervals()));
+				
+				} catch (Exception e) {
+					e.printStackTrace();
+					Thread.sleep(100);
+				}
+			}
+			
+		}
+		
+		String resultsFileName = "results-" + mapName +".csv";
+		
+		results.exportToCsv(resultsFileName);
+		System.out.println("Exported to " + resultsFileName + ".");
+	}
 	
 	public static void main(String[] args) throws Exception {
 		File logDir = new File(LOG_DIR);
@@ -126,7 +182,8 @@ public class ExportMetricsSummary {
 		Thread.sleep(2000);
 		
 		for (String mapName : maps) {
-			generateReport(mapName);			
+			//generateReport(mapName);
+			generateReport(mapName, "");
 		}
 		
 	}

@@ -43,7 +43,7 @@ public class CoolTableList {
 		return null;
 	}
 
-	private boolean hasTable(String tableName) {
+	public boolean hasTable(String tableName) {
 		for (CoolTable table : this.list) {
 			if (table.getName().equals(tableName)) {
 				return true;
