@@ -107,7 +107,7 @@ public class ExportMetricsSummary {
 		System.out.println("Exported to " + resultsFileName + ".");
 	}
 	
-	public static void generateHistogramReport(String mapName, String algName) throws Exception {
+	public static void generateHistogramReport(String mapName, String algorithmName) throws Exception {
 		File logDir = new File(LOG_DIR);
 		
 		CoolTableList results = new CoolTableList("Results for map " + mapName);
@@ -125,7 +125,7 @@ public class ExportMetricsSummary {
 			
 			System.out.println("File: " + file);			
 			
-			if (map.equals(mapName)) {
+			if (map.equals(mapName) && algorithm.equals(algorithmName)) {
 				try {
 					System.out.println("Parsing...");
 
@@ -150,8 +150,6 @@ public class ExportMetricsSummary {
 					for (int i = 0; i < histogram.length; i++) {
 						table.set(algorithm, ""+i, ""+histogram[i]);
 					}
-					
-					System.out.println("INTqmean: " + df.format(metrics.getQuadraticMeanOfIntervals()));
 				
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -183,7 +181,7 @@ public class ExportMetricsSummary {
 		
 		for (String mapName : maps) {
 			//generateReport(mapName);
-			generateReport(mapName, "");
+			generateHistogramReport(mapName, "grav(Node,Ar,2.0,sum)");
 		}
 		
 	}
