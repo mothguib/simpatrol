@@ -5,14 +5,14 @@ import util.graph2.Graph;
 
 
 /**
- * Propagador de gravidades atuantes sobre as arestas de um grafo dado.
+ * Propagates the attraction forces (gravities) through the edges (arcs) of the graph.
  * <br><br>
- * A gravidade sobre cada nó "atraído" atua na direção da aresta do menor caminho até o nó
- * "atrator", cuja massa produzia a gravidade. 
+ * The attraction force produced in x by a node z, actuates through the edge x->y which is
+ * the first edge of the shortest path x->y...->z. (Thus, it attracts an agent placed in
+ * node x to the node y, although it was produced by node z).
  * <br><br>
- * Em cada direção de caa aresta, várias gravidades (originadas de diferentes nós) podem atuar. 
- * Cada subclasse define como o valor final da gravidade na aresta vai ser calculada, por meio
- * de alguma "combinação" desses valores.
+ * All forces actuating in direction x->y are combined using one of the forces combinators 
+ * (e.g. max or sum), which are implemented in subclasses of this class. 
  * 
  * @see GravityPropagator 
  * @author Pablo A. Sampaio

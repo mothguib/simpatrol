@@ -4,7 +4,8 @@ package strategies.grav.core;
 public enum ForcePropagation {
 	NODE_NO_DISTANCE ("NodeX"),
 	NODE ("Node"),
-	EDGE ("Edge");
+	EDGE ("Edge"),
+	MIXED ("Mixed");
 	
 	private String identifier; 
 	

@@ -1,5 +1,6 @@
 package strategies.grav.core.propagators;
 
+import util.graph2.Edge;
 import util.graph2.Graph;
 import util.heap2.BinHeapPQueue;
 import util.heap2.PQueue;
@@ -10,36 +11,40 @@ import util.heap2.PQueueElement;
  * In this implementation, the resulting force in a specific edge x->y (in this specific
  * direction) is calculated as the MAXIMUM of all forces produced in x->y.
  * 
- * @see GravityPropagatorEdge
+ * @see GravityPropagatorMixed
  * @author Pablo A. Sampaio
  */
-public class GravityPropagatorEdgeMax extends GravityPropagatorEdge {
+public class GravityPropagatorMixedMax extends GravityPropagatorMixed {
 	private PQueue<GravInfo>[][] gravLists;
 	
 
 	@SuppressWarnings("unchecked")
-	public GravityPropagatorEdgeMax(Graph graph, double exponent) {
+	public GravityPropagatorMixedMax(Graph graph, double exponent) {
 		super(graph, exponent);		
 		gravLists = new PQueue[graph.getNumVertices()][graph.getNumVertices()];
 	}
 
-
+	
 	@Override
 	public void applyGravities(int attractor, double attractorMass) {
 		assert (attractorMass >= 0.0d);
 		assert (masses[attractor] == -1.0d);
 		
 		int numVertices = gravities.length;
-
-		int nextFromAttracted;
 		GravInfo gravInfo;
 
-		for (int attracted = 0; attracted < numVertices; attracted++) {
-			if (attracted != attractor) {
-				gravInfo = new GravInfo(attractor, attractorMass * propagationFactor[attracted][attractor]); 
+		for (int node = 0; node < numVertices; node++) {
+			if (node == attractor) {
+				continue;
+			}
+			for (Edge outEdge : super.graph.getOutEdges(node)) {
+				int intermedNode = outEdge.getTargetIndex(); 
+				double distIntermedAttractor = super.shortestPaths.getDistance(intermedNode, attractor);
+				double force = attractorMass / Math.pow(outEdge.getLength()+distIntermedAttractor, distanceExponent);
+				
+				gravInfo = new GravInfo(attractor, force); 
 
-				nextFromAttracted = shortestPaths.getSourceSuccessor(attracted, attractor);
-				gravities[attracted][nextFromAttracted] = addToGravList(attracted, nextFromAttracted, gravInfo); 
+				gravities[node][intermedNode] = addToGravList(node, intermedNode, gravInfo); 
 			}
 		}
 		
@@ -62,22 +67,22 @@ public class GravityPropagatorEdgeMax extends GravityPropagatorEdge {
 	@Override
 	public void undoGravities(int attractorNode) {
 		assert (masses[attractorNode] >= 0.0d);
-		
-		int numVertices = gravities.length;
-		int nextFromAttracted;
 
-		//System.out.println("... desfazendo gravidades partindo de " + attractorNode);
-		for (int attracted = 0; attracted < numVertices; attracted++) {
-			if (attracted != attractorNode) {
-				nextFromAttracted = shortestPaths.getSourceSuccessor(attracted, attractorNode);
-				
-				gravities[attracted][nextFromAttracted] = removeFromGravList(attracted, nextFromAttracted, attractorNode); 
+		int numVertices = gravities.length;
+
+		for (int node = 0; node < numVertices; node++) {
+			if (node == attractorNode) {
+				continue;
+			}
+			for (Edge outEdge : super.graph.getOutEdges(node)) {
+				int intermedNode = outEdge.getTargetIndex(); 
+				gravities[node][intermedNode] = removeFromGravList(node, intermedNode, attractorNode);
 			}
 		}
 
 		masses[attractorNode] = -1.0d;
 	}
-	
+		
 	private double removeFromGravList(int attracted, int neighbor, int attractor) {
 		assert (gravLists[attracted][neighbor] != null);
 		

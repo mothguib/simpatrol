@@ -3,6 +3,8 @@ package strategies.grav.core;
 
 import strategies.grav.core.propagators.GravityPropagatorEdgeMax;
 import strategies.grav.core.propagators.GravityPropagatorEdgeSum;
+import strategies.grav.core.propagators.GravityPropagatorMixedMax;
+import strategies.grav.core.propagators.GravityPropagatorMixedSum;
 import strategies.grav.core.propagators.GravityPropagatorNodeMax;
 import strategies.grav.core.propagators.GravityPropagatorNodeSum;
 import util.graph2.Graph;
@@ -53,6 +55,13 @@ public abstract class GravityPropagator {
 				return new GravityPropagatorNodeMax(g, exp, true);
 			} else if (comb == ForceCombination.SUM) {
 				return new GravityPropagatorNodeSum(g, exp, true);
+			}
+			
+		} else if (prop == ForcePropagation.MIXED) {
+			if (comb == ForceCombination.MAX) {
+				return new GravityPropagatorMixedMax(g, exp);
+			} else if (comb == ForceCombination.SUM) {
+				return new GravityPropagatorMixedSum(g, exp);
 			}
 			
 		}

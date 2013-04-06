@@ -1,5 +1,6 @@
 package strategies.grav.core.propagators;
 
+import util.graph2.Edge;
 import util.graph2.Graph;
 
 
@@ -7,12 +8,12 @@ import util.graph2.Graph;
  * In this implementation, the resulting force in a specific edge x->y (in this specific
  * direction) is calculated as the SUM of all forces produced in x->y.
  * 
- * @see GravityPropagatorEdge
+ * @see GravityPropagatorMixed
  * @author Pablo A. Sampaio
  */
-public class GravityPropagatorEdgeSum extends GravityPropagatorEdge {
+public class GravityPropagatorMixedSum extends GravityPropagatorMixed {
 	
-	public GravityPropagatorEdgeSum(Graph graph, double exponent) {
+	public GravityPropagatorMixedSum(Graph graph, double exponent) {
 		super(graph, exponent);
 	}
 
@@ -22,6 +23,7 @@ public class GravityPropagatorEdgeSum extends GravityPropagatorEdge {
 		assert (masses[attractor] == -1.0d);
 
 		applyGravitiesInternal(attractor, attractorMass);
+		
 		masses[attractor] = attractorMass;
 	}
 	
@@ -36,12 +38,14 @@ public class GravityPropagatorEdgeSum extends GravityPropagatorEdge {
 	private void applyGravitiesInternal(int attractor, double attractorMass) {
 		int numVertices = gravities.length;
 
-		int nextFromAttracted;
-
-		for (int attracted = 0; attracted < numVertices; attracted++) {
-			if (attracted != attractor) {
-				nextFromAttracted = shortestPaths.getSourceSuccessor(attracted, attractor);
-				gravities[attracted][nextFromAttracted] += attractorMass * propagationFactor[attracted][attractor]; 
+		for (int node = 0; node < numVertices; node++) {
+			if (node == attractor) {
+				continue;
+			}
+			for (Edge outEdge : super.graph.getOutEdges(node)) {
+				int intermedNode = outEdge.getTargetIndex(); 
+				double distIntermedAttractor = super.shortestPaths.getDistance(intermedNode, attractor);
+				gravities[node][intermedNode] += attractorMass / Math.pow(outEdge.getLength()+distIntermedAttractor, distanceExponent); 
 			}
 		}
 	}
