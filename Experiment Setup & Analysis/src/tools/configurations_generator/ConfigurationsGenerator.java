@@ -267,7 +267,8 @@ public class ConfigurationsGenerator {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String[][] GRAV_PARAMS = { {"Edge", "Node"},
+		String[][] GRAV_PARAMS = { 
+			  {"Edge", "Node", "Mixed"},
 			  {"Ar", "Ge"},
 			  {"1.0", "2.0"},
 			  {"max", "sum"}
@@ -296,6 +297,8 @@ public class ConfigurationsGenerator {
 				clientTypes.add(new SCClientType(agentNumbers[a]));
 				
 				//adiciona variantes do grav
+				clientTypes.add(new GravClientType(agentNumbers[a], "Mixed", "Ar", "2.0", "sum"));
+				clientTypes.add(new GravClientType(agentNumbers[a], "Mixed", "Ar", "1.0", "max"));
 //				for (int param0 = 0; param0 < GRAV_PARAMS[0].length; param0++) {
 //					for (int param1 = 0; param1 < GRAV_PARAMS[1].length; param1++) {
 //						for (int param2 = 0; param2 < GRAV_PARAMS[2].length; param2++) {
