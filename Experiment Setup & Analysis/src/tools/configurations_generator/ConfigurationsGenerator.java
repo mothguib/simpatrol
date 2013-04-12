@@ -292,9 +292,9 @@ public class ConfigurationsGenerator {
 			for (int a = 0; a < agentNumbers.length; a++) {
 				
 				//clientTypes.add(new CCClientType(agentNumbers[a]));
-				clientTypes.add(new CRClientType(agentNumbers[a]));
+				//clientTypes.add(new CRClientType(agentNumbers[a]));
 				//clientTypes.add(new HPCCClientType(agentNumbers[a]));
-				clientTypes.add(new SCClientType(agentNumbers[a]));
+				//clientTypes.add(new SCClientType(agentNumbers[a]));
 				
 				//adiciona variantes do grav
 				clientTypes.add(new GravClientType(agentNumbers[a], "Mixed", "Ar", "2.0", "sum"));

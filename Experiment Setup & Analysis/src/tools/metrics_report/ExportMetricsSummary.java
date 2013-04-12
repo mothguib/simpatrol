@@ -13,7 +13,7 @@ import util.cool_table.CoolTableList;
 
 
 public class ExportMetricsSummary {
-	public static String LOG_DIR = "..\\..\\_experiments-all";
+	public static String LOG_DIR = "..\\..\\_experiments-pos-tese";
 	public static int START_CYCLE = 0;
 	public static int FINAL_CYCLE = 2999;
 		
@@ -180,8 +180,8 @@ public class ExportMetricsSummary {
 		Thread.sleep(2000);
 		
 		for (String mapName : maps) {
-			//generateReport(mapName);
-			generateHistogramReport(mapName, "grav(Node,Ar,2.0,sum)");
+			generateReport(mapName);
+			//generateHistogramReport(mapName, "grav(Node,Ar,2.0,sum)");
 		}
 		
 	}
