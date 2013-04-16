@@ -28,7 +28,7 @@ import agent_library.launcher.Launcher;
 public class GravLauncher extends Launcher {
 	private static final String USAGE = Launcher.USAGE.replaceFirst("\\[CLIENT_CLASS\\]", GravLauncher.class.getSimpleName())
 			+ "\twhere <agents' parameter> can be:\n"
-			+ "\t\t -grav (Edge|Node) (Ar|Ge|No) <exponent> (max|sum)  The default is \"Edge Ar 1.0 Max\"\n"
+			+ "\t\t -grav (Edge|Node|Mixed) (Ar|Ge|No) <exponent> (max|sum)  The default is \"Edge Ar 1.0 Max\"\n"
 			+ "\t\t -ipc                                               Agents use IPC connection (Default: TCP)\n"
 			+ "\t\t -callback                                          Non-coordinator agents are not threads (Default: They are threads)\n"
 			+ "\n";
@@ -74,6 +74,8 @@ public class GravLauncher extends Launcher {
 				this.propagation = ForcePropagation.NODE;
 			} else if (parameter.equalsIgnoreCase("Edge")) {
 				this.propagation = ForcePropagation.EDGE;
+			} else if (parameter.equalsIgnoreCase("Mixed")) {
+				this.propagation = ForcePropagation.MIXED;
 			} else {
 				throw new Exception("Invalid gravitational parameter!");
 			}
@@ -151,7 +153,7 @@ public class GravLauncher extends Launcher {
 	 * it accepts three optional other parameters. One of them is the following (optional) parameter 
 	 * to set the type of gravitational propagation used:
 	 * <br><br>
-	 * -grav (Edge|Node) (Ar|Ge|No) [exponent] (max|sum) 
+	 * -grav (Edge|Node|Mixed) (Ar|Ge|No) [exponent] (max|sum) 
 	 * <br><br>
 	 * If this parameter is not given, the launcher assumes "-grav Edge Ar 1.0 Max"
 	 * <br><br>
